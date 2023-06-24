@@ -48,9 +48,9 @@ fi
 echo "> $IDLE_PROFILE 배포"
 nohup java -jar -Duser.timezone=Asia/Seoul -Dspring.profiles.active=$IDLE_PROFILE $IDLE_APPLICATION_PATH >> /home/ubuntu/app/nohup.out 2>&1 &
 
-echo "> $IDLE_PROFILE 10초 후 Health check 시작"
-echo "> curl -s http://localhost:$IDLE_PORT/health "
-sleep 10
+# echo "> $IDLE_PROFILE 10초 후 Health check 시작"
+# echo "> curl -s http://localhost:$IDLE_PORT/health "
+# sleep 10
 
 # health check부분
 # for retry_count in {1..10}
@@ -78,6 +78,6 @@ sleep 10
 #   sleep 10
 # done
 
-echo "> 스위칭"
-sleep 10
-/home/ubuntu/app/nonstop/switch.sh
+# echo "> 스위칭"
+# sleep 10
+# /home/ubuntu/app/nonstop/switch.sh
