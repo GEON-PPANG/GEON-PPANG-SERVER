@@ -52,7 +52,7 @@ echo "> $IDLE_PROFILE 10초 후 Health check 시작"
 echo "> curl -s http://localhost:$IDLE_PORT/health "
 sleep 10
 
-health check부분
+# health check부분
 for retry_count in {1..10}
 do
   response=$(curl -s http://localhost:$IDLE_PORT/actuator/health)
