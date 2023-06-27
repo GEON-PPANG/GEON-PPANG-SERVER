@@ -9,4 +9,6 @@ public class GunbbangApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GunbbangApplication.class, args);
 	}
+
+	
 }
