@@ -8,7 +8,7 @@ build/
 ### application config file ###
 src/**/resources/*.yml
 src/**/resources/*.properties
-client/src/main/resources/client.yml
+/client/src/main/resources/client.yml
 
 
 ### STS ###
