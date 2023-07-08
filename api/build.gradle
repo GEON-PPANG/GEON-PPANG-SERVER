@@ -1,0 +1,34 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.org'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':common:exception')
+    implementation project(':common:enum')
+    implementation project(':common:domain')
+    implementation project(':common:util')
+    implementation project(':storage:db-core')
+    implementation project(':client')
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+// true로 설정하면 실행가능한 jar 파일을 만듦
+bootJar {
+    enabled = true
+}
+
+jar {
+    enabled = false
+}

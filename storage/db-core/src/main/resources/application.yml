@@ -1,0 +1,6 @@
+spring.profiles.active: local
+
+spring:
+  config:
+    import:
+      - db-core.yml

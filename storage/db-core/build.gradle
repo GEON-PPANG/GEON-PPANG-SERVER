@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.org'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':common:enum')
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
+    runtimeOnly("com.h2database:h2")
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+// true로 설정하면 실행가능한 jar 파일을 만듦
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}

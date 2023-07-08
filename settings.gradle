@@ -1,1 +1,11 @@
 rootProject.name = 'gunbbang'
+
+include(
+    "common:enum",
+    "common:util",
+    "common:domain",
+    "common:exception",
+    "api",
+    "client",
+    "storage:db-core",
+)

@@ -1,0 +1,28 @@
+spring:
+  profiles:
+    active: local
+  config:
+    import:
+      - db-core.yml
+      - client.yml
+
+
+# dev
+---
+spring.config.activate.on-profile: local
+
+
+
+# dev-set1
+---
+spring.config.activate.on-profile: dev-set1
+
+server:
+  port: 8081
+
+# dev-set2
+---
+spring.config.activate.on-profile: dev-set2
+
+server:
+  port: 8082

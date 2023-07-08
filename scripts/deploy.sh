@@ -12,18 +12,18 @@ CURRENT_PROFILE=$(curl -s http://localhost/profile)
 echo "> $CURRENT_PROFILE"
 
 # 쉬고 있는 set 찾기: set1이 사용중이면 set2가 쉬고 있고, 반대면 set1이 쉬고 있음
-if [ $CURRENT_PROFILE == set1 ]
+if [ $CURRENT_PROFILE == dev-set1 ]
 then
-  IDLE_PROFILE=set2
+  IDLE_PROFILE=dev-set2
   IDLE_PORT=8082
-elif [ $CURRENT_PROFILE == set2 ]
+elif [ $CURRENT_PROFILE == dev-set2 ]
 then
-  IDLE_PROFILE=set1
+  IDLE_PROFILE=dev-set1
   IDLE_PORT=8081
 else
   echo "> 일치하는 Profile이 없습니다. Profile: $CURRENT_PROFILE"
-  echo "> set1을 할당합니다. IDLE_PROFILE: set1"
-  IDLE_PROFILE=set1
+  echo "> dev-set1을 할당합니다. IDLE_PROFILE: dev-set1"
+  IDLE_PROFILE=dev-set1
   IDLE_PORT=8081
 fi
 
