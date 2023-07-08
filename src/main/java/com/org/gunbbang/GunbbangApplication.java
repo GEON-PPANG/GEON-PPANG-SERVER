@@ -10,4 +10,6 @@ public class GunbbangApplication {
 		SpringApplication.run(GunbbangApplication.class, args);
 	}
 
+	
+
 }
