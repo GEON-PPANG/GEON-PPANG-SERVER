@@ -6,8 +6,8 @@ build/
 !**/src/test/**/build/
 
 ### application config file ###
-src/**/*.yml
-src/**/*.properties
+src/**/resources/*.yml
+src/**/resources/*.properties
 
 ### STS ###
 .apt_generated
