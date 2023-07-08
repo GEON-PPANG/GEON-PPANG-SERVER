@@ -1,0 +1,8 @@
+spring.config.activate.on-profile: local
+
+
+
+---
+spring.config.activate.on-profile:
+  - dev-set1
+  - dev-set2
