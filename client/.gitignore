@@ -17,7 +17,7 @@ out/
 !**/src/test/**/out/
 
 ### config files ###
-./main/resources/*.yml
+./src/main/resources/*.yml
 
 ### Eclipse ###
 .apt_generated
