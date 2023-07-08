@@ -20,6 +20,7 @@ out/
 ./src/main/resources/*.yml
 client/src/main/resources/*.yml
 client/src/main/resources/application.yml
+client/src/main/resources/client.yml
 
 ### Eclipse ###
 .apt_generated
