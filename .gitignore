@@ -6,11 +6,10 @@ build/
 !**/src/test/**/build/
 
 ### application config file ###
-src/**/resources/*.yml
-src/**/resources/*.properties
-/client/src/main/resources/client.yml
 *.yml
-
+!appspec.yml
+!.github/workflows/cd.yml
+!.github/workflows/gradle.yml
 
 ### STS ###
 .apt_generated
