@@ -19,7 +19,7 @@ out/
 ### config files ###
 ./src/main/resources/*.yml
 client/src/main/resources/*.yml
-
+client/src/main/resources/application.yml
 
 ### Eclipse ###
 .apt_generated
