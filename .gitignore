@@ -9,6 +9,7 @@ build/
 src/**/resources/*.yml
 src/**/resources/*.properties
 /client/src/main/resources/client.yml
+*.yml
 
 
 ### STS ###
