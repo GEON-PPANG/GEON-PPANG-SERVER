@@ -12,6 +12,7 @@ import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.BreadTypeRepository;
 import com.org.gunbbang.repository.MemberRepository;
 import com.org.gunbbang.repository.NutrientTypeRepository;
+import com.org.gunbbang.util.Security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,8 +36,10 @@ public class MemberService {
     private final NutrientTypeRepository nutrientTypeRepository;
 
     @Transactional
-    public MemberDetailResponseDto getMemberDetail(Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+    public MemberDetailResponseDto getMemberDetail() {
+        Long currentMemberId = SecurityUtil.getLoginMemberId();
+
+        Member member = memberRepository.findById(currentMemberId).orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
         BreadTypeResponseDto breadTypeResponseDto = BreadTypeResponseDto.builder()
                 .breadTypeId(member.getBreadTypeId().getBreadTypeId())
                 .breadTypeName(member.getBreadTypeId().getBreadTypeName())

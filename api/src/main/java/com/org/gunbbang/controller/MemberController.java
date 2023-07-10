@@ -24,8 +24,8 @@ public class MemberController {
 
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<MemberDetailResponseDto> getMemberDetail(@RequestHeader("memberId") @Valid Long memberId) {
-        MemberDetailResponseDto memberDetailResponseDto = memberService.getMemberDetail(memberId);
+    public ApiResponse<MemberDetailResponseDto> getMemberDetail() {
+        MemberDetailResponseDto memberDetailResponseDto = memberService.getMemberDetail();
         return ApiResponse.success(SuccessType.GET_MYPAGE_SUCCESS, memberDetailResponseDto);
     }
 
