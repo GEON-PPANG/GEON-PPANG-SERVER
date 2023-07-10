@@ -15,4 +15,8 @@ public class HandleException extends RuntimeException {
         return errorType.getHttpStatusCode();
     }
 
+    public ErrorType getErrorType() {
+        return errorType;
+    }
+
 }
