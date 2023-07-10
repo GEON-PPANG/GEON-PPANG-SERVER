@@ -50,7 +50,7 @@ INSERT INTO nutrient_type (nutrient_type_id, nutrient_type_name, is_ingredient_o
 
 -- member
 INSERT INTO member (email, password, platform_type, main_purpose, nickname, role, bread_type_id, nutrient_type_id)
-    VALUES ('example@naver.com', 'djfkskd!', 'NONE', '다이어트', '닉네임', 'ROLE_USER', 1, 3);
+    VALUES ('example@naver.com', 'djfkskd!', 'NONE', '다이어트', '닉네임', 'USER', 1, 3);
 
 -- category
 INSERT INTO category (category_id, category_name)
