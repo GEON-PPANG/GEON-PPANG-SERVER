@@ -25,7 +25,7 @@ public class Review {
     private Member memberId;
 
     @NotNull
-    private boolean isLike;
+    private Boolean isLike;
 
     private String reviewText;
 }

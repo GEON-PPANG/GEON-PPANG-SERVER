@@ -19,6 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * JWT 인증 필터
@@ -33,7 +34,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
-    private static final String WHITE_LIST = "/login"; // 로그인 요청은 필터에서 제외
+    private static final String WHITE_LIST = "/member/login"; // 로그인 요청은 필터에서 제외
 
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
@@ -97,7 +98,6 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
      * 해당 유저 객체를 saveAuthentication()으로 인증처리하여 인증 허가 처리된 객체를 SecurityContextHolder에 담기
      * 그 이후 다음 인증 필터로 넘김
      *
-     * 나는 여기서 userDetails의 username으로서 memberId를 사용하겠음
      */
     public void checkAccessTokenAndAuthentication(
             HttpServletRequest request,
@@ -108,7 +108,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         jwtService.extractAccessToken(request)
                 .filter(jwtService::isTokenValid)
                 .ifPresent(accessToken -> jwtService.extractMemberIdClaim(accessToken)
-                        .ifPresent(memberId -> memberRepository.findByMemberId(memberId)
+                        .ifPresent(memberId -> memberRepository.findById(memberId)
                                 .ifPresent(this::saveAuthentication)));
 
         filterChain.doFilter(request, response);
@@ -122,21 +122,14 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     public void saveAuthentication(Member myMember) {
         String password = myMember.getPassword();
         if (password == null) {
-            password = "TODO: 소셜로그인시 용 임시 패스워드 부여하기";
+            password = UUID.randomUUID().toString();
         }
-
-//        UserDetails userDetailsUser = org.springframework.security.core.userdetails.User.builder()
-//                .username(myMember.getEmail())
-//                .password(password)
-//                .roles(myMember.getRole().name())
-//                .build();
 
         CustomUserDetails userDetailsUser = new CustomUserDetails(
                 myMember.getEmail(),
                 myMember.getPassword(),
                 myMember.getMemberId());
 
-        // new UsernamePasswordAuthenticationToken()로 인증 객체인 Authentication 생성
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(
                         userDetailsUser, // 유저 정보 지정

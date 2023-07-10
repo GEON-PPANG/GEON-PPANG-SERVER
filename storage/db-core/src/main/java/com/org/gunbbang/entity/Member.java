@@ -38,15 +38,15 @@ public class Member {
     @NotNull
     private String mainPurpose; // 테이블로 뺄까 고민
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "bread_type_id")
-//    @NotNull
-//    private BreadType breadTypeId;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "nutrient_type_id")
-//    @NotNull
-//    private NutrientType nutrientTypeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bread_type_id")
+    @NotNull
+    private BreadType breadTypeId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "nutrient_type_id")
+    @NotNull
+    private NutrientType nutrientTypeId;
 
     private String refreshToken;
 

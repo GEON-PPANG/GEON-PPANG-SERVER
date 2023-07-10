@@ -9,11 +9,11 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class BreadTypeRequestDTO {
     @NotNull
-    private boolean isGlutenFree;
+    private Boolean isGlutenFree;
     @NotNull
-    private boolean isVegan;
+    private Boolean isVegan;
     @NotNull
-    private boolean isNutFree;
+    private Boolean isNutFree;
     @NotNull
-    private boolean isSugarFree;
+    private Boolean isSugarFree;
 }

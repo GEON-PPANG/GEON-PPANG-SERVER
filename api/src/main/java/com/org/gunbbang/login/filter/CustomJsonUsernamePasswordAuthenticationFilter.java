@@ -22,7 +22,7 @@ import java.util.Map;
  * "/login" 요청 왔을 때 json 값을 매핑 처리하는 필터
  */
 public class CustomJsonUsernamePasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
-    private static final String DEFAULT_LOGIN_REQUEST_URL = "/login";
+    private static final String DEFAULT_LOGIN_REQUEST_URL = "/member/login";
     private static final String HTTP_METHOD = "POST";
     private static final String CONTENT_TYPE = "application/json";
     private static final String USERNAME_KEY = "email";
@@ -38,7 +38,6 @@ public class CustomJsonUsernamePasswordAuthenticationFilter extends AbstractAuth
     }
 
     /**
-     * TODO: 이거 이해
      * UsernamePasswordAuthenticationFilter와 동일하게 UsernamePasswordAuthenticationToken 사용
      * 1. StreamUtils를 통해 requestBody를 꺼냄
      * 2. objectMapper.readValue()로 json의 키, json의 value를 usernamePasswordMap으로 변환
@@ -49,8 +48,6 @@ public class CustomJsonUsernamePasswordAuthenticationFilter extends AbstractAuth
      * authenticate()의 파라미터로 UsernamePasswordAuthenticationToken 객체를 넣고 인증 처리
      * (여기서 AuthenticationManager 객체는 ProviderManager -> SecurityConfig에서 설정)
      *
-     *
-     * 여기에서 principal을 어떻게 memberId로 설정하지??
      */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException {

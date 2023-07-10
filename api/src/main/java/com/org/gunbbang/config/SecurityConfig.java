@@ -33,7 +33,6 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final LoginService loginService;
     private final CustomLoginService customLoginService;
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
@@ -59,7 +58,7 @@ public class SecurityConfig {
                 // 아이콘, css, js 관련
                 // 기본 페이지, css, image, js 하위 폴더에 있는 자료들은 모두 접근 가능, h2-console에 접근 가능
                 .antMatchers("/","/css/**","/images/**","/js/**","/favicon.ico","/h2-console/**").permitAll()
-                .antMatchers("/signup").permitAll() // 회원가입은 모든 리소스에 접근 가능
+                .antMatchers("/member/signup").permitAll() // 회원가입은 모든 리소스에 접근 가능
                 .anyRequest().authenticated();
 
         // 원래 스프링 시큐리티 필터 순서가 LogoutFilter 이후에 로그인 필터 동작

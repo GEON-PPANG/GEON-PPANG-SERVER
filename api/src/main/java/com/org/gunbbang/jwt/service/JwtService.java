@@ -3,6 +3,8 @@ package com.org.gunbbang.jwt.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.org.gunbbang.NotFoundException;
+import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.MemberRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -43,13 +45,10 @@ public class JwtService {
 
     private final MemberRepository memberRepository;
 
-    // TODO: 여기 accessToken 발급할 떄 memberId로 해야하는거 아닌가??
-    // TODO: 애초에 식별자를 memberId 해야하는거 아닌가?
-    // TODO: claim에 email을 넣든 memberId를 넣든 상관없는데 userDetails에 uesrName을 memberId로 우리가 임의로 지정해야하는거 아닌가?
     public String createAccessToken(String email, Long memberId) {
         Date now = new Date();
         return JWT.create()
-                .withSubject(ACCESS_TOKEN_SUBJECT) // jwt의 subject 지정 (AccessToken으로 지정
+                .withSubject(ACCESS_TOKEN_SUBJECT) // jwt의 subject 지정 (AccessToken으로 지정)
                 .withExpiresAt(new Date(now.getTime() + accessTokenExpirationPeriod)) // 토큰 만료시간 지정
                 .withClaim(EMAIL_CLAIM, email)
                 .withClaim(MEMBER_ID_CLAIM, memberId)
@@ -152,7 +151,7 @@ public class JwtService {
         memberRepository.findByEmail(email)
                 .ifPresentOrElse(
                         member -> member.updateRefreshToken(refreshToken),
-                        () -> new Exception("해당 refreshtoken과 일치한 토큰을 가진 유저가 없습니다 ")
+                        () -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION)
                 );
     }
 

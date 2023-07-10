@@ -20,11 +20,9 @@ public class CustomLoginService implements UserDetailsService {
         Member member = memberRepository.findByEmail(userName)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 이메일이 존재하지 않습니다."));
 
-        System.out.println("### 커스텀 로그인 서비스 진입 ###");
         return new CustomUserDetails(
                 member.getEmail(),
                 member.getPassword(),
                 member.getMemberId());
-
     }
 }

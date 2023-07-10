@@ -9,10 +9,10 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class NutrientTypeRequestDTO {
     @NotNull
-    private boolean isNutrientOpen;
+    private Boolean isNutrientOpen;
     @NotNull
-    private boolean isIngredientOpen;
+    private Boolean isIngredientOpen;
     @NotNull
-    private boolean isNotOpen;
+    private Boolean isNotOpen;
 
 }

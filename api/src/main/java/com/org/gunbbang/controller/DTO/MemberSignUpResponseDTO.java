@@ -1,6 +1,7 @@
 package com.org.gunbbang.controller.DTO;
 
 
+import com.org.gunbbang.common.AuthType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class MemberSignUpResponseDTO {
-    private final String type;
+    private final AuthType type;
     private final String email;
 }
