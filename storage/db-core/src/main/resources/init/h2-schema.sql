@@ -75,14 +75,17 @@ create table book_mark
 create table member
 (
     member_id     bigint not null auto_increment,
-    bread_type_id            bigint not null,
-    nutrient_type_id         bigint not null,
+--     bread_type_id            bigint not null,
+--     nutrient_type_id         bigint not null,
+    bread_type_id            bigint,
+    nutrient_type_id         bigint,
     email         varchar(255) not null,
     main_purpose  varchar(255) not null,
     nickname      varchar(255) not null,
     password      varchar(255) not null,
     platform_type varchar(255) not null,
     role          varchar(255),
+    refresh_token  varchar(255),
     primary key (member_id)
 );
 

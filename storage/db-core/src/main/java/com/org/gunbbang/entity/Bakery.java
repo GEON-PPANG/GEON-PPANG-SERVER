@@ -47,13 +47,13 @@ public class Bakery {
 
     @ColumnDefault("false")
     @Column(name = "is_haccp")
-    private boolean isHACCP;
+    private Boolean isHACCP;
 
     @ColumnDefault("false")
-    private boolean isVegan;
+    private Boolean isVegan;
 
     @ColumnDefault("false")
-    private boolean isNonGMO;
+    private Boolean isNonGMO;
 
     @NotNull
     private String bakeryPicture;
