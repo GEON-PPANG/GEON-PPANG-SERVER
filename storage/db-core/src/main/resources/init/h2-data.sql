@@ -59,3 +59,19 @@ INSERT INTO category (category_id, category_name)
     VALUES (2, '디저트류');
 INSERT INTO category (category_id, category_name)
     VALUES (3, '브런치류');
+
+-- bakery
+INSERT INTO bakery (bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
+    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town)
+    VALUES (1,2,'1152-5','펄스브레드샵','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+    '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
+            '010-1111-1111','일산역','고양시','정발산동');
+INSERT INTO bakery (bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
+                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town)
+VALUES (1,2,'1152-5','펄스브레드샵2','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+        '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
+        '010-1111-1111','일산역','고양시','정발산동');
+
+-- bakery_category
+INSERT INTO bakery_category (bakery_id,category_id) values (1,2);
+INSERT INTO bakery_category (bakery_id,category_id) values (2,2);
