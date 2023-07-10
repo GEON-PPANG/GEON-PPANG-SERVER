@@ -26,6 +26,7 @@ create table bakery
     is_haccp                 boolean default false not null,
     is_nongmo                boolean default false not null,
     is_vegan                 boolean default false not null,
+    review_count             bigint  default 0,
     keyword_delicious_count  bigint  default 0,
     keyword_kind_count       bigint  default 0,
     keyword_special_count    bigint  default 0,

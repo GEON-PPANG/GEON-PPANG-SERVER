@@ -74,6 +74,9 @@ public class Bakery {
     private Long bookmarkCount;
 
     @ColumnDefault("0")
+    private Long reviewCount;
+
+    @ColumnDefault("0")
     private Long keywordDeliciousCount;
 
     @ColumnDefault("0")
