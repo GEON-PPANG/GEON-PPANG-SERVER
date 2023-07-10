@@ -56,10 +56,10 @@ public class BakeryService {
             breadTypeResponseDto = BreadTypeResponseDto.builder()
                     .breadTypeId(bakeryCategory.getBakeryId().getBreadTypeId().getBreadTypeId())
                     .breadTypeName(bakeryCategory.getBakeryId().getBreadTypeId().getBreadTypeName())
-                    .isGlutenFree(bakeryCategory.getBakeryId().getBreadTypeId().isGlutenFree())
-                    .isVegan(bakeryCategory.getBakeryId().getBreadTypeId().isVegan())
-                    .isNutFree(bakeryCategory.getBakeryId().getBreadTypeId().isNutFree())
-                    .isSugarFree(bakeryCategory.getBakeryId().getBreadTypeId().isSugarFree())
+                    .isGlutenFree(bakeryCategory.getBakeryId().getBreadTypeId().getIsGlutenFree())
+                    .isVegan(bakeryCategory.getBakeryId().getBreadTypeId().getIsVegan())
+                    .isNutFree(bakeryCategory.getBakeryId().getBreadTypeId().getIsNutFree())
+                    .isSugarFree(bakeryCategory.getBakeryId().getBreadTypeId().getIsSugarFree())
                     .build();
 
             if (bookmarkRepository.findByMemberIdAndBakeryId(memberRepository.findById(memberId).orElse(null), bakeryCategory.getBakeryId()).isPresent()) {
@@ -72,9 +72,9 @@ public class BakeryService {
                     .bakeryId(bakeryCategory.getBakeryId().getBakeryId())
                     .bakeryName(bakeryCategory.getBakeryId().getBakeryName())
                     .bakeryPicture(bakeryCategory.getBakeryId().getBakeryPicture())
-                    .isHACCP(bakeryCategory.getBakeryId().isHACCP())
-                    .isVegan(bakeryCategory.getBakeryId().isVegan())
-                    .isNonGMO(bakeryCategory.getBakeryId().isNonGMO())
+                    .isHACCP(bakeryCategory.getBakeryId().getIsHACCP())
+                    .isVegan(bakeryCategory.getBakeryId().getIsVegan())
+                    .isNonGMO(bakeryCategory.getBakeryId().getIsNonGMO())
                     .breadTypeResponseDto(breadTypeResponseDto)
                     .firstNearStation(bakeryCategory.getBakeryId().getFirstNearStation())
                     .secondNearStation(bakeryCategory.getBakeryId().getSecondNearStation())
