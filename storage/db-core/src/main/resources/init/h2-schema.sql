@@ -41,27 +41,27 @@ create table bakery
 
 
 create table category (
-      category_id bigint not null auto_increment,
-      category_name varchar(255),
-      primary key (category_id)
+                          category_id bigint not null auto_increment,
+                          category_name varchar(255),
+                          primary key (category_id)
 );
 
 
 create table bakery_category (
-     bakery_category_id bigint not null auto_increment,
-     bakery_id bigint not null,
-     category_id bigint not null,
-     primary key (bakery_category_id)
+                                 bakery_category_id bigint not null auto_increment,
+                                 bakery_id bigint not null,
+                                 category_id bigint not null,
+                                 primary key (bakery_category_id)
 );
 
 create table bread_type (
-    bread_type_id bigint not null auto_increment,
-    bread_type_name varchar(255) not null,
-    is_gluten_free boolean not null,
-    is_nut_free boolean not null,
-    is_sugar_free boolean not null,
-    is_vegan boolean not null,
-    primary key (bread_type_id)
+                            bread_type_id bigint not null auto_increment,
+                            bread_type_name varchar(255) not null,
+                            is_gluten_free boolean not null,
+                            is_nut_free boolean not null,
+                            is_sugar_free boolean not null,
+                            is_vegan boolean not null,
+                            primary key (bread_type_id)
 );
 
 create table book_mark
@@ -75,10 +75,8 @@ create table book_mark
 create table member
 (
     member_id     bigint not null auto_increment,
---     bread_type_id            bigint not null,
---     nutrient_type_id         bigint not null,
-    bread_type_id            bigint,
-    nutrient_type_id         bigint,
+    bread_type_id            bigint not null,
+    nutrient_type_id         bigint not null,
     email         varchar(255) not null,
     main_purpose  varchar(255) not null,
     nickname      varchar(255) not null,
@@ -100,12 +98,12 @@ create table menu
 
 
 create table nutrient_type (
-   nutrient_type_id bigint not null auto_increment,
-   is_ingredient_open boolean not null,
-   is_not_open boolean not null,
-   is_nutrient_open boolean not null,
-   nutrient_type_name varchar(255) not null,
-   primary key (nutrient_type_id)
+                               nutrient_type_id bigint not null auto_increment,
+                               is_ingredient_open boolean not null,
+                               is_not_open boolean not null,
+                               is_nutrient_open boolean not null,
+                               nutrient_type_name varchar(255) not null,
+                               primary key (nutrient_type_id)
 );
 
 create table recommend_keyword
@@ -129,7 +127,7 @@ create table review_recommend_keyword
 (
     review_recommend_keyword_id bigint not null auto_increment,
     recommend_keyword_id         bigint not null,
-    member_id                   bigint not null,
+    review_id                    bigint not null,
     primary key (review_recommend_keyword_id)
 );
 
@@ -185,10 +183,15 @@ alter table review_recommend_keyword
 
 alter table review_recommend_keyword
     add constraint fk11
-        foreign key (member_id)
-            references member (member_id) ON DELETE CASCADE ON UPDATE CASCADE;
+        foreign key (review_id)
+            references review (review_id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 alter table bakery_category
     add constraint fk12
         foreign key (category_id)
             references category (category_id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+alter table bakery_category
+    add constraint fk13
+        foreign key (bakery_id)
+            references bakery (bakery_id) ON DELETE CASCADE ON UPDATE CASCADE;

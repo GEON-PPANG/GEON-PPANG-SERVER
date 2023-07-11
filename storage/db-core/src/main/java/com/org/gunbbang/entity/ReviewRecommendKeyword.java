@@ -17,7 +17,7 @@ public class ReviewRecommendKeyword {
     private Long reviewRecommendKeywordId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "review_id")
     @NotNull
     private Review reviewId;
 
