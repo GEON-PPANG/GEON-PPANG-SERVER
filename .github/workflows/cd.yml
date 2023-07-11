@@ -36,7 +36,7 @@ jobs:
         mkdir ./api/src/main/resources ## GEON-PPANG-SERVER/api/src/main/resources/application.yml
         cd ./api/src/main/resources
         touch ./application.yml
-        cd / 
+        cd ~ 
         pwd
         
         ## create application.yml in client module
