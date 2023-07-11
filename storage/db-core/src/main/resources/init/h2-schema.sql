@@ -84,6 +84,8 @@ create table member
     platform_type varchar(255) not null,
     role          varchar(255),
     refresh_token  varchar(255),
+    created_at timestamp,
+    updated_at timestamp,
     primary key (member_id)
 );
 

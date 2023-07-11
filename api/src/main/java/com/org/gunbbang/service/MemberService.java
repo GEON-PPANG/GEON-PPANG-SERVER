@@ -18,8 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.org.gunbbang.Role;
-import com.org.gunbbang.controller.DTO.MemberSignUpRequestDTO;
-import com.org.gunbbang.controller.DTO.MemberSignUpResponseDTO;
+import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
+import com.org.gunbbang.controller.DTO.response.MemberSignUpResponseDTO;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -56,6 +56,7 @@ public class MemberService {
                 .build();
     }
 
+    @Transactional
     public MemberSignUpResponseDTO signUp(MemberSignUpRequestDTO memberSignUpRequestDTO) {
         if (memberRepository.findByEmail(memberSignUpRequestDTO.getEmail()).isPresent()) {
             throw new BadRequestException(ErrorType.ALREADY_EXIST_EMAIL_EXCEPTION);
@@ -92,10 +93,9 @@ public class MemberService {
         member.passwordEncode(passwordEncoder);
         memberRepository.save(member);
 
-        return new MemberSignUpResponseDTO(
-            AuthType.SIGN_UP,
-            member.getEmail()
-        );
-
+        return MemberSignUpResponseDTO.builder()
+                .type(AuthType.SIGN_UP)
+                .email(member.getEmail())
+                .build();
     }
 }
