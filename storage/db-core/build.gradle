@@ -16,6 +16,7 @@ dependencies {
     // TODO: 이 밑에 두개 passwordEncoder때문에 넣은건데 이 db-storage 모듈이 해당 의존성을 갖는게 맞나??
     implementation "org.springframework.security:spring-security-web"
     implementation "org.springframework.security:spring-security-config"
+    implementation 'mysql:mysql-connector-java:8.0.32'
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
     runtimeOnly("com.h2database:h2")
     testImplementation platform('org.junit:junit-bom:5.9.1')
