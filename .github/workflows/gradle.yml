@@ -72,10 +72,10 @@ jobs:
         
         # GitHub-Actions 에서 설정한 값을 application.yml 파일에 쓰기
         echo "${{ secrets.GUNBBANG_SECRET }}" >> ./api/src/main/resources/application.yml
-        echo "${{ secrets.GUNBBANG_SECRET_DB_CORE_APPLICATION_YML }}" >> ./storage/db-core/main/resources/application.yml
-        echo "${{ secrets.GUNBBANG_SECRET_DB_CORE }}" >> ./storage/db-core/main/resources/db-core.yml
+        echo "${{ secrets.GUNBBANG_SECRET_DB_CORE_APPLICATION_YML }}" >> ./storage/db-core/src/main/resources/application.yml
+        echo "${{ secrets.GUNBBANG_SECRET_DB_CORE }}" >> ./storage/db-core/src/main/resources/db-core.yml
         echo "${{ secrets.GUNBBANG_SECRET_CLIENT }}" >> ./client/src/main/resources/client.yml
-        echo "${{ secrets.GUNBBANG_SECRET_CLIENT_APPLICATION_YML }}" >> ./client/main/resources/application.yml
+        echo "${{ secrets.GUNBBANG_SECRET_CLIENT_APPLICATION_YML }}" >> ./client/src/main/resources/application.yml
         pwd
         
         # application.yml 파일 확인
