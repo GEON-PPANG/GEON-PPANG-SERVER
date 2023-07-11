@@ -120,6 +120,8 @@ create table review
     review_text varchar(255),
     bakery_id   bigint,
     member_id   bigint,
+    created_at timestamp,
+    updated_at timestamp,
     primary key (review_id)
 );
 
