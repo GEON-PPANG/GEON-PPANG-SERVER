@@ -19,9 +19,11 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-data-jpa" // 이거 개선해야됨
     implementation "org.springframework.security:spring-security-web"
     implementation "org.springframework.security:spring-security-config"
+    implementation 'mysql:mysql-connector-java:8.0.32'
     implementation 'com.auth0:java-jwt:4.2.1'
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+
     // 루트 build.gradle에 있는 의존성
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.6.RELEASE'
