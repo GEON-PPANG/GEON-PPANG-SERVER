@@ -55,6 +55,7 @@
 <br><br>
 
 ## 🛠️ Architecture Structure
+<img width="798" alt="image" src="https://github.com/GEON-PPANG/GEON-PPANG-SERVER/assets/89137120/30a727d6-4820-4067-818e-4d13945abcc2">
 
 <br><br>
 
