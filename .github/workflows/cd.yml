@@ -49,7 +49,7 @@ jobs:
         pwd
         
         ## create application.yml in storage module
-        mkdir ./storage/db-core/src/main/resources
+        # mkdir ./storage/db-core/src/main/resources
         cd ./storage/db-core/src/main/resources
         touch ./application.yml
         touch ./db-core.yml 
