@@ -1,15 +1,17 @@
 package com.org.gunbbang.service;
 
+import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.NotFoundException;
+import com.org.gunbbang.controller.DTO.response.BakeryDetailResponseDto;
 import com.org.gunbbang.controller.DTO.response.BakeryListResponseDto;
 import com.org.gunbbang.controller.DTO.response.BreadTypeResponseDto;
+import com.org.gunbbang.controller.DTO.response.MenuResponseDto;
+import com.org.gunbbang.entity.Bakery;
 import com.org.gunbbang.entity.BakeryCategory;
 import com.org.gunbbang.entity.Category;
+import com.org.gunbbang.entity.Menu;
 import com.org.gunbbang.errorType.ErrorType;
-import com.org.gunbbang.repository.BakeryCategoryRepository;
-import com.org.gunbbang.repository.BookmarkRepository;
-import com.org.gunbbang.repository.CategoryRepository;
-import com.org.gunbbang.repository.MemberRepository;
+import com.org.gunbbang.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,8 @@ public class BakeryService {
     private final BakeryCategoryRepository bakeryCategoryRepository;
     private final BookmarkRepository bookmarkRepository;
     private final MemberRepository memberRepository;
+    private final BakeryRepository bakeryRepository;
+    private final MenuRepository menuRepository;
 
     @Transactional
     public List<BakeryListResponseDto> getBakeryList(Long memberId, String sort, Boolean isHard, Boolean isDessert, Boolean isBrunch) {
@@ -62,7 +66,7 @@ public class BakeryService {
                     .isSugarFree(bakeryCategory.getBakeryId().getBreadTypeId().getIsSugarFree())
                     .build();
 
-            if (bookmarkRepository.findByMemberIdAndBakeryId(memberRepository.findById(memberId).orElse(null), bakeryCategory.getBakeryId()).isPresent()) {
+            if (bookmarkRepository.findByMemberIdAndBakeryId(memberRepository.findById(memberId).orElseThrow(()->new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION)), bakeryCategory.getBakeryId()).isPresent()) {
                 isBooked = Boolean.TRUE;
             } else {
                 isBooked = Boolean.FALSE;
@@ -85,5 +89,58 @@ public class BakeryService {
             responseDtoList.add(bakeryListResponseDto);
         }
         return responseDtoList;
+    }
+
+    @Transactional
+    public BakeryDetailResponseDto getBakeryDetail(Long memberId, Long bakeryId){
+        Boolean isBooked;
+
+        Bakery bakery= bakeryRepository.findById(bakeryId).orElseThrow(()->new NotFoundException(ErrorType.INVALID_BAKERY_EXCEPTION));
+
+        List<Menu> bakeryMenu = menuRepository.findAllByBakeryId(bakery);
+
+        BreadTypeResponseDto breadTypeResponseDto = BreadTypeResponseDto.builder()
+                .breadTypeId(bakery.getBreadTypeId().getBreadTypeId())
+                .breadTypeName(bakery.getBreadTypeId().getBreadTypeName())
+                .isGlutenFree(bakery.getBreadTypeId().getIsGlutenFree())
+                .isVegan(bakery.getBreadTypeId().getIsVegan())
+                .isNutFree(bakery.getBreadTypeId().getIsNutFree())
+                .isSugarFree(bakery.getBreadTypeId().getIsSugarFree())
+                .build();
+
+        if (bookmarkRepository.findByMemberIdAndBakeryId(memberRepository.findById(memberId).orElseThrow(()->new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION)), bakery).isPresent()) {
+            isBooked = Boolean.TRUE;
+        } else {
+            isBooked = Boolean.FALSE;
+        }
+
+        List<MenuResponseDto> menuList = new ArrayList<>();
+
+        for(Menu menu : bakeryMenu){
+            menuList.add(MenuResponseDto.builder()
+                            .menuId(menu.getMenuId())
+                            .menuName(menu.getMenuName())
+                            .menuPrice(menu.getMenuPrice())
+                            .build());
+        }
+
+        return BakeryDetailResponseDto.builder()
+                .bakeryId(bakery.getBakeryId())
+                .bakeryName(bakery.getBakeryName())
+                .bakeryPicture(bakery.getBakeryPicture())
+                .isHACCP(bakery.getIsHACCP())
+                .isVegan(bakery.getIsVegan())
+                .isNonGMO(bakery.getIsNonGMO())
+                .breadTypeResponseDto(breadTypeResponseDto)
+                .firstNearStation(bakery.getFirstNearStation())
+                .secondNearStation(bakery.getSecondNearStation())
+                .isBooked(isBooked)
+                .bookmarkCount(bakery.getBookmarkCount().intValue())
+                .homepage(bakery.getHomepage())
+                .openingTime(bakery.getOpeningHours())
+                .closedDay(bakery.getClosedDay())
+                .phoneNumber(bakery.getPhoneNumber())
+                .menuList(menuList)
+                .build();
     }
 }

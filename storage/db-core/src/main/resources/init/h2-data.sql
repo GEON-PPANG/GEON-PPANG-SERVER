@@ -75,3 +75,8 @@ VALUES (1,2,'1152-5','펄스브레드샵2','https://search.pstatic.net/common/?s
 -- bakery_category
 INSERT INTO bakery_category (bakery_id,category_id) values (1,2);
 INSERT INTO bakery_category (bakery_id,category_id) values (2,2);
+
+-- menu
+INSERT INTO menu (menu_name,menu_price,bakery_id) values ('소금빵',3000,1);
+INSERT INTO menu (menu_name,menu_price,bakery_id) values ('소금빵1',3000,1);
+INSERT INTO menu (menu_name,menu_price,bakery_id) values ('소금빵2',3000,1);

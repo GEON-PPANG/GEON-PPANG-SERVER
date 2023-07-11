@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BakeryCategoryRepository extends JpaRepository<BakeryCategory,Long> {
     @Query("SELECT bc FROM BakeryCategory bc WHERE bc.categoryId IN (:categoryList) order by bc.bakeryId.bakeryId desc")
