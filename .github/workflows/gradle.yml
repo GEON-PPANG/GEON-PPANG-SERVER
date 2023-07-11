@@ -43,6 +43,7 @@ jobs:
     # 3) 환경변수 파일 생성
     - name: make application.yml 파일 생성
       run: |
+        pwd
         ## create application.yml in api module
         mkdir ./api/src/main/resources ## GEON-PPANG-SERVER/api/src/main/resources/application.yml
         cd ./api/src/main/resources
