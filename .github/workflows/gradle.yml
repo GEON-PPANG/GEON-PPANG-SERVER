@@ -48,24 +48,27 @@ jobs:
         mkdir ./api/src/main/resources ## GEON-PPANG-SERVER/api/src/main/resources/application.yml
         cd ./api/src/main/resources
         touch ./application.yml
+        ls -al
         cd /home/runner/work/GEON-PPANG-SERVER/GEON-PPANG-SERVER
-        pwd
+        
         
         ## create application.yml in client module
         mkdir ./client/src/main/resources
         cd ./client/src/main/resources
         touch ./application.yml
         touch ./client.yml     
+        ls -al
         cd /home/runner/work/GEON-PPANG-SERVER/GEON-PPANG-SERVER
-        pwd
+        
         
         ## create application.yml in storage module
         # mkdir ./storage/db-core/src/main/resources
         cd ./storage/db-core/src/main/resources
         touch ./application.yml
         touch ./db-core.yml 
+        ls -al
         cd /home/runner/work/GEON-PPANG-SERVER/GEON-PPANG-SERVER
-        pwd
+        
         
         # GitHub-Actions 에서 설정한 값을 application.yml 파일에 쓰기
         echo "${{ secrets.GUNBBANG_SECRET }}" >> ./api/src/main/resources/application.yml
