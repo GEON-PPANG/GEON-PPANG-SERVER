@@ -13,8 +13,8 @@
   <th>임승하 @seunghaLim</th>
 	<th>김성은 @sung-silver</th>
 	<tr>
-		<td><img width="500" src="https://github.com/GEON-PPANG/GEON-PPANG-SERVER/assets/81363864/8caafe17-3b5a-41a8-9fe9-29f52b85569a"></td>
-		<td><img width="500" src="https://github.com/GEON-PPANG/GEON-PPANG-SERVER/assets/81363864/0c35d573-3ecc-4c0e-a029-9222ec5352aag"></td>
+		<td><img width="300" src="https://github.com/GEON-PPANG/GEON-PPANG-SERVER/assets/81363864/8caafe17-3b5a-41a8-9fe9-29f52b85569a"></td>
+		<td><img width="300" src="https://github.com/GEON-PPANG/GEON-PPANG-SERVER/assets/81363864/0c35d573-3ecc-4c0e-a029-9222ec5352aag"></td>
 	</tr>
 <th> 역할</th>
 <th> 역할</th>
