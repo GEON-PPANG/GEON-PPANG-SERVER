@@ -4,7 +4,7 @@
  <br>
 <img width="1728" alt="서버_과제제출_서비스설명" src="https://github.com/GEON-PPANG/GEON-PPANG-SERVER/assets/81363864/67b95ef8-36e3-469f-babd-655934fe535a">
 
-<br>
+<br><br>
 
 
 ## 🍞 Backend Developer
@@ -52,15 +52,15 @@
 
  <img src="https://img.shields.io/badge/Java-007396?style=flat&logo=CoffeeScript&logoColor=white" /> <img src="https://img.shields.io/badge/spring-boot-6DB33F?style=flat&logo=Spring Boot&logoColor=white" /> <img src="https://img.shields.io/badge/Python-3776AB?style=flat&logo=Python&logoColor=white" /> <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=MySQL&logoColor=white" />
 
-<br>
+<br><br>
 
 ## 🛠️ Architecture Structure
 
-
+<br><br>
 
 ## 🔐 Gunbbang Server's Rule
-[🍞 건빵 서버 규칙 🍞]([https://www.notion.so/sungah/8300f9e5674e4245892792778507685e?pvs=4](https://sungah.notion.site/8300f9e5674e4245892792778507685e?pvs=4))
-<br>
+[🍞 건빵 서버 규칙 🍞](https://www.notion.so/sungah/8300f9e5674e4245892792778507685e?pvs=4)
+<br><br>
 
 
 ## 📂 Project Structure
