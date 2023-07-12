@@ -99,7 +99,19 @@ public class Bakery {
     }
     public void keywordCountChange(String keyword) {
         switch(keyword){
-            case:
+            case "맛있어요":
+                this.keywordDeliciousCount++;
+                break;
+            case "친절해요":
+                this.keywordKindCount++;
+                break;
+            case "특별한 메뉴":
+                this.keywordSpecialCount++;
+                break;
+            case "제로 웨이스트":
+                this.keywordZeroWasteCount++;
+                break;
+            default:
         }
     }
 }

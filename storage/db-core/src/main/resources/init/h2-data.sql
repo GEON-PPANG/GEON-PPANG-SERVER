@@ -80,3 +80,9 @@ INSERT INTO bakery_category (bakery_id,category_id) values (2,2);
 INSERT INTO menu (menu_name,menu_price,bakery_id) values ('소금빵',3000,1);
 INSERT INTO menu (menu_name,menu_price,bakery_id) values ('소금빵1',3000,1);
 INSERT INTO menu (menu_name,menu_price,bakery_id) values ('소금빵2',3000,1);
+
+-- recommend
+INSERT INTO recommend_keyword (keyword_name) values ('맛있어요');
+INSERT INTO recommend_keyword (keyword_name) values ('친절해요');
+INSERT INTO recommend_keyword (keyword_name) values ('특별한 메뉴');
+INSERT INTO recommend_keyword (keyword_name) values ('제로 웨이스트');
