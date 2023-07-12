@@ -33,7 +33,6 @@ public class ReviewService {
 
     public Long createReview(Long bakeryId, ReviewRequestDto reviewRequestDto){
         Long currentMemberId = SecurityUtil.getLoginMemberId();
-        System.out.println(currentMemberId);
         Member member = memberRepository.findById(currentMemberId).orElseThrow(()->new BadRequestException(ErrorType.TOKEN_TIME_EXPIRED_EXCEPTION));
         Bakery bakery = bakeryRepository.findById(bakeryId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
         Review review = reviewRepository.save(Review.builder()
@@ -45,7 +44,6 @@ public class ReviewService {
         // 리뷰 작성되면 review count 증가
         bakery.reviewCountChange(true);
         bakeryRepository.save(bakery);
-        System.out.println(bakery.getBakeryName());
         return review.getReviewId();
     }
 
