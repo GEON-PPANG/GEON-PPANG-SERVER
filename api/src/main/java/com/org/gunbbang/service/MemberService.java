@@ -162,4 +162,35 @@ public class MemberService {
                 .nutrientType(nutrientTypeResponse)
                 .build();
     }
+
+    public MemberTypesResponseDTO getMemberTypes(Long memberId) {
+        Member foundMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+
+        BreadType foundMemberBreadType = foundMember.getBreadType();
+        BreadTypeResponseDto breadTypeResponse = BreadTypeResponseDto.builder()
+                .breadTypeId(foundMemberBreadType.getBreadTypeId())
+                .breadTypeName(foundMemberBreadType.getBreadTypeName())
+                .isGlutenFree(foundMemberBreadType.getIsGlutenFree())
+                .isVegan(foundMemberBreadType.getIsVegan())
+                .isNutFree(foundMemberBreadType.getIsNutFree())
+                .isSugarFree(foundMemberBreadType.getIsSugarFree())
+                .build();
+
+        NutrientType foundMemberNutrientType = foundMember.getNutrientType();
+        NutrientTypeResponseDTO nutrientTypeResponse = NutrientTypeResponseDTO.builder()
+                .nutrientTypeId(foundMemberNutrientType.getNutrientTypeId())
+                .nutrientTypeName(foundMemberNutrientType.getNutrientTypeName())
+                .isNutrientOpen(foundMemberNutrientType.getIsNutrientOpen())
+                .isIngredientOpen(foundMemberNutrientType.getIsIngredientOpen())
+                .isNotOpen(foundMemberNutrientType.getIsNotOpen())
+                .build();
+
+        return MemberTypesResponseDTO.builder()
+                .memberId(foundMember.getMemberId())
+                .mainPurpose(foundMember.getMainPurpose())
+                .breadType(breadTypeResponse)
+                .nutrientType(nutrientTypeResponse)
+                .build();
+    }
 }

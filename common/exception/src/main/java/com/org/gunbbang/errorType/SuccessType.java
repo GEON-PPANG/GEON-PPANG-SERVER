@@ -24,6 +24,7 @@ public enum SuccessType {
     CANCEL_BOOKMARK_SUCCESS(HttpStatus.OK, "북마크 취소 성공"),
     DELETE_IMAGE_SUCCESS(HttpStatus.OK, "이미지 삭제에 성공했습니다."),
     UPDATE_MEMBER_TYPES_SUCCESS(HttpStatus.OK, "회원 필터칩 변경 성공"),
+    GET_MEMBER_TYPES_SUCCESS(HttpStatus.OK, "회원 필터칩 조회 성공"),
 
     /**
      * 201 CREATED
