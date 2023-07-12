@@ -60,4 +60,12 @@ public class Member extends BaseEntity{
     public void passwordEncode(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(this.password);
     }
+
+    public void updateBreadType(BreadType breadType) {
+        this.breadType = breadType;
+    }
+
+    public void updateNutrientType(NutrientType nutrientType) {
+        this.nutrientType = nutrientType;
+    }
 }
