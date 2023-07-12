@@ -45,4 +45,11 @@ public class MemberController {
         Long memberId = SecurityUtil.getLoginMemberId();
         return ApiResponse.success(SuccessType.UPDATE_MEMBER_TYPES_SUCCESS, memberService.updateMemberTypes(request, memberId));
     }
+
+    @GetMapping("/types")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<MemberTypesResponseDTO> getMemberTypes() {
+        Long memberId = SecurityUtil.getLoginMemberId();
+        return ApiResponse.success(SuccessType.GET_MEMBER_TYPES_SUCCESS, memberService.getMemberTypes(memberId));
+    }
 }
