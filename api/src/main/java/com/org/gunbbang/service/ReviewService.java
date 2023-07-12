@@ -1,9 +1,11 @@
 package com.org.gunbbang.service;
 
+import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.controller.DTO.MemberSignUpRequestDTO;
 import com.org.gunbbang.controller.DTO.MemberSignUpResponseDTO;
 import com.org.gunbbang.controller.DTO.request.ReviewRequestDto;
+import com.org.gunbbang.entity.Bakery;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.BakeryRepository;
@@ -28,8 +30,9 @@ public class ReviewService {
 
     public Long createReview(Long bakeryId, ReviewRequestDto reviewRequestDto){
         Long currentMemberId = SecurityUtil.getLoginMemberId();
-        Member member = memberRepository.findById(currentMemberId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
-        Bakery bakery = bakeryRepository.findById(bakeryId).orElseThrow(()->new NotFoundException(ErrorType.NOT))
+        Member member = memberRepository.findById(currentMemberId).orElseThrow(()->new BadRequestException(ErrorType.TOKEN_TIME_EXPIRED_EXCEPTION));
+        Bakery bakery = bakeryRepository.findById(bakeryId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
+        return 1L;
     }
 
 

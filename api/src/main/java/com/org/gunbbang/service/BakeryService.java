@@ -41,13 +41,13 @@ public class BakeryService {
 
 
         if (Boolean.TRUE.equals(isHard)) {
-            categoryIdList.add(categoryRepository.findByCategoryName("하드빵류").orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION)));
+            categoryIdList.add(categoryRepository.findByCategoryName("하드빵류").orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
         }
         if (Boolean.TRUE.equals(isDessert)) {
-            categoryIdList.add(categoryRepository.findByCategoryName("디저트류").orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION)));
+            categoryIdList.add(categoryRepository.findByCategoryName("디저트류").orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
         }
         if (Boolean.TRUE.equals(isBrunch)) {
-            categoryIdList.add(categoryRepository.findByCategoryName("브런치류").orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION)));
+            categoryIdList.add(categoryRepository.findByCategoryName("브런치류").orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
         }
 
 
@@ -67,7 +67,7 @@ public class BakeryService {
                     .isSugarFree(bakeryCategory.getBakeryId().getBreadTypeId().getIsSugarFree())
                     .build();
 
-            if (bookmarkRepository.findByMemberIdAndBakeryId(memberRepository.findById(memberId).orElseThrow(()->new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION)), bakeryCategory.getBakeryId()).isPresent()) {
+            if (bookmarkRepository.findByMemberIdAndBakeryId(memberRepository.findById(memberId).orElseThrow(()->new BadRequestException(ErrorType.TOKEN_TIME_EXPIRED_EXCEPTION)), bakeryCategory.getBakeryId()).isPresent()) {
                 isBooked = Boolean.TRUE;
             } else {
                 isBooked = Boolean.FALSE;
@@ -95,7 +95,7 @@ public class BakeryService {
     public BakeryDetailResponseDto getBakeryDetail(Long memberId, Long bakeryId){
         Boolean isBooked;
 
-        Bakery bakery= bakeryRepository.findById(bakeryId).orElseThrow(()->new NotFoundException(ErrorType.INVALID_BAKERY_EXCEPTION));
+        Bakery bakery= bakeryRepository.findById(bakeryId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
 
         List<Menu> bakeryMenu = menuRepository.findAllByBakeryId(bakery);
 
