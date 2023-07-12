@@ -6,10 +6,7 @@ import com.org.gunbbang.controller.DTO.MemberSignUpRequestDTO;
 import com.org.gunbbang.controller.DTO.MemberSignUpResponseDTO;
 import com.org.gunbbang.controller.DTO.request.KeywordNameRequestDto;
 import com.org.gunbbang.controller.DTO.request.ReviewRequestDto;
-import com.org.gunbbang.entity.Bakery;
-import com.org.gunbbang.entity.Member;
-import com.org.gunbbang.entity.RecommendKeyword;
-import com.org.gunbbang.entity.Review;
+import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
 import com.org.gunbbang.util.Security.SecurityUtil;
@@ -41,17 +38,26 @@ public class ReviewService {
                         .isLike(reviewRequestDto.getIsLike())
                         .reviewText(reviewRequestDto.getReviewText())
                 .build()).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_SAVE_REVIEW)).getReviewId();
-        //TODO: 리뷰 작성되면 review count 증가
-
+        // 리뷰 작성되면 review count 증가
+        bakery.reviewCountChange(true);
+        bakeryRepository.save(bakery);
         return reviewId;
     }
 
     public void createReviewRecommendKeyword(List<KeywordNameRequestDto> keywordNameRequestDtoList, Long reviewId){
         Review review = reviewRepository.findById(reviewId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_REVIEW));
+        Bakery bakery = bakeryRepository.findById(review.getBakeryId().getBakeryId()).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
         for(KeywordNameRequestDto keyword : keywordNameRequestDtoList){
-            RecommendKeyword recommendKeyword = recommendKeywordRepository.findByKeywordName(keyword.getKeywordName()).orElseThrow(new ));
-            //TODO: 키워드 증가하면 리뷰에도 keywordcount 증가
+            RecommendKeyword recommendKeyword = recommendKeywordRepository.findByKeywordName(keyword.getKeywordName()).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION));
+            reviewRecommendKeywordRepository.save(ReviewRecommendKeyword.builder()
+                            .recommendKeywordId(recommendKeyword)
+                            .reviewId(review)
+                    .build());
+            // 키워드 증가하면 리뷰에도 keywordcount 증가
+            bakery.keywordCountChange(keyword.getKeywordName());
         }
+        bakeryRepository.save(bakery);
+
     }
 
 

@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -87,6 +88,20 @@ public class Bakery {
 
     @ColumnDefault("0")
     private Long keywordZeroWasteCount;
+
+    public void reviewCountChange(boolean status){
+        if(status){
+            this.reviewCount++;
+        }
+        else{
+            this.reviewCount--;
+        }
+    }
+    public void keywordCountChange(String keyword) {
+        switch(keyword){
+            case:
+        }
+    }
 }
 
 
