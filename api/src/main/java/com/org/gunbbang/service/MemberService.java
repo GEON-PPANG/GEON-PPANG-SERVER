@@ -35,7 +35,6 @@ public class MemberService {
     private final BreadTypeRepository breadTypeRepository;
     private final NutrientTypeRepository nutrientTypeRepository;
 
-    @Transactional
     public MemberDetailResponseDto getMemberDetail() {
         Long currentMemberId = SecurityUtil.getLoginMemberId();
 
@@ -96,6 +95,5 @@ public class MemberService {
             AuthType.SIGN_UP,
             member.getEmail()
         );
-
     }
 }

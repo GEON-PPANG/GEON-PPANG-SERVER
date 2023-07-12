@@ -28,4 +28,5 @@ public class Review {
     private Boolean isLike;
 
     private String reviewText;
+
 }

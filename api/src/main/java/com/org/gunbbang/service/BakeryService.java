@@ -13,13 +13,15 @@ import com.org.gunbbang.entity.Menu;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class BakeryService {
     private final CategoryRepository categoryRepository;
@@ -29,7 +31,6 @@ public class BakeryService {
     private final BakeryRepository bakeryRepository;
     private final MenuRepository menuRepository;
 
-    @Transactional
     public List<BakeryListResponseDto> getBakeryList(Long memberId, String sort, Boolean isHard, Boolean isDessert, Boolean isBrunch) {
         List<Category> categoryIdList = new ArrayList<>();
         List<BakeryCategory> bakeryCategoryList;
@@ -91,7 +92,6 @@ public class BakeryService {
         return responseDtoList;
     }
 
-    @Transactional
     public BakeryDetailResponseDto getBakeryDetail(Long memberId, Long bakeryId){
         Boolean isBooked;
 
