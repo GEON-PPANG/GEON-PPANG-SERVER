@@ -2,6 +2,7 @@ package com.org.gunbbang.entity;
 
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,4 +30,11 @@ public class Review {
 
     private String reviewText;
 
+    @Builder
+    public Review(Bakery bakeryId, Member memberId, Boolean isLike, String reviewText) {
+        this.bakeryId = bakeryId;
+        this.memberId = memberId;
+        this.isLike = isLike;
+        this.reviewText = reviewText;
+    }
 }

@@ -10,4 +10,5 @@ import java.util.List;
 public class ReviewRequestDto {
     Boolean isLike;
     List<KeywordNameRequestDto> keywordList;
+    String reviewText;
 }
