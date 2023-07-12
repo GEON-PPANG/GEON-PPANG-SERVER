@@ -2,8 +2,6 @@ package com.org.gunbbang.service;
 
 import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.NotFoundException;
-import com.org.gunbbang.controller.DTO.MemberSignUpRequestDTO;
-import com.org.gunbbang.controller.DTO.MemberSignUpResponseDTO;
 import com.org.gunbbang.controller.DTO.request.KeywordNameRequestDto;
 import com.org.gunbbang.controller.DTO.request.ReviewRequestDto;
 import com.org.gunbbang.entity.*;
@@ -48,12 +46,12 @@ public class ReviewService {
 
     public void createReviewRecommendKeyword(List<KeywordNameRequestDto> keywordNameRequestDtoList, Long reviewId){
         Review review = reviewRepository.findById(reviewId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_REVIEW));
-        Bakery bakery = bakeryRepository.findById(review.getBakeryId().getBakeryId()).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
+        Bakery bakery = bakeryRepository.findById(review.getBakery().getBakeryId()).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
         for(KeywordNameRequestDto keyword : keywordNameRequestDtoList){
             RecommendKeyword recommendKeyword = recommendKeywordRepository.findByKeywordName(keyword.getKeywordName()).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION));
             reviewRecommendKeywordRepository.save(ReviewRecommendKeyword.builder()
-                            .recommendKeywordId(recommendKeyword)
-                            .reviewId(review)
+                            .recommendKeyword(recommendKeyword)
+                            .review(review)
                     .build());
             // 키워드 증가하면 리뷰에도 keywordcount 증가
             bakery.keywordCountChange(keyword.getKeywordName());

@@ -20,11 +20,11 @@ public class BookMark {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     @NotNull
-    private Member memberId;
+    private Member member;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bakery_id")
     @NotNull
-    private  Bakery bakeryId;
+    private  Bakery bakery;
 }

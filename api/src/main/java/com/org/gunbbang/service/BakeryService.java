@@ -2,22 +2,19 @@ package com.org.gunbbang.service;
 
 import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.NotFoundException;
-import com.org.gunbbang.controller.DTO.response.BakeryDetailResponseDto;
-import com.org.gunbbang.controller.DTO.response.BakeryListResponseDto;
-import com.org.gunbbang.controller.DTO.response.BreadTypeResponseDto;
-import com.org.gunbbang.controller.DTO.response.MenuResponseDto;
-import com.org.gunbbang.entity.Bakery;
-import com.org.gunbbang.entity.BakeryCategory;
-import com.org.gunbbang.entity.Category;
-import com.org.gunbbang.entity.Menu;
+import com.org.gunbbang.controller.DTO.response.*;
+import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
+import com.org.gunbbang.util.Security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -30,6 +27,8 @@ public class BakeryService {
     private final MemberRepository memberRepository;
     private final BakeryRepository bakeryRepository;
     private final MenuRepository menuRepository;
+
+    private final int maxBestBakeryCount = 10;
 
     public List<BakeryListResponseDto> getBakeryList(Long memberId, String sort, Boolean isHard, Boolean isDessert, Boolean isBrunch) {
         List<Category> categoryIdList = new ArrayList<>();
@@ -59,32 +58,32 @@ public class BakeryService {
 
         for (BakeryCategory bakeryCategory : bakeryCategoryList) {
             breadTypeResponseDto = BreadTypeResponseDto.builder()
-                    .breadTypeId(bakeryCategory.getBakeryId().getBreadTypeId().getBreadTypeId())
-                    .breadTypeName(bakeryCategory.getBakeryId().getBreadTypeId().getBreadTypeName())
-                    .isGlutenFree(bakeryCategory.getBakeryId().getBreadTypeId().getIsGlutenFree())
-                    .isVegan(bakeryCategory.getBakeryId().getBreadTypeId().getIsVegan())
-                    .isNutFree(bakeryCategory.getBakeryId().getBreadTypeId().getIsNutFree())
-                    .isSugarFree(bakeryCategory.getBakeryId().getBreadTypeId().getIsSugarFree())
+                    .breadTypeId(bakeryCategory.getBakery().getBreadType().getBreadTypeId())
+                    .breadTypeName(bakeryCategory.getBakery().getBreadType().getBreadTypeName())
+                    .isGlutenFree(bakeryCategory.getBakery().getBreadType().getIsGlutenFree())
+                    .isVegan(bakeryCategory.getBakery().getBreadType().getIsVegan())
+                    .isNutFree(bakeryCategory.getBakery().getBreadType().getIsNutFree())
+                    .isSugarFree(bakeryCategory.getBakery().getBreadType().getIsSugarFree())
                     .build();
 
-            if (bookmarkRepository.findByMemberIdAndBakeryId(memberRepository.findById(memberId).orElseThrow(()->new BadRequestException(ErrorType.TOKEN_TIME_EXPIRED_EXCEPTION)), bakeryCategory.getBakeryId()).isPresent()) {
+            if (bookmarkRepository.findByMemberAndBakery(memberRepository.findById(memberId).orElseThrow(()->new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION)), bakeryCategory.getBakery()).isPresent()) {
                 isBooked = Boolean.TRUE;
             } else {
                 isBooked = Boolean.FALSE;
             }
 
             bakeryListResponseDto = BakeryListResponseDto.builder()
-                    .bakeryId(bakeryCategory.getBakeryId().getBakeryId())
-                    .bakeryName(bakeryCategory.getBakeryId().getBakeryName())
-                    .bakeryPicture(bakeryCategory.getBakeryId().getBakeryPicture())
-                    .isHACCP(bakeryCategory.getBakeryId().getIsHACCP())
-                    .isVegan(bakeryCategory.getBakeryId().getIsVegan())
-                    .isNonGMO(bakeryCategory.getBakeryId().getIsNonGMO())
+                    .bakeryId(bakeryCategory.getBakery().getBakeryId())
+                    .bakeryName(bakeryCategory.getBakery().getBakeryName())
+                    .bakeryPicture(bakeryCategory.getBakery().getBakeryPicture())
+                    .isHACCP(bakeryCategory.getBakery().getIsHACCP())
+                    .isVegan(bakeryCategory.getBakery().getIsVegan())
+                    .isNonGMO(bakeryCategory.getBakery().getIsNonGMO())
                     .breadTypeResponseDto(breadTypeResponseDto)
-                    .firstNearStation(bakeryCategory.getBakeryId().getFirstNearStation())
-                    .secondNearStation(bakeryCategory.getBakeryId().getSecondNearStation())
+                    .firstNearStation(bakeryCategory.getBakery().getFirstNearStation())
+                    .secondNearStation(bakeryCategory.getBakery().getSecondNearStation())
                     .isBooked(isBooked)
-                    .bookmarkCount(bakeryCategory.getBakeryId().getBookmarkCount().intValue())
+                    .bookmarkCount(bakeryCategory.getBakery().getBookmarkCount().intValue())
                     .build();
 
             responseDtoList.add(bakeryListResponseDto);
@@ -97,18 +96,18 @@ public class BakeryService {
 
         Bakery bakery= bakeryRepository.findById(bakeryId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
 
-        List<Menu> bakeryMenu = menuRepository.findAllByBakeryId(bakery);
+        List<Menu> bakeryMenu = menuRepository.findAllByBakery(bakery);
 
         BreadTypeResponseDto breadTypeResponseDto = BreadTypeResponseDto.builder()
-                .breadTypeId(bakery.getBreadTypeId().getBreadTypeId())
-                .breadTypeName(bakery.getBreadTypeId().getBreadTypeName())
-                .isGlutenFree(bakery.getBreadTypeId().getIsGlutenFree())
-                .isVegan(bakery.getBreadTypeId().getIsVegan())
-                .isNutFree(bakery.getBreadTypeId().getIsNutFree())
-                .isSugarFree(bakery.getBreadTypeId().getIsSugarFree())
+                .breadTypeId(bakery.getBreadType().getBreadTypeId())
+                .breadTypeName(bakery.getBreadType().getBreadTypeName())
+                .isGlutenFree(bakery.getBreadType().getIsGlutenFree())
+                .isVegan(bakery.getBreadType().getIsVegan())
+                .isNutFree(bakery.getBreadType().getIsNutFree())
+                .isSugarFree(bakery.getBreadType().getIsSugarFree())
                 .build();
 
-        if (bookmarkRepository.findByMemberIdAndBakeryId(memberRepository.findById(memberId).orElseThrow(()->new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION)), bakery).isPresent()) {
+        if (bookmarkRepository.findByMemberAndBakery(memberRepository.findById(memberId).orElseThrow(()->new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION)), bakery).isPresent()) {
             isBooked = Boolean.TRUE;
         } else {
             isBooked = Boolean.FALSE;
@@ -142,5 +141,66 @@ public class BakeryService {
                 .phoneNumber(bakery.getPhoneNumber())
                 .menuList(menuList)
                 .build();
+    }
+
+    @Transactional
+    public List<BestBakeryListResponseDTO> getBestBakeries() {
+        Long memberId = SecurityUtil.getLoginMemberId();
+
+        Member foundMember = memberRepository
+                .findById(memberId)
+                .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+
+        PageRequest bestPageRequest = PageRequest.of(0, maxBestBakeryCount);
+        List<Bakery> bestBakeries = bakeryRepository.findBestBakeries(
+                foundMember.getBreadType().getBreadTypeId(),
+                foundMember.getMainPurpose(),
+                bestPageRequest // TODO: 일케하는게맞냐????
+        );
+
+        if (bestBakeries.size() == maxBestBakeryCount){
+            return getResponseBakeries(foundMember, bestBakeries);
+        }
+
+        List<Long> alreadyFoundBakeries = bestBakeries.stream().map(Bakery::getBakeryId).collect(Collectors.toList());
+        PageRequest restPageRequest = PageRequest.of(0, maxBestBakeryCount - bestBakeries.size());
+        bestBakeries.addAll(bakeryRepository.findBakeriesByBreadTypeId(
+                        foundMember.getBreadType(),
+                        alreadyFoundBakeries,
+                        restPageRequest));
+
+        return getResponseBakeries(foundMember, bestBakeries);
+
+    }
+
+    private List<BestBakeryListResponseDTO> getResponseBakeries(Member member, List<Bakery> bakeries) {
+        List<BestBakeryListResponseDTO> responseDtoList = new ArrayList();
+        for (Bakery bestBakery: bakeries) {
+            Boolean isBooked = isBooked(member, bestBakery);
+
+            BestBakeryListResponseDTO response = BestBakeryListResponseDTO.builder()
+                    .bakeryId(bestBakery.getBakeryId())
+                    .bakeryName(bestBakery.getBakeryName())
+                    .bakeryPicture(bestBakery.getBakeryPicture())
+                    .isHACCP(bestBakery.getIsHACCP())
+                    .isVegan(bestBakery.getIsVegan())
+                    .isNonGMO(bestBakery.getIsNonGMO())
+                    .firstNearStation(bestBakery.getFirstNearStation())
+                    .secondNearStation(bestBakery.getSecondNearStation())
+                    .isBooked(isBooked)
+                    .bookmarkCount(bestBakery.getBookmarkCount().intValue())
+                    .build();
+
+            responseDtoList.add(response);
+        }
+        return responseDtoList;
+    }
+
+    private Boolean isBooked(Member member, Bakery bakery) {
+        Boolean isBooked = Boolean.FALSE;
+        if (bookmarkRepository.findByMemberAndBakery(member, bakery).isPresent()) {
+            isBooked = Boolean.TRUE;
+        }
+        return isBooked;
     }
 }

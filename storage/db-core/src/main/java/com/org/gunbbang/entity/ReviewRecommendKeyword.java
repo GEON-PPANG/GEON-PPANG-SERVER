@@ -20,16 +20,16 @@ public class ReviewRecommendKeyword {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id")
     @NotNull
-    private Review reviewId;
+    private Review review;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recommend_keyword_id")
     @NotNull
-    private RecommendKeyword recommendKeywordId;
+    private RecommendKeyword recommendKeyword;
 
     @Builder
-    public ReviewRecommendKeyword(Review reviewId, RecommendKeyword recommendKeywordId) {
-        this.reviewId = reviewId;
-        this.recommendKeywordId = recommendKeywordId;
+    public ReviewRecommendKeyword(Review review, RecommendKeyword recommendKeyword) {
+        this.review = review;
+        this.recommendKeyword = recommendKeyword;
     }
 }

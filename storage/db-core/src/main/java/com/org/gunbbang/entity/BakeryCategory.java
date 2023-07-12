@@ -20,11 +20,11 @@ public class BakeryCategory {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bakery_id")
     @NotNull
-    private Bakery bakeryId;
+    private Bakery bakery;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     @NotNull
-    private Category categoryId;
+    private Category category;
 
 }

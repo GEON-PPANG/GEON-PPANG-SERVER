@@ -1,5 +1,6 @@
 package com.org.gunbbang.entity;
 
+import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.PlatformType;
 import com.org.gunbbang.Role;
 import lombok.*;
@@ -36,17 +37,18 @@ public class Member extends BaseEntity{
     private Role role;
 
     @NotNull
-    private String mainPurpose; // 테이블로 뺄까 고민
+    @Enumerated(EnumType.STRING)
+    private MainPurpose mainPurpose; // 테이블로 뺄까 고민
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bread_type_id")
     @NotNull
-    private BreadType breadTypeId;
+    private BreadType breadType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nutrient_type_id")
     @NotNull
-    private NutrientType nutrientTypeId;
+    private NutrientType nutrientType;
 
     private String refreshToken;
 
@@ -58,12 +60,4 @@ public class Member extends BaseEntity{
     public void passwordEncode(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(this.password);
     }
-
-//    TODO: 유저 권한 생성메서드. 추후에 어디에 사용할지?
-//    public void authorizeUser() {
-//        this.role = Role.USER;
-//    }
-
-
-
 }
