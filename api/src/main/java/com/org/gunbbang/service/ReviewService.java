@@ -90,8 +90,8 @@ public class ReviewService {
                     .reviewText(review.getReviewText())
                     .createdAt(review.getCreatedAt().toString())
                     .build());
-            recommendKeywordList.clear();
         }
+
         if(bakery.getReviewCount()==0){
             tastePercent = 0f;
             specialPercent = 0f;
