@@ -114,6 +114,15 @@ public class Bakery {
             default:
         }
     }
+
+    public Long updateBookMarkCount(boolean isAddingBookMark) {
+        if (isAddingBookMark) {
+            this.bookmarkCount += 1;
+            return this.bookmarkCount;
+        }
+        this.bookmarkCount -= 1;
+        return this.bookmarkCount;
+    }
 }
 
 

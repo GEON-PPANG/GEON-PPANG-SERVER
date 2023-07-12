@@ -6,6 +6,7 @@ import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.common.AuthType;
 import com.org.gunbbang.controller.DTO.response.BreadTypeResponseDto;
 import com.org.gunbbang.controller.DTO.response.MemberDetailResponseDto;
+import com.org.gunbbang.controller.VO.CurrentMemberVO;
 import com.org.gunbbang.entity.BreadType;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.entity.NutrientType;
@@ -24,6 +25,8 @@ import com.org.gunbbang.controller.DTO.response.MemberSignUpResponseDTO;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -56,7 +59,6 @@ public class MemberService {
                 .build();
     }
 
-    @Transactional
     public MemberSignUpResponseDTO signUp(MemberSignUpRequestDTO memberSignUpRequestDTO) {
         if (memberRepository.findByEmail(memberSignUpRequestDTO.getEmail()).isPresent()) {
             throw new BadRequestException(ErrorType.ALREADY_EXIST_EMAIL_EXCEPTION);
@@ -97,5 +99,19 @@ public class MemberService {
                 .type(AuthType.SIGN_UP)
                 .email(member.getEmail())
                 .build();
+    }
+
+    public CurrentMemberVO getCurrentMemberVO() {
+        Long memberId = SecurityUtil.getLoginMemberId();
+        Member foundMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+
+        return CurrentMemberVO.of(
+                foundMember.getMemberId(),
+                foundMember.getEmail(),
+                foundMember.getPassword(),
+                foundMember.getNickname(),
+                foundMember.getMainPurpose()
+        );
     }
 }

@@ -1,6 +1,7 @@
 package com.org.gunbbang.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,4 +28,10 @@ public class BookMark {
     @JoinColumn(name = "bakery_id")
     @NotNull
     private  Bakery bakery;
+
+    @Builder
+    public BookMark(Member member, Bakery bakery) {
+        this.member = member;
+        this.bakery = bakery;
+    }
 }

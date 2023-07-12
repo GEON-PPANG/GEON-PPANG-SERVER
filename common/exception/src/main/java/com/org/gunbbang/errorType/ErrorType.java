@@ -15,8 +15,11 @@ public enum ErrorType {
     REQUEST_VALIDATION_EXCEPTION(HttpStatus.BAD_REQUEST, "잘못된 요청입니다"),
     INVALID_PASSWORD_EXCEPTION(HttpStatus.BAD_REQUEST, "잘못된 비밀번호입니다"),
     TOKEN_TIME_EXPIRED_EXCEPTION(HttpStatus.BAD_REQUEST, "만료된 토큰입니다"),
-    ALREADY_EXIST_EMAIL_EXCEPTION(HttpStatus.CONFLICT, "이미 등록된 이메일입니다"),
-    ALREADY_EXIST_NICKNAME_EXCEPTION(HttpStatus.CONFLICT, "이미 등록된 닉네임입니다"),
+    ALREADY_EXIST_EMAIL_EXCEPTION(HttpStatus.BAD_REQUEST, "이미 등록된 이메일입니다"),
+    ALREADY_EXIST_NICKNAME_EXCEPTION(HttpStatus.BAD_REQUEST, "이미 등록된 닉네임입니다"),
+    ALREADY_BOOKMARKED_EXCEPTION(HttpStatus.BAD_REQUEST, "이미 북마크된 빵집입니다"),
+    ALREADY_CANCELED_BOOKMARK_EXCEPTION(HttpStatus.BAD_REQUEST, "이미 북마크 취소된 빵집입니다"),
+
 
 
     /**
