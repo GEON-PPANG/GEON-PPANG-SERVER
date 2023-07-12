@@ -18,9 +18,7 @@ public enum ErrorType {
     ALREADY_EXIST_EMAIL_EXCEPTION(HttpStatus.BAD_REQUEST, "이미 등록된 이메일입니다"),
     ALREADY_EXIST_NICKNAME_EXCEPTION(HttpStatus.BAD_REQUEST, "이미 등록된 닉네임입니다"),
     ALREADY_BOOKMARKED_EXCEPTION(HttpStatus.BAD_REQUEST, "이미 북마크된 빵집입니다"),
-    ALREADY_CANCELED_BOOKMARK_EXCEPTION(HttpStatus.BAD_REQUEST, "이미 북마크 취소된 빵집입니다"),
-
-
+    ALREADY_CANCELED_BOOKMARK_EXCEPTION(HttpStatus.BAD_REQUEST, "북마크되지 않은 건빵집의 북마크를 취소하려는 시도입니다"),
 
     /**
      * 404 NOT FOUND
