@@ -2,9 +2,7 @@ package com.org.gunbbang.service;
 
 import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.NotFoundException;
-import com.org.gunbbang.controller.DTO.MemberSignUpRequestDTO;
-import com.org.gunbbang.controller.DTO.MemberSignUpResponseDTO;
-import com.org.gunbbang.controller.DTO.request.KeywordNameRequestDto;
+import com.org.gunbbang.controller.DTO.request.RecommendKeywordNameRequestDto;
 import com.org.gunbbang.controller.DTO.request.ReviewRequestDto;
 import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
@@ -46,10 +44,10 @@ public class ReviewService {
         return review.getReviewId();
     }
 
-    public void createReviewRecommendKeyword(List<KeywordNameRequestDto> keywordNameRequestDtoList, Long reviewId){
+    public void createReviewRecommendKeyword(List<RecommendKeywordNameRequestDto> keywordNameRequestDtoList, Long reviewId){
         Review review = reviewRepository.findById(reviewId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_REVIEW));
         Bakery bakery = bakeryRepository.findById(review.getBakeryId().getBakeryId()).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
-        for(KeywordNameRequestDto keyword : keywordNameRequestDtoList){
+        for(RecommendKeywordNameRequestDto keyword : keywordNameRequestDtoList){
             RecommendKeyword recommendKeyword = recommendKeywordRepository.findByKeywordName(keyword.getKeywordName()).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION));
             reviewRecommendKeywordRepository.save(ReviewRecommendKeyword.builder()
                             .recommendKeywordId(recommendKeyword)

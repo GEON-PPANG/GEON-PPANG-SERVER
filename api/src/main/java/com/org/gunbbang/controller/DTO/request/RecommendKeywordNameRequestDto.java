@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor
-public class KeywordNameRequestDto {
+public class RecommendKeywordNameRequestDto {
     @NotNull
     String keywordName;
 }
