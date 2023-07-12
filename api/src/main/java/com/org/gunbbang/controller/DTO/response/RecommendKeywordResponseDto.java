@@ -1,6 +1,7 @@
 package com.org.gunbbang.controller.DTO.response;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,4 +14,10 @@ public class RecommendKeywordResponseDto {
     Long recommendKeywordId;
     @NotNull
     String recommendKeywordName;
+
+    @Builder
+    public RecommendKeywordResponseDto(Long recommendKeywordId, String recommendKeywordName) {
+        this.recommendKeywordId = recommendKeywordId;
+        this.recommendKeywordName = recommendKeywordName;
+    }
 }

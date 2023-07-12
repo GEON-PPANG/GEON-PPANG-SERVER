@@ -4,6 +4,9 @@ import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.controller.DTO.request.RecommendKeywordNameRequestDto;
 import com.org.gunbbang.controller.DTO.request.ReviewRequestDto;
+import com.org.gunbbang.controller.DTO.response.RecommendKeywordResponseDto;
+import com.org.gunbbang.controller.DTO.response.ReviewListResponseDto;
+import com.org.gunbbang.controller.DTO.response.ReviewResponseDto;
 import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
@@ -13,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -59,5 +63,55 @@ public class ReviewService {
         bakeryRepository.save(bakery);
     }
 
+    public ReviewListResponseDto getBakeryReviewList(Long bakeryId){
+        Bakery bakery = bakeryRepository.findById(bakeryId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
+        List<Review> reviewList = reviewRepository.findAllByBakeryIdOrderByCreatedAtDesc(bakery);
+        List<ReviewResponseDto> reviewListDto = new ArrayList<>();
+        Float tastePercent;
+        Float specialPercent;
+        Float kindPercent;
+        Float zeroPercent;
+
+        for(Review review : reviewList){
+            List<RecommendKeywordResponseDto> recommendKeywordList = new ArrayList<>();
+            if(review.getIsLike()) {
+                List<ReviewRecommendKeyword> reviewRecommendKeywordList = reviewRecommendKeywordRepository.findAllByReviewId(review);
+                for(ReviewRecommendKeyword reviewRecommendKeyword : reviewRecommendKeywordList){
+                    recommendKeywordList.add(RecommendKeywordResponseDto.builder()
+                                    .recommendKeywordId(reviewRecommendKeyword.getRecommendKeywordId().getRecommendKeywordId())
+                                    .recommendKeywordName(reviewRecommendKeyword.getRecommendKeywordId().getKeywordName())
+                            .build());
+                }
+            }
+            reviewListDto.add(ReviewResponseDto.builder()
+                    .reviewId(review.getReviewId())
+                    .memberNickname(review.getMemberId().getNickname())
+                    .recommendKeywordList(recommendKeywordList)
+                    .reviewText(review.getReviewText())
+                    .createdAt(review.getCreatedAt().toString())
+                    .build());
+            recommendKeywordList.clear();
+        }
+        if(bakery.getReviewCount()==0){
+            tastePercent = 0f;
+            specialPercent = 0f;
+            kindPercent = 0f;
+            zeroPercent = 0f;
+        }
+        else{
+            tastePercent = bakery.getKeywordDeliciousCount().floatValue()/bakery.getReviewCount().floatValue();
+            specialPercent = bakery.getKeywordSpecialCount().floatValue()/bakery.getReviewCount().floatValue();
+            kindPercent = bakery.getKeywordKindCount().floatValue()/bakery.getReviewCount().floatValue();
+            zeroPercent = bakery.getKeywordZeroWasteCount().floatValue()/bakery.getReviewCount().floatValue();
+        }
+
+        return ReviewListResponseDto.builder()
+                .tastePercent(tastePercent)
+                .specialPercent(specialPercent)
+                .kindPercent(kindPercent)
+                .zeroPercent(zeroPercent)
+                .reviewList(reviewListDto)
+                .build();
+    }
 
 }
