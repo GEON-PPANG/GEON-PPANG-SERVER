@@ -35,5 +35,4 @@ public interface BakeryRepository extends JpaRepository<Bakery, Long> {
             BreadType breadTypeId,
             List<Long> alreadyFoundBakeries,
             PageRequest pageRequest);
-
 }

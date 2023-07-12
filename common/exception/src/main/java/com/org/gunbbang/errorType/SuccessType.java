@@ -21,6 +21,7 @@ public enum SuccessType {
     GET_BAKERY_REVIEW_LIST_SUCCESS(HttpStatus.OK, "건빵집 리뷰 리스트 조회 성공"),
     GET_BEST_BAKERIES_SUCCESS(HttpStatus.OK, "베스트 건빵집 리스트 조회 성공"),
     GET_BAKERY_DETAIL_SUCCESS(HttpStatus.OK, "건빵집 상세 페이지 조회 성공"),
+    CANCEL_BOOKMARK_SUCCESS(HttpStatus.OK, "북마크 취소 성공"),
     DELETE_IMAGE_SUCCESS(HttpStatus.OK, "이미지 삭제에 성공했습니다."),
 
     /**
@@ -30,6 +31,8 @@ public enum SuccessType {
     CREATE_REVIEW_SUCCESS(HttpStatus.CREATED, "리뷰 등록이 완료됐습니다."),
     CREATE_EMOTION_SUCCESS(HttpStatus.CREATED, "감정 기록에 성공했습니다."),
     CREATE_VOTE_SUCCESS(HttpStatus.CREATED, "투표가 완료됐습니다."),
+    CREATE_BOOKMARK_SUCCESS(HttpStatus.OK, "북마크 추가 성공"),
+
     ;
 
     private final HttpStatus httpStatus;
