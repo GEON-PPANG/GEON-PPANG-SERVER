@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review,Long> {
     Review save(Review review);
-    List<Review> findAllByBakeryIdOrderByCreatedAtDesc(Bakery bakeryId);
+    List<Review> findAllByBakeryOrderByCreatedAtDesc(Bakery bakery);
 }

@@ -20,7 +20,7 @@ public class Menu {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bakery_id")
     @NotNull
-    private Bakery bakeryId;
+    private Bakery bakery;
 
     @NotNull
     private String menuName;

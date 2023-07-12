@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ReviewRecommendKeywordRepository extends JpaRepository<ReviewRecommendKeyword, Long> {
-    List<ReviewRecommendKeyword> findAllByReviewId(Review reviewId);
+    List<ReviewRecommendKeyword> findAllByReview(Review review);
 }
 

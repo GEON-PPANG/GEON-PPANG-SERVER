@@ -1,6 +1,7 @@
 package com.org.gunbbang.service;
 
 import com.org.gunbbang.BadRequestException;
+import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.common.AuthType;
 import com.org.gunbbang.controller.DTO.response.BreadTypeResponseDto;
@@ -40,12 +41,12 @@ public class MemberService {
 
         Member member = memberRepository.findById(currentMemberId).orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
         BreadTypeResponseDto breadTypeResponseDto = BreadTypeResponseDto.builder()
-                .breadTypeId(member.getBreadTypeId().getBreadTypeId())
-                .breadTypeName(member.getBreadTypeId().getBreadTypeName())
-                .isVegan(member.getBreadTypeId().getIsVegan())
-                .isGlutenFree(member.getBreadTypeId().getIsGlutenFree())
-                .isSugarFree(member.getBreadTypeId().getIsSugarFree())
-                .isNutFree(member.getBreadTypeId().getIsNutFree())
+                .breadTypeId(member.getBreadType().getBreadTypeId())
+                .breadTypeName(member.getBreadType().getBreadTypeName())
+                .isVegan(member.getBreadType().getIsVegan())
+                .isGlutenFree(member.getBreadType().getIsGlutenFree())
+                .isSugarFree(member.getBreadType().getIsSugarFree())
+                .isNutFree(member.getBreadType().getIsNutFree())
                 .build();
 
         return MemberDetailResponseDto.builder()
@@ -84,9 +85,9 @@ public class MemberService {
                 .platformType(memberSignUpRequestDTO.getPlatformType())
                 .nickname(memberSignUpRequestDTO.getNickname())
                 .role(Role.USER)
-                .breadTypeId(breadType)
-                .nutrientTypeId(nutrientType)
-                .mainPurpose(memberSignUpRequestDTO.getMainPurpose())
+                .breadType(breadType)
+                .nutrientType(nutrientType)
+                .mainPurpose(MainPurpose.valueOf(memberSignUpRequestDTO.getMainPurpose()))
                 .build();
 
         member.passwordEncode(passwordEncoder);

@@ -24,12 +24,12 @@ public class Bakery {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bread_type_id")
     @NotNull
-    private BreadType breadTypeId;
+    private BreadType breadType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nutrient_type_id")
     @NotNull
-    private NutrientType nutrientTypeId;
+    private NutrientType nutrientType;
 
     @NotNull
     private String bakeryName;

@@ -51,12 +51,12 @@ public class ReviewService {
 
     public void createReviewRecommendKeyword(List<RecommendKeywordNameRequestDto> keywordNameRequestDtoList, Long reviewId){
         Review review = reviewRepository.findById(reviewId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_REVIEW));
-        Bakery bakery = bakeryRepository.findById(review.getBakeryId().getBakeryId()).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
+        Bakery bakery = bakeryRepository.findById(review.getBakery().getBakeryId()).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
         for(RecommendKeywordNameRequestDto keyword : keywordNameRequestDtoList){
             RecommendKeyword recommendKeyword = recommendKeywordRepository.findByKeywordName(keyword.getKeywordName()).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION));
             reviewRecommendKeywordRepository.save(ReviewRecommendKeyword.builder()
-                            .recommendKeywordId(recommendKeyword)
-                            .reviewId(review)
+                            .recommendKeyword(recommendKeyword)
+                            .review(review)
                     .build());
             // 키워드 증가하면 리뷰에도 keywordcount 증가
             bakery.keywordCountChange(keyword.getKeywordName());
@@ -66,7 +66,7 @@ public class ReviewService {
 
     public ReviewListResponseDto getBakeryReviewList(Long bakeryId){
         Bakery bakery = bakeryRepository.findById(bakeryId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
-        List<Review> reviewList = reviewRepository.findAllByBakeryIdOrderByCreatedAtDesc(bakery);
+        List<Review> reviewList = reviewRepository.findAllByBakeryOrderByCreatedAtDesc(bakery);
         List<ReviewResponseDto> reviewListDto = new ArrayList<>();
         Float tastePercent;
         Float specialPercent;
@@ -76,17 +76,17 @@ public class ReviewService {
         for(Review review : reviewList){
             List<RecommendKeywordResponseDto> recommendKeywordList = new ArrayList<>();
             if(review.getIsLike()) {
-                List<ReviewRecommendKeyword> reviewRecommendKeywordList = reviewRecommendKeywordRepository.findAllByReviewId(review);
+                List<ReviewRecommendKeyword> reviewRecommendKeywordList = reviewRecommendKeywordRepository.findAllByReview(review);
                 for(ReviewRecommendKeyword reviewRecommendKeyword : reviewRecommendKeywordList){
                     recommendKeywordList.add(RecommendKeywordResponseDto.builder()
-                                    .recommendKeywordId(reviewRecommendKeyword.getRecommendKeywordId().getRecommendKeywordId())
-                                    .recommendKeywordName(reviewRecommendKeyword.getRecommendKeywordId().getKeywordName())
+                                    .recommendKeywordId(reviewRecommendKeyword.getRecommendKeyword().getRecommendKeywordId())
+                                    .recommendKeywordName(reviewRecommendKeyword.getRecommendKeyword().getKeywordName())
                             .build());
                 }
             }
             reviewListDto.add(ReviewResponseDto.builder()
                     .reviewId(review.getReviewId())
-                    .memberNickname(review.getMemberId().getNickname())
+                    .memberNickname(review.getMember().getNickname())
                     .recommendKeywordList(recommendKeywordList)
                     .reviewText(review.getReviewText())
                     .createdAt(review.getCreatedAt().format(DateTimeFormatter.ofPattern("yy.MM.dd")))
