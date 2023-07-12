@@ -27,6 +27,8 @@ public enum ErrorType {
     NOT_FOUND_IMAGE_EXCEPTION(HttpStatus.NOT_FOUND, "존재하지 않는 이미지입니다"),
     INVALID_MULTIPART_EXTENSION_EXCEPTION(HttpStatus.NOT_FOUND, "존재하지 않는 이미지입니다"),
     NOT_FOUND_BAKERY_EXCEPTION(HttpStatus.NOT_FOUND, "존재하지 않는 건빵집입니다"),
+    NOT_FOUND_BREAD_TYPE_EXCEPTION(HttpStatus.NOT_FOUND, "존재하지 않는 빵유형 타입입니다"),
+    NOT_FOUND_NUTRIENT_EXCEPTION(HttpStatus.NOT_FOUND, "존재하지 않는 영양성분 타입입니다"),
     NOT_FOUND_SAVE_REVIEW(HttpStatus.NOT_FOUND, "리뷰 저장에 실패했습니다"),
     NOT_FOUND_REVIEW(HttpStatus.NOT_FOUND, "존재하지 않는 리뷰입니다"),
     NOT_FOUND_CATEGORY_EXCEPTION(HttpStatus.NOT_FOUND, "해당 카테고리를 찾을 수 없습니다"),

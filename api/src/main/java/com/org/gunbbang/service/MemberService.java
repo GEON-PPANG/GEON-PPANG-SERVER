@@ -4,8 +4,8 @@ import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.common.AuthType;
-import com.org.gunbbang.controller.DTO.response.BreadTypeResponseDto;
-import com.org.gunbbang.controller.DTO.response.MemberDetailResponseDto;
+import com.org.gunbbang.controller.DTO.request.MemberTypesRequestDTO;
+import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.controller.VO.CurrentMemberVO;
 import com.org.gunbbang.entity.BreadType;
 import com.org.gunbbang.entity.Member;
@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.org.gunbbang.Role;
 import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
-import com.org.gunbbang.controller.DTO.response.MemberSignUpResponseDTO;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -113,5 +112,54 @@ public class MemberService {
                 foundMember.getNickname(),
                 foundMember.getMainPurpose()
         );
+    }
+
+    public MemberTypesResponseDTO updateMemberTypes(MemberTypesRequestDTO request, Long memberId) {
+        Member foundMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+
+        BreadType breadType = breadTypeRepository.findBreadTypeByIsGlutenFreeAndIsVeganAndIsNutFreeAndIsSugarFree(
+                request.getBreadType().getIsGlutenFree(),
+                request.getBreadType().getIsVegan(),
+                request.getBreadType().getIsNutFree(),
+                request.getBreadType().getIsSugarFree()
+        ).orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION));
+
+        NutrientType nutrientType = nutrientTypeRepository.findByIsNutrientOpenAndIsIngredientOpenAndIsNotOpen(
+                request.getNutrientType().getIsNutrientOpen(),
+                request.getNutrientType().getIsIngredientOpen(),
+                request.getNutrientType().getIsNotOpen()
+        ).orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_NUTRIENT_EXCEPTION));
+
+        foundMember.updateBreadType(breadType);
+        foundMember.updateNutrientType(nutrientType);
+        memberRepository.saveAndFlush(foundMember);
+
+        // TODO: 이거 구체적으로 어떻게 돌아가는건지???
+        BreadType foundMemberBreadType = foundMember.getBreadType();
+        BreadTypeResponseDto breadTypeResponse = BreadTypeResponseDto.builder()
+                .breadTypeId(foundMemberBreadType.getBreadTypeId())
+                .breadTypeName(foundMemberBreadType.getBreadTypeName())
+                .isGlutenFree(foundMemberBreadType.getIsGlutenFree())
+                .isVegan(foundMemberBreadType.getIsVegan())
+                .isNutFree(foundMemberBreadType.getIsNutFree())
+                .isSugarFree(foundMemberBreadType.getIsSugarFree())
+                .build();
+
+        NutrientType foundMemberNutrientType = foundMember.getNutrientType();
+        NutrientTypeResponseDTO nutrientTypeResponse = NutrientTypeResponseDTO.builder()
+                .nutrientTypeId(foundMemberNutrientType.getNutrientTypeId())
+                .nutrientTypeName(foundMemberNutrientType.getNutrientTypeName())
+                .isNutrientOpen(foundMemberNutrientType.getIsNutrientOpen())
+                .isIngredientOpen(foundMemberNutrientType.getIsIngredientOpen())
+                .isNotOpen(foundMemberNutrientType.getIsNotOpen())
+                .build();
+
+        return MemberTypesResponseDTO.builder()
+                .memberId(foundMember.getMemberId())
+                .mainPurpose(foundMember.getMainPurpose())
+                .breadType(breadTypeResponse)
+                .nutrientType(nutrientTypeResponse)
+                .build();
     }
 }
