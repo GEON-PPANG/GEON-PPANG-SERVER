@@ -84,6 +84,8 @@ create table member
     platform_type varchar(255) not null,
     role          varchar(255),
     refresh_token  varchar(255),
+    created_at timestamp,
+    updated_at timestamp,
     primary key (member_id)
 );
 
@@ -120,6 +122,8 @@ create table review
     review_text varchar(255),
     bakery_id   bigint,
     member_id   bigint,
+    created_at timestamp,
+    updated_at timestamp,
     primary key (review_id)
 );
 
