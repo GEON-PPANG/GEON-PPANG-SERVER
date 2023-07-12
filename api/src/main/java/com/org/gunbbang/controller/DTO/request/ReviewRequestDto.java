@@ -11,7 +11,7 @@ import java.util.List;
 public class ReviewRequestDto {
     @NotNull
     private Boolean isLike;
-    private List<KeywordNameRequestDto> keywordList;
+    private List<RecommendKeywordNameRequestDto> keywordList;
     @NotNull
     private String reviewText;
 }

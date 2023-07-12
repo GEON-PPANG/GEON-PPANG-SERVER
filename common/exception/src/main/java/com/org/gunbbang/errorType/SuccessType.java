@@ -18,6 +18,7 @@ public enum SuccessType {
     GET_EMOTION_SUCCESS(HttpStatus.OK, "감정 조회에 성공했습니다."),
     GET_MYPAGE_SUCCESS(HttpStatus.OK, "마이페이지 조회에 성공했습니다."),
     GET_BAKERY_LIST_SUCCESS(HttpStatus.OK, "건빵집 리스트 조회 성공"),
+    GET_BAKERY_REVIEW_LIST_SUCCESS(HttpStatus.OK, "건빵집 리뷰 리스트 조회 성공"),
     GET_BEST_BAKERIES_SUCCESS(HttpStatus.OK, "베스트 건빵집 리스트 조회 성공"),
     GET_BAKERY_DETAIL_SUCCESS(HttpStatus.OK, "건빵집 상세 페이지 조회 성공"),
     DELETE_IMAGE_SUCCESS(HttpStatus.OK, "이미지 삭제에 성공했습니다."),
