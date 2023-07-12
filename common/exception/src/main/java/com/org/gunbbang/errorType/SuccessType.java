@@ -25,7 +25,7 @@ public enum SuccessType {
      * 201 CREATED
      */
     SIGNUP_SUCCESS(HttpStatus.CREATED, "회원가입이 완료됐습니다."),
-    CREATE_BOARD_SUCCESS(HttpStatus.CREATED, "게시물 생성이 완료됐습니다."),
+    CREATE_REVIEW_SUCCESS(HttpStatus.CREATED, "리뷰 등록이 완료됐습니다."),
     CREATE_EMOTION_SUCCESS(HttpStatus.CREATED, "감정 기록에 성공했습니다."),
     CREATE_VOTE_SUCCESS(HttpStatus.CREATED, "투표가 완료됐습니다."),
     ;

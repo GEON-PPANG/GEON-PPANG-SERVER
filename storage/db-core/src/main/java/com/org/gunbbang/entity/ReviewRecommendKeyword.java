@@ -1,6 +1,7 @@
 package com.org.gunbbang.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,4 +26,10 @@ public class ReviewRecommendKeyword {
     @JoinColumn(name = "recommend_keyword_id")
     @NotNull
     private RecommendKeyword recommendKeywordId;
+
+    @Builder
+    public ReviewRecommendKeyword(Review reviewId, RecommendKeyword recommendKeywordId) {
+        this.reviewId = reviewId;
+        this.recommendKeywordId = recommendKeywordId;
+    }
 }
