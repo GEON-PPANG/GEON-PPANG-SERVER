@@ -1,4 +1,4 @@
-package com.org.gunbbang.controller.DTO;
+package com.org.gunbbang.controller.DTO.request;
 
 import com.org.gunbbang.PlatformType;
 import com.org.gunbbang.controller.DTO.request.BreadTypeRequestDTO;

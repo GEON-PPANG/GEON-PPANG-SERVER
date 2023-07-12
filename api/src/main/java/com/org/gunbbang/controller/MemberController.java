@@ -1,7 +1,7 @@
 package com.org.gunbbang.controller;
 
 import com.org.gunbbang.common.dto.ApiResponse;
-import com.org.gunbbang.controller.DTO.MemberSignUpResponseDTO;
+import com.org.gunbbang.controller.DTO.response.MemberSignUpResponseDTO;
 import com.org.gunbbang.controller.DTO.response.MemberDetailResponseDto;
 import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.service.MemberService;
@@ -9,9 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
-import com.org.gunbbang.controller.DTO.MemberSignUpRequestDTO;
+import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import com.org.gunbbang.util.Security.SecurityUtil;
 
 
@@ -30,7 +28,7 @@ public class MemberController {
     }
 
     @PostMapping("/signup")
-    public ApiResponse<MemberSignUpResponseDTO> signUp(@RequestBody MemberSignUpRequestDTO memberSignUpRequestDTO) throws Exception {
+    public ApiResponse<MemberSignUpResponseDTO> signUp(@RequestBody final MemberSignUpRequestDTO memberSignUpRequestDTO) throws Exception {
         return ApiResponse.success(SuccessType.SIGNUP_SUCCESS, memberService.signUp(memberSignUpRequestDTO));
     }
 

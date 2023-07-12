@@ -49,8 +49,8 @@ INSERT INTO nutrient_type (nutrient_type_id, nutrient_type_name, is_ingredient_o
     VALUES (7, '영양성분 공개/원재료 공개/비공개', true, true, true);
 
 -- member
-INSERT INTO member (email, password, platform_type, main_purpose, nickname, role, bread_type_id, nutrient_type_id)
-    VALUES ('example@naver.com', 'djfkskd!', 'NONE', '다이어트', '닉네임', 'USER', 1, 3);
+INSERT INTO member (email, password, platform_type, main_purpose, nickname, role, bread_type_id, nutrient_type_id, created_at, updated_at)
+    VALUES ('example@naver.com', 'djfkskd!', 'NONE', '다이어트', '닉네임', 'USER', 1, 3, null, null);
 
 -- category
 INSERT INTO category (category_id, category_name)
