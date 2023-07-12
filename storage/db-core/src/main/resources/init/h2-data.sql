@@ -38,7 +38,7 @@ INSERT INTO nutrient_type (nutrient_type_id, nutrient_type_name, is_ingredient_o
 INSERT INTO nutrient_type (nutrient_type_id, nutrient_type_name, is_ingredient_open, is_nutrient_open, is_not_open)
     VALUES (2, '원재료 공개', false, true, false);
 INSERT INTO nutrient_type (nutrient_type_id, nutrient_type_name, is_ingredient_open, is_nutrient_open, is_not_open)
-    VALUES (3, '넛프리', false, false, true);
+    VALUES (3, '비공개', false, false, true);
 INSERT INTO nutrient_type (nutrient_type_id, nutrient_type_name, is_ingredient_open, is_nutrient_open, is_not_open)
     VALUES (4, '영양성분 공개/원재료 공개', true, true, false);
 INSERT INTO nutrient_type (nutrient_type_id, nutrient_type_name, is_ingredient_open, is_nutrient_open, is_not_open)
@@ -50,7 +50,15 @@ INSERT INTO nutrient_type (nutrient_type_id, nutrient_type_name, is_ingredient_o
 
 -- member
 INSERT INTO member (email, password, platform_type, main_purpose, nickname, role, bread_type_id, nutrient_type_id, created_at, updated_at)
-    VALUES ('example@naver.com', 'djfkskd!', 'NONE', '다이어트', '닉네임', 'USER', 1, 3, null, null);
+    VALUES ('example@naver.com', 'djfkskd!', 'NONE', 'DIET', '닉네임1', 'USER', 1, 3, null, null);
+INSERT INTO member (email, password, platform_type, main_purpose, nickname, role, bread_type_id, nutrient_type_id, created_at, updated_at)
+    VALUES ('example@han.com', 'djfkskd!', 'NONE', 'DIET', '닉네임2', 'USER', 1, 3, null, null); -- 빵유형 + 주목적 일치
+INSERT INTO member (email, password, platform_type, main_purpose, nickname, role, bread_type_id, nutrient_type_id, created_at, updated_at)
+    VALUES ('example@hanfff.com', 'djfkskd!', 'NONE', 'DIET', '닉네임3', 'USER', 1, 3, null, null); -- 빵유형 + 주목적 일치
+INSERT INTO member (email, password, platform_type, main_purpose, nickname, role, bread_type_id, nutrient_type_id, created_at, updated_at)
+    VALUES ('example@gggg.com', 'djfkskd!', 'NONE', 'HEALTH', '닉네임4', 'USER', 1, 3, null, null); -- 빵유형만 일치
+INSERT INTO member (email, password, platform_type, main_purpose, nickname, role, bread_type_id, nutrient_type_id, created_at, updated_at)
+    VALUES ('example@korea.com', 'djfkskd!', 'NONE', 'DIET', '닉네임5', 'USER', 7, 1, null, null); -- 주목적만 일치
 
 -- category
 INSERT INTO category (category_id, category_name)
@@ -61,16 +69,41 @@ INSERT INTO category (category_id, category_name)
     VALUES (3, '브런치류');
 
 -- bakery
-INSERT INTO bakery (bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town)
-    VALUES (1,2,'1152-5','펄스브레드샵','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
+    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town, bookmark_count)
+    VALUES (1,1,2,'1152-5','펄스브레드샵','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
     '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
-            '010-1111-1111','일산역','고양시','정발산동');
-INSERT INTO bakery (bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town)
-VALUES (1,2,'1152-5','펄스브레드샵2','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+            '010-1111-1111','일산역','고양시','정발산동', 1);
+INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
+                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town, bookmark_count)
+VALUES (2,1,2,'1152-5','펄스브레드샵2','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
         '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
-        '010-1111-1111','일산역','고양시','정발산동');
+        '010-1111-1111','일산역','고양시','정발산동', 2);
+INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
+                    first_near_station, homepage, is_haccp, is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town, bookmark_count)
+VALUES (3, 1,3,'11-5','건대초코빵','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+        '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
+        '010-1111-1111','일산역','고양시','정발산동', 3);
+INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
+                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town, bookmark_count)
+VALUES (4,1,1,'52-5','비건비건','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+        '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
+        '010-1111-1111','일산역','고양시','정발산동', 4);
+INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
+                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town, bookmark_count)
+VALUES (5,7,1,'52-5','저당빵만판다','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+        '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
+        '010-1111-1111','일산역','고양시','정발산동', 5);
+INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
+                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town, bookmark_count)
+VALUES (6,3,6,'5211-5','졸려','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+        '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
+        '010-1111-1111','일산역','고양시','정발산동', 6);
+INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
+                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town, bookmark_count)
+VALUES (7,1,6,'51-5','졸빵집','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+        '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
+        '010-1111-1111','일산역','고양시','정발산동', 7);
 
 -- bakery_category
 INSERT INTO bakery_category (bakery_id,category_id) values (1,2);
@@ -86,3 +119,13 @@ INSERT INTO recommend_keyword (keyword_name) values ('맛있어요');
 INSERT INTO recommend_keyword (keyword_name) values ('친절해요');
 INSERT INTO recommend_keyword (keyword_name) values ('특별한 메뉴');
 INSERT INTO recommend_keyword (keyword_name) values ('제로 웨이스트');
+
+-- book_mark
+INSERT INTO book_mark (bakery_id, member_id) values (1, 2);
+INSERT INTO book_mark (bakery_id, member_id) values (2, 2);
+INSERT INTO book_mark (bakery_id, member_id) values (3, 2);
+INSERT INTO book_mark (bakery_id, member_id) values (3, 3);
+INSERT INTO book_mark (bakery_id, member_id) values (4, 3);
+INSERT INTO book_mark (bakery_id, member_id) values (5, 3);
+INSERT INTO book_mark (bakery_id, member_id) values (6, 4);
+INSERT INTO book_mark (bakery_id, member_id) values (7, 5);

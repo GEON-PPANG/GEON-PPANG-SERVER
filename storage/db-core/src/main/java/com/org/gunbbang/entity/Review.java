@@ -19,11 +19,11 @@ public class Review extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bakery_id")
-    private Bakery bakeryId;
+    private Bakery bakery;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member memberId;
+    private Member member;
 
     @NotNull
     private Boolean isLike;
@@ -32,8 +32,8 @@ public class Review extends BaseEntity {
 
     @Builder
     public Review(Bakery bakeryId, Member memberId, Boolean isLike, String reviewText) {
-        this.bakeryId = bakeryId;
-        this.memberId = memberId;
+        this.bakery = bakeryId;
+        this.member = memberId;
         this.isLike = isLike;
         this.reviewText = reviewText;
     }

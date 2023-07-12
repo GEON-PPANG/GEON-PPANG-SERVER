@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BakeryCategoryRepository extends JpaRepository<BakeryCategory,Long> {
-    @Query("SELECT bc FROM BakeryCategory bc WHERE bc.categoryId IN (:categoryList) order by bc.bakeryId.bakeryId desc")
+    @Query("SELECT bc FROM BakeryCategory bc WHERE bc.category IN (:categoryList) order by bc.bakery.bakeryId desc")
     List<BakeryCategory> findByBakeryCategoryId(@Param("categoryList") List<Category> categoryList);
 
-    @Query("SELECT bc FROM BakeryCategory bc WHERE bc.categoryId IN (:categoryList) order by bc.bakeryId.reviewCount desc")
+    @Query("SELECT bc FROM BakeryCategory bc WHERE bc.category IN (:categoryList) order by bc.bakery.reviewCount desc")
     List<BakeryCategory> findByBakeryCategoryIdAndReview(@Param("categoryList") List<Category> categoryList);
 
 }
