@@ -1,7 +1,7 @@
 ---
-name: "\U0001F41E Bug"
-about: BUG 발생 시 작성해주세요
-title: "[BUG]"
+name: "\U0001F6E0️ Fix"
+about: Feature 작업 이후 수정할 사항을 입력하세요
+title: "[FIX]"
 labels: ''
 assignees: ''
 
