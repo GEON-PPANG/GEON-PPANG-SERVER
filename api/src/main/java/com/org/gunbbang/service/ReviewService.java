@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +89,7 @@ public class ReviewService {
                     .memberNickname(review.getMemberId().getNickname())
                     .recommendKeywordList(recommendKeywordList)
                     .reviewText(review.getReviewText())
-                    .createdAt(review.getCreatedAt().toString())
+                    .createdAt(review.getCreatedAt().format(DateTimeFormatter.ofPattern("yy.MM.dd")))
                     .build());
         }
 
