@@ -30,10 +30,4 @@ public class BakeriesController {
         List<BakeryListResponseDto> bakeryListResponseDto = bakeryService.getBakeryList(memberId, sort,isHard,isDessert,isBrunch);
         return ApiResponse.success(SuccessType.GET_MYPAGE_SUCCESS, bakeryListResponseDto);
     }
-
-    @GetMapping("/best")
-    @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<List<BestBakeryListResponseDTO>> getBestBakeries () {
-        return ApiResponse.success(SuccessType.GET_BEST_BAKERIES_SUCCESS, bakeryService.getBestBakeries());
-    }
 }
