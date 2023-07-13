@@ -22,5 +22,4 @@ public interface BookMarkRepository extends JpaRepository<BookMark, Long> {
     @Transactional
     @Query(value = "DELETE FROM BookMark bm WHERE bm.member = :member AND bm.bakery = :bakery")
     void deleteByMemberAndBakery(Member member, Bakery bakery);
-
 }

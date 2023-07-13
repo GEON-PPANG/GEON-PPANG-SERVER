@@ -28,4 +28,10 @@ public class BakeriesController {
         List<BakeryListResponseDTO> bakeryListResponseDto = bakeryService.getBakeryList(memberId, sort,isHard,isDessert,isBrunch);
         return ApiResponse.success(SuccessType.GET_BAKERY_LIST_SUCCESS, bakeryListResponseDto);
     }
+
+    @GetMapping("/bookMark")
+    public ApiResponse<List<BakeryListResponseDTO>> getBookMarkedBakeries() {
+        Long memberId = SecurityUtil.getLoginMemberId();
+        return ApiResponse.success(SuccessType.GET_BOOKMARKED_BAKERIES, bakeryService.getBookMarkedBakeries(memberId));
+    }
 }

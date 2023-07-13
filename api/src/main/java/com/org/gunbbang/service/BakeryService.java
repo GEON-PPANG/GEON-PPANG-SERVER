@@ -247,4 +247,39 @@ public class BakeryService {
         }
         return isBooked;
     }
+
+    public List<BakeryListResponseDTO> getBookMarkedBakeries(Long memberId) {
+        List<Bakery> bookMarkedBakeries = bakeryRepository.findBookMarkedBakeries(memberId);
+        List<BakeryListResponseDTO> bakeryListResponseDTOs = new ArrayList<>();
+        for (Bakery bookMarkedBakery : bookMarkedBakeries) {
+            BreadTypeResponseDTO breadTypeResponseDto = BreadTypeResponseDTO.builder()
+                    .breadTypeId(bookMarkedBakery.getBreadType().getBreadTypeId())
+                    .breadTypeName(bookMarkedBakery.getBreadType().getBreadTypeName())
+                    .isGlutenFree(bookMarkedBakery.getBreadType().getIsGlutenFree())
+                    .isVegan(bookMarkedBakery.getBreadType().getIsVegan())
+                    .isNutFree(bookMarkedBakery.getBreadType().getIsNutFree())
+                    .isSugarFree(bookMarkedBakery.getBreadType().getIsSugarFree())
+                    .build();
+
+
+            BakeryListResponseDTO bakeryListResponseDto = BakeryListResponseDTO.builder()
+                    .bakeryId(bookMarkedBakery.getBakeryId())
+                    .bakeryName(bookMarkedBakery.getBakeryName())
+                    .bakeryPicture(bookMarkedBakery.getBakeryPicture())
+                    .isHACCP(bookMarkedBakery.getIsHACCP())
+                    .isVegan(bookMarkedBakery.getIsVegan())
+                    .isNonGMO(bookMarkedBakery.getIsNonGMO())
+                    .firstNearStation(bookMarkedBakery.getFirstNearStation())
+                    .secondNearStation(bookMarkedBakery.getSecondNearStation())
+                    .isBooked(true)
+                    .bookMarkCount(bookMarkedBakery.getBookMarkCount())
+                    .breadType(breadTypeResponseDto)
+                    .build();
+
+            bakeryListResponseDTOs.add(bakeryListResponseDto);
+        }
+
+        return bakeryListResponseDTOs;
+
+    }
 }

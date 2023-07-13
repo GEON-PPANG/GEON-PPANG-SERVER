@@ -40,4 +40,10 @@ public interface BakeryRepository extends JpaRepository<Bakery, Long> {
     @Query(value = "SELECT b FROM Bakery b " +
             "WHERE b.bakeryName like %:bakeryName% ")
     List<Bakery> findBakeryByBakeryName(@Param("bakeryName") String bakeryName);
+
+    @Query(value = "SELECT distinct b FROM Bakery b " +
+            "INNER JOIN BookMark bm ON b.bakeryId = bm.bakery.bakeryId " +
+            "INNER JOIN Member m ON bm.member.memberId = m.memberId " +
+            "WHERE m.memberId = :memberId")
+    List<Bakery> findBookMarkedBakeries(@Param("memberId") Long memberId);
 }
