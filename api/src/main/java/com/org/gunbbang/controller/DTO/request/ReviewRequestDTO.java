@@ -4,10 +4,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class RecommendKeywordNameRequestDto {
+public class ReviewRequestDTO {
     @NotNull
-    String keywordName;
+    private Boolean isLike;
+    private List<RecommendKeywordNameRequestDTO> keywordList;
+    @NotNull
+    private String reviewText;
 }

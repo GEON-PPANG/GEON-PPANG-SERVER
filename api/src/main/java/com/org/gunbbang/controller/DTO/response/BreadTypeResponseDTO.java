@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class BreadTypeResponseDto {
+public class BreadTypeResponseDTO {
 
     private Long breadTypeId;
 
@@ -28,7 +28,7 @@ public class BreadTypeResponseDto {
     private Boolean isSugarFree; // 저당 및 무설탕
 
     @Builder
-    public BreadTypeResponseDto(Long breadTypeId, String breadTypeName, boolean isGlutenFree, boolean isVegan, boolean isNutFree, boolean isSugarFree) {
+    public BreadTypeResponseDTO(Long breadTypeId, String breadTypeName, boolean isGlutenFree, boolean isVegan, boolean isNutFree, boolean isSugarFree) {
         this.breadTypeId = breadTypeId;
         this.breadTypeName = breadTypeName;
         this.isGlutenFree = isGlutenFree;

@@ -9,12 +9,12 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @SuperBuilder
-public class BakeryListResponseDto extends BaseBakeryResponseDTO {
-    private BreadTypeResponseDto breadTypeResponseDto;
+public class BakeryListResponseDTO extends BaseBakeryResponseDTO {
+    private BreadTypeResponseDTO breadType;
 
-    public BakeryListResponseDto(Long bakeryId, String bakeryName, String bakeryPicture, Boolean isHACCP, Boolean isVegan, Boolean isNonGMO, BreadTypeResponseDto breadTypeResponseDto, String firstNearStation, String secondNearStation, Boolean isBooked, Long bookMarkCount) {
+    public BakeryListResponseDTO(Long bakeryId, String bakeryName, String bakeryPicture, Boolean isHACCP, Boolean isVegan, Boolean isNonGMO, BreadTypeResponseDTO breadTypeResponseDto, String firstNearStation, String secondNearStation, Boolean isBooked, Long bookMarkCount) {
         super(bakeryId, bakeryName, bakeryPicture, isHACCP, isVegan,
                 isNonGMO, firstNearStation, secondNearStation, isBooked, bookMarkCount);
-        this.breadTypeResponseDto = breadTypeResponseDto;
+            this.breadType = breadType;
     }
 }

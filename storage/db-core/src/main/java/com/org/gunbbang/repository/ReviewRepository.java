@@ -19,6 +19,8 @@ public interface ReviewRepository extends JpaRepository<Review,Long> {
     Review save(Review review);
 
     Optional<Review> findByMember(Member member);
+
+    Optional<Review> findById(Long reviewId);
     List<Review> findAllByBakeryOrderByCreatedAtDesc(Bakery bakery);
     List<Review> findAllByMemberOrderByCreatedAtDesc(Member member);
     @Query(value = "SELECT r FROM Review r " +

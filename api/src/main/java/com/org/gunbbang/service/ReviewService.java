@@ -3,8 +3,8 @@ package com.org.gunbbang.service;
 import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.BestReviewDTO;
 import com.org.gunbbang.NotFoundException;
-import com.org.gunbbang.controller.DTO.request.RecommendKeywordNameRequestDto;
-import com.org.gunbbang.controller.DTO.request.ReviewRequestDto;
+import com.org.gunbbang.controller.DTO.request.RecommendKeywordNameRequestDTO;
+import com.org.gunbbang.controller.DTO.request.ReviewRequestDTO;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
@@ -31,10 +31,10 @@ public class ReviewService {
     private final MemberRepository memberRepository;
     private final RecommendKeywordRepository recommendKeywordRepository;
     private final BookMarkRepository bookMarkRepository;
-
     private final int maxBestBakeryCount = 10;
 
-    public Long createReview(Long bakeryId, ReviewRequestDto reviewRequestDto){
+
+    public Long createReview(Long bakeryId, ReviewRequestDTO reviewRequestDto){
         Long currentMemberId = SecurityUtil.getLoginMemberId();
         Member member = memberRepository.findById(currentMemberId).orElseThrow(()->new BadRequestException(ErrorType.TOKEN_TIME_EXPIRED_EXCEPTION));
         Bakery bakery = bakeryRepository.findById(bakeryId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
@@ -50,64 +50,67 @@ public class ReviewService {
         return review.getReviewId();
     }
 
-    public void createReviewRecommendKeyword(List<RecommendKeywordNameRequestDto> keywordNameRequestDtoList, Long reviewId){
+    public void createReviewRecommendKeyword(List<RecommendKeywordNameRequestDTO> keywordNameRequestDtoList, Long reviewId){
         Review review = reviewRepository.findById(reviewId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_REVIEW));
         Bakery bakery = bakeryRepository.findById(review.getBakery().getBakeryId()).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
-        for(RecommendKeywordNameRequestDto keyword : keywordNameRequestDtoList){
+        for(RecommendKeywordNameRequestDTO keyword : keywordNameRequestDtoList){
             RecommendKeyword recommendKeyword = recommendKeywordRepository.findByKeywordName(keyword.getKeywordName()).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION));
             reviewRecommendKeywordRepository.save(ReviewRecommendKeyword.builder()
                             .recommendKeyword(recommendKeyword)
                             .review(review)
                     .build());
-            // 키워드 증가하면 리뷰에도 keywordcount 증가
             bakery.keywordCountChange(keyword.getKeywordName());
         }
         bakeryRepository.save(bakery);
     }
 
-    public ReviewDetailResponseDto getReviewedByMember(Long reviewId){
+    public ReviewDetailResponseDTO getReviewedByMember(Long reviewId){
         Long currentMemberId = SecurityUtil.getLoginMemberId();
-        Member member = memberRepository.findById(currentMemberId).orElseThrow(()->new BadRequestException(ErrorType.TOKEN_TIME_EXPIRED_EXCEPTION));
-        Review review = reviewRepository.findByMember(member).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_REVIEW));
-        List<RecommendKeywordResponseDto> recommendKeywordList = new ArrayList<>();
-        if(review.getIsLike()) {
-            List<ReviewRecommendKeyword> reviewRecommendKeywordList = reviewRecommendKeywordRepository.findAllByReview(review);
-            for(ReviewRecommendKeyword reviewRecommendKeyword : reviewRecommendKeywordList){
-                recommendKeywordList.add(RecommendKeywordResponseDto.builder()
-                        .recommendKeywordId(reviewRecommendKeyword.getRecommendKeyword().getRecommendKeywordId())
-                        .recommendKeywordName(reviewRecommendKeyword.getRecommendKeyword().getKeywordName())
-                        .build());
+        Review review = reviewRepository.findById(reviewId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_REVIEW));
+        if(currentMemberId.equals(review.getMember().getMemberId())){
+            List<RecommendKeywordResponseDTO> recommendKeywordList = new ArrayList<>();
+            if (review.getIsLike()) {
+                List<ReviewRecommendKeyword> reviewRecommendKeywordList = reviewRecommendKeywordRepository.findAllByReview(review);
+                for (ReviewRecommendKeyword reviewRecommendKeyword : reviewRecommendKeywordList) {
+                    recommendKeywordList.add(RecommendKeywordResponseDTO.builder()
+                            .recommendKeywordId(reviewRecommendKeyword.getRecommendKeyword().getRecommendKeywordId())
+                            .recommendKeywordName(reviewRecommendKeyword.getRecommendKeyword().getKeywordName())
+                            .build());
+                }
             }
+            return ReviewDetailResponseDTO.builder()
+                    .reviewId(review.getReviewId())
+                    .isLike(review.getIsLike())
+                    .recommendKeywordList(recommendKeywordList)
+                    .reviewText(review.getReviewText())
+                    .build();
         }
-        return ReviewDetailResponseDto.builder()
-                .reviewId(review.getReviewId())
-                .isLike(review.getIsLike())
-                .recommendKeywordList(recommendKeywordList)
-                .reviewText(review.getReviewText())
-                .build();
+        else{
+            throw new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION);
+        }
     }
 
-    public ReviewListResponseDto getBakeryReviewList(Long bakeryId){
+    public ReviewListResponseDTO getBakeryReviewList(Long bakeryId){
         Bakery bakery = bakeryRepository.findById(bakeryId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
         List<Review> reviewList = reviewRepository.findAllByBakeryOrderByCreatedAtDesc(bakery);
-        List<ReviewResponseDto> reviewListDto = new ArrayList<>();
+        List<ReviewResponseDTO> reviewListDto = new ArrayList<>();
         Float tastePercent;
         Float specialPercent;
         Float kindPercent;
         Float zeroPercent;
 
         for(Review review : reviewList){
-            List<RecommendKeywordResponseDto> recommendKeywordList = new ArrayList<>();
+            List<RecommendKeywordResponseDTO> recommendKeywordList = new ArrayList<>();
             if(review.getIsLike()) {
                 List<ReviewRecommendKeyword> reviewRecommendKeywordList = reviewRecommendKeywordRepository.findAllByReview(review);
                 for(ReviewRecommendKeyword reviewRecommendKeyword : reviewRecommendKeywordList){
-                    recommendKeywordList.add(RecommendKeywordResponseDto.builder()
+                    recommendKeywordList.add(RecommendKeywordResponseDTO.builder()
                                     .recommendKeywordId(reviewRecommendKeyword.getRecommendKeyword().getRecommendKeywordId())
                                     .recommendKeywordName(reviewRecommendKeyword.getRecommendKeyword().getKeywordName())
                             .build());
                 }
             }
-            reviewListDto.add(ReviewResponseDto.builder()
+            reviewListDto.add(ReviewResponseDTO.builder()
                     .reviewId(review.getReviewId())
                     .memberNickname(review.getMember().getNickname())
                     .recommendKeywordList(recommendKeywordList)
@@ -129,24 +132,25 @@ public class ReviewService {
             zeroPercent = bakery.getKeywordZeroWasteCount().floatValue()/bakery.getReviewCount().floatValue();
         }
 
-        return ReviewListResponseDto.builder()
+        return ReviewListResponseDTO.builder()
                 .tastePercent(tastePercent)
                 .specialPercent(specialPercent)
                 .kindPercent(kindPercent)
                 .zeroPercent(zeroPercent)
+                .totalReviewCount(bakery.getReviewCount().intValue())
                 .reviewList(reviewListDto)
                 .build();
     }
 
-    public List<BakeryListReviewedByMemberDto> getBakeryListReviewedByMember(Long memberId) {
+    public List<BakeryListReviewedByMemberDTO> getBakeryListReviewedByMember(Long memberId) {
         Member currentMember = memberRepository.findById(memberId).orElseThrow(() -> new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION));
         List<Review> reviewList = reviewRepository.findAllByMemberOrderByCreatedAtDesc(currentMember);
-        List<BakeryListReviewedByMemberDto> responseDtoList = new ArrayList<>();
-        BreadTypeResponseDto breadTypeResponseDto;
-        BakeryListReviewedByMemberDto bakeryListReviewedByMemberDto;
+        List<BakeryListReviewedByMemberDTO> responseDtoList = new ArrayList<>();
+        BreadTypeResponseDTO breadTypeResponseDto;
+        BakeryListReviewedByMemberDTO bakeryListReviewedByMemberDto;
 
         for (Review review : reviewList) {
-            breadTypeResponseDto = BreadTypeResponseDto.builder()
+            breadTypeResponseDto = BreadTypeResponseDTO.builder()
                     .breadTypeId(review.getBakery().getBreadType().getBreadTypeId())
                     .breadTypeName(review.getBakery().getBreadType().getBreadTypeName())
                     .isGlutenFree(review.getBakery().getBreadType().getIsGlutenFree())
@@ -155,7 +159,7 @@ public class ReviewService {
                     .isSugarFree(review.getBakery().getBreadType().getIsSugarFree())
                     .build();
 
-            bakeryListReviewedByMemberDto = BakeryListReviewedByMemberDto.builder()
+            bakeryListReviewedByMemberDto = BakeryListReviewedByMemberDTO.builder()
                     .bakeryId(review.getBakery().getBakeryId())
                     .bakeryName(review.getBakery().getBakeryName())
                     .bakeryPicture(review.getBakery().getBakeryPicture())

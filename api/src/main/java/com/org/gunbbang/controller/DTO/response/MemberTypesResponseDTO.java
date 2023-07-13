@@ -18,7 +18,7 @@ public class MemberTypesResponseDTO {
     @NotNull
     private MainPurpose mainPurpose;
     @NotNull
-    private BreadTypeResponseDto breadType;
+    private BreadTypeResponseDTO breadType;
     @NotNull
     private NutrientTypeResponseDTO nutrientType;
 }
