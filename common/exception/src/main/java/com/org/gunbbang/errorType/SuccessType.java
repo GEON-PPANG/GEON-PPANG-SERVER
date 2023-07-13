@@ -29,6 +29,7 @@ public enum SuccessType {
     GET_MEMBER_TYPES_SUCCESS(HttpStatus.OK, "회원 필터칩 조회 성공"),
     GET_BEST_REVIEWS_SUCCESS(HttpStatus.OK, "베스트 리뷰 조회 성공"),
     SEARCH_BAKERIES_SUCCESS(HttpStatus.OK, "건빵집 검색 성공"),
+    GET_BOOKMARKED_BAKERIES(HttpStatus.OK, "북마크된 건빵집 조회 성공"),
 
     /**
      * 201 CREATED
