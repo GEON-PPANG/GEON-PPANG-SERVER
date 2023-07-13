@@ -1,6 +1,6 @@
 package com.org.gunbbang.controller.DTO.response;
 
-import com.org.gunbbang.controller.DTO.response.BaseDTO.BaseBakeryListResponseDTO;
+import com.org.gunbbang.controller.DTO.response.BaseDTO.BaseBakeryResponseDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @NoArgsConstructor
 @SuperBuilder
-public class BestBakeryListResponseDTO extends BaseBakeryListResponseDTO {
+public class BestBakeryListResponseDTO extends BaseBakeryResponseDTO {
     private int reviewCount;
 
     public BestBakeryListResponseDTO(

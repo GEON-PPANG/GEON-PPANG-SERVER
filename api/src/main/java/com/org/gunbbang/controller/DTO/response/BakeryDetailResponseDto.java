@@ -1,6 +1,6 @@
 package com.org.gunbbang.controller.DTO.response;
 
-import com.org.gunbbang.controller.DTO.response.BaseDTO.BaseBakeryListResponseDTO;
+import com.org.gunbbang.controller.DTO.response.BaseDTO.BaseBakeryResponseDTO;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @SuperBuilder
-public class BakeryDetailResponseDto extends BaseBakeryListResponseDTO {
+public class BakeryDetailResponseDto extends BaseBakeryResponseDTO {
     private BreadTypeResponseDto breadTypeResponseDto;
     private String homepage;
     private String openingTime;

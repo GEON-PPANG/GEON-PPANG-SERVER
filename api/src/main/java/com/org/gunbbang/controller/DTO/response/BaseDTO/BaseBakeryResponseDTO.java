@@ -6,7 +6,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @NoArgsConstructor
 @SuperBuilder
-public class BaseBakeryListResponseDTO {
+public class BaseBakeryResponseDTO {
     private Long bakeryId;
     private String bakeryName;
     private String bakeryPicture;
@@ -18,7 +18,7 @@ public class BaseBakeryListResponseDTO {
     private Boolean isBooked;
     private int bookmarkCount;
 
-    public BaseBakeryListResponseDTO (
+    public BaseBakeryResponseDTO (
             Long bakeryId,
             String bakeryName,
             String bakeryPicture,
