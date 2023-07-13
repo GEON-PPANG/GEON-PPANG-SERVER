@@ -233,7 +233,7 @@ public class BakeryService {
 
 
         BakerySearchResponseDTO bakerySearchResponseDTO = BakerySearchResponseDTO.builder()
-                .reviewCount(foundBakeries.size())
+                .resultCount(foundBakeries.size())
                 .bakeryList(bakeryListResponseDTOs)
                 .build();
 
