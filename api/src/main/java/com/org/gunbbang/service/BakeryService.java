@@ -79,7 +79,7 @@ public class BakeryService {
                     .isHACCP(bakeryCategory.getBakery().getIsHACCP())
                     .isVegan(bakeryCategory.getBakery().getIsVegan())
                     .isNonGMO(bakeryCategory.getBakery().getIsNonGMO())
-                    .breadTypeResponseDto(breadTypeResponseDto)
+                    .breadType(breadTypeResponseDto)
                     .firstNearStation(bakeryCategory.getBakery().getFirstNearStation())
                     .secondNearStation(bakeryCategory.getBakery().getSecondNearStation())
                     .isBooked(isBooked)
