@@ -200,11 +200,11 @@ public class BakeryService {
 
     public BakerySearchResponseDTO getBakeriesByName(String bakeryName, Long memberId) {
         List<Bakery> foundBakeries = bakeryRepository.findBakeryByBakeryName(bakeryName);
-        List<BakeryListResponseDto> bakeryListResponseDTOs = new ArrayList<>();
+        List<BakeryListResponseDTO> bakeryListResponseDTOs = new ArrayList<>();
         for (Bakery foundBakery : foundBakeries) {
             Boolean isBooked = isBooked(memberId, foundBakery.getBakeryId());
 
-            BreadTypeResponseDto breadTypeResponseDto = BreadTypeResponseDto.builder()
+            BreadTypeResponseDTO breadTypeResponseDto = BreadTypeResponseDTO.builder()
                     .breadTypeId(foundBakery.getBreadType().getBreadTypeId())
                     .breadTypeName(foundBakery.getBreadType().getBreadTypeName())
                     .isGlutenFree(foundBakery.getBreadType().getIsGlutenFree())
@@ -214,7 +214,7 @@ public class BakeryService {
                     .build();
 
 
-            BakeryListResponseDto bakeryListResponseDto = BakeryListResponseDto.builder()
+            BakeryListResponseDTO bakeryListResponseDto = BakeryListResponseDTO.builder()
                     .bakeryId(foundBakery.getBakeryId())
                     .bakeryName(foundBakery.getBakeryName())
                     .bakeryPicture(foundBakery.getBakeryPicture())
@@ -225,7 +225,7 @@ public class BakeryService {
                     .secondNearStation(foundBakery.getSecondNearStation())
                     .isBooked(isBooked)
                     .bookMarkCount(foundBakery.getBookMarkCount())
-                    .breadTypeResponseDto(breadTypeResponseDto)
+                    .breadType(breadTypeResponseDto)
                     .build();
 
             bakeryListResponseDTOs.add(bakeryListResponseDto);

@@ -11,6 +11,6 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @SuperBuilder
 public class BakerySearchResponseDTO {
-    private int reviewCount;
-    private List<BakeryListResponseDto> bakeryList;
+    private int resultCount;
+    private List<BakeryListResponseDTO> bakeryList;
 }
