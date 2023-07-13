@@ -19,7 +19,7 @@ public class BakeryController {
 
     @GetMapping("/detail/{bakeryId}")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<BakeryDetailResponseDto> getMemberDetail(@PathVariable("bakeryId") @Valid Long bakeryId){
+    public ApiResponse<BakeryDetailResponseDto> getBakeryDetail(@PathVariable("bakeryId") @Valid Long bakeryId){
         Long memberId = SecurityUtil.getLoginMemberId();
         BakeryDetailResponseDto bakeryDetailResponseDto = bakeryService.getBakeryDetail(memberId, bakeryId);
         return ApiResponse.success(SuccessType.GET_BAKERY_DETAIL_SUCCESS, bakeryDetailResponseDto);

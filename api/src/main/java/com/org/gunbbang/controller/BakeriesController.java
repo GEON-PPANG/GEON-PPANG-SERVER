@@ -20,12 +20,12 @@ public class BakeriesController {
     private final BakeryService bakeryService;
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<List<BakeryListResponseDto>> getMemberDetail(@RequestParam("sort") @Valid String sort,
+    public ApiResponse<List<BakeryListResponseDto>> getBakeryList(@RequestParam("sort") @Valid String sort,
                                                                     @RequestParam("isHard") @Valid Boolean isHard,
                                                                     @RequestParam("isDessert") @Valid Boolean isDessert,
                                                                     @RequestParam("isBrunch") @Valid Boolean isBrunch){
         Long memberId = SecurityUtil.getLoginMemberId();
         List<BakeryListResponseDto> bakeryListResponseDto = bakeryService.getBakeryList(memberId, sort,isHard,isDessert,isBrunch);
-        return ApiResponse.success(SuccessType.GET_MYPAGE_SUCCESS, bakeryListResponseDto);
+        return ApiResponse.success(SuccessType.GET_BAKERY_LIST_SUCCESS, bakeryListResponseDto);
     }
 }
