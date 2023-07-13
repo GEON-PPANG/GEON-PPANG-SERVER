@@ -5,6 +5,7 @@ import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.controller.DTO.request.RecommendKeywordNameRequestDto;
 import com.org.gunbbang.controller.DTO.request.ReviewRequestDto;
 import com.org.gunbbang.controller.DTO.response.*;
+import com.org.gunbbang.controller.DTO.response.BaseDTO.BaseReviewResponseDto;
 import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
@@ -59,6 +60,28 @@ public class ReviewService {
             bakery.keywordCountChange(keyword.getKeywordName());
         }
         bakeryRepository.save(bakery);
+    }
+
+    public ReviewDetailResponseDto getReviewedByMember(Long reviewId){
+        Long currentMemberId = SecurityUtil.getLoginMemberId();
+        Member member = memberRepository.findById(currentMemberId).orElseThrow(()->new BadRequestException(ErrorType.TOKEN_TIME_EXPIRED_EXCEPTION));
+        Review review = reviewRepository.findByMember(member).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_REVIEW));
+        List<RecommendKeywordResponseDto> recommendKeywordList = new ArrayList<>();
+        if(review.getIsLike()) {
+            List<ReviewRecommendKeyword> reviewRecommendKeywordList = reviewRecommendKeywordRepository.findAllByReview(review);
+            for(ReviewRecommendKeyword reviewRecommendKeyword : reviewRecommendKeywordList){
+                recommendKeywordList.add(RecommendKeywordResponseDto.builder()
+                        .recommendKeywordId(reviewRecommendKeyword.getRecommendKeyword().getRecommendKeywordId())
+                        .recommendKeywordName(reviewRecommendKeyword.getRecommendKeyword().getKeywordName())
+                        .build());
+            }
+        }
+        return ReviewDetailResponseDto.builder()
+                .reviewId(review.getReviewId())
+                .isLike(review.getIsLike())
+                .recommendKeywordList(recommendKeywordList)
+                .reviewText(review.getReviewText())
+                .build();
     }
 
     public ReviewListResponseDto getBakeryReviewList(Long bakeryId){
@@ -118,8 +141,6 @@ public class ReviewService {
         List<BakeryListReviewedByMemberDto> responseDtoList = new ArrayList<>();
         BreadTypeResponseDto breadTypeResponseDto;
         BakeryListReviewedByMemberDto bakeryListReviewedByMemberDto;
-        Boolean isBooked;
-
 
         for (Review review : reviewList) {
             breadTypeResponseDto = BreadTypeResponseDto.builder()
@@ -130,12 +151,6 @@ public class ReviewService {
                     .isNutFree(review.getBakery().getBreadType().getIsNutFree())
                     .isSugarFree(review.getBakery().getBreadType().getIsSugarFree())
                     .build();
-
-            if (bookmarkRepository.findByMemberAndBakery(memberRepository.findById(memberId).orElseThrow(()->new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION)), review.getBakery()).isPresent()) {
-                isBooked = Boolean.TRUE;
-            } else {
-                isBooked = Boolean.FALSE;
-            }
 
             bakeryListReviewedByMemberDto = BakeryListReviewedByMemberDto.builder()
                     .bakeryId(review.getBakery().getBakeryId())

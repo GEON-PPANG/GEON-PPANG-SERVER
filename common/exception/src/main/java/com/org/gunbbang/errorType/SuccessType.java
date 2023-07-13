@@ -20,6 +20,7 @@ public enum SuccessType {
     GET_BAKERY_LIST_SUCCESS(HttpStatus.OK, "건빵집 리스트 조회 성공"),
     GET_BAKERY_REVIEW_LIST_SUCCESS(HttpStatus.OK, "건빵집 리뷰 리스트 조회 성공"),
     GET_MEMBER_REVIEW_BAKERY_LIST_SUCCESS(HttpStatus.OK, "회원이 리뷰한 빵집 리스트 조회 성공"),
+    GET_REVIEW_DETAIL_MEMBER_SUCCESS(HttpStatus.OK, "회원이 작성한 리뷰 조회 성공"),
     GET_BEST_BAKERIES_SUCCESS(HttpStatus.OK, "베스트 건빵집 리스트 조회 성공"),
     GET_BAKERY_DETAIL_SUCCESS(HttpStatus.OK, "건빵집 상세 페이지 조회 성공"),
     CANCEL_BOOKMARK_SUCCESS(HttpStatus.OK, "북마크 취소 성공"),
