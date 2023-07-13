@@ -26,6 +26,6 @@ public class BakeriesController {
                                                                     @RequestParam("isBrunch") @Valid Boolean isBrunch){
         Long memberId = SecurityUtil.getLoginMemberId();
         List<BakeryListResponseDto> bakeryListResponseDto = bakeryService.getBakeryList(memberId, sort,isHard,isDessert,isBrunch);
-        return ApiResponse.success(SuccessType.GET_MYPAGE_SUCCESS, bakeryListResponseDto);
+        return ApiResponse.success(SuccessType.GET_BAKERY_LIST_SUCCESS, bakeryListResponseDto);
     }
 }
