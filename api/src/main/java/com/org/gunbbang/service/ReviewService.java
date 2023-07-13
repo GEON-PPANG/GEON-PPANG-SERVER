@@ -28,7 +28,6 @@ public class ReviewService {
     private final BakeryRepository bakeryRepository;
     private final MemberRepository memberRepository;
     private final RecommendKeywordRepository recommendKeywordRepository;
-    private final BookmarkRepository bookmarkRepository;
 
     public Long createReview(Long bakeryId, ReviewRequestDto reviewRequestDto){
         Long currentMemberId = SecurityUtil.getLoginMemberId();
