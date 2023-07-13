@@ -1,7 +1,7 @@
 package com.org.gunbbang.controller;
 
 import com.org.gunbbang.common.dto.ApiResponse;
-import com.org.gunbbang.controller.DTO.response.BakeryDetailResponseDto;
+import com.org.gunbbang.controller.DTO.response.BakeryDetailResponseDTO;
 import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.service.BakeryService;
 import com.org.gunbbang.util.Security.SecurityUtil;
@@ -19,10 +19,10 @@ public class BakeryController {
 
     @GetMapping("/detail/{bakeryId}")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<BakeryDetailResponseDto> getBakeryDetail(@PathVariable("bakeryId") @Valid Long bakeryId){
+    public ApiResponse<BakeryDetailResponseDTO> getBakeryDetail(@PathVariable("bakeryId") @Valid Long bakeryId){
         Long memberId = SecurityUtil.getLoginMemberId();
-        BakeryDetailResponseDto bakeryDetailResponseDto = bakeryService.getBakeryDetail(memberId, bakeryId);
-        return ApiResponse.success(SuccessType.GET_BAKERY_DETAIL_SUCCESS, bakeryDetailResponseDto);
+        BakeryDetailResponseDTO bakeryDetailResponseDTO = bakeryService.getBakeryDetail(memberId, bakeryId);
+        return ApiResponse.success(SuccessType.GET_BAKERY_DETAIL_SUCCESS, bakeryDetailResponseDTO);
     }
 
 }

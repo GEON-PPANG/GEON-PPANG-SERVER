@@ -1,6 +1,6 @@
 package com.org.gunbbang.controller.DTO.response.BaseDTO;
 
-import com.org.gunbbang.controller.DTO.response.RecommendKeywordResponseDto;
+import com.org.gunbbang.controller.DTO.response.RecommendKeywordResponseDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -11,14 +11,14 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @SuperBuilder
-public class BaseReviewResponseDto {
+public class BaseReviewResponseDTO {
     @NotNull
     Long reviewId;
-    List<RecommendKeywordResponseDto> recommendKeywordList;
+    List<RecommendKeywordResponseDTO> recommendKeywordList;
     @NotNull
     String reviewText;
 
-    public BaseReviewResponseDto(Long reviewId, List<RecommendKeywordResponseDto> recommendKeywordList, String reviewText) {
+    public BaseReviewResponseDTO(Long reviewId, List<RecommendKeywordResponseDTO> recommendKeywordList, String reviewText) {
         this.reviewId = reviewId;
         this.recommendKeywordList = recommendKeywordList;
         this.reviewText = reviewText;

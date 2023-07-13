@@ -11,16 +11,16 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @SuperBuilder
-public class BakeryDetailResponseDto extends BaseBakeryResponseDTO {
-    private BreadTypeResponseDto breadType;
+public class BakeryDetailResponseDTO extends BaseBakeryResponseDTO {
+    private BreadTypeResponseDTO breadType;
     private String homepage;
     private String address;
     private String openingTime;
     private String closedDay;
     private String phoneNumber;
-    private List<MenuResponseDto> menuList;
+    private List<MenuResponseDTO> menuList;
 
-    public BakeryDetailResponseDto(Long bakeryId, String bakeryName, String bakeryPicture, Boolean isHACCP, Boolean isVegan, Boolean isNonGMO, BreadTypeResponseDto breadType, String firstNearStation, String secondNearStation, Boolean isBooked, Long bookMarkCount, String homepage, String address, String openingTime, String closedDay, String phoneNumber, List<MenuResponseDto> menuList) {
+    public BakeryDetailResponseDTO(Long bakeryId, String bakeryName, String bakeryPicture, Boolean isHACCP, Boolean isVegan, Boolean isNonGMO, BreadTypeResponseDTO breadType, String firstNearStation, String secondNearStation, Boolean isBooked, Long bookMarkCount, String homepage, String address, String openingTime, String closedDay, String phoneNumber, List<MenuResponseDTO> menuList) {
         super(bakeryId, bakeryName, bakeryPicture, isHACCP, isVegan,
                 isNonGMO, firstNearStation, secondNearStation, isBooked, bookMarkCount);
         this.breadType = breadType;

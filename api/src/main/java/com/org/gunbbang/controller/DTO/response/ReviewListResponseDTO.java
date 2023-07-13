@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ReviewListResponseDto {
+public class ReviewListResponseDTO {
     @NotNull
     Float tastePercent;
     @NotNull
@@ -21,10 +21,10 @@ public class ReviewListResponseDto {
     Float zeroPercent;
     @NotNull
     int totalReviewCount;
-    List<ReviewResponseDto> reviewList;
+    List<ReviewResponseDTO> reviewList;
 
     @Builder
-    public ReviewListResponseDto(Float tastePercent, Float specialPercent, Float kindPercent, Float zeroPercent, int totalReviewCount, List<ReviewResponseDto> reviewList) {
+    public ReviewListResponseDTO(Float tastePercent, Float specialPercent, Float kindPercent, Float zeroPercent, int totalReviewCount, List<ReviewResponseDTO> reviewList) {
         this.tastePercent = tastePercent;
         this.specialPercent = specialPercent;
         this.kindPercent = kindPercent;

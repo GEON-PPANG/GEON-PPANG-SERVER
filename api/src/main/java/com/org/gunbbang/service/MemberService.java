@@ -38,11 +38,11 @@ public class MemberService {
     private final BreadTypeRepository breadTypeRepository;
     private final NutrientTypeRepository nutrientTypeRepository;
 
-    public MemberDetailResponseDto getMemberDetail() {
+    public MemberDetailResponseDTO getMemberDetail() {
         Long currentMemberId = SecurityUtil.getLoginMemberId();
 
         Member member = memberRepository.findById(currentMemberId).orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
-        BreadTypeResponseDto breadTypeResponseDto = BreadTypeResponseDto.builder()
+        BreadTypeResponseDTO breadTypeResponseDto = BreadTypeResponseDTO.builder()
                 .breadTypeId(member.getBreadType().getBreadTypeId())
                 .breadTypeName(member.getBreadType().getBreadTypeName())
                 .isVegan(member.getBreadType().getIsVegan())
@@ -51,7 +51,7 @@ public class MemberService {
                 .isNutFree(member.getBreadType().getIsNutFree())
                 .build();
 
-        return MemberDetailResponseDto.builder()
+        return MemberDetailResponseDTO.builder()
                 .memberNickname(member.getNickname())
                 .mainPurpose(member.getMainPurpose())
                 .breadType(breadTypeResponseDto)
@@ -137,7 +137,7 @@ public class MemberService {
 
         // TODO: 이거 구체적으로 어떻게 돌아가는건지???
         BreadType foundMemberBreadType = foundMember.getBreadType();
-        BreadTypeResponseDto breadTypeResponse = BreadTypeResponseDto.builder()
+        BreadTypeResponseDTO breadTypeResponse = BreadTypeResponseDTO.builder()
                 .breadTypeId(foundMemberBreadType.getBreadTypeId())
                 .breadTypeName(foundMemberBreadType.getBreadTypeName())
                 .isGlutenFree(foundMemberBreadType.getIsGlutenFree())
@@ -168,7 +168,7 @@ public class MemberService {
                 .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
 
         BreadType foundMemberBreadType = foundMember.getBreadType();
-        BreadTypeResponseDto breadTypeResponse = BreadTypeResponseDto.builder()
+        BreadTypeResponseDTO breadTypeResponse = BreadTypeResponseDTO.builder()
                 .breadTypeId(foundMemberBreadType.getBreadTypeId())
                 .breadTypeName(foundMemberBreadType.getBreadTypeName())
                 .isGlutenFree(foundMemberBreadType.getIsGlutenFree())

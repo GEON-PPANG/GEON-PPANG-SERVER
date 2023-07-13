@@ -10,7 +10,6 @@ import com.org.gunbbang.util.Security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
@@ -32,12 +31,12 @@ public class BakeryService {
 
     private final int maxBestBakeryCount = 10;
 
-    public List<BakeryListResponseDto> getBakeryList(Long memberId, String sort, Boolean isHard, Boolean isDessert, Boolean isBrunch) {
+    public List<BakeryListResponseDTO> getBakeryList(Long memberId, String sort, Boolean isHard, Boolean isDessert, Boolean isBrunch) {
         List<Category> categoryIdList = new ArrayList<>();
         List<BakeryCategory> bakeryCategoryList;
-        List<BakeryListResponseDto> responseDtoList = new ArrayList();
-        BakeryListResponseDto bakeryListResponseDto;
-        BreadTypeResponseDto breadTypeResponseDto;
+        List<BakeryListResponseDTO> responseDtoList = new ArrayList();
+        BakeryListResponseDTO bakeryListResponseDto;
+        BreadTypeResponseDTO breadTypeResponseDto;
         Boolean isBooked;
 
 
@@ -59,7 +58,7 @@ public class BakeryService {
         }
 
         for (BakeryCategory bakeryCategory : bakeryCategoryList) {
-            breadTypeResponseDto = BreadTypeResponseDto.builder()
+            breadTypeResponseDto = BreadTypeResponseDTO.builder()
                     .breadTypeId(bakeryCategory.getBakery().getBreadType().getBreadTypeId())
                     .breadTypeName(bakeryCategory.getBakery().getBreadType().getBreadTypeName())
                     .isGlutenFree(bakeryCategory.getBakery().getBreadType().getIsGlutenFree())
@@ -74,7 +73,7 @@ public class BakeryService {
                 isBooked = Boolean.FALSE;
             }
 
-            bakeryListResponseDto = BakeryListResponseDto.builder()
+            bakeryListResponseDto = BakeryListResponseDTO.builder()
                     .bakeryId(bakeryCategory.getBakery().getBakeryId())
                     .bakeryName(bakeryCategory.getBakery().getBakeryName())
                     .bakeryPicture(bakeryCategory.getBakery().getBakeryPicture())
@@ -93,14 +92,14 @@ public class BakeryService {
         return responseDtoList;
     }
 
-    public BakeryDetailResponseDto getBakeryDetail(Long memberId, Long bakeryId){
+    public BakeryDetailResponseDTO getBakeryDetail(Long memberId, Long bakeryId){
         Boolean isBooked;
 
         Bakery bakery= bakeryRepository.findById(bakeryId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
 
         List<Menu> bakeryMenu = menuRepository.findAllByBakery(bakery);
 
-        BreadTypeResponseDto breadTypeResponseDto = BreadTypeResponseDto.builder()
+        BreadTypeResponseDTO breadTypeResponseDto = BreadTypeResponseDTO.builder()
                 .breadTypeId(bakery.getBreadType().getBreadTypeId())
                 .breadTypeName(bakery.getBreadType().getBreadTypeName())
                 .isGlutenFree(bakery.getBreadType().getIsGlutenFree())
@@ -115,17 +114,17 @@ public class BakeryService {
             isBooked = Boolean.FALSE;
         }
 
-        List<MenuResponseDto> menuList = new ArrayList<>();
+        List<MenuResponseDTO> menuList = new ArrayList<>();
 
         for(Menu menu : bakeryMenu){
-            menuList.add(MenuResponseDto.builder()
+            menuList.add(MenuResponseDTO.builder()
                             .menuId(menu.getMenuId())
                             .menuName(menu.getMenuName())
                             .menuPrice(menu.getMenuPrice())
                             .build());
         }
 
-        return BakeryDetailResponseDto.builder()
+        return BakeryDetailResponseDTO.builder()
                 .bakeryId(bakery.getBakeryId())
                 .bakeryName(bakery.getBakeryName())
                 .bakeryPicture(bakery.getBakeryPicture())

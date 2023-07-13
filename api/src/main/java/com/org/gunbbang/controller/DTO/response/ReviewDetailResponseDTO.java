@@ -1,6 +1,6 @@
 package com.org.gunbbang.controller.DTO.response;
 
-import com.org.gunbbang.controller.DTO.response.BaseDTO.BaseReviewResponseDto;
+import com.org.gunbbang.controller.DTO.response.BaseDTO.BaseReviewResponseDTO;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,11 +12,11 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @SuperBuilder
-public class ReviewDetailResponseDto extends BaseReviewResponseDto {
+public class ReviewDetailResponseDTO extends BaseReviewResponseDTO {
     @NotNull
     Boolean isLike;
 
-    public ReviewDetailResponseDto(Long reviewId, List<RecommendKeywordResponseDto> recommendKeywordList, String reviewText, Boolean isLike) {
+    public ReviewDetailResponseDTO(Long reviewId, List<RecommendKeywordResponseDTO> recommendKeywordList, String reviewText, Boolean isLike) {
         super(reviewId, recommendKeywordList, reviewText);
         this.isLike = isLike;
     }
