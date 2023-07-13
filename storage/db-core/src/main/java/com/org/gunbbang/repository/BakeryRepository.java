@@ -36,4 +36,8 @@ public interface BakeryRepository extends JpaRepository<Bakery, Long> {
             BreadType breadTypeId,
             List<Long> alreadyFoundBakeries,
             PageRequest pageRequest);
+
+    @Query(value = "SELECT b FROM Bakery b " +
+            "WHERE b.bakeryName like %:bakeryName% ")
+    List<Bakery> findBakeryByBakeryName(@Param("bakeryName") String bakeryName);
 }
