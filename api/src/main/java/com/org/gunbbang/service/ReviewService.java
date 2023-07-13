@@ -81,7 +81,7 @@ public class ReviewService {
                     .build();
         }
         else{
-            throw new BadRequestException(ErrorType.TOKEN_TIME_EXPIRED_EXCEPTION);
+            throw new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION);
         }
     }
 
