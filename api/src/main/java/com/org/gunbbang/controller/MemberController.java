@@ -2,9 +2,9 @@ package com.org.gunbbang.controller;
 
 import com.org.gunbbang.common.dto.ApiResponse;
 import com.org.gunbbang.controller.DTO.request.MemberTypesRequestDTO;
-import com.org.gunbbang.controller.DTO.response.BakeryListReviewedByMemberDto;
+import com.org.gunbbang.controller.DTO.response.BakeryListReviewedByMemberDTO;
+import com.org.gunbbang.controller.DTO.response.MemberDetailResponseDTO;
 import com.org.gunbbang.controller.DTO.response.MemberSignUpResponseDTO;
-import com.org.gunbbang.controller.DTO.response.MemberDetailResponseDto;
 import com.org.gunbbang.controller.DTO.response.MemberTypesResponseDTO;
 import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.service.MemberService;
@@ -29,8 +29,8 @@ public class MemberController {
 
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<MemberDetailResponseDto> getMemberDetail() {
-        MemberDetailResponseDto memberDetailResponseDto = memberService.getMemberDetail();
+    public ApiResponse<MemberDetailResponseDTO> getMemberDetail() {
+        MemberDetailResponseDTO memberDetailResponseDto = memberService.getMemberDetail();
         return ApiResponse.success(SuccessType.GET_MYPAGE_SUCCESS, memberDetailResponseDto);
     }
 
@@ -60,7 +60,7 @@ public class MemberController {
 
     @GetMapping("/reviews")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<List<BakeryListReviewedByMemberDto>> getBakeryListReviewedByMember(){
+    public ApiResponse<List<BakeryListReviewedByMemberDTO>> getBakeryListReviewedByMember(){
         Long memberId = SecurityUtil.getLoginMemberId();
         return ApiResponse.success(SuccessType.GET_MEMBER_REVIEW_BAKERY_LIST_SUCCESS, reviewService.getBakeryListReviewedByMember(memberId));
     }

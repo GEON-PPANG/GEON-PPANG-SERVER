@@ -1,6 +1,6 @@
 package com.org.gunbbang.controller.DTO.response;
 
-import com.org.gunbbang.controller.DTO.response.BaseDTO.BaseReviewResponseDto;
+import com.org.gunbbang.controller.DTO.response.BaseDTO.BaseReviewResponseDTO;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,14 +12,14 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @SuperBuilder
-public class ReviewResponseDto extends BaseReviewResponseDto {
+public class ReviewResponseDTO extends BaseReviewResponseDTO {
     @NotNull
     String memberNickname;
     @NotNull
     String createdAt;
 
-    public ReviewResponseDto(Long reviewId, String memberNickname, List<RecommendKeywordResponseDto> recommendKeywordList, String reviewText, String createdAt) {
-        super(reviewId, memberNickname, recommendKeywordList, reviewText);
+    public ReviewResponseDTO(Long reviewId, String memberNickname, List<RecommendKeywordResponseDTO> recommendKeywordList, String reviewText, String createdAt) {
+        super(reviewId, recommendKeywordList, reviewText);
         this.memberNickname = memberNickname;
         this.createdAt = createdAt;
     }
