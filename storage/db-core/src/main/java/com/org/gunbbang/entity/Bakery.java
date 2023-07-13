@@ -72,7 +72,7 @@ public class Bakery {
     private String addressRest;
 
     @ColumnDefault("0")
-    private Long bookmarkCount;
+    private Long bookMarkCount;
 
     @ColumnDefault("0")
     private Long reviewCount;
@@ -117,11 +117,11 @@ public class Bakery {
 
     public Long updateBookMarkCount(boolean isAddingBookMark) {
         if (isAddingBookMark) {
-            this.bookmarkCount += 1;
-            return this.bookmarkCount;
+            this.bookMarkCount += 1;
+            return this.bookMarkCount;
         }
-        this.bookmarkCount -= 1;
-        return this.bookmarkCount;
+        this.bookMarkCount -= 1;
+        return this.bookMarkCount;
     }
 }
 

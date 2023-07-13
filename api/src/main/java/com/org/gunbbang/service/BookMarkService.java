@@ -8,9 +8,8 @@ import com.org.gunbbang.entity.BookMark;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.BakeryRepository;
-import com.org.gunbbang.repository.BookmarkRepository;
+import com.org.gunbbang.repository.BookMarkRepository;
 import com.org.gunbbang.repository.MemberRepository;
-import com.org.gunbbang.util.Security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,16 +19,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BookMarkService {
 
-    private final BookmarkRepository bookmarkRepository;
+    private final BookMarkRepository bookMarkRepository;
     private final BakeryRepository bakeryRepository;
     private final MemberRepository memberRepository;
 
     public BookMarkResponseDTO doBookMark(
-            boolean isAddingBookmark,
+            boolean isAddingBookMark,
             Long bakeryId,
             Long memberId
     ) {
-        System.out.println("isAddingBookmark 값: " + isAddingBookmark);
+        System.out.println("isAddingbookMark 값: " + isAddingBookMark);
         Bakery foundBakery = bakeryRepository
                 .findById(bakeryId)
                 .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
@@ -37,26 +36,26 @@ public class BookMarkService {
         Member foundMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
 
-        Optional<BookMark> foundBookMark = bookmarkRepository.findByMemberAndBakery(foundMember, foundBakery);
+        Optional<BookMark> foundBookMark = bookMarkRepository.findByMemberAndBakery(foundMember, foundBakery);
 
-        if (isAddingBookmark) {
+        if (isAddingBookMark) {
             if(foundBookMark.isPresent()) {  // 북마크 했는데 또 한경우
-                System.out.println("북마크 객체 결과: " + foundBookMark.get().getBookmarkId());
+                System.out.println("북마크 객체 결과: " + foundBookMark.get().getBookMarkId());
                 System.out.println("북마크 멤버 결과: " + foundBookMark.get().getMember().getMemberId());
                 System.out.println("북마크 빵집 결과: " + foundBookMark.get().getBakery().getBakeryId());
 
                 throw new DoubleBookMarkRequestException(ErrorType.ALREADY_BOOKMARKED_EXCEPTION);
             }
-            bookmarkRepository.saveAndFlush(
+            bookMarkRepository.saveAndFlush(
                     BookMark.builder()
                             .bakery(foundBakery)
                             .member(foundMember).build());
 
-            foundBakery.updateBookMarkCount(isAddingBookmark);
+            foundBakery.updateBookMarkCount(isAddingBookMark);
             bakeryRepository.saveAndFlush(foundBakery);
             // flush 안되는 문제 해결
             return BookMarkResponseDTO.builder()
-                    .bookMarkCount(foundBakery.getBookmarkCount())
+                    .bookMarkCount(foundBakery.getBookMarkCount())
                     .build();
         }
 
@@ -65,12 +64,12 @@ public class BookMarkService {
             throw new DoubleBookMarkRequestException(ErrorType.ALREADY_CANCELED_BOOKMARK_EXCEPTION);
         }
 
-        bookmarkRepository.deleteByMemberAndBakery(foundMember, foundBakery);
+        bookMarkRepository.deleteByMemberAndBakery(foundMember, foundBakery);
 
-        foundBakery.updateBookMarkCount(isAddingBookmark);
+        foundBakery.updateBookMarkCount(isAddingBookMark);
         bakeryRepository.saveAndFlush(foundBakery);
         return BookMarkResponseDTO.builder()
-                .bookMarkCount(foundBakery.getBookmarkCount())
+                .bookMarkCount(foundBakery.getBookMarkCount())
                 .build();
     }
 }

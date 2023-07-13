@@ -70,40 +70,47 @@ INSERT INTO category (category_id, category_name)
 
 -- bakery
 INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town, bookmark_count)
+                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
+                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count)
     VALUES (1,1,2,'1152-5','펄스브레드샵','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
     '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
-            '010-1111-1111','일산역','고양시','정발산동', 1);
+            '010-1111-1111','일산역','고양시','정발산동', 1, 9, 1, 4, 2, 2);
 INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town, bookmark_count)
+                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
+                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count)
 VALUES (2,1,2,'1152-5','펄스브레드샵2','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
         '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
-        '010-1111-1111','일산역','고양시','정발산동', 2);
+        '010-1111-1111','일산역','고양시','정발산동', 2, 9, 0, 5, 1, 3);
 INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-                    first_near_station, homepage, is_haccp, is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town, bookmark_count)
+                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
+                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count)
 VALUES (3, 1,3,'11-5','건대초코빵','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
         '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
-        '010-1111-1111','일산역','고양시','정발산동', 3);
+        '010-1111-1111','일산역','고양시','정발산동', 3, 5, 1, 1, 1, 2);
 INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town, bookmark_count)
+                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
+                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count)
 VALUES (4,1,1,'52-5','비건비건','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
         '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
-        '010-1111-1111','일산역','고양시','정발산동', 4);
+        '010-1111-1111','일산역','고양시','정발산동', 4, 6, 0, 1, 3, 2);
 INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town, bookmark_count)
+                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
+                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count)
 VALUES (5,7,1,'52-5','저당빵만판다','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
         '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
-        '010-1111-1111','일산역','고양시','정발산동', 5);
+        '010-1111-1111','일산역','고양시','정발산동', 5, 14, 5, 4, 3, 2);
 INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town, bookmark_count)
+                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
+                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count)
 VALUES (6,3,6,'5211-5','졸려','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
         '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
-        '010-1111-1111','일산역','고양시','정발산동', 6);
+        '010-1111-1111','일산역','고양시','정발산동', 6, 7, 0, 7, 0, 0);
 INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town, bookmark_count)
+                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
+                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count)
 VALUES (7,1,6,'51-5','졸빵집','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
         '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
-        '010-1111-1111','일산역','고양시','정발산동', 7);
+        '010-1111-1111','일산역','고양시','정발산동', 7, 8, 1, 7, 0, 0);
 
 -- bakery_category
 INSERT INTO bakery_category (bakery_id,category_id) values (1,2);
@@ -129,3 +136,34 @@ INSERT INTO book_mark (bakery_id, member_id) values (4, 3);
 INSERT INTO book_mark (bakery_id, member_id) values (5, 3);
 INSERT INTO book_mark (bakery_id, member_id) values (6, 4);
 INSERT INTO book_mark (bakery_id, member_id) values (7, 5);
+
+-- -- review
+-- INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)
+--     VALUES (1, true, 'review_id: 1 | 제일최근 리뷰+좋아요+멤버빵유형 및 주목적 일치', 1, 2, '2023-07-13T18:00:29.68338Z', null);
+-- INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)
+--     VALUES (2, true, 'review_id: 2 | 두번째+좋아요+멤버빵유형 및 주목적 일치', 1, 2, '2023-07-12T18:00:29.68338Z', null);
+-- INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)
+--     VALUES (3, true, 'review_id: 3 | 세번째+좋아요+멤버빵유형 및 주목적 일치', 1, 2, '2023-07-11T18:00:29.68338Z', null);
+-- INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)
+--     VALUES (4, true, 'review_id: 4 | 네번째+좋아요+멤버빵유형 및 주목적 일치', 4, 2, '2023-07-10T18:00:29.68338Z', null);
+-- INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)
+--     VALUES (5, true, 'review_id: 5 | 다섯+좋아요++멤버빵유형 및 주목적 일치', 5, 3, '2023-07-09T18:00:29.68338Z', null);
+--
+-- -- 여기까지 best 리뷰에서 조회되어야 하는 데이터
+--
+-- INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)
+-- VALUES (6, true, 'review_id: 6 | 좋아요+빵유형만 일치 이거 나오면 안됨', 1, 4, '2023-07-11T18:00:29.68338Z', null);
+-- INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)
+-- VALUES (7, true, 'review_id: 7 | 좋아요+주목적만 일치 이거 나오면 안됨', 1, 5, '2023-07-13T18:00:29.68338Z', null);
+--
+-- -- 여기까지 best 리뷰가 모자를 때 나오는 랜덤 데이터
+--
+-- INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)
+-- VALUES (8, false, 'review_id: 8 | 싫어요임 나오면 안됨', 1, 3, '2023-07-13T18:00:29.68338Z', null);
+-- INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)
+-- VALUES (9, false, 'review_id: 9 | 싫어요임 이거 나오면 안됨', 1, 4, '2023-07-12T18:00:29.68338Z', null);
+--
+-- -- 여기는 best+랜덤 리뷰 10개 했을때 모자라도 나오면 안되는 데이터
+
+
+

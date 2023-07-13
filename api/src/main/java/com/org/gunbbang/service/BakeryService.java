@@ -10,10 +10,12 @@ import com.org.gunbbang.util.Security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -23,7 +25,7 @@ import java.util.stream.Collectors;
 public class BakeryService {
     private final CategoryRepository categoryRepository;
     private final BakeryCategoryRepository bakeryCategoryRepository;
-    private final BookmarkRepository bookmarkRepository;
+    private final BookMarkRepository bookMarkRepository;
     private final MemberRepository memberRepository;
     private final BakeryRepository bakeryRepository;
     private final MenuRepository menuRepository;
@@ -66,7 +68,7 @@ public class BakeryService {
                     .isSugarFree(bakeryCategory.getBakery().getBreadType().getIsSugarFree())
                     .build();
 
-            if (bookmarkRepository.findByMemberAndBakery(memberRepository.findById(memberId).orElseThrow(()->new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION)), bakeryCategory.getBakery()).isPresent()) {
+            if (bookMarkRepository.findByMemberAndBakery(memberRepository.findById(memberId).orElseThrow(()->new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION)), bakeryCategory.getBakery()).isPresent()) {
                 isBooked = Boolean.TRUE;
             } else {
                 isBooked = Boolean.FALSE;
@@ -83,7 +85,7 @@ public class BakeryService {
                     .firstNearStation(bakeryCategory.getBakery().getFirstNearStation())
                     .secondNearStation(bakeryCategory.getBakery().getSecondNearStation())
                     .isBooked(isBooked)
-                    .bookmarkCount(bakeryCategory.getBakery().getBookmarkCount().intValue())
+                    .bookMarkCount(bakeryCategory.getBakery().getBookMarkCount())
                     .build();
 
             responseDtoList.add(bakeryListResponseDto);
@@ -107,7 +109,7 @@ public class BakeryService {
                 .isSugarFree(bakery.getBreadType().getIsSugarFree())
                 .build();
 
-        if (bookmarkRepository.findByMemberAndBakery(memberRepository.findById(memberId).orElseThrow(()->new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION)), bakery).isPresent()) {
+        if (bookMarkRepository.findByMemberAndBakery(memberRepository.findById(memberId).orElseThrow(()->new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION)), bakery).isPresent()) {
             isBooked = Boolean.TRUE;
         } else {
             isBooked = Boolean.FALSE;
@@ -134,7 +136,7 @@ public class BakeryService {
                 .firstNearStation(bakery.getFirstNearStation())
                 .secondNearStation(bakery.getSecondNearStation())
                 .isBooked(isBooked)
-                .bookmarkCount(bakery.getBookmarkCount().intValue())
+                .bookMarkCount(bakery.getBookMarkCount())
                 .homepage(bakery.getHomepage())
                 .address(bakery.getState()+" "+bakery.getCity()+" "+bakery.getTown()+" "+bakery.getAddressRest())
                 .openingTime(bakery.getOpeningHours())
@@ -144,7 +146,6 @@ public class BakeryService {
                 .build();
     }
 
-    @Transactional
     public List<BestBakeryListResponseDTO> getBestBakeries() {
         Long memberId = SecurityUtil.getLoginMemberId();
 
@@ -165,7 +166,7 @@ public class BakeryService {
 
         List<Long> alreadyFoundBakeries = bestBakeries.stream().map(Bakery::getBakeryId).collect(Collectors.toList());
         PageRequest restPageRequest = PageRequest.of(0, maxBestBakeryCount - bestBakeries.size());
-        bestBakeries.addAll(bakeryRepository.findBakeriesByBreadTypeId(
+        bestBakeries.addAll(bakeryRepository.findRestBakeriesByBreadTypeId(
                         foundMember.getBreadType(),
                         alreadyFoundBakeries,
                         restPageRequest));
@@ -174,10 +175,11 @@ public class BakeryService {
 
     }
 
+    // TODO: 이거 DTO 안에 static 메서드로 못빼나??
     private List<BestBakeryListResponseDTO> getResponseBakeries(Member member, List<Bakery> bakeries) {
         List<BestBakeryListResponseDTO> responseDtoList = new ArrayList();
         for (Bakery bestBakery: bakeries) {
-            Boolean isBooked = isBooked(member, bestBakery);
+            Boolean isBooked = isBooked(member.getMemberId(), bestBakery.getBakeryId());
 
             BestBakeryListResponseDTO response = BestBakeryListResponseDTO.builder()
                     .bakeryId(bestBakery.getBakeryId())
@@ -189,7 +191,7 @@ public class BakeryService {
                     .firstNearStation(bestBakery.getFirstNearStation())
                     .secondNearStation(bestBakery.getSecondNearStation())
                     .isBooked(isBooked)
-                    .bookmarkCount(bestBakery.getBookmarkCount().intValue())
+                    .bookMarkCount(bestBakery.getBookMarkCount())
                     .build();
 
             responseDtoList.add(response);
@@ -197,9 +199,9 @@ public class BakeryService {
         return responseDtoList;
     }
 
-    private Boolean isBooked(Member member, Bakery bakery) {
+    private Boolean isBooked(Long memberId, Long bakeryId) {
         Boolean isBooked = Boolean.FALSE;
-        if (bookmarkRepository.findByMemberAndBakery(member, bakery).isPresent()) {
+        if (bookMarkRepository.findByMemberIdAndBakeryId(memberId, bakeryId).isPresent()) {
             isBooked = Boolean.TRUE;
         }
         return isBooked;

@@ -16,7 +16,7 @@ public class BaseBakeryResponseDTO {
     private String firstNearStation;
     private String secondNearStation;
     private Boolean isBooked;
-    private int bookmarkCount;
+    private Long bookMarkCount;
 
     public BaseBakeryResponseDTO (
             Long bakeryId,
@@ -28,7 +28,7 @@ public class BaseBakeryResponseDTO {
             String firstNearStation,
             String secondNearStation,
             Boolean isBooked,
-            int bookmarkCount
+            Long bookMarkCount
     ) {
          this.bakeryId = bakeryId;
          this.bakeryName = bakeryName;
@@ -39,7 +39,7 @@ public class BaseBakeryResponseDTO {
          this.firstNearStation = firstNearStation;
          this.secondNearStation = secondNearStation;
          this.isBooked = isBooked;
-         this.bookmarkCount = bookmarkCount;
+         this.bookMarkCount = bookMarkCount;
     }
 
     public BaseBakeryResponseDTO(Long bakeryId, String bakeryName, String bakeryPicture, Boolean isHACCP, Boolean isVegan, Boolean isNonGMO, String firstNearStation, String secondNearStation) {

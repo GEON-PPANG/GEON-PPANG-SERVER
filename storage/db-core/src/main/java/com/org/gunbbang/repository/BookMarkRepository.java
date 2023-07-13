@@ -10,8 +10,12 @@ import org.springframework.data.jpa.repository.Query;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
-public interface BookmarkRepository extends JpaRepository<BookMark, Long> {
+public interface BookMarkRepository extends JpaRepository<BookMark, Long> {
     Optional<BookMark> findByMemberAndBakery(Member member, Bakery bakery);
+
+    @Query(value = "SELECT bm FROM BookMark bm WHERE bm.member.memberId = :memberId AND bm.bakery.bakeryId = :bakeryId")
+    Optional<BookMark> findByMemberIdAndBakeryId(Long memberId, Long bakeryId);
+
     BookMark saveAndFlush(BookMark bookMark);
 
     @Modifying
