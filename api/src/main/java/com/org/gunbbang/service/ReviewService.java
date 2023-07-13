@@ -4,9 +4,7 @@ import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.controller.DTO.request.RecommendKeywordNameRequestDto;
 import com.org.gunbbang.controller.DTO.request.ReviewRequestDto;
-import com.org.gunbbang.controller.DTO.response.RecommendKeywordResponseDto;
-import com.org.gunbbang.controller.DTO.response.ReviewListResponseDto;
-import com.org.gunbbang.controller.DTO.response.ReviewResponseDto;
+import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
@@ -30,6 +28,7 @@ public class ReviewService {
     private final BakeryRepository bakeryRepository;
     private final MemberRepository memberRepository;
     private final RecommendKeywordRepository recommendKeywordRepository;
+    private final BookmarkRepository bookmarkRepository;
 
     public Long createReview(Long bakeryId, ReviewRequestDto reviewRequestDto){
         Long currentMemberId = SecurityUtil.getLoginMemberId();
@@ -111,6 +110,50 @@ public class ReviewService {
                 .zeroPercent(zeroPercent)
                 .reviewList(reviewListDto)
                 .build();
+    }
+
+    public List<BakeryListReviewedByMemberDto> getBakeryListReviewedByMember(Long memberId){
+        Member currentMember = memberRepository.findById(memberId).orElseThrow(()->new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION));
+        List<Review> reviewList = reviewRepository.findAllByMemberOrderByCreatedAtDesc(currentMember);
+        List<BakeryListReviewedByMemberDto> responseDtoList = new ArrayList<>();
+        BreadTypeResponseDto breadTypeResponseDto;
+        BakeryListReviewedByMemberDto bakeryListReviewedByMemberDto;
+        Boolean isBooked;
+
+
+        for (Review review : reviewList) {
+            breadTypeResponseDto = BreadTypeResponseDto.builder()
+                    .breadTypeId(review.getBakery().getBreadType().getBreadTypeId())
+                    .breadTypeName(review.getBakery().getBreadType().getBreadTypeName())
+                    .isGlutenFree(review.getBakery().getBreadType().getIsGlutenFree())
+                    .isVegan(review.getBakery().getBreadType().getIsVegan())
+                    .isNutFree(review.getBakery().getBreadType().getIsNutFree())
+                    .isSugarFree(review.getBakery().getBreadType().getIsSugarFree())
+                    .build();
+
+            if (bookmarkRepository.findByMemberAndBakery(memberRepository.findById(memberId).orElseThrow(()->new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION)), review.getBakery()).isPresent()) {
+                isBooked = Boolean.TRUE;
+            } else {
+                isBooked = Boolean.FALSE;
+            }
+
+            bakeryListReviewedByMemberDto = BakeryListReviewedByMemberDto.builder()
+                    .bakeryId(review.getBakery().getBakeryId())
+                    .bakeryName(review.getBakery().getBakeryName())
+                    .bakeryPicture(review.getBakery().getBakeryPicture())
+                    .isHACCP(review.getBakery().getIsHACCP())
+                    .isVegan(review.getBakery().getIsVegan())
+                    .isNonGMO(review.getBakery().getIsNonGMO())
+                    .breadTypeResponseDto(breadTypeResponseDto)
+                    .firstNearStation(review.getBakery().getFirstNearStation())
+                    .secondNearStation(review.getBakery().getSecondNearStation())
+                    .reviewId(review.getReviewId())
+                    .createdAt(review.getCreatedAt().format(DateTimeFormatter.ofPattern("yy.MM.dd")))
+                    .build();
+
+            responseDtoList.add(bakeryListReviewedByMemberDto);
+        }
+        return responseDtoList;
     }
 
 }

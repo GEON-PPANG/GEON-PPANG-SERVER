@@ -41,4 +41,15 @@ public class BaseBakeryResponseDTO {
          this.isBooked = isBooked;
          this.bookmarkCount = bookmarkCount;
     }
+
+    public BaseBakeryResponseDTO(Long bakeryId, String bakeryName, String bakeryPicture, Boolean isHACCP, Boolean isVegan, Boolean isNonGMO, String firstNearStation, String secondNearStation) {
+        this.bakeryId = bakeryId;
+        this.bakeryName = bakeryName;
+        this.bakeryPicture = bakeryPicture;
+        this.isHACCP = isHACCP;
+        this.isVegan = isVegan;
+        this.isNonGMO = isNonGMO;
+        this.firstNearStation = firstNearStation;
+        this.secondNearStation = secondNearStation;
+    }
 }
