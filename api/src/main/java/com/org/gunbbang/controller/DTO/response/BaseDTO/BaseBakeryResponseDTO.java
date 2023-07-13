@@ -1,18 +1,12 @@
 package com.org.gunbbang.controller.DTO.response.BaseDTO;
 
-import com.org.gunbbang.controller.DTO.response.BestBakeryListResponseDTO;
-import com.org.gunbbang.entity.Bakery;
-import com.org.gunbbang.entity.Member;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
 @SuperBuilder
-public class BaseBakeryListResponseDTO {
+public class BaseBakeryResponseDTO {
     private Long bakeryId;
     private String bakeryName;
     private String bakeryPicture;
@@ -24,7 +18,7 @@ public class BaseBakeryListResponseDTO {
     private Boolean isBooked;
     private int bookmarkCount;
 
-    public BaseBakeryListResponseDTO (
+    public BaseBakeryResponseDTO (
             Long bakeryId,
             String bakeryName,
             String bakeryPicture,
