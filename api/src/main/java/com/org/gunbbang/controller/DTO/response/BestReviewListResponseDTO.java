@@ -5,14 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-
 @Getter
 @NoArgsConstructor
 @SuperBuilder
-public class BestBakeryListResponseDTO extends BaseBakeryResponseDTO {
+public class BestReviewListResponseDTO extends BaseBakeryResponseDTO {
     private Long reviewCount;
+    private String reviewText;
+    private String firstMaxRecommendKeyword;
+    private String secondMaxRecommendKeyword;
 
-    public BestBakeryListResponseDTO(
+    public BestReviewListResponseDTO(
             Long bakeryId,
             String bakeryName,
             String bakeryPicture,
@@ -23,12 +25,16 @@ public class BestBakeryListResponseDTO extends BaseBakeryResponseDTO {
             String secondNearStation,
             Boolean isBooked,
             Long bookMarkCount,
-            Long reviewCount
+            Long reviewCount,
+            String reviewText,
+            String firstMaxRecommendKeyword,
+            String secondMaxRecommendKeyword
     ) {
         super(bakeryId, bakeryName, bakeryPicture, isHACCP, isVegan,
                 isNonGMO, firstNearStation, secondNearStation, isBooked, bookMarkCount);
         this.reviewCount = reviewCount;
+        this.reviewText = reviewText;
+        this.firstMaxRecommendKeyword = firstMaxRecommendKeyword;
+        this.secondMaxRecommendKeyword = secondMaxRecommendKeyword;
     }
-
 }
-

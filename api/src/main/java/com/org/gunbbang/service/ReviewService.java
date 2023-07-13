@@ -1,23 +1,24 @@
 package com.org.gunbbang.service;
 
 import com.org.gunbbang.BadRequestException;
+import com.org.gunbbang.BestReviewDTO;
 import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.controller.DTO.request.RecommendKeywordNameRequestDto;
 import com.org.gunbbang.controller.DTO.request.ReviewRequestDto;
 import com.org.gunbbang.controller.DTO.response.*;
-import com.org.gunbbang.controller.DTO.response.BaseDTO.BaseReviewResponseDto;
 import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
 import com.org.gunbbang.util.Security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -29,7 +30,9 @@ public class ReviewService {
     private final BakeryRepository bakeryRepository;
     private final MemberRepository memberRepository;
     private final RecommendKeywordRepository recommendKeywordRepository;
-    private final BookmarkRepository bookmarkRepository;
+    private final BookMarkRepository bookMarkRepository;
+
+    private final int maxBestBakeryCount = 10;
 
     public Long createReview(Long bakeryId, ReviewRequestDto reviewRequestDto){
         Long currentMemberId = SecurityUtil.getLoginMemberId();
@@ -135,8 +138,8 @@ public class ReviewService {
                 .build();
     }
 
-    public List<BakeryListReviewedByMemberDto> getBakeryListReviewedByMember(Long memberId){
-        Member currentMember = memberRepository.findById(memberId).orElseThrow(()->new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION));
+    public List<BakeryListReviewedByMemberDto> getBakeryListReviewedByMember(Long memberId) {
+        Member currentMember = memberRepository.findById(memberId).orElseThrow(() -> new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION));
         List<Review> reviewList = reviewRepository.findAllByMemberOrderByCreatedAtDesc(currentMember);
         List<BakeryListReviewedByMemberDto> responseDtoList = new ArrayList<>();
         BreadTypeResponseDto breadTypeResponseDto;
@@ -171,4 +174,96 @@ public class ReviewService {
         return responseDtoList;
     }
 
+    public List<BestReviewListResponseDTO> getBestReviews(Long memberId) {
+        PageRequest bestPageRequest = PageRequest.of(0, maxBestBakeryCount);
+        Member foundMember = memberRepository
+                .findById(memberId)
+                .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+
+        List<BestReviewDTO> bestReviews = reviewRepository.findBestReviewDTOList(
+                foundMember.getBreadType().getBreadTypeId(),
+                foundMember.getMainPurpose(),
+                bestPageRequest);
+
+        if (bestReviews.size() == maxBestBakeryCount){
+            return getBestReviewsListResponseDTO(memberId, bestReviews);
+        }
+
+        List<Long> alreadyFoundReviews = bestReviews.stream().map(BestReviewDTO::getReviewId).collect(Collectors.toList());
+        PageRequest restPageRequest = PageRequest.of(0, maxBestBakeryCount - alreadyFoundReviews.size());
+
+        bestReviews.addAll(
+                reviewRepository.findRestBestReviewDTOListByBreadType(alreadyFoundReviews, restPageRequest)
+        );
+
+        return getBestReviewsListResponseDTO(memberId, bestReviews);
+    }
+
+    // TODO: 이거 DTO 안에 static 메서드로 못빼나??
+    private List<BestReviewListResponseDTO> getBestReviewsListResponseDTO(Long memberId, List<BestReviewDTO> bestReviews) {
+        List<BestReviewListResponseDTO> responseDtoList = new ArrayList();
+        for (BestReviewDTO bestReview: bestReviews) {
+            Boolean isBooked = isBooked(memberId, bestReview.getBakeryId());
+            List<String> recommendKeywords = getMaxRecommendKeywords(bestReview);
+
+            // max인 리뷰 키워드 두 개 넣기
+            BestReviewListResponseDTO response = BestReviewListResponseDTO.builder()
+                    .bakeryId(bestReview.getBakeryId())
+                    .bakeryName(bestReview.getBakeryName())
+                    .bakeryPicture(bestReview.getBakeryPicture())
+                    .isHACCP(bestReview.getIsHACCP())
+                    .isVegan(bestReview.getIsVegan())
+                    .isNonGMO(bestReview.getIsNonGMO())
+                    .firstNearStation(bestReview.getFirstNearStation())
+                    .secondNearStation(bestReview.getSecondNearStation())
+                    .isBooked(isBooked)
+                    .bookMarkCount(bestReview.getBookMarkCount())
+                    .reviewCount(bestReview.getReviewCount())
+                    .reviewText(bestReview.getReviewText())
+                    .firstMaxRecommendKeyword(recommendKeywords.get(0))
+                    .secondMaxRecommendKeyword(recommendKeywords.get(1))
+                    .build();
+
+            responseDtoList.add(response);
+        }
+        return responseDtoList;
+    }
+
+    private Boolean isBooked(Long memberId, Long bakeryId) {
+        Boolean isBooked = Boolean.FALSE;
+        if (bookMarkRepository.findByMemberIdAndBakeryId(memberId, bakeryId).isPresent()) {
+            isBooked = Boolean.TRUE;
+        }
+        return isBooked;
+    }
+
+    private List<String> getMaxRecommendKeywords(BestReviewDTO bestReview) {
+
+        Map<String, Long> recommendKeywordsMap = new HashMap<>();
+        recommendKeywordsMap.put("keywordDelicious", bestReview.getKeywordDeliciousCount());
+        recommendKeywordsMap.put("keywordKind", bestReview.getKeywordKindCount());
+        recommendKeywordsMap.put("keywordSpecial", bestReview.getKeywordSpecialCount());
+        recommendKeywordsMap.put("keywordZeroWaste", bestReview.getKeywordZeroWasteCount());
+
+        Long maxValue = Long.MIN_VALUE;
+        Long secondMaxValue = Long.MAX_VALUE;
+        String maxKey = "null";
+        String secondMaxKey = "null";
+
+        for (Map.Entry<String, Long> entry : recommendKeywordsMap.entrySet()) {
+            Long value = entry.getValue();
+
+            if (value > maxValue) {
+                secondMaxValue = maxValue;
+                secondMaxKey = maxKey;
+                maxValue = value;
+                maxKey = entry.getKey();
+            } else if (value > secondMaxValue) {
+                secondMaxValue = value;
+                secondMaxKey = entry.getKey();
+            }
+        }
+
+        return List.of(maxKey, secondMaxKey);
+    }
 }

@@ -18,7 +18,7 @@ create table bakery
     address_rest             varchar(255)          not null,
     bakery_name              varchar(255)          not null,
     bakery_picture           varchar(255)          not null,
-    bookmark_count           bigint  default 0,
+    book_mark_count           bigint  default 0,
     city                     varchar(255)          not null,
     closed_day               varchar(255),
     first_near_station       varchar(255),
@@ -66,10 +66,10 @@ create table bread_type (
 
 create table book_mark
 (
-    bookmark_id bigint not null auto_increment,
+    book_mark_id bigint not null auto_increment,
     bakery_id   bigint not null,
     member_id   bigint not null,
-    primary key (bookmark_id)
+    primary key (book_mark_id)
 );
 
 create table member
