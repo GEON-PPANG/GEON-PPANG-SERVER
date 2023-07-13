@@ -1,13 +1,7 @@
 package com.org.gunbbang.controller.DTO.response.BaseDTO;
 
-import com.org.gunbbang.controller.DTO.response.BestBakeryListResponseDTO;
-import com.org.gunbbang.entity.Bakery;
-import com.org.gunbbang.entity.Member;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
