@@ -1,6 +1,7 @@
 package com.org.gunbbang.controller;
 
 import com.org.gunbbang.common.dto.ApiResponse;
+import com.org.gunbbang.controller.DTO.response.ReviewDetailResponseDto;
 import com.org.gunbbang.controller.DTO.response.ReviewListResponseDto;
 import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.service.ReviewService;

@@ -16,8 +16,8 @@ public class ReviewDetailResponseDto extends BaseReviewResponseDto {
     @NotNull
     Boolean isLike;
 
-    public ReviewDetailResponseDto(Long reviewId, String memberNickname, List<RecommendKeywordResponseDto> recommendKeywordList, String reviewText, Boolean isLike) {
-        super(reviewId, memberNickname, recommendKeywordList, reviewText);
+    public ReviewDetailResponseDto(Long reviewId, List<RecommendKeywordResponseDto> recommendKeywordList, String reviewText, Boolean isLike) {
+        super(reviewId, recommendKeywordList, reviewText);
         this.isLike = isLike;
     }
 

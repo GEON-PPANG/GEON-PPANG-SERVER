@@ -62,24 +62,28 @@ public class ReviewService {
 
     public ReviewDetailResponseDto getReviewedByMember(Long reviewId){
         Long currentMemberId = SecurityUtil.getLoginMemberId();
-        Member member = memberRepository.findById(currentMemberId).orElseThrow(()->new BadRequestException(ErrorType.TOKEN_TIME_EXPIRED_EXCEPTION));
-        Review review = reviewRepository.findByMember(member).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_REVIEW));
-        List<RecommendKeywordResponseDto> recommendKeywordList = new ArrayList<>();
-        if(review.getIsLike()) {
-            List<ReviewRecommendKeyword> reviewRecommendKeywordList = reviewRecommendKeywordRepository.findAllByReview(review);
-            for(ReviewRecommendKeyword reviewRecommendKeyword : reviewRecommendKeywordList){
-                recommendKeywordList.add(RecommendKeywordResponseDto.builder()
-                        .recommendKeywordId(reviewRecommendKeyword.getRecommendKeyword().getRecommendKeywordId())
-                        .recommendKeywordName(reviewRecommendKeyword.getRecommendKeyword().getKeywordName())
-                        .build());
+        Review review = reviewRepository.findById(reviewId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_REVIEW));
+        if(currentMemberId.equals(review.getMember().getMemberId())){
+            List<RecommendKeywordResponseDto> recommendKeywordList = new ArrayList<>();
+            if (review.getIsLike()) {
+                List<ReviewRecommendKeyword> reviewRecommendKeywordList = reviewRecommendKeywordRepository.findAllByReview(review);
+                for (ReviewRecommendKeyword reviewRecommendKeyword : reviewRecommendKeywordList) {
+                    recommendKeywordList.add(RecommendKeywordResponseDto.builder()
+                            .recommendKeywordId(reviewRecommendKeyword.getRecommendKeyword().getRecommendKeywordId())
+                            .recommendKeywordName(reviewRecommendKeyword.getRecommendKeyword().getKeywordName())
+                            .build());
+                }
             }
+            return ReviewDetailResponseDto.builder()
+                    .reviewId(review.getReviewId())
+                    .isLike(review.getIsLike())
+                    .recommendKeywordList(recommendKeywordList)
+                    .reviewText(review.getReviewText())
+                    .build();
         }
-        return ReviewDetailResponseDto.builder()
-                .reviewId(review.getReviewId())
-                .isLike(review.getIsLike())
-                .recommendKeywordList(recommendKeywordList)
-                .reviewText(review.getReviewText())
-                .build();
+        else{
+            throw new BadRequestException(ErrorType.TOKEN_TIME_EXPIRED_EXCEPTION);
+        }
     }
 
     public ReviewListResponseDto getBakeryReviewList(Long bakeryId){

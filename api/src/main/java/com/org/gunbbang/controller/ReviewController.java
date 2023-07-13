@@ -20,8 +20,8 @@ public class ReviewController {
     @PostMapping(value = "/{bakeryId}")
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse createReview(@PathVariable("bakeryId") @Valid final Long bakeryId, @RequestBody @Valid final ReviewRequestDto request) {
-        Long reviewId = reviewService.createReview(bakeryId,request);
-        if(request.getIsLike()) {
+        Long reviewId = reviewService.createReview(bakeryId, request);
+        if (request.getIsLike()) {
             reviewService.createReviewRecommendKeyword(request.getKeywordList(), reviewId);
         }
         return ApiResponse.success(SuccessType.CREATE_REVIEW_SUCCESS);
@@ -29,7 +29,7 @@ public class ReviewController {
 
     @GetMapping(value="/{reviewId}")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<ReviewDetailResponseDto> getReviewedByMember(@PathVariable("reviewId") @Valid final Long reviewId) {
+    public ApiResponse<ReviewDetailResponseDto> getReviewedByMember(@PathVariable @Valid Long reviewId) {
         return ApiResponse.success(SuccessType.GET_REVIEW_DETAIL_MEMBER_SUCCESS, reviewService.getReviewedByMember(reviewId));
     }
 }
