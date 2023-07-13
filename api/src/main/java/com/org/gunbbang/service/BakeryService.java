@@ -198,6 +198,48 @@ public class BakeryService {
         return responseDtoList;
     }
 
+    public BakerySearchResponseDTO getBakeriesByName(String bakeryName, Long memberId) {
+        List<Bakery> foundBakeries = bakeryRepository.findBakeryByBakeryName(bakeryName);
+        List<BakeryListResponseDto> bakeryListResponseDTOs = new ArrayList<>();
+        for (Bakery foundBakery : foundBakeries) {
+            Boolean isBooked = isBooked(memberId, foundBakery.getBakeryId());
+
+            BreadTypeResponseDto breadTypeResponseDto = BreadTypeResponseDto.builder()
+                    .breadTypeId(foundBakery.getBreadType().getBreadTypeId())
+                    .breadTypeName(foundBakery.getBreadType().getBreadTypeName())
+                    .isGlutenFree(foundBakery.getBreadType().getIsGlutenFree())
+                    .isVegan(foundBakery.getBreadType().getIsVegan())
+                    .isNutFree(foundBakery.getBreadType().getIsNutFree())
+                    .isSugarFree(foundBakery.getBreadType().getIsSugarFree())
+                    .build();
+
+
+            BakeryListResponseDto bakeryListResponseDto = BakeryListResponseDto.builder()
+                    .bakeryId(foundBakery.getBakeryId())
+                    .bakeryName(foundBakery.getBakeryName())
+                    .bakeryPicture(foundBakery.getBakeryPicture())
+                    .isHACCP(foundBakery.getIsHACCP())
+                    .isVegan(foundBakery.getIsVegan())
+                    .isNonGMO(foundBakery.getIsNonGMO())
+                    .firstNearStation(foundBakery.getFirstNearStation())
+                    .secondNearStation(foundBakery.getSecondNearStation())
+                    .isBooked(isBooked)
+                    .bookMarkCount(foundBakery.getBookMarkCount())
+                    .breadTypeResponseDto(breadTypeResponseDto)
+                    .build();
+
+            bakeryListResponseDTOs.add(bakeryListResponseDto);
+        }
+
+
+        BakerySearchResponseDTO bakerySearchResponseDTO = BakerySearchResponseDTO.builder()
+                .reviewCount(foundBakeries.size())
+                .bakeryList(bakeryListResponseDTOs)
+                .build();
+
+        return bakerySearchResponseDTO;
+    }
+
     private Boolean isBooked(Long memberId, Long bakeryId) {
         Boolean isBooked = Boolean.FALSE;
         if (bookMarkRepository.findByMemberIdAndBakeryId(memberId, bakeryId).isPresent()) {
