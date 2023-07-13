@@ -12,9 +12,9 @@ import lombok.experimental.SuperBuilder;
 public class BakeryListResponseDto extends BaseBakeryResponseDTO {
     private BreadTypeResponseDto breadTypeResponseDto;
 
-    public BakeryListResponseDto(Long bakeryId, String bakeryName, String bakeryPicture, Boolean isHACCP, Boolean isVegan, Boolean isNonGMO, BreadTypeResponseDto breadTypeResponseDto, String firstNearStation, String secondNearStation, Boolean isBooked, int bookmarkCount) {
+    public BakeryListResponseDto(Long bakeryId, String bakeryName, String bakeryPicture, Boolean isHACCP, Boolean isVegan, Boolean isNonGMO, BreadTypeResponseDto breadTypeResponseDto, String firstNearStation, String secondNearStation, Boolean isBooked, Long bookMarkCount) {
         super(bakeryId, bakeryName, bakeryPicture, isHACCP, isVegan,
-                isNonGMO, firstNearStation, secondNearStation, isBooked, bookmarkCount);
+                isNonGMO, firstNearStation, secondNearStation, isBooked, bookMarkCount);
         this.breadTypeResponseDto = breadTypeResponseDto;
     }
 }

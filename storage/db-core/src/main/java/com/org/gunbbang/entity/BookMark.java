@@ -15,7 +15,7 @@ public class BookMark {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bookmarkId;
+    private Long bookMarkId;
 
 
     @ManyToOne(fetch = FetchType.LAZY)

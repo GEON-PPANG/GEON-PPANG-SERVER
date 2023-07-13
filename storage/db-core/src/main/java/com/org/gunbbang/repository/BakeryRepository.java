@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.awt.print.Pageable;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface BakeryRepository extends JpaRepository<Bakery, Long> {
@@ -21,7 +22,7 @@ public interface BakeryRepository extends JpaRepository<Bakery, Long> {
             "INNER JOIN Member m ON bm.member.memberId = m.memberId " +
             "WHERE m.breadType.breadTypeId = :currentMemberBreadType " +
             "AND m.mainPurpose = :currentMemberMainPurpose " +
-            "ORDER BY b.bookmarkCount DESC ")
+            "ORDER BY b.bookMarkCount DESC ")
     List<Bakery> findBestBakeries(
             @Param("currentMemberBreadType") Long currentMemberBreadType,
             @Param("currentMemberMainPurpose") MainPurpose currentMemberMainPurpose,
@@ -31,7 +32,7 @@ public interface BakeryRepository extends JpaRepository<Bakery, Long> {
     @Query(value = "SELECT b FROM Bakery b " +
             "WHERE b.breadType = :breadTypeId " +
             "AND b.bakeryId not in :alreadyFoundBakeries " )
-    List<Bakery> findBakeriesByBreadTypeId(
+    List<Bakery> findRestBakeriesByBreadTypeId(
             BreadType breadTypeId,
             List<Long> alreadyFoundBakeries,
             PageRequest pageRequest);

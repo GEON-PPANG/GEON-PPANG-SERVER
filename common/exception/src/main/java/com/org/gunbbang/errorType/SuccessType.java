@@ -27,6 +27,7 @@ public enum SuccessType {
     DELETE_IMAGE_SUCCESS(HttpStatus.OK, "이미지 삭제에 성공했습니다."),
     UPDATE_MEMBER_TYPES_SUCCESS(HttpStatus.OK, "회원 필터칩 변경 성공"),
     GET_MEMBER_TYPES_SUCCESS(HttpStatus.OK, "회원 필터칩 조회 성공"),
+    GET_BEST_REVIEWS_SUCCESS(HttpStatus.OK, "베스트 리뷰 조회 성공"),
 
     /**
      * 201 CREATED
