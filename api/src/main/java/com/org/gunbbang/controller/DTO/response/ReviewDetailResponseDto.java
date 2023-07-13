@@ -12,15 +12,13 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @SuperBuilder
-public class ReviewResponseDto extends BaseReviewResponseDto {
+public class ReviewDetailResponseDto extends BaseReviewResponseDto {
     @NotNull
-    String memberNickname;
-    @NotNull
-    String createdAt;
+    Boolean isLike;
 
-    public ReviewResponseDto(Long reviewId, String memberNickname, List<RecommendKeywordResponseDto> recommendKeywordList, String reviewText, String createdAt) {
+    public ReviewDetailResponseDto(Long reviewId, String memberNickname, List<RecommendKeywordResponseDto> recommendKeywordList, String reviewText, Boolean isLike) {
         super(reviewId, memberNickname, recommendKeywordList, reviewText);
-        this.memberNickname = memberNickname;
-        this.createdAt = createdAt;
+        this.isLike = isLike;
     }
+
 }
