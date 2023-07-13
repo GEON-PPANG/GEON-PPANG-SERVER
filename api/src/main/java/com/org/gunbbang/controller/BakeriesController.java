@@ -20,7 +20,7 @@ public class BakeriesController {
     private final BakeryService bakeryService;
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<List<BakeryListResponseDto>> getMemberDetail(@RequestParam("sort") @Valid String sort,
+    public ApiResponse<List<BakeryListResponseDto>> getBakeryList(@RequestParam("sort") @Valid String sort,
                                                                     @RequestParam("isHard") @Valid Boolean isHard,
                                                                     @RequestParam("isDessert") @Valid Boolean isDessert,
                                                                     @RequestParam("isBrunch") @Valid Boolean isBrunch){
