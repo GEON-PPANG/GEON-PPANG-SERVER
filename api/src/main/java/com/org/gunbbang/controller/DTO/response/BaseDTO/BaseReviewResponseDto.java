@@ -18,7 +18,7 @@ public class BaseReviewResponseDto {
     @NotNull
     String reviewText;
 
-    public BaseReviewResponseDto(Long reviewId, String memberNickname, List<RecommendKeywordResponseDto> recommendKeywordList, String reviewText) {
+    public BaseReviewResponseDto(Long reviewId, List<RecommendKeywordResponseDto> recommendKeywordList, String reviewText) {
         this.reviewId = reviewId;
         this.recommendKeywordList = recommendKeywordList;
         this.reviewText = reviewText;

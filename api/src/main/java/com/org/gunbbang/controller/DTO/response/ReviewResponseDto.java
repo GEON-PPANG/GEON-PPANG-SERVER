@@ -19,7 +19,7 @@ public class ReviewResponseDto extends BaseReviewResponseDto {
     String createdAt;
 
     public ReviewResponseDto(Long reviewId, String memberNickname, List<RecommendKeywordResponseDto> recommendKeywordList, String reviewText, String createdAt) {
-        super(reviewId, memberNickname, recommendKeywordList, reviewText);
+        super(reviewId, recommendKeywordList, reviewText);
         this.memberNickname = memberNickname;
         this.createdAt = createdAt;
     }

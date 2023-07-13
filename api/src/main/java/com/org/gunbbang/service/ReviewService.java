@@ -5,7 +5,6 @@ import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.controller.DTO.request.RecommendKeywordNameRequestDto;
 import com.org.gunbbang.controller.DTO.request.ReviewRequestDto;
 import com.org.gunbbang.controller.DTO.response.*;
-import com.org.gunbbang.controller.DTO.response.BaseDTO.BaseReviewResponseDto;
 import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
@@ -56,7 +55,6 @@ public class ReviewService {
                             .recommendKeyword(recommendKeyword)
                             .review(review)
                     .build());
-            // 키워드 증가하면 리뷰에도 keywordcount 증가
             bakery.keywordCountChange(keyword.getKeywordName());
         }
         bakeryRepository.save(bakery);
@@ -131,6 +129,7 @@ public class ReviewService {
                 .specialPercent(specialPercent)
                 .kindPercent(kindPercent)
                 .zeroPercent(zeroPercent)
+                .totalReviewCount(bakery.getReviewCount().intValue())
                 .reviewList(reviewListDto)
                 .build();
     }
