@@ -159,7 +159,7 @@ public class BakeryService {
                 bestPageRequest // TODO: 일케하는게맞냐????
         );
 
-        if (bestBakeries.size() == maxBestBakeryCount){
+        if (bestBakeries.size() == maxBestBakeryCount) {
             return getResponseBakeries(foundMember, bestBakeries);
         }
 
@@ -191,6 +191,7 @@ public class BakeryService {
                     .secondNearStation(bestBakery.getSecondNearStation())
                     .isBooked(isBooked)
                     .bookMarkCount(bestBakery.getBookMarkCount())
+                    .reviewCount(bestBakery.getReviewCount())
                     .build();
 
             responseDtoList.add(response);

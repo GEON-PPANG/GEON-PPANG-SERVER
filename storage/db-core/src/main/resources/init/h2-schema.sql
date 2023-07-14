@@ -18,7 +18,7 @@ create table bakery
     address_rest             varchar(255)          not null,
     bakery_name              varchar(255)          not null,
     bakery_picture           varchar(255)          not null,
-    book_mark_count           bigint  default 0,
+    book_mark_count          bigint  default 0,
     city                     varchar(255)          not null,
     closed_day               varchar(255),
     first_near_station       varchar(255),
