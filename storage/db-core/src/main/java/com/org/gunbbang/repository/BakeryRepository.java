@@ -46,4 +46,10 @@ public interface BakeryRepository extends JpaRepository<Bakery, Long> {
             "INNER JOIN Member m ON bm.member.memberId = m.memberId " +
             "WHERE m.memberId = :memberId")
     List<Bakery> findBookMarkedBakeries(@Param("memberId") Long memberId);
+
+    @Query(value = "SELECT b FROM Bakery b " +
+            "WHERE b.bakeryId not in :alreadyFoundBakeries " +
+            "ORDER BY RAND() ")
+    List<Bakery> findRestBakeriesRandomly(List<Long> alreadyFoundBakeries,
+                                          PageRequest pageRequest);
 }

@@ -163,13 +163,25 @@ public class BakeryService {
             return getResponseBakeries(foundMember, bestBakeries);
         }
 
-        List<Long> alreadyFoundBakeries = bestBakeries.stream().map(Bakery::getBakeryId).collect(Collectors.toList());
-        PageRequest restPageRequest = PageRequest.of(0, maxBestBakeryCount - bestBakeries.size());
+        List<Long> alreadyFoundBakeryIds = bestBakeries.stream().map(Bakery::getBakeryId).collect(Collectors.toList());
+        bestPageRequest = PageRequest.of(0, maxBestBakeryCount - bestBakeries.size());
         bestBakeries.addAll(bakeryRepository.findRestBakeriesByBreadTypeId(
                         foundMember.getBreadType(),
-                        alreadyFoundBakeries,
-                        restPageRequest));
+                        alreadyFoundBakeryIds,
+                        bestPageRequest));
 
+        if (bestBakeries.size() == maxBestBakeryCount) {
+            return getResponseBakeries(foundMember, bestBakeries);
+        }
+
+        alreadyFoundBakeryIds.addAll(
+                bestBakeries.stream().map(Bakery::getBakeryId).collect(Collectors.toList())
+        );
+
+        bestPageRequest = PageRequest.of(0, maxBestBakeryCount - bestBakeries.size());
+        bestBakeries.addAll(bakeryRepository.findRestBakeriesRandomly(
+                alreadyFoundBakeryIds,
+                bestPageRequest));
         return getResponseBakeries(foundMember, bestBakeries);
 
     }
