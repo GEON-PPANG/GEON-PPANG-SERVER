@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class BookMarkResponseDTO {
     private Long bookMarkCount;
+    private Boolean isBookMarked;
 }
