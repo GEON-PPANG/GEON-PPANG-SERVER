@@ -193,4 +193,10 @@ public class MemberService {
                 .nutrientType(nutrientTypeResponse)
                 .build();
     }
+
+    public void checkDuplicatedNickname(String nickname) {
+        if (memberRepository.findByNickname(nickname).isPresent()) {
+            throw new BadRequestException(ErrorType.ALREADY_EXIST_NICKNAME_EXCEPTION);
+        }
+    }
 }
