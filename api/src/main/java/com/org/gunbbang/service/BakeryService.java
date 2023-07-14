@@ -242,11 +242,10 @@ public class BakeryService {
     }
 
     private Boolean isBooked(Long memberId, Long bakeryId) {
-        Boolean isBooked = Boolean.FALSE;
         if (bookMarkRepository.findByMemberIdAndBakeryId(memberId, bakeryId).isPresent()) {
-            isBooked = Boolean.TRUE;
+            return Boolean.TRUE;
         }
-        return isBooked;
+        return Boolean.FALSE;
     }
 
     public List<BakeryListResponseDTO> getBookMarkedBakeries(Long memberId) {
