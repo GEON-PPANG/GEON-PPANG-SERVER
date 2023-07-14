@@ -267,6 +267,10 @@ public class ReviewService {
             }
         }
 
-        return List.of(maxKey, secondMaxKey);
+        if (secondMaxValue == 0) {
+            secondMaxKey = null;
+        }
+
+        return Arrays.asList(maxKey, secondMaxKey);
     }
 }
