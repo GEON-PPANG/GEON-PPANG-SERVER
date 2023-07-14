@@ -81,10 +81,10 @@ public class MemberService {
         ).orElseThrow();
 
         Member member = Member.builder()
-                .email(memberSignUpRequestDTO.getEmail())
-                .password(memberSignUpRequestDTO.getPassword())
+                .email(memberSignUpRequestDTO.getEmail().strip())
+                .password(memberSignUpRequestDTO.getPassword().strip())
                 .platformType(memberSignUpRequestDTO.getPlatformType())
-                .nickname(memberSignUpRequestDTO.getNickname())
+                .nickname(memberSignUpRequestDTO.getNickname().strip())
                 .role(Role.USER)
                 .breadType(breadType)
                 .nutrientType(nutrientType)
@@ -92,7 +92,7 @@ public class MemberService {
                 .build();
 
         member.passwordEncode(passwordEncoder);
-        memberRepository.save(member);
+        memberRepository.saveAndFlush(member);
 
         return MemberSignUpResponseDTO.builder()
                 .type(AuthType.SIGN_UP)
@@ -197,6 +197,12 @@ public class MemberService {
     public void checkDuplicatedNickname(String nickname) {
         if (memberRepository.findByNickname(nickname).isPresent()) {
             throw new BadRequestException(ErrorType.ALREADY_EXIST_NICKNAME_EXCEPTION);
+        }
+    }
+
+    public void checkDuplicatedEmail(String email) {
+        if (memberRepository.findByEmail(email).isPresent()) {
+            throw new BadRequestException(ErrorType.ALREADY_EXIST_EMAIL_EXCEPTION);
         }
     }
 }
