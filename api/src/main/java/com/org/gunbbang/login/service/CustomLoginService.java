@@ -23,6 +23,10 @@ public class CustomLoginService implements UserDetailsService {
         return new CustomUserDetails(
                 member.getEmail(),
                 member.getPassword(),
-                member.getMemberId());
+                member.getMemberId(),
+                member.getMainPurpose(),
+                member.getBreadType().getBreadTypeId(),
+                member.getNutrientType().getNutrientTypeId()
+        );
     }
 }

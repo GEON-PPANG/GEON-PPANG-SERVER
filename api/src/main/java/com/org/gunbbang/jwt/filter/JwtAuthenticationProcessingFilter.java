@@ -128,7 +128,10 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         CustomUserDetails userDetailsUser = new CustomUserDetails(
                 myMember.getEmail(),
                 myMember.getPassword(),
-                myMember.getMemberId());
+                myMember.getMemberId(),
+                myMember.getMainPurpose(),
+                myMember.getBreadType().getBreadTypeId(),
+                myMember.getNutrientType().getNutrientTypeId());
 
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(

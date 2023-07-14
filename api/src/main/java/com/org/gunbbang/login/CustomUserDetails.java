@@ -1,5 +1,6 @@
 package com.org.gunbbang.login;
 
+import com.org.gunbbang.MainPurpose;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,10 +15,19 @@ public class CustomUserDetails implements UserDetails {
     private String password;
     private boolean enabled = true;
 
-    public CustomUserDetails(String username, String password, Long memberId) {
+    private MainPurpose mainPurpose;
+
+    private Long breadTypeId;
+
+    private Long nutrientTypeId;
+
+    public CustomUserDetails(String username, String password, Long memberId, MainPurpose mainPurpose, Long breadTypeId, Long nutrientTypeId) {
         this.username = username;
         this.password = password;
         this.memberId = memberId;
+        this.mainPurpose = mainPurpose;
+        this.breadTypeId = breadTypeId;
+        this.nutrientTypeId = nutrientTypeId;
     }
 
 
@@ -41,6 +51,18 @@ public class CustomUserDetails implements UserDetails {
 
     public Long getMemberId() {
         return memberId;
+    }
+
+    public MainPurpose getMainPurpose() {
+        return mainPurpose;
+    }
+
+    public Long getBreadTypeId() {
+        return breadTypeId;
+    }
+
+    public Long getNutrientTypeId() {
+        return nutrientTypeId;
     }
 
     @Override
