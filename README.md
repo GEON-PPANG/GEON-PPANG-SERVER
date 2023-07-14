@@ -1,7 +1,7 @@
 # <img src="https://github.com/GEON-PPANG/GEON-PPANG-iOS/assets/107853954/d6fdefe3-4c88-4cef-a280-cae13b5199f6" align=left width=110><image src ="https://github.com/GEON-PPANG/GEON-PPANG-iOS/assets/107853954/abf67c6b-0dc2-45f6-be6f-e6534f4850a3" width=100 height=50>
 
- 비주류가 만드는 **건빵문화**, 당신이 찾던 그 **건강한 빵집**이 여기에 !
- <br>
+비주류가 만드는 **건빵문화**, 당신이 찾던 그 **건강한 빵집**이 여기에 !
+<br>
 <img width="1728" alt="서버_과제제출_서비스설명" src="https://github.com/GEON-PPANG/GEON-PPANG-SERVER/assets/81363864/67b95ef8-36e3-469f-babd-655934fe535a">
 
 <br><br>
@@ -45,8 +45,8 @@
 	</table>
 </div>
 
-</br>
-</br>
+<br>
+<br>
 
 ## 💻 Development Tech
 
