@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor
-public class ValidateNicknameRequestDTO {
+public class ValidateEmailRequestDTO {
     @NotNull
-    private String nickname;
+    private String email;
 }
