@@ -68,4 +68,9 @@ public class Member extends BaseEntity{
     public void updateNutrientType(NutrientType nutrientType) {
         this.nutrientType = nutrientType;
     }
+
+    public void updateMainPurpose(MainPurpose mainPurpose) {
+        this.mainPurpose = mainPurpose;
+    }
+
 }

@@ -133,6 +133,7 @@ public class MemberService {
 
         foundMember.updateBreadType(breadType);
         foundMember.updateNutrientType(nutrientType);
+        foundMember.updateMainPurpose(request.getMainPurpose());
         memberRepository.saveAndFlush(foundMember);
 
         // TODO: 이거 구체적으로 어떻게 돌아가는건지???
