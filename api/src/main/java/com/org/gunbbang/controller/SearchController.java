@@ -20,7 +20,7 @@ public class SearchController {
     @GetMapping("/search/bakeries")
     public ApiResponse<BakerySearchResponseDTO> searchBakery(@RequestParam("bakeryName") String bakeryName) {
         Long memberId = SecurityUtil.getLoginMemberId();
-        return ApiResponse.success(SuccessType.SEARCH_BAKERIES_SUCCESS, bakeryService.getBakeriesByName(bakeryName, memberId));
+        return ApiResponse.success(SuccessType.SEARCH_BAKERIES_SUCCESS, bakeryService.getBakeriesByName(bakeryName.strip(), memberId));
     }
 
 }
