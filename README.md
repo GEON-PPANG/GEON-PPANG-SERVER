@@ -1,7 +1,7 @@
 # <img src="https://github.com/GEON-PPANG/GEON-PPANG-iOS/assets/107853954/d6fdefe3-4c88-4cef-a280-cae13b5199f6" align=left width=110><image src ="https://github.com/GEON-PPANG/GEON-PPANG-iOS/assets/107853954/abf67c6b-0dc2-45f6-be6f-e6534f4850a3" width=100 height=50>
 
- 비주류가 만드는 **건빵문화**, 당신이 찾던 그 **건강한 빵집**이 여기에 !
- <br>
+비주류가 만드는 **건빵문화**, 당신이 찾던 그 **건강한 빵집**이 여기에 !
+<br>
 <img width="1728" alt="서버_과제제출_서비스설명" src="https://github.com/GEON-PPANG/GEON-PPANG-SERVER/assets/81363864/67b95ef8-36e3-469f-babd-655934fe535a">
 
 <br><br>
@@ -45,12 +45,18 @@
 	</table>
 </div>
 
-</br>
-</br>
+<br>
+<br>
 
 ## 💻 Development Tech
 
- <img src="https://img.shields.io/badge/Java-007396?style=flat&logo=CoffeeScript&logoColor=white" /> <img src="https://img.shields.io/badge/spring-boot-6DB33F?style=flat&logo=Spring Boot&logoColor=white" /> <img src="https://img.shields.io/badge/Python-3776AB?style=flat&logo=Python&logoColor=white" /> <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=MySQL&logoColor=white" />
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white) <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+<br>
+<img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
+<br>
+<img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"> <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
+<br>
+<img src="https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white"> <img src="https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white">
 
 <br><br>
 
