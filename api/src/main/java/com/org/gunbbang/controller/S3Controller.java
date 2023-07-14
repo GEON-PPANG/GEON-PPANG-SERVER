@@ -13,9 +13,9 @@ import org.w3c.dom.stylesheets.LinkStyle;
 import javax.validation.Valid;
 import java.util.List;
 
-@RestController
-@RequiredArgsConstructor
-@RequestMapping("/s3")
+ @RestController
+ @RequiredArgsConstructor
+ @RequestMapping("/s3")
 public class S3Controller {
 
     private final S3Service s3Service;
