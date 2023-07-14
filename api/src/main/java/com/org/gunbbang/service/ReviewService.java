@@ -234,11 +234,10 @@ public class ReviewService {
     }
 
     private Boolean isBooked(Long memberId, Long bakeryId) {
-        Boolean isBooked = Boolean.FALSE;
         if (bookMarkRepository.findByMemberIdAndBakeryId(memberId, bakeryId).isPresent()) {
-            isBooked = Boolean.TRUE;
+            return Boolean.TRUE;
         }
-        return isBooked;
+        return Boolean.FALSE;
     }
 
     private List<String> getMaxRecommendKeywords(BestReviewDTO bestReview) {

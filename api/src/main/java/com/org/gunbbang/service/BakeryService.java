@@ -159,7 +159,7 @@ public class BakeryService {
                 bestPageRequest // TODO: 일케하는게맞냐????
         );
 
-        if (bestBakeries.size() == maxBestBakeryCount){
+        if (bestBakeries.size() == maxBestBakeryCount) {
             return getResponseBakeries(foundMember, bestBakeries);
         }
 
@@ -191,6 +191,7 @@ public class BakeryService {
                     .secondNearStation(bestBakery.getSecondNearStation())
                     .isBooked(isBooked)
                     .bookMarkCount(bestBakery.getBookMarkCount())
+                    .reviewCount(bestBakery.getReviewCount())
                     .build();
 
             responseDtoList.add(response);
@@ -241,11 +242,10 @@ public class BakeryService {
     }
 
     private Boolean isBooked(Long memberId, Long bakeryId) {
-        Boolean isBooked = Boolean.FALSE;
         if (bookMarkRepository.findByMemberIdAndBakeryId(memberId, bakeryId).isPresent()) {
-            isBooked = Boolean.TRUE;
+            return Boolean.TRUE;
         }
-        return isBooked;
+        return Boolean.FALSE;
     }
 
     public List<BakeryListResponseDTO> getBookMarkedBakeries(Long memberId) {
