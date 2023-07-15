@@ -36,7 +36,7 @@ public class BakeryService {
         List<BakeryListResponseDTO> responseDtoList = new ArrayList();
         BakeryListResponseDTO bakeryListResponseDto;
         BreadTypeResponseDTO breadTypeResponseDto;
-        Boolean isBooked;
+        Boolean isBookMarked;
 
 
         if (Boolean.TRUE.equals(isHard)) {
@@ -66,11 +66,7 @@ public class BakeryService {
                     .isSugarFree(bakeryCategory.getBakery().getBreadType().getIsSugarFree())
                     .build();
 
-            if (bookMarkRepository.findByMemberAndBakery(memberRepository.findById(memberId).orElseThrow(()->new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION)), bakeryCategory.getBakery()).isPresent()) {
-                isBooked = Boolean.TRUE;
-            } else {
-                isBooked = Boolean.FALSE;
-            }
+            isBookMarked = isBookMarked(memberId, bakeryCategory.getBakery().getBakeryId());
 
             bakeryListResponseDto = BakeryListResponseDTO.builder()
                     .bakeryId(bakeryCategory.getBakery().getBakeryId())
@@ -82,7 +78,7 @@ public class BakeryService {
                     .breadType(breadTypeResponseDto)
                     .firstNearStation(bakeryCategory.getBakery().getFirstNearStation())
                     .secondNearStation(bakeryCategory.getBakery().getSecondNearStation())
-                    .isBooked(isBooked)
+                    .isBooked(isBookMarked)
                     .bookMarkCount(bakeryCategory.getBakery().getBookMarkCount())
                     .build();
 
