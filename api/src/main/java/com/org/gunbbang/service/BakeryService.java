@@ -1,6 +1,5 @@
 package com.org.gunbbang.service;
 
-import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.*;
@@ -48,7 +47,6 @@ public class BakeryService {
         if (Boolean.TRUE.equals(isBrunch)) {
             categoryIdList.add(categoryRepository.findByCategoryName("브런치류").orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
         }
-
 
         if (sort.equals("reivew")) {
             bakeryCategoryList = bakeryCategoryRepository.findByBakeryCategoryIdAndReview(categoryIdList);
