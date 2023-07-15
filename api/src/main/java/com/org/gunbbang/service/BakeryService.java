@@ -1,6 +1,5 @@
 package com.org.gunbbang.service;
 
-import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.*;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -37,7 +35,7 @@ public class BakeryService {
         List<BakeryListResponseDTO> responseDtoList = new ArrayList();
         BakeryListResponseDTO bakeryListResponseDto;
         BreadTypeResponseDTO breadTypeResponseDto;
-        Boolean isBooked;
+        Boolean isBookMarked;
 
 
         if (Boolean.TRUE.equals(isHard)) {
@@ -49,7 +47,6 @@ public class BakeryService {
         if (Boolean.TRUE.equals(isBrunch)) {
             categoryIdList.add(categoryRepository.findByCategoryName("브런치류").orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
         }
-
 
         if (sort.equals("reivew")) {
             bakeryCategoryList = bakeryCategoryRepository.findByBakeryCategoryIdAndReview(categoryIdList);
@@ -67,11 +64,7 @@ public class BakeryService {
                     .isSugarFree(bakeryCategory.getBakery().getBreadType().getIsSugarFree())
                     .build();
 
-            if (bookMarkRepository.findByMemberAndBakery(memberRepository.findById(memberId).orElseThrow(()->new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION)), bakeryCategory.getBakery()).isPresent()) {
-                isBooked = Boolean.TRUE;
-            } else {
-                isBooked = Boolean.FALSE;
-            }
+            isBookMarked = isBookMarked(memberId, bakeryCategory.getBakery().getBakeryId());
 
             bakeryListResponseDto = BakeryListResponseDTO.builder()
                     .bakeryId(bakeryCategory.getBakery().getBakeryId())
@@ -83,7 +76,7 @@ public class BakeryService {
                     .breadType(breadTypeResponseDto)
                     .firstNearStation(bakeryCategory.getBakery().getFirstNearStation())
                     .secondNearStation(bakeryCategory.getBakery().getSecondNearStation())
-                    .isBooked(isBooked)
+                    .isBooked(isBookMarked)
                     .bookMarkCount(bakeryCategory.getBakery().getBookMarkCount())
                     .build();
 
@@ -93,10 +86,8 @@ public class BakeryService {
     }
 
     public BakeryDetailResponseDTO getBakeryDetail(Long memberId, Long bakeryId){
-        Boolean isBooked;
 
         Bakery bakery= bakeryRepository.findById(bakeryId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
-
         List<Menu> bakeryMenu = menuRepository.findAllByBakery(bakery);
 
         BreadTypeResponseDTO breadTypeResponseDto = BreadTypeResponseDTO.builder()
@@ -108,11 +99,7 @@ public class BakeryService {
                 .isSugarFree(bakery.getBreadType().getIsSugarFree())
                 .build();
 
-        if (bookMarkRepository.findByMemberAndBakery(memberRepository.findById(memberId).orElseThrow(()->new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION)), bakery).isPresent()) {
-            isBooked = Boolean.TRUE;
-        } else {
-            isBooked = Boolean.FALSE;
-        }
+        Boolean isBookMark = isBookMarked(memberId, bakeryId);
 
         List<MenuResponseDTO> menuList = new ArrayList<>();
 
@@ -134,7 +121,7 @@ public class BakeryService {
                 .breadType(breadTypeResponseDto)
                 .firstNearStation(bakery.getFirstNearStation())
                 .secondNearStation(bakery.getSecondNearStation())
-                .isBooked(isBooked)
+                .isBooked(isBookMark)
                 .bookMarkCount(bakery.getBookMarkCount())
                 .homepage(bakery.getHomepage())
                 .address(bakery.getState()+" "+bakery.getCity()+" "+bakery.getTown()+" "+bakery.getAddressRest())
@@ -190,7 +177,7 @@ public class BakeryService {
     private List<BestBakeryListResponseDTO> getResponseBakeries(Member member, List<Bakery> bakeries) {
         List<BestBakeryListResponseDTO> responseDtoList = new ArrayList();
         for (Bakery bestBakery: bakeries) {
-            Boolean isBooked = isBooked(member.getMemberId(), bestBakery.getBakeryId());
+            Boolean isBooked = isBookMarked(member.getMemberId(), bestBakery.getBakeryId());
 
             BestBakeryListResponseDTO response = BestBakeryListResponseDTO.builder()
                     .bakeryId(bestBakery.getBakeryId())
@@ -215,7 +202,7 @@ public class BakeryService {
         List<Bakery> foundBakeries = bakeryRepository.findBakeryByBakeryName(bakeryName);
         List<BakeryListResponseDTO> bakeryListResponseDTOs = new ArrayList<>();
         for (Bakery foundBakery : foundBakeries) {
-            Boolean isBooked = isBooked(memberId, foundBakery.getBakeryId());
+            Boolean isBooked = isBookMarked(memberId, foundBakery.getBakeryId());
 
             BreadTypeResponseDTO breadTypeResponseDto = BreadTypeResponseDTO.builder()
                     .breadTypeId(foundBakery.getBreadType().getBreadTypeId())
@@ -253,7 +240,7 @@ public class BakeryService {
         return bakerySearchResponseDTO;
     }
 
-    private Boolean isBooked(Long memberId, Long bakeryId) {
+    private Boolean isBookMarked(Long memberId, Long bakeryId) {
         if (bookMarkRepository.findByMemberIdAndBakeryId(memberId, bakeryId).isPresent()) {
             return Boolean.TRUE;
         }
