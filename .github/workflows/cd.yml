@@ -34,7 +34,7 @@ jobs:
       run: |
         pwd
         ## create application.yml in api module
-        mkdir ./api/src/main/resources ## GEON-PPANG-SERVER/api/src/main/resources/application.yml
+        ## mkdir ./api/src/main/resources 
         cd ./api/src/main/resources
         touch ./application.yml
         ls -al
