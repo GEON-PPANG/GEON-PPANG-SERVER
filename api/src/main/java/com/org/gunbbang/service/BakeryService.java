@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -106,7 +105,7 @@ public class BakeryService {
                 .isSugarFree(bakery.getBreadType().getIsSugarFree())
                 .build();
 
-        Boolean isBookMark = isBooked(memberId, bakeryId);
+        Boolean isBookMark = isBookMarked(memberId, bakeryId);
 
         List<MenuResponseDTO> menuList = new ArrayList<>();
 
@@ -184,7 +183,7 @@ public class BakeryService {
     private List<BestBakeryListResponseDTO> getResponseBakeries(Member member, List<Bakery> bakeries) {
         List<BestBakeryListResponseDTO> responseDtoList = new ArrayList();
         for (Bakery bestBakery: bakeries) {
-            Boolean isBooked = isBooked(member.getMemberId(), bestBakery.getBakeryId());
+            Boolean isBooked = isBookMarked(member.getMemberId(), bestBakery.getBakeryId());
 
             BestBakeryListResponseDTO response = BestBakeryListResponseDTO.builder()
                     .bakeryId(bestBakery.getBakeryId())
@@ -209,7 +208,7 @@ public class BakeryService {
         List<Bakery> foundBakeries = bakeryRepository.findBakeryByBakeryName(bakeryName);
         List<BakeryListResponseDTO> bakeryListResponseDTOs = new ArrayList<>();
         for (Bakery foundBakery : foundBakeries) {
-            Boolean isBooked = isBooked(memberId, foundBakery.getBakeryId());
+            Boolean isBooked = isBookMarked(memberId, foundBakery.getBakeryId());
 
             BreadTypeResponseDTO breadTypeResponseDto = BreadTypeResponseDTO.builder()
                     .breadTypeId(foundBakery.getBreadType().getBreadTypeId())
@@ -247,7 +246,7 @@ public class BakeryService {
         return bakerySearchResponseDTO;
     }
 
-    private Boolean isBooked(Long memberId, Long bakeryId) {
+    private Boolean isBookMarked(Long memberId, Long bakeryId) {
         if (bookMarkRepository.findByMemberIdAndBakeryId(memberId, bakeryId).isPresent()) {
             return Boolean.TRUE;
         }
