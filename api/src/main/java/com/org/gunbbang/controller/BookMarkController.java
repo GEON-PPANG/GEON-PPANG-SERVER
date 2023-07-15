@@ -8,15 +8,13 @@ import com.org.gunbbang.service.BookMarkService;
 import com.org.gunbbang.service.MemberService;
 import com.org.gunbbang.util.Security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("")
 public class BookMarkController {
 
     private final BookMarkService bookMarkService;
