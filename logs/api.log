@@ -1,0 +1,81 @@
+{"logInfo":{"url":"/member/signup","name":"","method":"POST","header":"{content-length=455, postman-token=39c545f8-e946-495e-a2f2-4f573af05aa3, host=localhost:8085, content-type=application/json, connection=keep-alive, accept-encoding=gzip, deflate, br, user-agent=PostmanRuntime/7.32.3, accept=*/*}","parameters":"{\"memberSignUpRequestDTO\":\"{\\\"email\\\":\\\"example@qqq.com\\\",\\\"password\\\":\\\"2b3n4m\\\",\\\"nickname\\\":\\\"건빵죽빵빵빵빵11\\\",\\\"mainPurpose\\\":\\\"DIET\\\",\\\"platformType\\\":\\\"NONE\\\",\\\"breadType\\\":{\\\"isGlutenFree\\\":true,\\\"isVegan\\\":false,\\\"isNutFree\\\":false,\\\"isSugarFree\\\":false},\\\"nutrientType\\\":{\\\"isNutrientOpen\\\":false,\\\"isIngredientOpen\\\":false,\\\"isNotOpen\\\":true}}\"}","body":"{}","ipAddress":"0:0:0:0:0:0:0:1","exception":null}}
+HV000001: Hibernate Validator 6.2.5.Final
+Starting GunbbangApplication using Java 11.0.19 on seunghaui-MacBookAir.local with PID 62921 (/Users/seunghalim/Documents/GEON-PPANG-SERVER/api/build/classes/java/main started by seunghalim in /Users/seunghalim/Documents/GEON-PPANG-SERVER)
+The following 1 profile is active: "local"
+Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+Finished Spring Data repository scanning in 40 ms. Found 11 JPA repository interfaces.
+Bean '(inner bean)#2272cbb0' of type [com.amazonaws.auth.BasicAWSCredentials] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+Bean '(inner bean)#53f0d09c' of type [com.amazonaws.auth.AWSStaticCredentialsProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+Bean '(inner bean)#45e6d1e0' of type [com.amazonaws.auth.profile.ProfileCredentialsProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+Bean 'credentialsProvider' of type [org.springframework.cloud.aws.core.credentials.CredentialsProviderFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+Bean 'credentialsProvider' of type [com.amazonaws.auth.AWSCredentialsProviderChain] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+Tomcat initialized with port(s): 8085 (http)
+Initializing ProtocolHandler ["http-nio-8085"]
+Starting service [Tomcat]
+Starting Servlet engine: [Apache Tomcat/9.0.76]
+Initializing Spring embedded WebApplicationContext
+Root WebApplicationContext: initialization completed in 907 ms
+HikariPool-1 - Starting...
+HikariPool-1 - Start completed.
+H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:gunbbang-local-db'
+HHH000204: Processing PersistenceUnitInfo [name: default]
+HHH000412: Hibernate ORM core version 5.6.15.Final
+HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+Initialized JPA EntityManagerFactory for persistence unit 'default'
+Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@3ed4c822, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7b6558aa, org.springframework.security.web.context.SecurityContextPersistenceFilter@5ace902e, org.springframework.security.web.header.HeaderWriterFilter@66ca8882, com.org.gunbbang.jwt.filter.JwtAuthenticationProcessingFilter@61d9dd15, org.springframework.security.web.authentication.logout.LogoutFilter@35ffe3ac, com.org.gunbbang.login.filter.CustomJsonUsernamePasswordAuthenticationFilter@225fb75e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@76ac8c3d, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6b5c4b75, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@65cb50dc, org.springframework.security.web.session.SessionManagementFilter@384b718c, org.springframework.security.web.access.ExceptionTranslationFilter@1fcef6f9, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@622c658d]
+Exposing 1 endpoint(s) beneath base path '/actuator'
+Starting ProtocolHandler ["http-nio-8085"]
+Tomcat started on port(s): 8085 (http) with context path ''
+Started GunbbangApplication in 2.816 seconds (JVM running for 3.273)
+Initializing Spring DispatcherServlet 'dispatcherServlet'
+Initializing Servlet 'dispatcherServlet'
+Completed initialization in 2 ms
+checkAccessTokenAndAuthentication() 호출
+{"logInfo":{"url":"/member/signup","name":"","method":"POST","header":"{content-length=455, postman-token=f1f0632e-7ba4-4e0b-a9ee-47919b02e70c, host=localhost:8085, content-type=application/json, connection=keep-alive, accept-encoding=gzip, deflate, br, user-agent=PostmanRuntime/7.32.3, accept=*/*}","parameters":"{\"memberSignUpRequestDTO\":\"{\\\"email\\\":\\\"example@qqq.com\\\",\\\"password\\\":\\\"2b3n4m\\\",\\\"nickname\\\":\\\"건빵죽빵빵빵빵11\\\",\\\"mainPurpose\\\":\\\"DIET\\\",\\\"platformType\\\":\\\"NONE\\\",\\\"breadType\\\":{\\\"isGlutenFree\\\":true,\\\"isVegan\\\":false,\\\"isNutFree\\\":false,\\\"isSugarFree\\\":false},\\\"nutrientType\\\":{\\\"isNutrientOpen\\\":false,\\\"isIngredientOpen\\\":false,\\\"isNotOpen\\\":true}}\"}","body":"{}","ipAddress":"0:0:0:0:0:0:0:1","exception":null}}
+{"logInfo":{"url":"/member/signup","name":"","method":"POST","header":"{content-length=455, postman-token=f1f0632e-7ba4-4e0b-a9ee-47919b02e70c, host=localhost:8085, content-type=application/json, connection=keep-alive, accept-encoding=gzip, deflate, br, user-agent=PostmanRuntime/7.32.3, accept=*/*}","parameters":"{\"memberSignUpRequestDTO\":\"{\\\"email\\\":\\\"example@qqq.com\\\",\\\"password\\\":\\\"2b3n4m\\\",\\\"nickname\\\":\\\"건빵죽빵빵빵빵11\\\",\\\"mainPurpose\\\":\\\"DIET\\\",\\\"platformType\\\":\\\"NONE\\\",\\\"breadType\\\":{\\\"isGlutenFree\\\":true,\\\"isVegan\\\":false,\\\"isNutFree\\\":false,\\\"isSugarFree\\\":false},\\\"nutrientType\\\":{\\\"isNutrientOpen\\\":false,\\\"isIngredientOpen\\\":false,\\\"isNotOpen\\\":true}}\"}","body":"{}","ipAddress":"0:0:0:0:0:0:0:1","exception":null}}
+checkAccessTokenAndAuthentication() 호출
+Closing JPA EntityManagerFactory for persistence unit 'default'
+HikariPool-1 - Shutdown initiated...
+HikariPool-1 - Shutdown completed.
+HV000001: Hibernate Validator 6.2.5.Final
+Starting GunbbangApplication using Java 11.0.19 on seunghaui-MacBookAir.local with PID 62933 (/Users/seunghalim/Documents/GEON-PPANG-SERVER/api/build/classes/java/main started by seunghalim in /Users/seunghalim/Documents/GEON-PPANG-SERVER)
+The following 1 profile is active: "local"
+Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+Finished Spring Data repository scanning in 48 ms. Found 11 JPA repository interfaces.
+Bean '(inner bean)#180b3819' of type [com.amazonaws.auth.BasicAWSCredentials] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+Bean '(inner bean)#6f8e9d06' of type [com.amazonaws.auth.AWSStaticCredentialsProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+Bean '(inner bean)#4da1f38a' of type [com.amazonaws.auth.profile.ProfileCredentialsProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+Bean 'credentialsProvider' of type [org.springframework.cloud.aws.core.credentials.CredentialsProviderFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+Bean 'credentialsProvider' of type [com.amazonaws.auth.AWSCredentialsProviderChain] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+Tomcat initialized with port(s): 8085 (http)
+Initializing ProtocolHandler ["http-nio-8085"]
+Starting service [Tomcat]
+Starting Servlet engine: [Apache Tomcat/9.0.76]
+Initializing Spring embedded WebApplicationContext
+Root WebApplicationContext: initialization completed in 7419 ms
+HikariPool-1 - Starting...
+HikariPool-1 - Start completed.
+H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:gunbbang-local-db'
+HHH000204: Processing PersistenceUnitInfo [name: default]
+HHH000412: Hibernate ORM core version 5.6.15.Final
+HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+Initialized JPA EntityManagerFactory for persistence unit 'default'
+Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6179551b, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@54626326, org.springframework.security.web.context.SecurityContextPersistenceFilter@6f254d79, org.springframework.security.web.header.HeaderWriterFilter@6d224921, com.org.gunbbang.jwt.filter.JwtAuthenticationProcessingFilter@4936fbc6, org.springframework.security.web.authentication.logout.LogoutFilter@5c940e28, com.org.gunbbang.login.filter.CustomJsonUsernamePasswordAuthenticationFilter@61d9dd15, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@44233014, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6888a33, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6f4e39b3, org.springframework.security.web.session.SessionManagementFilter@7bb996e0, org.springframework.security.web.access.ExceptionTranslationFilter@35ffe3ac, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@4dfbe8c2]
+Exposing 1 endpoint(s) beneath base path '/actuator'
+Starting ProtocolHandler ["http-nio-8085"]
+Tomcat started on port(s): 8085 (http) with context path ''
+Started GunbbangApplication in 9.28 seconds (JVM running for 9.555)
+Initializing Spring DispatcherServlet 'dispatcherServlet'
+Initializing Servlet 'dispatcherServlet'
+Completed initialization in 1 ms
+checkAccessTokenAndAuthentication() 호출
+{"logInfo":{"url":"/member/signup","name":"","method":"POST","header":"{content-length=455, postman-token=cc7d761a-b759-4aa1-9ebc-d07e7622ad3c, host=localhost:8085, content-type=application/json, connection=keep-alive, accept-encoding=gzip, deflate, br, user-agent=PostmanRuntime/7.32.3, accept=*/*}","parameters":"{\"memberSignUpRequestDTO\":\"{\\\"email\\\":\\\"example@qqq.com\\\",\\\"password\\\":\\\"2b3n4m\\\",\\\"nickname\\\":\\\"건빵죽빵빵빵빵11\\\",\\\"mainPurpose\\\":\\\"DIET\\\",\\\"platformType\\\":\\\"NONE\\\",\\\"breadType\\\":{\\\"isGlutenFree\\\":true,\\\"isVegan\\\":false,\\\"isNutFree\\\":false,\\\"isSugarFree\\\":false},\\\"nutrientType\\\":{\\\"isNutrientOpen\\\":false,\\\"isIngredientOpen\\\":false,\\\"isNotOpen\\\":true}}\"}","body":"{}","ipAddress":"0:0:0:0:0:0:0:1","exception":null}}
+{"logInfo":{"url":"/member/signup","name":"","method":"POST","header":"{content-length=455, postman-token=cc7d761a-b759-4aa1-9ebc-d07e7622ad3c, host=localhost:8085, content-type=application/json, connection=keep-alive, accept-encoding=gzip, deflate, br, user-agent=PostmanRuntime/7.32.3, accept=*/*}","parameters":"{\"memberSignUpRequestDTO\":\"{\\\"email\\\":\\\"example@qqq.com\\\",\\\"password\\\":\\\"2b3n4m\\\",\\\"nickname\\\":\\\"건빵죽빵빵빵빵11\\\",\\\"mainPurpose\\\":\\\"DIET\\\",\\\"platformType\\\":\\\"NONE\\\",\\\"breadType\\\":{\\\"isGlutenFree\\\":true,\\\"isVegan\\\":false,\\\"isNutFree\\\":false,\\\"isSugarFree\\\":false},\\\"nutrientType\\\":{\\\"isNutrientOpen\\\":false,\\\"isIngredientOpen\\\":false,\\\"isNotOpen\\\":true}}\"}","body":"{}","ipAddress":"0:0:0:0:0:0:0:1","exception":null}}
+checkAccessTokenAndAuthentication() 호출
+Closing JPA EntityManagerFactory for persistence unit 'default'
+HikariPool-1 - Shutdown initiated...
+HikariPool-1 - Shutdown completed.
