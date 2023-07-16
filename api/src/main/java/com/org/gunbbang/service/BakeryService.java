@@ -9,6 +9,7 @@ import com.org.gunbbang.util.Security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
@@ -29,30 +30,39 @@ public class BakeryService {
 
     private final int maxBestBakeryCount = 10;
 
-    private List<BakeryListResponseDTO> getBakeryList(Long memberId, String sort, Boolean isHard, Boolean isDessert, Boolean isBrunch) {
+    public List<BakeryListResponseDTO> getBakeryList(Long memberId, String sort, Boolean isHard, Boolean isDessert, Boolean isBrunch) {
         List<Category> categoryList = getCategoryList(isHard, isDessert, isBrunch);
-        List<BakeryCategory> bakeryCategoryList;
         List<BakeryListResponseDTO> responseDtoList = new ArrayList<>();
-        BakeryListResponseDTO bakeryListResponseDto;
         BreadTypeResponseDTO breadTypeResponseDto;
         Boolean isBookMarked;
 
-        if (sort.equals("default")) {
-            bakeryCategoryList = bakeryCategoryRepository.findByBakeryCategoryAndReview(categoryList);
-        } else {
-            bakeryCategoryList = bakeryCategoryRepository.findByBakeryCategory(categoryList);
+        List<BakeryCategory> bakeryCategoryList;
+        Sort sortOption;
+
+        if (categoryList.isEmpty()) {
+            sortOption = "review".equals(sort) ? Sort.by(Sort.Direction.DESC, "reviewCount") : Sort.by(Sort.Direction.DESC, "bakeryId");
+            List<Bakery> bakeryList = bakeryRepository.findAll(sortOption);
+            for (Bakery bakery : bakeryList) {
+                breadTypeResponseDto = getBreadType(bakery);
+                isBookMarked = isBookMarked(memberId, bakery.getBakeryId());
+                BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(bakery, isBookMarked, breadTypeResponseDto);
+                responseDtoList.add(bakeryListResponseDto);
+            }
+            return responseDtoList;
         }
 
+        sortOption = "review".equals(sort) ? Sort.by(Sort.Direction.DESC, "bakery.reviewCount") : Sort.by(Sort.Direction.DESC, "bakery.bakeryId");
+        bakeryCategoryList = bakeryCategoryRepository.findAllByCategoryIn(categoryList, sortOption);
         for (BakeryCategory bakeryCategory : bakeryCategoryList) {
             breadTypeResponseDto = getBreadType(bakeryCategory.getBakery());
             isBookMarked = isBookMarked(memberId, bakeryCategory.getBakery().getBakeryId());
-            bakeryListResponseDto = getBakeryResponseDTO(bakeryCategory.getBakery(), isBookMarked, breadTypeResponseDto);
+            BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(bakeryCategory.getBakery(), isBookMarked, breadTypeResponseDto);
             responseDtoList.add(bakeryListResponseDto);
         }
         return responseDtoList;
     }
 
-    private BakeryDetailResponseDTO getBakeryDetail(Long memberId, Long bakeryId){
+    public BakeryDetailResponseDTO getBakeryDetail(Long memberId, Long bakeryId){
         Bakery bakery= bakeryRepository.findById(bakeryId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
         List<Menu> bakeryMenu = menuRepository.findAllByBakery(bakery);
         BreadTypeResponseDTO breadTypeResponseDto = getBreadType(bakery);
@@ -131,7 +141,7 @@ public class BakeryService {
 
     // TODO: 이거 DTO 안에 static 메서드로 못빼나??
     private List<BestBakeryListResponseDTO> getResponseBakeries(Member member, List<Bakery> bakeries) {
-        List<BestBakeryListResponseDTO> responseDtoList = new ArrayList();
+        List<BestBakeryListResponseDTO> responseDtoList = new ArrayList<>();
         for (Bakery bestBakery: bakeries) {
             Boolean isBooked = isBookMarked(member.getMemberId(), bestBakery.getBakeryId());
 

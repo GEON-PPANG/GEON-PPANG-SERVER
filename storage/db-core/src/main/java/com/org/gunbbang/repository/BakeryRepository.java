@@ -13,9 +13,6 @@ import java.util.Optional;
 public interface BakeryRepository extends JpaRepository<Bakery, Long> {
     Optional<Bakery> findById(Long Id);
 
-    List<Bakery> findAllOrderById();
-    List<Bakery> findAllOrderByReviewCount();
-
     // 나와 빵유형과 주목적이 일치하는 유저들이 북마크한 빵집중에 가장 북마크수가 높은 순대로 조회
     @Query(value = "SELECT distinct b FROM Bakery b " +
             "INNER JOIN BookMark bm ON b.bakeryId = bm.bakery.bakeryId " +
