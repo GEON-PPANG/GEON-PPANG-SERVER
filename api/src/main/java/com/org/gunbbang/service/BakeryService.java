@@ -35,7 +35,6 @@ public class BakeryService {
         List<BakeryListResponseDTO> responseDtoList = new ArrayList<>();
         BreadTypeResponseDTO breadTypeResponseDto;
         Boolean isBookMarked;
-
         List<BakeryCategory> bakeryCategoryList;
         Sort sortOption;
 
