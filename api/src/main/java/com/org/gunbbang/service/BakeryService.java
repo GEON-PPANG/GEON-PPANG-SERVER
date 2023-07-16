@@ -143,7 +143,6 @@ public class BakeryService {
         List<BestBakeryListResponseDTO> responseDtoList = new ArrayList<>();
         for (Bakery bestBakery: bakeries) {
             Boolean isBooked = isBookMarked(member.getMemberId(), bestBakery.getBakeryId());
-
             BestBakeryListResponseDTO response = BestBakeryListResponseDTO.builder()
                     .bakeryId(bestBakery.getBakeryId())
                     .bakeryName(bestBakery.getBakeryName())
@@ -157,7 +156,6 @@ public class BakeryService {
                     .bookMarkCount(bestBakery.getBookMarkCount())
                     .reviewCount(bestBakery.getReviewCount())
                     .build();
-
             responseDtoList.add(response);
         }
         return responseDtoList;
@@ -168,20 +166,15 @@ public class BakeryService {
         List<BakeryListResponseDTO> bakeryListResponseDTOs = new ArrayList<>();
         for (Bakery foundBakery : foundBakeries) {
             Boolean isBookMarked = isBookMarked(memberId, foundBakery.getBakeryId());
-
             BreadTypeResponseDTO breadTypeResponseDto = getBreadType(foundBakery);
-
             BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(foundBakery, isBookMarked, breadTypeResponseDto);
-
             bakeryListResponseDTOs.add(bakeryListResponseDto);
         }
 
-        BakerySearchResponseDTO bakerySearchResponseDTO = BakerySearchResponseDTO.builder()
+        return BakerySearchResponseDTO.builder()
                 .resultCount(foundBakeries.size())
                 .bakeryList(bakeryListResponseDTOs)
                 .build();
-
-        return bakerySearchResponseDTO;
     }
 
     public List<BakeryListResponseDTO> getBookMarkedBakeries(Long memberId) {
@@ -189,12 +182,9 @@ public class BakeryService {
         List<BakeryListResponseDTO> bakeryListResponseDTOs = new ArrayList<>();
         for (Bakery bookMarkedBakery : bookMarkedBakeries) {
             BreadTypeResponseDTO breadTypeResponseDto = getBreadType(bookMarkedBakery);
-
             BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(bookMarkedBakery, true, breadTypeResponseDto);
-
             bakeryListResponseDTOs.add(bakeryListResponseDto);
         }
-
         return bakeryListResponseDTOs;
     }
 
