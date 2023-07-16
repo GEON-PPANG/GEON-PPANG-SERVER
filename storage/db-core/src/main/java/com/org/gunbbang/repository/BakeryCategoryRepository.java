@@ -11,9 +11,9 @@ import java.util.Optional;
 
 public interface BakeryCategoryRepository extends JpaRepository<BakeryCategory,Long> {
     @Query("SELECT bc FROM BakeryCategory bc WHERE bc.category IN (:categoryList) order by bc.bakery.bakeryId desc")
-    List<BakeryCategory> findByBakeryCategoryId(@Param("categoryList") List<Category> categoryList);
+    List<BakeryCategory> findByBakeryCategory(@Param("categoryList") List<Category> categoryList);
 
     @Query("SELECT bc FROM BakeryCategory bc WHERE bc.category IN (:categoryList) order by bc.bakery.reviewCount desc")
-    List<BakeryCategory> findByBakeryCategoryIdAndReview(@Param("categoryList") List<Category> categoryList);
+    List<BakeryCategory> findByBakeryCategoryAndReview(@Param("categoryList") List<Category> categoryList);
 
 }
