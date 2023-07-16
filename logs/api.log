@@ -79,3 +79,7 @@ checkAccessTokenAndAuthentication() 호출
 Closing JPA EntityManagerFactory for persistence unit 'default'
 HikariPool-1 - Shutdown initiated...
 HikariPool-1 - Shutdown completed.
+
+
+
+{"logInfo":{"url":"/member/signup","name":"","method":"POST","header":"{content-length=455, postman-token=bd0dd155-d640-4e7e-a815-a0e67ba2aecb, host=localhost:8085, content-type=application/json, connection=keep-alive, accept-encoding=gzip, deflate, br, user-agent=PostmanRuntime/7.32.3, accept=*/*}","parameters":"{\"memberSignUpRequestDTO\":\"{\\\"email\\\":\\\"example@qqq.com\\\",\\\"password\\\":\\\"2b3n4m\\\",\\\"nickname\\\":\\\"건빵죽빵빵빵빵11\\\",\\\"mainPurpose\\\":\\\"DIET\\\",\\\"platformType\\\":\\\"NONE\\\",\\\"breadType\\\":{\\\"isGlutenFree\\\":true,\\\"isVegan\\\":false,\\\"isNutFree\\\":false,\\\"isSugarFree\\\":false},\\\"nutrientType\\\":{\\\"isNutrientOpen\\\":false,\\\"isIngredientOpen\\\":false,\\\"isNotOpen\\\":true}}\"}","body":"{}","ipAddress":"0:0:0:0:0:0:0:1","exception":null}}

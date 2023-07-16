@@ -7,7 +7,6 @@
         </encoder>
     </appender>
 
-    <property name="LOG_PATH" value="./logs"/>
     <property name="LOG_FILE_NAME" value="api"/>
     <property name="ERR_LOG_FILE_NAME" value="api-error"/>
 
