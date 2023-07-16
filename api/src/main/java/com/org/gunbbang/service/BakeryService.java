@@ -9,6 +9,7 @@ import com.org.gunbbang.util.Security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
@@ -30,77 +31,41 @@ public class BakeryService {
     private final int maxBestBakeryCount = 10;
 
     public List<BakeryListResponseDTO> getBakeryList(Long memberId, String sort, Boolean isHard, Boolean isDessert, Boolean isBrunch) {
-        List<Category> categoryIdList = new ArrayList<>();
-        List<BakeryCategory> bakeryCategoryList;
-        List<BakeryListResponseDTO> responseDtoList = new ArrayList();
-        BakeryListResponseDTO bakeryListResponseDto;
+        List<Category> categoryList = getCategoryList(isHard, isDessert, isBrunch);
+        List<BakeryListResponseDTO> responseDtoList = new ArrayList<>();
         BreadTypeResponseDTO breadTypeResponseDto;
         Boolean isBookMarked;
+        List<BakeryCategory> bakeryCategoryList;
+        Sort sortOption;
 
-
-        if (Boolean.TRUE.equals(isHard)) {
-            categoryIdList.add(categoryRepository.findByCategoryName("하드빵류").orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
-        }
-        if (Boolean.TRUE.equals(isDessert)) {
-            categoryIdList.add(categoryRepository.findByCategoryName("디저트류").orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
-        }
-        if (Boolean.TRUE.equals(isBrunch)) {
-            categoryIdList.add(categoryRepository.findByCategoryName("브런치류").orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
-        }
-
-        if (sort.equals("reivew")) {
-            bakeryCategoryList = bakeryCategoryRepository.findByBakeryCategoryIdAndReview(categoryIdList);
-        } else {
-            bakeryCategoryList = bakeryCategoryRepository.findByBakeryCategoryId(categoryIdList);
+        if (categoryList.isEmpty()) {
+            sortOption = "review".equals(sort) ? Sort.by(Sort.Direction.DESC, "reviewCount") : Sort.by(Sort.Direction.DESC, "bakeryId");
+            List<Bakery> bakeryList = bakeryRepository.findAll(sortOption);
+            for (Bakery bakery : bakeryList) {
+                breadTypeResponseDto = getBreadType(bakery);
+                isBookMarked = isBookMarked(memberId, bakery.getBakeryId());
+                BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(bakery, isBookMarked, breadTypeResponseDto);
+                responseDtoList.add(bakeryListResponseDto);
+            }
+            return responseDtoList;
         }
 
+        sortOption = "review".equals(sort) ? Sort.by(Sort.Direction.DESC, "bakery.reviewCount") : Sort.by(Sort.Direction.DESC, "bakery.bakeryId");
+        bakeryCategoryList = bakeryCategoryRepository.findAllByCategoryIn(categoryList, sortOption);
         for (BakeryCategory bakeryCategory : bakeryCategoryList) {
-            breadTypeResponseDto = BreadTypeResponseDTO.builder()
-                    .breadTypeId(bakeryCategory.getBakery().getBreadType().getBreadTypeId())
-                    .breadTypeName(bakeryCategory.getBakery().getBreadType().getBreadTypeName())
-                    .isGlutenFree(bakeryCategory.getBakery().getBreadType().getIsGlutenFree())
-                    .isVegan(bakeryCategory.getBakery().getBreadType().getIsVegan())
-                    .isNutFree(bakeryCategory.getBakery().getBreadType().getIsNutFree())
-                    .isSugarFree(bakeryCategory.getBakery().getBreadType().getIsSugarFree())
-                    .build();
-
+            breadTypeResponseDto = getBreadType(bakeryCategory.getBakery());
             isBookMarked = isBookMarked(memberId, bakeryCategory.getBakery().getBakeryId());
-
-            bakeryListResponseDto = BakeryListResponseDTO.builder()
-                    .bakeryId(bakeryCategory.getBakery().getBakeryId())
-                    .bakeryName(bakeryCategory.getBakery().getBakeryName())
-                    .bakeryPicture(bakeryCategory.getBakery().getBakeryPicture())
-                    .isHACCP(bakeryCategory.getBakery().getIsHACCP())
-                    .isVegan(bakeryCategory.getBakery().getIsVegan())
-                    .isNonGMO(bakeryCategory.getBakery().getIsNonGMO())
-                    .breadType(breadTypeResponseDto)
-                    .firstNearStation(bakeryCategory.getBakery().getFirstNearStation())
-                    .secondNearStation(bakeryCategory.getBakery().getSecondNearStation())
-                    .isBooked(isBookMarked)
-                    .bookMarkCount(bakeryCategory.getBakery().getBookMarkCount())
-                    .build();
-
+            BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(bakeryCategory.getBakery(), isBookMarked, breadTypeResponseDto);
             responseDtoList.add(bakeryListResponseDto);
         }
         return responseDtoList;
     }
 
     public BakeryDetailResponseDTO getBakeryDetail(Long memberId, Long bakeryId){
-
         Bakery bakery= bakeryRepository.findById(bakeryId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
         List<Menu> bakeryMenu = menuRepository.findAllByBakery(bakery);
-
-        BreadTypeResponseDTO breadTypeResponseDto = BreadTypeResponseDTO.builder()
-                .breadTypeId(bakery.getBreadType().getBreadTypeId())
-                .breadTypeName(bakery.getBreadType().getBreadTypeName())
-                .isGlutenFree(bakery.getBreadType().getIsGlutenFree())
-                .isVegan(bakery.getBreadType().getIsVegan())
-                .isNutFree(bakery.getBreadType().getIsNutFree())
-                .isSugarFree(bakery.getBreadType().getIsSugarFree())
-                .build();
-
+        BreadTypeResponseDTO breadTypeResponseDto = getBreadType(bakery);
         Boolean isBookMark = isBookMarked(memberId, bakeryId);
-
         List<MenuResponseDTO> menuList = new ArrayList<>();
 
         for(Menu menu : bakeryMenu){
@@ -175,10 +140,9 @@ public class BakeryService {
 
     // TODO: 이거 DTO 안에 static 메서드로 못빼나??
     private List<BestBakeryListResponseDTO> getResponseBakeries(Member member, List<Bakery> bakeries) {
-        List<BestBakeryListResponseDTO> responseDtoList = new ArrayList();
+        List<BestBakeryListResponseDTO> responseDtoList = new ArrayList<>();
         for (Bakery bestBakery: bakeries) {
             Boolean isBooked = isBookMarked(member.getMemberId(), bestBakery.getBakeryId());
-
             BestBakeryListResponseDTO response = BestBakeryListResponseDTO.builder()
                     .bakeryId(bestBakery.getBakeryId())
                     .bakeryName(bestBakery.getBakeryName())
@@ -192,7 +156,6 @@ public class BakeryService {
                     .bookMarkCount(bestBakery.getBookMarkCount())
                     .reviewCount(bestBakery.getReviewCount())
                     .build();
-
             responseDtoList.add(response);
         }
         return responseDtoList;
@@ -202,42 +165,27 @@ public class BakeryService {
         List<Bakery> foundBakeries = bakeryRepository.findBakeryByBakeryName(bakeryName);
         List<BakeryListResponseDTO> bakeryListResponseDTOs = new ArrayList<>();
         for (Bakery foundBakery : foundBakeries) {
-            Boolean isBooked = isBookMarked(memberId, foundBakery.getBakeryId());
-
-            BreadTypeResponseDTO breadTypeResponseDto = BreadTypeResponseDTO.builder()
-                    .breadTypeId(foundBakery.getBreadType().getBreadTypeId())
-                    .breadTypeName(foundBakery.getBreadType().getBreadTypeName())
-                    .isGlutenFree(foundBakery.getBreadType().getIsGlutenFree())
-                    .isVegan(foundBakery.getBreadType().getIsVegan())
-                    .isNutFree(foundBakery.getBreadType().getIsNutFree())
-                    .isSugarFree(foundBakery.getBreadType().getIsSugarFree())
-                    .build();
-
-
-            BakeryListResponseDTO bakeryListResponseDto = BakeryListResponseDTO.builder()
-                    .bakeryId(foundBakery.getBakeryId())
-                    .bakeryName(foundBakery.getBakeryName())
-                    .bakeryPicture(foundBakery.getBakeryPicture())
-                    .isHACCP(foundBakery.getIsHACCP())
-                    .isVegan(foundBakery.getIsVegan())
-                    .isNonGMO(foundBakery.getIsNonGMO())
-                    .firstNearStation(foundBakery.getFirstNearStation())
-                    .secondNearStation(foundBakery.getSecondNearStation())
-                    .isBooked(isBooked)
-                    .bookMarkCount(foundBakery.getBookMarkCount())
-                    .breadType(breadTypeResponseDto)
-                    .build();
-
+            Boolean isBookMarked = isBookMarked(memberId, foundBakery.getBakeryId());
+            BreadTypeResponseDTO breadTypeResponseDto = getBreadType(foundBakery);
+            BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(foundBakery, isBookMarked, breadTypeResponseDto);
             bakeryListResponseDTOs.add(bakeryListResponseDto);
         }
 
-
-        BakerySearchResponseDTO bakerySearchResponseDTO = BakerySearchResponseDTO.builder()
+        return BakerySearchResponseDTO.builder()
                 .resultCount(foundBakeries.size())
                 .bakeryList(bakeryListResponseDTOs)
                 .build();
+    }
 
-        return bakerySearchResponseDTO;
+    public List<BakeryListResponseDTO> getBookMarkedBakeries(Long memberId) {
+        List<Bakery> bookMarkedBakeries = bakeryRepository.findBookMarkedBakeries(memberId);
+        List<BakeryListResponseDTO> bakeryListResponseDTOs = new ArrayList<>();
+        for (Bakery bookMarkedBakery : bookMarkedBakeries) {
+            BreadTypeResponseDTO breadTypeResponseDto = getBreadType(bookMarkedBakery);
+            BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(bookMarkedBakery, true, breadTypeResponseDto);
+            bakeryListResponseDTOs.add(bakeryListResponseDto);
+        }
+        return bakeryListResponseDTOs;
     }
 
     private Boolean isBookMarked(Long memberId, Long bakeryId) {
@@ -247,38 +195,44 @@ public class BakeryService {
         return Boolean.FALSE;
     }
 
-    public List<BakeryListResponseDTO> getBookMarkedBakeries(Long memberId) {
-        List<Bakery> bookMarkedBakeries = bakeryRepository.findBookMarkedBakeries(memberId);
-        List<BakeryListResponseDTO> bakeryListResponseDTOs = new ArrayList<>();
-        for (Bakery bookMarkedBakery : bookMarkedBakeries) {
-            BreadTypeResponseDTO breadTypeResponseDto = BreadTypeResponseDTO.builder()
-                    .breadTypeId(bookMarkedBakery.getBreadType().getBreadTypeId())
-                    .breadTypeName(bookMarkedBakery.getBreadType().getBreadTypeName())
-                    .isGlutenFree(bookMarkedBakery.getBreadType().getIsGlutenFree())
-                    .isVegan(bookMarkedBakery.getBreadType().getIsVegan())
-                    .isNutFree(bookMarkedBakery.getBreadType().getIsNutFree())
-                    .isSugarFree(bookMarkedBakery.getBreadType().getIsSugarFree())
-                    .build();
+    private BreadTypeResponseDTO getBreadType(Bakery bakery){
+        return BreadTypeResponseDTO.builder()
+                .breadTypeId(bakery.getBreadType().getBreadTypeId())
+                .breadTypeName(bakery.getBreadType().getBreadTypeName())
+                .isGlutenFree(bakery.getBreadType().getIsGlutenFree())
+                .isVegan(bakery.getBreadType().getIsVegan())
+                .isNutFree(bakery.getBreadType().getIsNutFree())
+                .isSugarFree(bakery.getBreadType().getIsSugarFree())
+                .build();
+    }
 
+    private BakeryListResponseDTO getBakeryResponseDTO(Bakery bakery, Boolean isBookMarked, BreadTypeResponseDTO breadTypeResponseDto ){
+        return BakeryListResponseDTO.builder()
+                .bakeryId(bakery.getBakeryId())
+                .bakeryName(bakery.getBakeryName())
+                .bakeryPicture(bakery.getBakeryPicture())
+                .isHACCP(bakery.getIsHACCP())
+                .isVegan(bakery.getIsVegan())
+                .isNonGMO(bakery.getIsNonGMO())
+                .firstNearStation(bakery.getFirstNearStation())
+                .secondNearStation(bakery.getSecondNearStation())
+                .isBooked(isBookMarked)
+                .bookMarkCount(bakery.getBookMarkCount())
+                .breadType(breadTypeResponseDto)
+                .build();
+    }
 
-            BakeryListResponseDTO bakeryListResponseDto = BakeryListResponseDTO.builder()
-                    .bakeryId(bookMarkedBakery.getBakeryId())
-                    .bakeryName(bookMarkedBakery.getBakeryName())
-                    .bakeryPicture(bookMarkedBakery.getBakeryPicture())
-                    .isHACCP(bookMarkedBakery.getIsHACCP())
-                    .isVegan(bookMarkedBakery.getIsVegan())
-                    .isNonGMO(bookMarkedBakery.getIsNonGMO())
-                    .firstNearStation(bookMarkedBakery.getFirstNearStation())
-                    .secondNearStation(bookMarkedBakery.getSecondNearStation())
-                    .isBooked(true)
-                    .bookMarkCount(bookMarkedBakery.getBookMarkCount())
-                    .breadType(breadTypeResponseDto)
-                    .build();
-
-            bakeryListResponseDTOs.add(bakeryListResponseDto);
+    private List<Category> getCategoryList(Boolean isHard, Boolean isDessert, Boolean isBrunch){
+        List<Category> categoryList = new ArrayList<>();
+        if (Boolean.TRUE.equals(isHard)) {
+            categoryList.add(categoryRepository.findByCategoryName("하드빵류").orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
         }
-
-        return bakeryListResponseDTOs;
-
+        if (Boolean.TRUE.equals(isDessert)) {
+            categoryList.add(categoryRepository.findByCategoryName("디저트류").orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
+        }
+        if (Boolean.TRUE.equals(isBrunch)) {
+            categoryList.add(categoryRepository.findByCategoryName("브런치류").orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
+        }
+        return categoryList;
     }
 }
