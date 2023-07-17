@@ -23,7 +23,7 @@ public class BestReviewListResponseDTO extends BaseBakeryResponseDTO {
             Boolean isNonGMO,
             String firstNearStation,
             String secondNearStation,
-            Boolean isBooked,
+            Boolean isBookMarked,
             Long bookMarkCount,
             Long reviewCount,
             String reviewText,
@@ -31,7 +31,7 @@ public class BestReviewListResponseDTO extends BaseBakeryResponseDTO {
             String secondMaxRecommendKeyword
     ) {
         super(bakeryId, bakeryName, bakeryPicture, isHACCP, isVegan,
-                isNonGMO, firstNearStation, secondNearStation, isBooked, bookMarkCount);
+                isNonGMO, firstNearStation, secondNearStation, isBookMarked, bookMarkCount);
         this.reviewCount = reviewCount;
         this.reviewText = reviewText;
         this.firstMaxRecommendKeyword = firstMaxRecommendKeyword;

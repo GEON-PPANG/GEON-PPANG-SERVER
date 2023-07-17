@@ -146,11 +146,11 @@ public class ReviewService {
         Member currentMember = memberRepository.findById(memberId).orElseThrow(() -> new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION));
         List<Review> reviewList = reviewRepository.findAllByMemberOrderByCreatedAtDesc(currentMember);
         List<BakeryListReviewedByMemberDTO> responseDtoList = new ArrayList<>();
-        BreadTypeResponseDTO breadTypeResponseDto;
+        BreadTypeResponseDTO breadType;
         BakeryListReviewedByMemberDTO bakeryListReviewedByMemberDto;
 
         for (Review review : reviewList) {
-            breadTypeResponseDto = BreadTypeResponseDTO.builder()
+            breadType = BreadTypeResponseDTO.builder()
                     .breadTypeId(review.getBakery().getBreadType().getBreadTypeId())
                     .breadTypeName(review.getBakery().getBreadType().getBreadTypeName())
                     .isGlutenFree(review.getBakery().getBreadType().getIsGlutenFree())
@@ -166,7 +166,7 @@ public class ReviewService {
                     .isHACCP(review.getBakery().getIsHACCP())
                     .isVegan(review.getBakery().getIsVegan())
                     .isNonGMO(review.getBakery().getIsNonGMO())
-                    .breadTypeResponseDto(breadTypeResponseDto)
+                    .breadTypeResponseDto(breadType)
                     .firstNearStation(review.getBakery().getFirstNearStation())
                     .secondNearStation(review.getBakery().getSecondNearStation())
                     .reviewId(review.getReviewId())
@@ -207,7 +207,7 @@ public class ReviewService {
     private List<BestReviewListResponseDTO> getBestReviewsListResponseDTO(Long memberId, List<BestReviewDTO> bestReviews) {
         List<BestReviewListResponseDTO> responseDtoList = new ArrayList();
         for (BestReviewDTO bestReview: bestReviews) {
-            Boolean isBooked = isBooked(memberId, bestReview.getBakeryId());
+            Boolean isBookMarked = isBookMarked(memberId, bestReview.getBakeryId());
             List<String> recommendKeywords = getMaxRecommendKeywords(bestReview);
 
             // max인 리뷰 키워드 두 개 넣기
@@ -220,7 +220,7 @@ public class ReviewService {
                     .isNonGMO(bestReview.getIsNonGMO())
                     .firstNearStation(bestReview.getFirstNearStation())
                     .secondNearStation(bestReview.getSecondNearStation())
-                    .isBooked(isBooked)
+                    .isBookMarked(isBookMarked)
                     .bookMarkCount(bestReview.getBookMarkCount())
                     .reviewCount(bestReview.getReviewCount())
                     .reviewText(bestReview.getReviewText())
@@ -233,7 +233,7 @@ public class ReviewService {
         return responseDtoList;
     }
 
-    private Boolean isBooked(Long memberId, Long bakeryId) {
+    private Boolean isBookMarked(Long memberId, Long bakeryId) {
         if (bookMarkRepository.findByMemberIdAndBakeryId(memberId, bakeryId).isPresent()) {
             return Boolean.TRUE;
         }

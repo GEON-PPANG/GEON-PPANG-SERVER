@@ -21,12 +21,12 @@ public class BestBakeryListResponseDTO extends BaseBakeryResponseDTO {
             Boolean isNonGMO,
             String firstNearStation,
             String secondNearStation,
-            Boolean isBooked,
+            Boolean isBookMarked,
             Long bookMarkCount,
             Long reviewCount
     ) {
         super(bakeryId, bakeryName, bakeryPicture, isHACCP, isVegan,
-                isNonGMO, firstNearStation, secondNearStation, isBooked, bookMarkCount);
+                isNonGMO, firstNearStation, secondNearStation, isBookMarked, bookMarkCount);
         this.reviewCount = reviewCount;
     }
 
