@@ -4,6 +4,7 @@ import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.common.dto.ApiResponse;
 import com.org.gunbbang.controller.DTO.request.ReviewRequestDTO;
 import com.org.gunbbang.controller.DTO.response.ReviewDetailResponseDTO;
+import com.org.gunbbang.controller.DTO.response.ReviewListResponseDTO;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +16,13 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/review")
-public class ReviewController {
+@RequestMapping("/reviews")
+public class ReviewsController {
     private final ReviewService reviewService;
 
     @PostMapping(value = "/{bakeryId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse createReview(@PathVariable("bakeryId") @Valid final Long bakeryId, @RequestBody @Valid final ReviewRequestDTO request) {
+    public ApiResponse createReview(@PathVariable("bakeryId")final Long bakeryId, @RequestBody @Valid final ReviewRequestDTO request) {
         Long reviewId = reviewService.createReview(bakeryId, request);
         if (request.getIsLike()) {
             if(request.getKeywordList().isEmpty()){

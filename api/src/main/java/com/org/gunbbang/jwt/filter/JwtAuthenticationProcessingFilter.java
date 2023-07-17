@@ -34,7 +34,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
-    private static final String WHITE_LIST = "/member/login"; // 로그인 요청은 필터에서 제외
+    private static final String WHITE_LIST = "/auth/login"; // 로그인 요청은 필터에서 제외
 
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
