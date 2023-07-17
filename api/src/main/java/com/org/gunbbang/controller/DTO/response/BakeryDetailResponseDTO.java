@@ -21,9 +21,9 @@ public class BakeryDetailResponseDTO extends BaseBakeryResponseDTO {
     private String phoneNumber;
     private List<MenuResponseDTO> menuList;
 
-    public BakeryDetailResponseDTO(Long bakeryId, String bakeryName, String bakeryPicture, Boolean isHACCP, Boolean isVegan, Boolean isNonGMO, Long reviewCount, BreadTypeResponseDTO breadType, String firstNearStation, String secondNearStation, Boolean isBooked, Long bookMarkCount, String homepage, String address, String openingTime, String closedDay, String phoneNumber, List<MenuResponseDTO> menuList) {
+    public BakeryDetailResponseDTO(Long bakeryId, String bakeryName, String bakeryPicture, Boolean isHACCP, Boolean isVegan, Boolean isNonGMO, Long reviewCount, BreadTypeResponseDTO breadType, String firstNearStation, String secondNearStation, Boolean isBookMarked, Long bookMarkCount, String homepage, String address, String openingTime, String closedDay, String phoneNumber, List<MenuResponseDTO> menuList) {
         super(bakeryId, bakeryName, bakeryPicture, isHACCP, isVegan,
-                isNonGMO, firstNearStation, secondNearStation, isBooked, bookMarkCount);
+                isNonGMO, firstNearStation, secondNearStation, isBookMarked, bookMarkCount);
         this.reviewCount = reviewCount;
         this.breadType = breadType;
         this.homepage = homepage;

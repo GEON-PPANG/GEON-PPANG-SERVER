@@ -65,7 +65,7 @@ public class BakeryService {
         Bakery bakery= bakeryRepository.findById(bakeryId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
         List<Menu> bakeryMenu = menuRepository.findAllByBakery(bakery);
         BreadTypeResponseDTO breadTypeResponseDto = getBreadType(bakery);
-        Boolean isBookMark = isBookMarked(memberId, bakeryId);
+        Boolean isBookMarked = isBookMarked(memberId, bakeryId);
         List<MenuResponseDTO> menuList = new ArrayList<>();
 
         for(Menu menu : bakeryMenu){
@@ -86,7 +86,7 @@ public class BakeryService {
                 .breadType(breadTypeResponseDto)
                 .firstNearStation(bakery.getFirstNearStation())
                 .secondNearStation(bakery.getSecondNearStation())
-                .isBooked(isBookMark)
+                .isBookMarked(isBookMarked)
                 .bookMarkCount(bakery.getBookMarkCount())
                 .reviewCount(bakery.getReviewCount())
                 .homepage(bakery.getHomepage())
@@ -143,7 +143,7 @@ public class BakeryService {
     private List<BestBakeryListResponseDTO> getResponseBakeries(Member member, List<Bakery> bakeries) {
         List<BestBakeryListResponseDTO> responseDtoList = new ArrayList<>();
         for (Bakery bestBakery: bakeries) {
-            Boolean isBooked = isBookMarked(member.getMemberId(), bestBakery.getBakeryId());
+            Boolean isBookMarked = isBookMarked(member.getMemberId(), bestBakery.getBakeryId());
             BestBakeryListResponseDTO response = BestBakeryListResponseDTO.builder()
                     .bakeryId(bestBakery.getBakeryId())
                     .bakeryName(bestBakery.getBakeryName())
@@ -153,7 +153,7 @@ public class BakeryService {
                     .isNonGMO(bestBakery.getIsNonGMO())
                     .firstNearStation(bestBakery.getFirstNearStation())
                     .secondNearStation(bestBakery.getSecondNearStation())
-                    .isBooked(isBooked)
+                    .isBookMarked(isBookMarked)
                     .bookMarkCount(bestBakery.getBookMarkCount())
                     .reviewCount(bestBakery.getReviewCount())
                     .build();
@@ -217,7 +217,7 @@ public class BakeryService {
                 .isNonGMO(bakery.getIsNonGMO())
                 .firstNearStation(bakery.getFirstNearStation())
                 .secondNearStation(bakery.getSecondNearStation())
-                .isBooked(isBookMarked)
+                .isBookMarked(isBookMarked)
                 .bookMarkCount(bakery.getBookMarkCount())
                 .reviewCount(bakery.getReviewCount())
                 .breadType(breadTypeResponseDto)
