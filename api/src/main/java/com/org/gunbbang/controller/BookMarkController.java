@@ -5,7 +5,6 @@ import com.org.gunbbang.controller.DTO.request.BookMarkRequestDTO;
 import com.org.gunbbang.controller.DTO.response.BookMarkResponseDTO;
 import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.service.BookMarkService;
-import com.org.gunbbang.service.MemberService;
 import com.org.gunbbang.util.Security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,7 @@ public class BookMarkController {
 
     private final BookMarkService bookMarkService;
 
-    @PostMapping("/bookMark/{bakeryId}")
+    @PostMapping("/bookMarks/{bakeryId}")
     public ApiResponse<BookMarkResponseDTO> doBookMark(
             @RequestBody @Valid final BookMarkRequestDTO request,
             @PathVariable("bakeryId") Long bakeryId
