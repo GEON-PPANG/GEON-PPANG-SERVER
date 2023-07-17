@@ -218,6 +218,7 @@ public class BakeryService {
                 .secondNearStation(bakery.getSecondNearStation())
                 .isBooked(isBookMarked)
                 .bookMarkCount(bakery.getBookMarkCount())
+                .reviewCount(bakery.getReviewCount())
                 .breadType(breadTypeResponseDto)
                 .build();
     }
