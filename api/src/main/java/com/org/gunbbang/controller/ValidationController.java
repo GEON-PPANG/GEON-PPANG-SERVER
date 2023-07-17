@@ -11,18 +11,18 @@ import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("")
+@RequestMapping("validation")
 public class ValidationController {
 
     private final MemberService memberService;
 
-    @PostMapping("/validate/nickname")
+    @PostMapping("/nickname")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void checkDuplicatedNickname(@RequestBody @Valid ValidateNicknameRequestDTO request) {
         memberService.checkDuplicatedNickname(request.getNickname().strip());
     }
 
-    @PostMapping("/validate/email")
+    @PostMapping("/email")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void checkDuplicatedEmail (@RequestBody @Valid ValidateEmailRequestDTO request) {
         memberService.checkDuplicatedEmail(request.getEmail().strip());

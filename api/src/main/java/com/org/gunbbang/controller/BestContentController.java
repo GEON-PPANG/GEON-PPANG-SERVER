@@ -18,19 +18,19 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("")
+@RequestMapping("/best")
 public class BestContentController {
     private final BakeryService bakeryService;
     private final ReviewService reviewService;
 
 
-    @GetMapping("/bakeries/best")
+    @GetMapping("/bakeries")
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse<List<BestBakeryListResponseDTO>> getBestBakeries () {
         return ApiResponse.success(SuccessType.GET_BEST_BAKERIES_SUCCESS, bakeryService.getBestBakeries());
     }
 
-    @GetMapping("/reviews/best")
+    @GetMapping("/reviews")
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse<List<BestReviewListResponseDTO>> getBestReviews () {
         Long memberId = SecurityUtil.getLoginMemberId();
