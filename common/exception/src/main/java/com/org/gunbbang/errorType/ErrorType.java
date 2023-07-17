@@ -13,6 +13,7 @@ public enum ErrorType {
      * 400 BAD REQUEST
      */
     REQUEST_VALIDATION_EXCEPTION(HttpStatus.BAD_REQUEST, "잘못된 요청입니다"),
+    REQUEST_KEYWORDLIST_VALIDATION_EXCEPTION(HttpStatus.BAD_REQUEST, "좋아요 선택시 추천 키워드를 하나 이상 선택해야 합니다"),
     INVALID_PASSWORD_EXCEPTION(HttpStatus.BAD_REQUEST, "잘못된 비밀번호입니다"),
     TOKEN_TIME_EXPIRED_EXCEPTION(HttpStatus.BAD_REQUEST, "만료된 토큰입니다"),
     ALREADY_BOOKMARKED_EXCEPTION(HttpStatus.BAD_REQUEST, "이미 북마크된 빵집입니다"),
