@@ -109,7 +109,8 @@ public class RequestApiInfo {
             final Object[] args = joinPoint.getArgs();
             for (int i = 0; i < parameterNames.length; i++) {
                 if (parameterNames[i].equals("request")) {
-                    this.body = objectMapper.convertValue(args[i], new TypeReference<Map<String, String>>(){});
+//                    this.body = objectMapper.convertValue(args[i], new TypeReference<Map<String, String>>(){});
+                    this.body = new HashMap<>();
                 } else {
                     this.parameters.put(parameterNames[i], objectMapper.writeValueAsString(args[i]));
                 }
