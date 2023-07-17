@@ -88,6 +88,7 @@ public class BakeryService {
                 .secondNearStation(bakery.getSecondNearStation())
                 .isBooked(isBookMark)
                 .bookMarkCount(bakery.getBookMarkCount())
+                .reviewCount(bakery.getReviewCount())
                 .homepage(bakery.getHomepage())
                 .address(bakery.getState()+" "+bakery.getCity()+" "+bakery.getTown()+" "+bakery.getAddressRest())
                 .openingTime(bakery.getOpeningHours())
@@ -218,6 +219,7 @@ public class BakeryService {
                 .secondNearStation(bakery.getSecondNearStation())
                 .isBooked(isBookMarked)
                 .bookMarkCount(bakery.getBookMarkCount())
+                .reviewCount(bakery.getReviewCount())
                 .breadType(breadTypeResponseDto)
                 .build();
     }
