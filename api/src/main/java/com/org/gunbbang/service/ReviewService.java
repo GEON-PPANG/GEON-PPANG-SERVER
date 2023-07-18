@@ -38,7 +38,7 @@ public class ReviewService {
         Long currentMemberId = SecurityUtil.getLoginMemberId();
         Member member = memberRepository.findById(currentMemberId).orElseThrow(()->new BadRequestException(ErrorType.TOKEN_TIME_EXPIRED_EXCEPTION));
         Bakery bakery = bakeryRepository.findById(bakeryId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
-        Review review = reviewRepository.save(Review.builder()
+        Review review = reviewRepository.saveAndFlush(Review.builder()
                         .memberId(member)
                         .bakeryId(bakery)
                         .isLike(reviewRequestDto.getIsLike())
@@ -46,7 +46,7 @@ public class ReviewService {
                 .build());
         // 리뷰 작성되면 review count 증가
         bakery.reviewCountChange(true);
-        bakeryRepository.save(bakery);
+        bakeryRepository.saveAndFlush(bakery);
         return review.getReviewId();
     }
 
@@ -55,13 +55,13 @@ public class ReviewService {
         Bakery bakery = bakeryRepository.findById(review.getBakery().getBakeryId()).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
         for(RecommendKeywordNameRequestDTO keyword : keywordNameRequestDtoList){
             RecommendKeyword recommendKeyword = recommendKeywordRepository.findByKeywordName(keyword.getKeywordName()).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION));
-            reviewRecommendKeywordRepository.save(ReviewRecommendKeyword.builder()
+            reviewRecommendKeywordRepository.saveAndFlush(ReviewRecommendKeyword.builder()
                             .recommendKeyword(recommendKeyword)
                             .review(review)
                     .build());
             bakery.keywordCountChange(keyword.getKeywordName());
         }
-        bakeryRepository.save(bakery);
+        bakeryRepository.saveAndFlush(bakery);
     }
 
     public ReviewDetailResponseDTO getReviewedByMember(Long reviewId){
