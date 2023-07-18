@@ -166,7 +166,7 @@ public class ReviewService {
                     .isHACCP(review.getBakery().getIsHACCP())
                     .isVegan(review.getBakery().getIsVegan())
                     .isNonGMO(review.getBakery().getIsNonGMO())
-                    .breadTypeResponseDto(breadType)
+                    .breadType(breadType)
                     .firstNearStation(review.getBakery().getFirstNearStation())
                     .secondNearStation(review.getBakery().getSecondNearStation())
                     .reviewId(review.getReviewId())
