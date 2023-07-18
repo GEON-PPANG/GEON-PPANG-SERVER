@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 로그인 성공 시 처리되는 handler
- * 앱잼 이후에 사용
  */
 @Slf4j
 @RequiredArgsConstructor

@@ -9,9 +9,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+/**
+ * DaoAuthenticationProvider 로 인증처리를 하기 위해 필요한 커스텀 UserDetailsService 클래스
+ *
+ */
 @Service
 @RequiredArgsConstructor
-public class CustomLoginService implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {
 
     private  final MemberRepository memberRepository;
 
