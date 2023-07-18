@@ -39,7 +39,7 @@ public class BakeryService {
         Sort sortOption;
 
         if (categoryList.isEmpty()) {
-            sortOption = "review".equals(sort) ? Sort.by(Sort.Direction.DESC, "reviewCount") : Sort.by(Sort.Direction.DESC, "bakeryId");
+            sortOption = sort.equals("review") ? Sort.by(Sort.Direction.DESC, "reviewCount") : Sort.by(Sort.Direction.DESC, "bakeryId");
             List<Bakery> bakeryList = bakeryRepository.findAll(sortOption);
             for (Bakery bakery : bakeryList) {
                 breadType = getBreadType(bakery);
@@ -50,7 +50,7 @@ public class BakeryService {
             return responseDtoList;
         }
 
-        sortOption = "review".equals(sort) ? Sort.by(Sort.Direction.DESC, "bakery.reviewCount") : Sort.by(Sort.Direction.DESC, "bakery.bakeryId");
+        sortOption = sort.equals("review") ? Sort.by(Sort.Direction.DESC, "bakery.reviewCount") : Sort.by(Sort.Direction.DESC, "bakery.bakeryId");
         bakeryCategoryList = bakeryCategoryRepository.findAllByCategoryIn(categoryList, sortOption);
         for (BakeryCategory bakeryCategory : bakeryCategoryList) {
             breadType = getBreadType(bakeryCategory.getBakery());
@@ -226,13 +226,13 @@ public class BakeryService {
 
     private List<Category> getCategoryList(Boolean isHard, Boolean isDessert, Boolean isBrunch){
         List<Category> categoryList = new ArrayList<>();
-        if (Boolean.TRUE.equals(isHard)) {
+        if (isHard) {
             categoryList.add(categoryRepository.findByCategoryName("하드빵류").orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
         }
-        if (Boolean.TRUE.equals(isDessert)) {
+        if (isDessert) {
             categoryList.add(categoryRepository.findByCategoryName("디저트류").orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
         }
-        if (Boolean.TRUE.equals(isBrunch)) {
+        if (isBrunch) {
             categoryList.add(categoryRepository.findByCategoryName("브런치류").orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
         }
         return categoryList;
