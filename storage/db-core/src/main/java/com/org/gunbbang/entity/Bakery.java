@@ -1,5 +1,6 @@
 package com.org.gunbbang.entity;
 
+import com.org.gunbbang.common.RecommendKeywordType;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -7,7 +8,6 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import com.org.gunbbang.common.RecommendKeywordType;
 
 @Entity
 @Getter
@@ -98,18 +98,17 @@ public class Bakery {
         }
     }
     public void keywordCountChange(String keyword) {
-        RecommendKeywordType keywordType = RecommendKeywordType.valueOf(keyword);
-        switch(keywordType){
-            case DELICIOUS:
+        switch(keyword){
+            case RecommendKeywordType.DELICIOUS:
                 this.keywordDeliciousCount++;
                 break;
-            case KIND:
+            case RecommendKeywordType.KIND:
                 this.keywordKindCount++;
                 break;
-            case SPECIAL_MENU:
+            case RecommendKeywordType.SPECIAL_MENU:
                 this.keywordSpecialCount++;
                 break;
-            case ZERO_WASTE:
+            case RecommendKeywordType.ZERO_WASTE:
                 this.keywordZeroWasteCount++;
                 break;
             default:
