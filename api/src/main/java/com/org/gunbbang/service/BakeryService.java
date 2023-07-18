@@ -1,6 +1,7 @@
 package com.org.gunbbang.service;
 
 import com.org.gunbbang.NotFoundException;
+import com.org.gunbbang.common.CategoryType;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
@@ -28,7 +29,11 @@ public class BakeryService {
     private final BakeryRepository bakeryRepository;
     private final MenuRepository menuRepository;
 
+
+
+
     private final int maxBestBakeryCount = 10;
+
 
     public List<BakeryListResponseDTO> getBakeryList(Long memberId, String sort, Boolean isHard, Boolean isDessert, Boolean isBrunch) {
         List<Category> categoryList = getCategoryList(isHard, isDessert, isBrunch);
@@ -227,13 +232,13 @@ public class BakeryService {
     private List<Category> getCategoryList(Boolean isHard, Boolean isDessert, Boolean isBrunch){
         List<Category> categoryList = new ArrayList<>();
         if (isHard) {
-            categoryList.add(categoryRepository.findByCategoryName("하드빵류").orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
+            categoryList.add(categoryRepository.findByCategoryName(CategoryType.HARD_BREAD.getName()).orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
         }
         if (isDessert) {
-            categoryList.add(categoryRepository.findByCategoryName("디저트류").orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
+            categoryList.add(categoryRepository.findByCategoryName(CategoryType.DESSERT.getName()).orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
         }
         if (isBrunch) {
-            categoryList.add(categoryRepository.findByCategoryName("브런치류").orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
+            categoryList.add(categoryRepository.findByCategoryName(CategoryType.BRUNCH.getName()).orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
         }
         return categoryList;
     }
