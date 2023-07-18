@@ -25,17 +25,17 @@ public class BakeriesController {
 
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<List<BakeryListResponseDTO>> getBakeryList(@RequestParam("sort") @Valid String sort,
-                                                                  @RequestParam("isHard") @Valid Boolean isHard,
-                                                                  @RequestParam("isDessert") @Valid Boolean isDessert,
-                                                                  @RequestParam("isBrunch") @Valid Boolean isBrunch){
+    public ApiResponse<List<BakeryListResponseDTO>> getBakeryList(@RequestParam("sort")String sort,
+                                                                  @RequestParam("isHard")Boolean isHard,
+                                                                  @RequestParam("isDessert")Boolean isDessert,
+                                                                  @RequestParam("isBrunch")Boolean isBrunch){
         Long memberId = SecurityUtil.getLoginMemberId();
         List<BakeryListResponseDTO> bakeryListResponseDto = bakeryService.getBakeryList(memberId, sort,isHard,isDessert,isBrunch);
         return ApiResponse.success(SuccessType.GET_BAKERY_LIST_SUCCESS, bakeryListResponseDto);
     }
     @GetMapping("/{bakeryId}")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<BakeryDetailResponseDTO> getBakeryDetail(@PathVariable("bakeryId") @Valid Long bakeryId){
+    public ApiResponse<BakeryDetailResponseDTO> getBakeryDetail(@PathVariable("bakeryId") Long bakeryId){
         Long memberId = SecurityUtil.getLoginMemberId();
         BakeryDetailResponseDTO bakeryDetailResponseDTO = bakeryService.getBakeryDetail(memberId, bakeryId);
         return ApiResponse.success(SuccessType.GET_BAKERY_DETAIL_SUCCESS, bakeryDetailResponseDTO);
