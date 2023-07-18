@@ -37,6 +37,7 @@ subprojects {
 		compileOnly 'org.projectlombok:lombok'
 		annotationProcessor 'org.projectlombok:lombok'
 		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		implementation group: 'org.springframework', name: 'spring-web', version: '5.3.23'
 	}
 
     // true로 설정하면 실행가능한 jar 파일을 만듦
