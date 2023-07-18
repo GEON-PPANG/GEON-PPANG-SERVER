@@ -42,7 +42,7 @@ public class MemberService {
         Long currentMemberId = SecurityUtil.getLoginMemberId();
 
         Member member = memberRepository.findById(currentMemberId).orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
-        BreadTypeResponseDTO breadTypeResponseDto = BreadTypeResponseDTO.builder()
+        BreadTypeResponseDTO breadType = BreadTypeResponseDTO.builder()
                 .breadTypeId(member.getBreadType().getBreadTypeId())
                 .breadTypeName(member.getBreadType().getBreadTypeName())
                 .isVegan(member.getBreadType().getIsVegan())
@@ -54,7 +54,7 @@ public class MemberService {
         return MemberDetailResponseDTO.builder()
                 .memberNickname(member.getNickname())
                 .mainPurpose(member.getMainPurpose())
-                .breadType(breadTypeResponseDto)
+                .breadType(breadType)
                 .build();
     }
 
@@ -169,7 +169,7 @@ public class MemberService {
                 .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
 
         BreadType foundMemberBreadType = foundMember.getBreadType();
-        BreadTypeResponseDTO breadTypeResponse = BreadTypeResponseDTO.builder()
+        BreadTypeResponseDTO breadType = BreadTypeResponseDTO.builder()
                 .breadTypeId(foundMemberBreadType.getBreadTypeId())
                 .breadTypeName(foundMemberBreadType.getBreadTypeName())
                 .isGlutenFree(foundMemberBreadType.getIsGlutenFree())
@@ -190,7 +190,7 @@ public class MemberService {
         return MemberTypesResponseDTO.builder()
                 .memberId(foundMember.getMemberId())
                 .mainPurpose(foundMember.getMainPurpose())
-                .breadType(breadTypeResponse)
+                .breadType(breadType)
                 .nutrientType(nutrientTypeResponse)
                 .build();
     }

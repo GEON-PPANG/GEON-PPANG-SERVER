@@ -33,7 +33,7 @@ public class BakeryService {
     public List<BakeryListResponseDTO> getBakeryList(Long memberId, String sort, Boolean isHard, Boolean isDessert, Boolean isBrunch) {
         List<Category> categoryList = getCategoryList(isHard, isDessert, isBrunch);
         List<BakeryListResponseDTO> responseDtoList = new ArrayList<>();
-        BreadTypeResponseDTO breadTypeResponseDto;
+        BreadTypeResponseDTO breadType;
         Boolean isBookMarked;
         List<BakeryCategory> bakeryCategoryList;
         Sort sortOption;
@@ -42,9 +42,9 @@ public class BakeryService {
             sortOption = "review".equals(sort) ? Sort.by(Sort.Direction.DESC, "reviewCount") : Sort.by(Sort.Direction.DESC, "bakeryId");
             List<Bakery> bakeryList = bakeryRepository.findAll(sortOption);
             for (Bakery bakery : bakeryList) {
-                breadTypeResponseDto = getBreadType(bakery);
+                breadType = getBreadType(bakery);
                 isBookMarked = isBookMarked(memberId, bakery.getBakeryId());
-                BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(bakery, isBookMarked, breadTypeResponseDto);
+                BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(bakery, isBookMarked, breadType);
                 responseDtoList.add(bakeryListResponseDto);
             }
             return responseDtoList;
@@ -53,9 +53,9 @@ public class BakeryService {
         sortOption = "review".equals(sort) ? Sort.by(Sort.Direction.DESC, "bakery.reviewCount") : Sort.by(Sort.Direction.DESC, "bakery.bakeryId");
         bakeryCategoryList = bakeryCategoryRepository.findAllByCategoryIn(categoryList, sortOption);
         for (BakeryCategory bakeryCategory : bakeryCategoryList) {
-            breadTypeResponseDto = getBreadType(bakeryCategory.getBakery());
+            breadType = getBreadType(bakeryCategory.getBakery());
             isBookMarked = isBookMarked(memberId, bakeryCategory.getBakery().getBakeryId());
-            BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(bakeryCategory.getBakery(), isBookMarked, breadTypeResponseDto);
+            BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(bakeryCategory.getBakery(), isBookMarked, breadType);
             responseDtoList.add(bakeryListResponseDto);
         }
         return responseDtoList;
@@ -64,7 +64,7 @@ public class BakeryService {
     public BakeryDetailResponseDTO getBakeryDetail(Long memberId, Long bakeryId){
         Bakery bakery= bakeryRepository.findById(bakeryId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
         List<Menu> bakeryMenu = menuRepository.findAllByBakery(bakery);
-        BreadTypeResponseDTO breadTypeResponseDto = getBreadType(bakery);
+        BreadTypeResponseDTO breadType = getBreadType(bakery);
         Boolean isBookMarked = isBookMarked(memberId, bakeryId);
         List<MenuResponseDTO> menuList = new ArrayList<>();
 
@@ -83,7 +83,7 @@ public class BakeryService {
                 .isHACCP(bakery.getIsHACCP())
                 .isVegan(bakery.getIsVegan())
                 .isNonGMO(bakery.getIsNonGMO())
-                .breadType(breadTypeResponseDto)
+                .breadType(breadType)
                 .firstNearStation(bakery.getFirstNearStation())
                 .secondNearStation(bakery.getSecondNearStation())
                 .isBookMarked(isBookMarked)
@@ -167,8 +167,8 @@ public class BakeryService {
         List<BakeryListResponseDTO> bakeryListResponseDTOs = new ArrayList<>();
         for (Bakery foundBakery : foundBakeries) {
             Boolean isBookMarked = isBookMarked(memberId, foundBakery.getBakeryId());
-            BreadTypeResponseDTO breadTypeResponseDto = getBreadType(foundBakery);
-            BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(foundBakery, isBookMarked, breadTypeResponseDto);
+            BreadTypeResponseDTO breadType = getBreadType(foundBakery);
+            BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(foundBakery, isBookMarked, breadType);
             bakeryListResponseDTOs.add(bakeryListResponseDto);
         }
 
@@ -182,8 +182,8 @@ public class BakeryService {
         List<Bakery> bookMarkedBakeries = bakeryRepository.findBookMarkedBakeries(memberId);
         List<BakeryListResponseDTO> bakeryListResponseDTOs = new ArrayList<>();
         for (Bakery bookMarkedBakery : bookMarkedBakeries) {
-            BreadTypeResponseDTO breadTypeResponseDto = getBreadType(bookMarkedBakery);
-            BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(bookMarkedBakery, true, breadTypeResponseDto);
+            BreadTypeResponseDTO breadType = getBreadType(bookMarkedBakery);
+            BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(bookMarkedBakery, true, breadType);
             bakeryListResponseDTOs.add(bakeryListResponseDto);
         }
         return bakeryListResponseDTOs;
@@ -207,7 +207,7 @@ public class BakeryService {
                 .build();
     }
 
-    private BakeryListResponseDTO getBakeryResponseDTO(Bakery bakery, Boolean isBookMarked, BreadTypeResponseDTO breadTypeResponseDto ){
+    private BakeryListResponseDTO getBakeryResponseDTO(Bakery bakery, Boolean isBookMarked, BreadTypeResponseDTO breadType ){
         return BakeryListResponseDTO.builder()
                 .bakeryId(bakery.getBakeryId())
                 .bakeryName(bakery.getBakeryName())
@@ -220,7 +220,7 @@ public class BakeryService {
                 .isBookMarked(isBookMarked)
                 .bookMarkCount(bakery.getBookMarkCount())
                 .reviewCount(bakery.getReviewCount())
-                .breadType(breadTypeResponseDto)
+                .breadType(breadType)
                 .build();
     }
 
