@@ -94,10 +94,7 @@ public class ReviewService {
         Bakery bakery = bakeryRepository.findById(bakeryId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
         List<Review> reviewList = reviewRepository.findAllByBakeryOrderByCreatedAtDesc(bakery);
         List<ReviewResponseDTO> reviewListDto = new ArrayList<>();
-        Float tastePercent;
-        Float specialPercent;
-        Float kindPercent;
-        Float zeroPercent;
+        Long reviewCount;
 
         for(Review review : reviewList){
             List<RecommendKeywordResponseDTO> recommendKeywordList = new ArrayList<>();
@@ -119,27 +116,23 @@ public class ReviewService {
                     .build());
         }
 
-        if(bakery.getReviewCount()==0){
-            tastePercent = 0f;
-            specialPercent = 0f;
-            kindPercent = 0f;
-            zeroPercent = 0f;
-        }
-        else{
-            tastePercent = bakery.getKeywordDeliciousCount().floatValue()/bakery.getReviewCount().floatValue();
-            specialPercent = bakery.getKeywordSpecialCount().floatValue()/bakery.getReviewCount().floatValue();
-            kindPercent = bakery.getKeywordKindCount().floatValue()/bakery.getReviewCount().floatValue();
-            zeroPercent = bakery.getKeywordZeroWasteCount().floatValue()/bakery.getReviewCount().floatValue();
-        }
+        reviewCount = bakery.getReviewCount();
 
         return ReviewListResponseDTO.builder()
-                .tastePercent(tastePercent)
-                .specialPercent(specialPercent)
-                .kindPercent(kindPercent)
-                .zeroPercent(zeroPercent)
+                .tastePercent(calculatorPercentage(reviewCount, bakery.getKeywordDeliciousCount()))
+                .specialPercent(calculatorPercentage(reviewCount, bakery.getKeywordSpecialCount()))
+                .kindPercent(calculatorPercentage(reviewCount, bakery.getKeywordKindCount()))
+                .zeroPercent(calculatorPercentage(reviewCount, bakery.getKeywordZeroWasteCount()))
                 .totalReviewCount(bakery.getReviewCount().intValue())
                 .reviewList(reviewListDto)
                 .build();
+    }
+
+    private Float calculatorPercentage(Long reviewCount, Long keywordCount){
+        if(reviewCount==0){
+            return 0f;
+        }
+        return keywordCount/(float)reviewCount;
     }
 
     public List<BakeryListReviewedByMemberDTO> getBakeryListReviewedByMember(Long memberId) {
