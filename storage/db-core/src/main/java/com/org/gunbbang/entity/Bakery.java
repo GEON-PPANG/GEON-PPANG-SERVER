@@ -1,10 +1,10 @@
 package com.org.gunbbang.entity;
 
+import com.org.gunbbang.common.RecommendKeywordType;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -99,16 +99,16 @@ public class Bakery {
     }
     public void keywordCountChange(String keyword) {
         switch(keyword){
-            case "맛있어요":
+            case RecommendKeywordType.DELICIOUS:
                 this.keywordDeliciousCount++;
                 break;
-            case "친절해요":
+            case RecommendKeywordType.KIND:
                 this.keywordKindCount++;
                 break;
-            case "특별한 메뉴":
+            case RecommendKeywordType.SPECIAL_MENU:
                 this.keywordSpecialCount++;
                 break;
-            case "제로 웨이스트":
+            case RecommendKeywordType.ZERO_WASTE:
                 this.keywordZeroWasteCount++;
                 break;
             default:

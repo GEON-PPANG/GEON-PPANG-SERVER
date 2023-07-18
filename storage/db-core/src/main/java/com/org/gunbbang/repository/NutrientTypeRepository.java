@@ -1,6 +1,5 @@
 package com.org.gunbbang.repository;
 
-import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.entity.NutrientType;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -35,7 +35,7 @@ public class ReviewsController {
 
     @GetMapping(value="/{reviewId}")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<ReviewDetailResponseDTO> getReviewedByMember(@PathVariable @Valid Long reviewId) {
+    public ApiResponse<ReviewDetailResponseDTO> getReviewedByMember(@PathVariable Long reviewId) {
         return ApiResponse.success(SuccessType.GET_REVIEW_DETAIL_MEMBER_SUCCESS, reviewService.getReviewedByMember(reviewId));
     }
 }
