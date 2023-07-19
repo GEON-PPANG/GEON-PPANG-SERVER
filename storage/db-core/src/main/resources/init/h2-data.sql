@@ -220,7 +220,7 @@ INSERT INTO book_mark (bakery_id, member_id) values (7, 5);
 --     VALUES (15, false, 'review_id: 15 | 싫어요임 이거 나오면 안됨', 1, 4, '2023-07-12T18:00:29.68338Z', null);
 -- INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)
 --     VALUES (16, false, 'review_id: 16 | 싫어요임 이거 나오면 안됨', 1, 4, '2023-07-12T18:00:29.68338Z', null);
-
--- 여기는 best+랜덤 리뷰 10개 했을때 모자라도 나오면 안되는 데이터
+--
+-- -- 여기는 best+랜덤 리뷰 10개 했을때 모자라도 나오면 안되는 데이터
 
 
