@@ -28,7 +28,6 @@ public class BookMarkService {
             Long bakeryId,
             Long memberId
     ) {
-        System.out.println("isAddingbookMark 값: " + isAddingBookMark);
         Bakery foundBakery = bakeryRepository
                 .findById(bakeryId)
                 .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
@@ -40,10 +39,6 @@ public class BookMarkService {
 
         if (isAddingBookMark) {
             if(foundBookMark.isPresent()) {  // 북마크 했는데 또 한경우
-                System.out.println("북마크 객체 결과: " + foundBookMark.get().getBookMarkId());
-                System.out.println("북마크 멤버 결과: " + foundBookMark.get().getMember().getMemberId());
-                System.out.println("북마크 빵집 결과: " + foundBookMark.get().getBakery().getBakeryId());
-
                 throw new DoubleBookMarkRequestException(ErrorType.ALREADY_BOOKMARKED_EXCEPTION);
             }
             bookMarkRepository.saveAndFlush(

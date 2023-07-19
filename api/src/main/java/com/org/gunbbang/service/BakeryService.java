@@ -193,6 +193,10 @@ public class BakeryService {
     }
 
     public BakerySearchResponseDTO getBakeriesByName(String bakeryName, Long memberId) {
+        if (bakeryName.isEmpty()) {
+            return BakerySearchResponseDTO.getEmptyBakerySearchResponseDTO();
+        }
+
         List<Bakery> foundBakeries = bakeryRepository.findBakeryByBakeryName(bakeryName);
         List<BakeryListResponseDTO> bakeryListResponseDTOs = new ArrayList<>();
         for (Bakery foundBakery : foundBakeries) {
