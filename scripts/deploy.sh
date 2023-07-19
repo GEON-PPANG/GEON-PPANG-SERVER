@@ -42,12 +42,16 @@ then
 else
   echo "> kill -15 $IDLE_PID"
   kill -15 $IDLE_PID
+  current_datetime=$(date "+%Y년 %m월 %d일 %H시 %M분 %S초")
+  echo "종료된 시간: $current_datetime"
   sleep 60
 fi
 
 echo "> $IDLE_PROFILE 배포"
 nohup java -jar -Duser.timezone=Asia/Seoul -Dspring.profiles.active=$IDLE_PROFILE $IDLE_APPLICATION_PATH >> /home/ubuntu/app/nohup.out 2>&1 &
 
+current_datetime=$(date "+%Y년 %m월 %d일 %H시 %M분 %S초")
+echo "배포된 시간: $current_datetime"
 echo "> $IDLE_PROFILE 10초 후 Health check 시작"
 echo "> curl -s http://localhost:$IDLE_PORT/health "
 sleep 10
