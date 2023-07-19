@@ -54,12 +54,12 @@ public class ReviewService {
         Review review = reviewRepository.findById(reviewId).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_REVIEW));
         Bakery bakery = bakeryRepository.findById(review.getBakery().getBakeryId()).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
         for(RecommendKeywordNameRequestDTO keyword : keywordNameRequestDtoList){
-            RecommendKeyword recommendKeyword = recommendKeywordRepository.findByKeywordName(keyword.getKeywordName()).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION));
+            RecommendKeyword recommendKeyword = recommendKeywordRepository.findByKeywordName(keyword.getKeywordName().getMessage()).orElseThrow(()->new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION));
             reviewRecommendKeywordRepository.saveAndFlush(ReviewRecommendKeyword.builder()
                             .recommendKeyword(recommendKeyword)
                             .review(review)
                     .build());
-            bakery.keywordCountChange(keyword.getKeywordName());
+            bakery.keywordCountChange(keyword.getKeywordName().getMessage());
         }
         bakeryRepository.saveAndFlush(bakery);
     }
