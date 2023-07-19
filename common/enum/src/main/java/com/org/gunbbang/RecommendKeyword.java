@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum RecommendKeyword {
     DELICIOUS("맛있어요"),
     KIND("친절해요"),
-    SPECIAL("특별한 메뉴"),
+    SPECIAL_MENU("특별한 메뉴"),
     ZERO_WASTE("제로웨이스트")
     ;
 

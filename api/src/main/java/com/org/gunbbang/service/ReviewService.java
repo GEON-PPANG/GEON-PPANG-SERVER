@@ -238,7 +238,7 @@ public class ReviewService {
         Map<String, Long> recommendKeywordsMap = new HashMap<>();
         recommendKeywordsMap.put(com.org.gunbbang.RecommendKeyword.DELICIOUS.getMessage(), bestReview.getKeywordDeliciousCount());
         recommendKeywordsMap.put(com.org.gunbbang.RecommendKeyword.KIND.getMessage(), bestReview.getKeywordKindCount());
-        recommendKeywordsMap.put(com.org.gunbbang.RecommendKeyword.SPECIAL.getMessage(), bestReview.getKeywordSpecialCount());
+        recommendKeywordsMap.put(com.org.gunbbang.RecommendKeyword.SPECIAL_MENU.getMessage(), bestReview.getKeywordSpecialCount());
         recommendKeywordsMap.put(com.org.gunbbang.RecommendKeyword.ZERO_WASTE.getMessage(), bestReview.getKeywordZeroWasteCount());
 
         Long maxValue = Long.MIN_VALUE;
