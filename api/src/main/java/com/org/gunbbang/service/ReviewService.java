@@ -236,10 +236,10 @@ public class ReviewService {
     private List<String> getMaxRecommendKeywords(BestReviewDTO bestReview) {
 
         Map<String, Long> recommendKeywordsMap = new HashMap<>();
-        recommendKeywordsMap.put("keywordDelicious", bestReview.getKeywordDeliciousCount());
-        recommendKeywordsMap.put("keywordKind", bestReview.getKeywordKindCount());
-        recommendKeywordsMap.put("keywordSpecial", bestReview.getKeywordSpecialCount());
-        recommendKeywordsMap.put("keywordZeroWaste", bestReview.getKeywordZeroWasteCount());
+        recommendKeywordsMap.put(com.org.gunbbang.RecommendKeyword.TASTE.getMessage(), bestReview.getKeywordDeliciousCount());
+        recommendKeywordsMap.put(com.org.gunbbang.RecommendKeyword.KIND.getMessage(), bestReview.getKeywordKindCount());
+        recommendKeywordsMap.put(com.org.gunbbang.RecommendKeyword.SPECIAL.getMessage(), bestReview.getKeywordSpecialCount());
+        recommendKeywordsMap.put(com.org.gunbbang.RecommendKeyword.ZERO_WASTE.getMessage(), bestReview.getKeywordZeroWasteCount());
 
         Long maxValue = Long.MIN_VALUE;
         Long secondMaxValue = Long.MAX_VALUE;
