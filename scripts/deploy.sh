@@ -42,7 +42,7 @@ then
 else
   echo "> kill -15 $IDLE_PID"
   kill -15 $IDLE_PID
-  exit := $?
+  exit=$?
   sleep 60
   if [ exit -eq 0 ]; then
       echo "kill -15 명령어로 서버가 다운되었습니다. exit status $exit. kill -15로 종료된 시각: $(date) "
