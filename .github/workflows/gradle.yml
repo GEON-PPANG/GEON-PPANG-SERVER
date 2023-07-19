@@ -14,8 +14,9 @@
 name: Gunbbang-Server CI
 
 on:
-  push:
-    branches: [ "dev" ]
+#  dev에 푸시할 때 ci 안돌아가게 막기
+#  push:
+#    branches: [ "dev" ]
   pull_request:
     branches: [ "dev" ]
 
