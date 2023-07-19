@@ -35,6 +35,12 @@ public interface BakeryRepository extends JpaRepository<Bakery, Long> {
             PageRequest pageRequest);
 
     @Query(value = "SELECT b FROM Bakery b " +
+            "WHERE b.breadType = :breadTypeId ")
+    List<Bakery> findBakeriesByBreadTypeId(
+            BreadType breadTypeId,
+            PageRequest pageRequest);
+
+    @Query(value = "SELECT b FROM Bakery b " +
             "WHERE b.bakeryName like %:bakeryName% ")
     List<Bakery> findBakeryByBakeryName(@Param("bakeryName") String bakeryName);
 
@@ -49,4 +55,8 @@ public interface BakeryRepository extends JpaRepository<Bakery, Long> {
             "ORDER BY RAND() ")
     List<Bakery> findRestBakeriesRandomly(List<Long> alreadyFoundBakeries,
                                           PageRequest pageRequest);
+
+    @Query(value = "SELECT b FROM Bakery b " +
+            "ORDER BY RAND() ")
+    List<Bakery> findBakeriesRandomly(PageRequest pageRequest);
 }
