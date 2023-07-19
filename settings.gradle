@@ -5,7 +5,7 @@ include(
     "common:util",
     "common:domain",
     "common:exception",
-    "api",
+    "api", // jar
     "client",
     "storage:db-core",
 )
