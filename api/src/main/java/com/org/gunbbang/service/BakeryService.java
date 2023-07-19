@@ -1,7 +1,7 @@
 package com.org.gunbbang.service;
 
 import com.org.gunbbang.NotFoundException;
-import com.org.gunbbang.common.CategoryType;
+import com.org.gunbbang.CategoryType;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
@@ -56,7 +56,7 @@ public class BakeryService {
         }
 
         sortOption = sort.equals("review") ? Sort.by(Sort.Direction.DESC, "bakery.reviewCount") : Sort.by(Sort.Direction.DESC, "bakery.bakeryId");
-        bakeryCategoryList = bakeryCategoryRepository.findAllByCategoryIn(categoryList, sortOption);
+        bakeryCategoryList = bakeryCategoryRepository.findDistinctByCategoryIn(categoryList, sortOption);
         for (BakeryCategory bakeryCategory : bakeryCategoryList) {
             breadType = getBreadType(bakeryCategory.getBakery());
             isBookMarked = isBookMarked(memberId, bakeryCategory.getBakery().getBakeryId());

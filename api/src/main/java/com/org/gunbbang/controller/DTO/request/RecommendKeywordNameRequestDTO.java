@@ -1,5 +1,6 @@
 package com.org.gunbbang.controller.DTO.request;
 
+import com.org.gunbbang.RecommendKeyword;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,5 +10,5 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class RecommendKeywordNameRequestDTO {
     @NotNull
-    String keywordName;
+    RecommendKeyword keywordName;
 }
