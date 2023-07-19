@@ -22,7 +22,7 @@ public class ReviewsController {
 
     @PostMapping(value = "/{bakeryId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse createReview(@PathVariable("bakeryId")final Long bakeryId, @RequestBody @Valid final ReviewRequestDTO request) {
+    public ApiResponse<Long> createReview(@PathVariable("bakeryId")final Long bakeryId, @RequestBody @Valid final ReviewRequestDTO request) {
         Long reviewId = reviewService.createReview(bakeryId, request);
         if (request.getIsLike()) {
             if(request.getKeywordList().isEmpty()){
@@ -30,7 +30,7 @@ public class ReviewsController {
             }
             reviewService.createReviewRecommendKeyword(request.getKeywordList(), reviewId);
         }
-        return ApiResponse.success(SuccessType.CREATE_REVIEW_SUCCESS);
+        return ApiResponse.success(SuccessType.CREATE_REVIEW_SUCCESS, reviewId);
     }
 
     @GetMapping(value="/{reviewId}")
