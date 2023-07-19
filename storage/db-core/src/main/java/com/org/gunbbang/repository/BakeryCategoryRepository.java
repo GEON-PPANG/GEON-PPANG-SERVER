@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface BakeryCategoryRepository extends JpaRepository<BakeryCategory,Long> {
-
-    List<BakeryCategory> findAllByCategoryIn(List<Category> categoryList, Sort sort);
+    List<BakeryCategory> findDistinctByCategoryIn(List<Category> categoryList, Sort sort);
 
 }

@@ -1,4 +1,4 @@
-package com.org.gunbbang.common;
+package com.org.gunbbang;
 
 import lombok.AccessLevel;
 import lombok.Getter;
