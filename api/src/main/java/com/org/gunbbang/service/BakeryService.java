@@ -105,45 +105,37 @@ public class BakeryService {
 
     public List<BestBakeryListResponseDTO> getBestBakeries() {
         Long memberId = SecurityUtil.getLoginMemberId();
+        List<Long> alreadyFoundBakeryIds = new ArrayList<>();
 
         Member foundMember = memberRepository
                 .findById(memberId)
                 .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
 
         PageRequest bestPageRequest = PageRequest.of(0, maxBestBakeryCount);
-        log.info("베스트만 고른 빵집 베이커리");
         List<Bakery> bestBakeries = bakeryRepository.findBestBakeries(
                 foundMember.getBreadType().getBreadTypeId(),
                 foundMember.getMainPurpose(),
                 bestPageRequest // TODO: 일케하는게맞냐????
         );
 
-        for (Bakery bestBakery: bestBakeries) {
-            log.info("베스트 베이커리 이름: " + bestBakery.getBakeryName() + "베스트 베이커리 아이디: " + bestBakery.getBakeryId());
-        }
-
         if (bestBakeries.size() == maxBestBakeryCount) {
+            log.info("베스트 베이커리 10개 조회 완료. 추가 조회 쿼리 없이 바로 반환");
             return getResponseBakeries(foundMember, bestBakeries);
         }
 
-        List<Long> alreadyFoundBakeryIds = bestBakeries.stream().map(Bakery::getBakeryId).collect(Collectors.toList());
-        bestPageRequest = PageRequest.of(0, maxBestBakeryCount - bestBakeries.size());
+        System.out.println("alreadyFoundBakeryIds 엠티 여부: " + alreadyFoundBakeryIds);
 
-        log.info("빵유형 일치 베이커리");
+        alreadyFoundBakeryIds = bestBakeries.stream().map(Bakery::getBakeryId).collect(Collectors.toList());
+
+        log.info("빵유형 일치 베이커리 조회 시작");
+        bestPageRequest = PageRequest.of(0, maxBestBakeryCount - bestBakeries.size());
         bestBakeries.addAll(bakeryRepository.findRestBakeriesByBreadTypeId(
                         foundMember.getBreadType(),
                         alreadyFoundBakeryIds,
                         bestPageRequest));
 
-        for (Bakery bestBakery: bestBakeries) {
-            log.info("빵유형 일치 베이커리 이름: " + bestBakery.getBakeryName() + "빵유형 일치 아이디: " + bestBakery.getBakeryId());
-        }
-
-        for (Long id: alreadyFoundBakeryIds) {
-            log.info("빵유형 일치 alreadyFoundBakeryIds : " + id);
-        }
-
         if (bestBakeries.size() == maxBestBakeryCount) {
+            log.info("빵유형 10개 조회 완료. 추가 조회 쿼리 없이 바로 반환");
             return getResponseBakeries(foundMember, bestBakeries);
         }
 
@@ -156,14 +148,6 @@ public class BakeryService {
         bestBakeries.addAll(bakeryRepository.findRestBakeriesRandomly(
                 alreadyFoundBakeryIds,
                 bestPageRequest));
-
-        for (Bakery bestBakery: bestBakeries) {
-            log.info("찐 나머지 베이커리 이름: " + bestBakery.getBakeryName() + "찐 나머지 베이커리 이름: " + bestBakery.getBakeryId());
-        }
-
-        for (Long id: alreadyFoundBakeryIds) {
-            log.info("찐 나머지 alreadyFoundBakeryIds : " + id);
-        }
 
         return getResponseBakeries(foundMember, bestBakeries);
 
