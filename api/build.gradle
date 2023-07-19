@@ -31,14 +31,14 @@ dependencies {
     implementation 'org.slf4j:slf4j-api:1.7.32'
 
     // 루트 build.gradle에 있는 의존성
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.6.RELEASE'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    implementation group: 'org.springframework', name: 'spring-web', version: '5.3.23'
+//    implementation 'org.springframework.boot:spring-boot-starter-web'
+//    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.6.RELEASE'
+//    implementation 'org.springframework.boot:spring-boot-starter-validation'
+//    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+//    compileOnly 'org.projectlombok:lombok'
+//    annotationProcessor 'org.projectlombok:lombok'
+//    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//    implementation group: 'org.springframework', name: 'spring-web', version: '5.3.23'
 
 }
 
