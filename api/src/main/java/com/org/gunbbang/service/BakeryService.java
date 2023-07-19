@@ -106,6 +106,7 @@ public class BakeryService {
     public List<BestBakeryListResponseDTO> getBestBakeries() {
         Long memberId = SecurityUtil.getLoginMemberId();
         List<Long> alreadyFoundBakeryIds = new ArrayList<>();
+        alreadyFoundBakeryIds.add(Long.MAX_VALUE);
 
         Member foundMember = memberRepository
                 .findById(memberId)
