@@ -181,6 +181,7 @@ public class LoggingAspect {
             }
 
             logInfo.setException(truncatedStackTrace.toString());
+            logInfo.setExceptionSimpleName(e.getClass().getSimpleName());
             final String logMessage = objectMapper.writeValueAsString(logInfo);
             logger.error(logMessage);
 
