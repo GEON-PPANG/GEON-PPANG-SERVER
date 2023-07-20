@@ -1,8 +1,15 @@
 package com.org.gunbbang.AOP;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.org.gunbbang.AOP.ApiInfo.RequestApiInfo;
+import com.org.gunbbang.AOP.ApiInfo.SearchApiInfo;
+import com.org.gunbbang.AOP.ApiInfo.SignupApiInfo;
+import com.org.gunbbang.AOP.annotation.BakeryIdApiLog;
+import com.org.gunbbang.AOP.annotation.ReviewIdApiLog;
+import com.org.gunbbang.AOP.annotation.SearchApiLog;
+import com.org.gunbbang.AOP.annotation.SignupApiLog;
+import com.org.gunbbang.AOP.logInfo.*;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Request;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -27,36 +34,136 @@ public class LoggingAspect {
     @Pointcut("within(com.org.gunbbang.controller..*)")
     public void onRequest() {}
 
-    // 지정된 패턴에 해당하는 메소드의 실행되기 전, 실행된 후 모두에서 동작
-    @Around("onRequest()")
-    public Object requestLogging(ProceedingJoinPoint joinPoint) throws Throwable {
-        // API의 정보 담는 클래스
+    @Pointcut("onRequest() " +
+            "&& !@annotation(com.org.gunbbang.AOP.annotation.SearchApiLog) " +
+            "&& !@annotation(com.org.gunbbang.AOP.annotation.SignupApiLog) " +
+            "&& !@annotation(com.org.gunbbang.AOP.annotation.ReviewIdApiLog) " +
+            "&& !@annotation(com.org.gunbbang.AOP.annotation.BakeryIdApiLog) " )
+    private void defaultRequest() {}
+
+    @Around("@annotation(reviewIdApiLog) && args(reviewId,..)")
+    public Object doReviewIdLogging(
+            ProceedingJoinPoint joinPoint,
+            ReviewIdApiLog reviewIdApiLog,
+            Long reviewId
+    ) throws Throwable {
         final RequestApiInfo apiInfo = new RequestApiInfo(joinPoint, joinPoint.getTarget().getClass(), objectMapper);
 
-        // TODO: LogInfo 클래스 코드가 정확히 어떻게 될지??
-        final LogInfo logInfo = new LogInfo(
+        final ReviewIdLogInfo reviewIdLogInfo = new ReviewIdLogInfo(
                 apiInfo.getUrl(),
                 apiInfo.getName(),
                 apiInfo.getMethod(),
                 apiInfo.getHeader().toString(),
                 objectMapper.writeValueAsString(apiInfo.getParameters()),
                 objectMapper.writeValueAsString(apiInfo.getBody()),
+                apiInfo.getIpAddress(),
+                reviewId
+//                apiInfo.getMemberId()
+        );
+
+        System.out.println("리뷰 id 로깅");
+        return doLogging(joinPoint, reviewIdLogInfo);
+    }
+
+    @Around("@annotation(bakeryIdLog) && args(bakeryId,..)")
+    public Object doBakeryIdLogging(
+            ProceedingJoinPoint joinPoint,
+            BakeryIdApiLog bakeryIdLog,
+            Long bakeryId
+    ) throws Throwable {
+        final RequestApiInfo apiInfo = new RequestApiInfo(joinPoint, joinPoint.getTarget().getClass(), objectMapper);
+
+        final BakeryIdLogInfo logInfo = new BakeryIdLogInfo(
+                apiInfo.getUrl(),
+                apiInfo.getName(),
+                apiInfo.getMethod(),
+                apiInfo.getHeader().toString(),
+                apiInfo.getParameters(),
+                apiInfo.getBody(),
+                apiInfo.getIpAddress(),
+                bakeryId
+//                apiInfo.getMemberId()
+        );
+
+        System.out.println("베이커리 id 로깅");
+        return doLogging(joinPoint, logInfo);
+    }
+
+    @Around("defaultRequest() && args(reviewId,..)")
+    public Object doDefaultLogging(ProceedingJoinPoint joinPoint, Long reviewId) throws Throwable {
+        final RequestApiInfo apiInfo = new RequestApiInfo(joinPoint, joinPoint.getTarget().getClass(), objectMapper);
+
+        final LogInfo logInfo = new LogInfo(
+                apiInfo.getUrl(),
+                apiInfo.getName(),
+                apiInfo.getMethod(),
+                apiInfo.getHeader().toString(),
+                apiInfo.getParameters(),
+                apiInfo.getBody(),
                 apiInfo.getIpAddress()
 //                apiInfo.getMemberId()
         );
 
+        System.out.println("기본 로깅");
+        return doLogging(joinPoint, logInfo);
+    }
+
+    @Around("@annotation(signupApiLog)")
+    public Object doSignupLogging(ProceedingJoinPoint joinPoint, SignupApiLog signupApiLog) throws Throwable {
+
+        final SignupApiInfo apiInfo = new SignupApiInfo(joinPoint, joinPoint.getTarget().getClass(), objectMapper);
+
+        final SignupLogInfo signupLogInfo = new SignupLogInfo(
+                apiInfo.getUrl(),
+                apiInfo.getName(),
+                apiInfo.getMethod(),
+                apiInfo.getHeader().toString(),
+                apiInfo.getParameters(),
+                apiInfo.getBody(),
+                apiInfo.getIpAddress(),
+                apiInfo.getIsGlutenFree(),
+                apiInfo.getIsVegan(),
+                apiInfo.getIsNutFree(),
+                apiInfo.getIsSugarFree(),
+                apiInfo.getIsNutrientOpen(),
+                apiInfo.getIsIngredientOpen(),
+                apiInfo.getIsNotOpen()
+//                apiInfo.getMemberId()
+
+        );
+
+        System.out.println("회원가입 로깅");
+        return doLogging(joinPoint, signupLogInfo);
+    }
+
+    @Around("@annotation(searchApiLog)")
+    public Object doSearchLogging(ProceedingJoinPoint joinPoint, SearchApiLog searchApiLog) throws Throwable {
+
+        final SearchApiInfo apiInfo = new SearchApiInfo(joinPoint, joinPoint.getTarget().getClass(), objectMapper);
+
+        final SearchLogInfo searchLogInfo = new SearchLogInfo(
+                apiInfo.getUrl(),
+                apiInfo.getName(),
+                apiInfo.getMethod(),
+                apiInfo.getHeader().toString(),
+                apiInfo.getParameters(),
+                apiInfo.getBody(),
+                apiInfo.getIpAddress(),
+                apiInfo.getSearchKeyword()
+//                apiInfo.getMemberId()
+        );
+
+        System.out.println("서치 로깅");
+        return doLogging(joinPoint, searchLogInfo);
+
+    }
+
+    private Object doLogging(ProceedingJoinPoint joinPoint, LogInfo logInfo) throws Throwable {
         try {
-            // TODO: 이거 이해
+
             final Object result = joinPoint.proceed(joinPoint.getArgs());
-
-            // GET 메서드가 아닌 로그만 수집
-//            if(!logInfo.getMethod().equals("GET")) {
-//                final String logMessage = objectMapper.writeValueAsString(Map.entry("logInfo", logInfo));
-//                logger.info(logMessage);
-//            }
-
             final String logMessage = objectMapper.writeValueAsString(Map.entry("logInfo", logInfo));
-            logger.info(logMessage); // TODO: 여기 두 번 찍힘 왜???
+            logger.info(logMessage);
 
             return result;
 
@@ -65,8 +172,14 @@ public class LoggingAspect {
             e.printStackTrace(new PrintWriter(sw));
             final String exceptionAsString = sw.toString();
 
-            // 발생 Exception 설정
-            logInfo.setException(exceptionAsString);
+            String[] lines = exceptionAsString.split(System.lineSeparator());
+            StringBuilder truncatedStackTrace = new StringBuilder();
+            int limit = Math.min(5, lines.length);
+            for (int i = 0; i < limit; i++) {
+                truncatedStackTrace.append(lines[i]).append(System.lineSeparator());
+            }
+
+            logInfo.setException(truncatedStackTrace.toString());
             final String logMessage = objectMapper.writeValueAsString(logInfo);
             logger.error(logMessage);
 

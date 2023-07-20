@@ -15,4 +15,13 @@ public class MemberTypesRequestDTO {
     private BreadTypeRequestDTO breadType;
     @NotNull
     private NutrientTypeRequestDTO nutrientType;
+
+    @Override
+    public String toString() {
+        return "MemberTypesRequestDTO{" +
+                "mainPurpose=" + mainPurpose +
+                ", breadType=" + breadType +
+                ", nutrientType=" + nutrientType +
+                '}';
+    }
 }

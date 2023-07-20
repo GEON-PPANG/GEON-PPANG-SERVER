@@ -1,5 +1,6 @@
 package com.org.gunbbang.controller;
 
+import com.org.gunbbang.AOP.annotation.BakeryIdApiLog;
 import com.org.gunbbang.common.dto.ApiResponse;
 import com.org.gunbbang.controller.DTO.request.BookMarkRequestDTO;
 import com.org.gunbbang.controller.DTO.response.BookMarkResponseDTO;
@@ -13,15 +14,16 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("")
+@RequestMapping("/bookMarks")
 public class BookMarkController {
 
     private final BookMarkService bookMarkService;
 
-    @PostMapping("/bookMarks/{bakeryId}")
+    @PostMapping("/{bakeryId}")
+    @BakeryIdApiLog
     public ApiResponse<BookMarkResponseDTO> doBookMark(
-            @RequestBody @Valid final BookMarkRequestDTO request,
-            @PathVariable("bakeryId") Long bakeryId
+            @PathVariable("bakeryId") Long bakeryId,
+            @RequestBody @Valid final BookMarkRequestDTO request
     ) {
         Long memberId = SecurityUtil.getLoginMemberId();
         BookMarkResponseDTO response = bookMarkService.doBookMark(request.getIsAddingBookMark(), bakeryId, memberId);

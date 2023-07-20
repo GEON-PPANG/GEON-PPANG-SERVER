@@ -16,4 +16,14 @@ public class BreadTypeRequestDTO {
     private Boolean isNutFree;
     @NotNull
     private Boolean isSugarFree;
+
+    @Override
+    public String toString() {
+        return "BreadTypeRequestDTO{" +
+                "isGlutenFree=" + isGlutenFree +
+                ", isVegan=" + isVegan +
+                ", isNutFree=" + isNutFree +
+                ", isSugarFree=" + isSugarFree +
+                '}';
+    }
 }

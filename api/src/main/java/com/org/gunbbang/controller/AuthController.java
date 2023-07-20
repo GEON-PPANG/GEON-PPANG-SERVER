@@ -1,5 +1,6 @@
 package com.org.gunbbang.controller;
 
+import com.org.gunbbang.AOP.annotation.SignupApiLog;
 import com.org.gunbbang.common.dto.ApiResponse;
 import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import com.org.gunbbang.controller.DTO.response.MemberSignUpResponseDTO;
@@ -18,7 +19,8 @@ public class AuthController {
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    public ApiResponse<MemberSignUpResponseDTO> signUp(@RequestBody final MemberSignUpRequestDTO memberSignUpRequestDTO) throws Exception {
-        return ApiResponse.success(SuccessType.SIGNUP_SUCCESS, memberService.signUp(memberSignUpRequestDTO));
+    @SignupApiLog
+    public ApiResponse<MemberSignUpResponseDTO> signUp(@RequestBody final MemberSignUpRequestDTO request) throws Exception {
+        return ApiResponse.success(SuccessType.SIGNUP_SUCCESS, memberService.signUp(request));
     }
 }

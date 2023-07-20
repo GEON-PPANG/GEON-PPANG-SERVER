@@ -14,4 +14,13 @@ public class ReviewRequestDTO {
     private List<RecommendKeywordNameRequestDTO> keywordList;
     @NotNull
     private String reviewText;
+
+    @Override
+    public String toString() {
+        return "ReviewRequestDTO{" +
+                "isLike=" + isLike +
+                ", keywordList=" + keywordList +
+                ", reviewText='" + reviewText + '\'' +
+                '}';
+    }
 }

@@ -27,4 +27,16 @@ public class MemberSignUpRequestDTO {
     @NotNull
     private NutrientTypeRequestDTO nutrientType;
 
+    @Override
+    public String toString() {
+        return "MemberSignUpRequestDTO{" +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", mainPurpose='" + mainPurpose + '\'' +
+                ", platformType=" + platformType +
+                ", breadType=" + breadType +
+                ", nutrientType=" + nutrientType +
+                '}';
+    }
 }

@@ -10,4 +10,11 @@ import javax.validation.constraints.NotNull;
 public class ValidateNicknameRequestDTO {
     @NotNull
     private String nickname;
+
+    @Override
+    public String toString() {
+        return "ValidateNicknameRequestDTO{" +
+                "nickname='" + nickname + '\'' +
+                '}';
+    }
 }

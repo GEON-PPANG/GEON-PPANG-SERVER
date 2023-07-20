@@ -1,8 +1,6 @@
-package com.org.gunbbang.AOP;
+package com.org.gunbbang.AOP.logInfo;
 
 import lombok.Getter;
-
-import java.util.Map;
 
 @Getter
 public class LogInfo {
@@ -14,9 +12,11 @@ public class LogInfo {
     private String body;
     private String ipAddress;
 //    private Long memberId;
-    private String exception;
+    private String exception = null;
 
-    public LogInfo(String url, String name, String method, String header, String parameters, String body, String ipAddress) {
+    public LogInfo(
+            String url, String name, String method, String header, String parameters, String body, String ipAddress
+    ) {
         this.url = url;
         this.name = name;
         this.method = method;
@@ -24,11 +24,10 @@ public class LogInfo {
         this.parameters = parameters;
         this.body = body;
         this.ipAddress = ipAddress;
-//        this.memberId = memberId;
     }
 
-//    public LogInfo(String url, String name, String method, Map<String, String> header, String parameters, String body, String ipAddress, Long memberId) {
-//    }
+    public LogInfo() {
+    }
 
     public void setException(String exception) {
         this.exception = exception;
