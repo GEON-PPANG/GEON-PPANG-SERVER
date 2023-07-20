@@ -172,6 +172,9 @@ public class ReviewService {
     }
 
     public List<BestReviewListResponseDTO> getBestReviews(Long memberId) {
+        List<Long> alreadyFoundReviews = new ArrayList<>();
+        alreadyFoundReviews.add(Long.MAX_VALUE);
+
         PageRequest bestPageRequest = PageRequest.of(0, maxBestBakeryCount);
         Member foundMember = memberRepository
                 .findById(memberId)
@@ -186,7 +189,7 @@ public class ReviewService {
             return getBestReviewsListResponseDTO(memberId, bestReviews);
         }
 
-        List<Long> alreadyFoundReviews = bestReviews.stream().map(BestReviewDTO::getReviewId).collect(Collectors.toList());
+        alreadyFoundReviews = bestReviews.stream().map(BestReviewDTO::getReviewId).collect(Collectors.toList());
         PageRequest restPageRequest = PageRequest.of(0, maxBestBakeryCount - alreadyFoundReviews.size());
 
         bestReviews.addAll(
