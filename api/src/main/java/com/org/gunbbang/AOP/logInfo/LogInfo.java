@@ -13,6 +13,7 @@ public class LogInfo {
     private String ipAddress;
 //    private Long memberId;
     private String exception = null;
+    private String exceptionSimpleName = null;
 
     public LogInfo(
             String url, String name, String method, String header, String parameters, String body, String ipAddress
@@ -31,5 +32,9 @@ public class LogInfo {
 
     public void setException(String exception) {
         this.exception = exception;
+    }
+
+    public void setExceptionSimpleName(String exceptionSimpleName) {
+        this.exceptionSimpleName = exceptionSimpleName;
     }
 }
