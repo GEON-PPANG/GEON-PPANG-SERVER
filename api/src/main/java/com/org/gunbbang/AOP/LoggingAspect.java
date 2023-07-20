@@ -89,8 +89,8 @@ public class LoggingAspect {
         return doLogging(joinPoint, logInfo);
     }
 
-    @Around("defaultRequest() && args(reviewId,..)")
-    public Object doDefaultLogging(ProceedingJoinPoint joinPoint, Long reviewId) throws Throwable {
+    @Around("defaultRequest()")
+    public Object doDefaultLogging(ProceedingJoinPoint joinPoint) throws Throwable {
         final RequestApiInfo apiInfo = new RequestApiInfo(joinPoint, joinPoint.getTarget().getClass(), objectMapper);
 
         final LogInfo logInfo = new LogInfo(
