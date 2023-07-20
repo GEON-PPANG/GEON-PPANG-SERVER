@@ -107,6 +107,7 @@ public class BakeryService {
         Long memberId = SecurityUtil.getLoginMemberId();
         List<Long> alreadyFoundBakeryIds = new ArrayList<>();
         alreadyFoundBakeryIds.add(Long.MAX_VALUE);
+        System.out.println("alreadyFoundBakeryIds 값 확인: " + alreadyFoundBakeryIds);
 
         Member foundMember = memberRepository
                 .findById(memberId)
@@ -124,9 +125,11 @@ public class BakeryService {
             return getResponseBakeries(foundMember, bestBakeries);
         }
 
-        System.out.println("alreadyFoundBakeryIds 엠티 여부: " + alreadyFoundBakeryIds);
+        System.out.println("alreadyFoundBakeryIds 값 확인: " + alreadyFoundBakeryIds);
+        System.out.println("alreadyFoundBakeryIds 엠티 여부: " + alreadyFoundBakeryIds.isEmpty());
 
-        alreadyFoundBakeryIds = bestBakeries.stream().map(Bakery::getBakeryId).collect(Collectors.toList());
+        alreadyFoundBakeryIds.addAll(
+                bestBakeries.stream().map(Bakery::getBakeryId).collect(Collectors.toList()));
 
         log.info("빵유형 일치 베이커리 조회 시작");
         bestPageRequest = PageRequest.of(0, maxBestBakeryCount - bestBakeries.size());
