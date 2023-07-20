@@ -127,7 +127,8 @@ public class LoggingAspect {
                 apiInfo.getIsSugarFree(),
                 apiInfo.getIsNutrientOpen(),
                 apiInfo.getIsIngredientOpen(),
-                apiInfo.getIsNotOpen()
+                apiInfo.getIsNotOpen(),
+                apiInfo.getMainPurpose()
 //                apiInfo.getMemberId()
 
         );

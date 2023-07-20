@@ -13,10 +13,12 @@ public class SignupLogInfo extends LogInfo {
     private Boolean isIngredientOpen;
     private Boolean isNotOpen;
 
+    private String mainPurpose;
+
     public SignupLogInfo (
             String url, String name, String method, String header, String parameters, String body, String ipAddress,
             Boolean isGlutenFree, Boolean isVegan, Boolean isNutFree, Boolean isSugarFree,
-            Boolean isNutrientOpen, Boolean isIngredientOpen, Boolean isNotOpen
+            Boolean isNutrientOpen, Boolean isIngredientOpen, Boolean isNotOpen, String mainPurpose
     ) {
         super(url, name, method, header, parameters, body, ipAddress);
         this.isGlutenFree = isGlutenFree;
@@ -26,5 +28,6 @@ public class SignupLogInfo extends LogInfo {
         this.isNutrientOpen = isNutrientOpen;
         this.isIngredientOpen = isIngredientOpen;
         this.isNotOpen = isNotOpen;
+        this.mainPurpose = mainPurpose;
     }
 }
