@@ -15,4 +15,12 @@ public class NutrientTypeRequestDTO {
     @NotNull
     private Boolean isNotOpen;
 
+    @Override
+    public String toString() {
+        return "NutrientTypeRequestDTO{" +
+                "isNutrientOpen=" + isNutrientOpen +
+                ", isIngredientOpen=" + isIngredientOpen +
+                ", isNotOpen=" + isNotOpen +
+                '}';
+    }
 }

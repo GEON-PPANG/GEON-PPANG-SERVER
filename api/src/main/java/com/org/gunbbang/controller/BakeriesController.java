@@ -1,5 +1,6 @@
 package com.org.gunbbang.controller;
 
+import com.org.gunbbang.AOP.annotation.BakeryIdApiLog;
 import com.org.gunbbang.common.dto.ApiResponse;
 import com.org.gunbbang.controller.DTO.response.BakeryDetailResponseDTO;
 import com.org.gunbbang.controller.DTO.response.BakeryListResponseDTO;
@@ -35,6 +36,7 @@ public class BakeriesController {
     }
     @GetMapping("/{bakeryId}")
     @ResponseStatus(HttpStatus.OK)
+    @BakeryIdApiLog
     public ApiResponse<BakeryDetailResponseDTO> getBakeryDetail(@PathVariable("bakeryId") Long bakeryId){
         Long memberId = SecurityUtil.getLoginMemberId();
         BakeryDetailResponseDTO bakeryDetailResponseDTO = bakeryService.getBakeryDetail(memberId, bakeryId);
@@ -43,6 +45,7 @@ public class BakeriesController {
 
     @GetMapping("/{bakeryId}/reviews")
     @ResponseStatus(HttpStatus.OK)
+    @BakeryIdApiLog
     public ApiResponse<ReviewListResponseDTO> getBakeryReviewList(@PathVariable("bakeryId") Long bakeryId) {
         ReviewListResponseDTO reviewListResponseDto= reviewService.getBakeryReviewList(bakeryId);
         return ApiResponse.success(SuccessType.GET_BAKERY_REVIEW_LIST_SUCCESS, reviewListResponseDto);

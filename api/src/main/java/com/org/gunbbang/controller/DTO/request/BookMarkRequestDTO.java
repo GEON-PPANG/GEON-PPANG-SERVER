@@ -14,4 +14,11 @@ public class BookMarkRequestDTO {
     public boolean getIsAddingBookMark() {
         return isAddingBookMark;
     }
+
+    @Override
+    public String toString() {
+        return "BookMarkRequestDTO{" +
+                "isAddingBookMark=" + isAddingBookMark +
+                '}';
+    }
 }

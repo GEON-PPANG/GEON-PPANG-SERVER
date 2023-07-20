@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import com.org.gunbbang.util.Security.SecurityUtil;
 
 import javax.validation.Valid;
@@ -32,11 +31,6 @@ public class MemberController {
     public ApiResponse<MemberDetailResponseDTO> getMemberDetail() {
         MemberDetailResponseDTO memberDetailResponseDto = memberService.getMemberDetail();
         return ApiResponse.success(SuccessType.GET_MYPAGE_SUCCESS, memberDetailResponseDto);
-    }
-
-    @GetMapping("/security-test")
-    public Long securityTest() {
-        return SecurityUtil.getLoginMemberId();
     }
 
     @PostMapping("/types")

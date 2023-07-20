@@ -10,4 +10,11 @@ import javax.validation.constraints.NotNull;
 public class ValidateEmailRequestDTO {
     @NotNull
     private String email;
+
+    @Override
+    public String toString() {
+        return "ValidateEmailRequestDTO{" +
+                "email='" + email + '\'' +
+                '}';
+    }
 }

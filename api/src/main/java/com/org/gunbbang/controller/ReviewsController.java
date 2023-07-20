@@ -1,5 +1,6 @@
 package com.org.gunbbang.controller;
 
+import com.org.gunbbang.AOP.annotation.BakeryIdApiLog;
 import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.common.dto.ApiResponse;
 import com.org.gunbbang.controller.DTO.request.ReviewRequestDTO;
@@ -24,7 +25,8 @@ public class ReviewsController {
 
     @PostMapping(value = "/{bakeryId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<ReviewCreateResponseDTO> createReview(@PathVariable("bakeryId")final Long bakeryId, @RequestBody @Valid final ReviewRequestDTO request) {
+    @BakeryIdApiLog
+    public ApiResponse<ReviewCreateResponseDTO> createReview(@PathVariable("bakeryId") final Long bakeryId, @RequestBody @Valid final ReviewRequestDTO request) {
         Long reviewId = reviewService.createReview(bakeryId, request);
         if (request.getIsLike()) {
             if(request.getKeywordList().isEmpty()){

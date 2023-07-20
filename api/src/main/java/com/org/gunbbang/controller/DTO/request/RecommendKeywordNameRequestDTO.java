@@ -11,4 +11,11 @@ import javax.validation.constraints.NotNull;
 public class RecommendKeywordNameRequestDTO {
     @NotNull
     RecommendKeyword keywordName;
+
+    @Override
+    public String toString() {
+        return "RecommendKeywordNameRequestDTO{" +
+                "keywordName='" + keywordName + '\'' +
+                '}';
+    }
 }
