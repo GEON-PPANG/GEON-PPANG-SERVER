@@ -6,8 +6,7 @@ import com.org.gunbbang.jwt.service.JwtService;
 import com.org.gunbbang.login.filter.CustomJsonUsernamePasswordAuthenticationFilter;
 import com.org.gunbbang.login.handler.LoginFailureHandler;
 import com.org.gunbbang.login.handler.LoginSuccessHandler;
-import com.org.gunbbang.login.service.CustomLoginService;
-import com.org.gunbbang.login.service.LoginService;
+import com.org.gunbbang.login.service.CustomUserDetailsService;
 import com.org.gunbbang.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -33,7 +32,7 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final CustomLoginService customLoginService;
+    private final CustomUserDetailsService customUserDetailsService;
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper;
@@ -83,8 +82,8 @@ public class SecurityConfig {
 
     /**
      * AuthenticationManager 설정 후 등록
-     * PasswordEncoder를 사용하는 AuthenticationProvider 지정 (PasswordEncoder는 위에서 등록한 PasswordEncoder 사용)
-     * FormLogin(기존 스프링 시큐리티 로그인)과 동일하게 DaoAuthenticationProvider 사용
+     * PasswordEncoder를 사용하는 AuthenticationProvider 지정
+     * FormLogin(기존 스프링 시큐리티 로그인)과 동일하게 DaoAuthenticationProvider 사용, 유저네임과 비밀번호를 기반으로 사용
      * UserDetailsService는 커스텀 LoginService로 등록
      * 또한, FormLogin과 동일하게 AuthenticationManager로는 구현체인 ProviderManager 사용(return ProviderManager)
      *
@@ -93,7 +92,7 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
-        provider.setUserDetailsService(customLoginService);
+        provider.setUserDetailsService(customUserDetailsService);
         return new ProviderManager(provider);
     }
 
