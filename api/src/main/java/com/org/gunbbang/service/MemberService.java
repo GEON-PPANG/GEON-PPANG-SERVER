@@ -91,7 +91,7 @@ public class MemberService {
                 .mainPurpose(MainPurpose.valueOf(memberSignUpRequestDTO.getMainPurpose()))
                 .build();
 
-        member.passwordEncode(passwordEncoder);
+        member.passwordEncode(passwordEncoder); // security에서 제공하는 PasswordEncoder로 유저의 비밀번호 인코딩해서 저장
         memberRepository.saveAndFlush(member);
 
         return MemberSignUpResponseDTO.builder()
