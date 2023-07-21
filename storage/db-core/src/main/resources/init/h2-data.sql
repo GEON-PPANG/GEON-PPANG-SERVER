@@ -159,6 +159,9 @@ INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, ba
 -- bakery_category
 INSERT INTO bakery_category (bakery_id,category_id) values (1,2);
 INSERT INTO bakery_category (bakery_id,category_id) values (2,2);
+INSERT INTO bakery_category (bakery_id,category_id) values (1,3);
+INSERT INTO bakery_category (bakery_id,category_id) values (1,1);
+
 
 -- menu
 INSERT INTO menu (menu_name,menu_price,bakery_id) values ('소금빵',3000,1);
