@@ -3,7 +3,9 @@ package com.org.gunbbang.repository;
 import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.entity.Bakery;
 import com.org.gunbbang.entity.BreadType;
+import com.org.gunbbang.entity.Category;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -59,4 +61,18 @@ public interface BakeryRepository extends JpaRepository<Bakery, Long> {
     @Query(value = "SELECT b FROM Bakery b " +
             "ORDER BY RAND() ")
     List<Bakery> findBakeriesRandomly(PageRequest pageRequest);
+
+    @Query(value = "SELECT DISTINCT b FROM Bakery b " +
+            "INNER JOIN BakeryCategory bc ON b.bakeryId = bc.bakery.bakeryId " +
+            "INNER JOIN Category c ON bc.category.categoryId = c.categoryId " +
+            "WHERE c IN :categoryList " +
+            "ORDER BY b.reviewCount DESC")
+    List<Bakery> findBakeriesByCategoryAndReview(List<Category> categoryList);
+
+    @Query(value = "SELECT DISTINCT b FROM Bakery b " +
+            "INNER JOIN BakeryCategory bc ON b.bakeryId = bc.bakery.bakeryId " +
+            "INNER JOIN Category c ON bc.category.categoryId = c.categoryId " +
+            "WHERE c IN :categoryList " +
+            "ORDER BY b.bakeryId DESC")
+    List<Bakery> findBakeriesByCategory(List<Category> categoryList);
 }

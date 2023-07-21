@@ -40,12 +40,11 @@ public class BakeryService {
         List<BakeryListResponseDTO> responseDtoList = new ArrayList<>();
         BreadTypeResponseDTO breadType;
         Boolean isBookMarked;
-        List<BakeryCategory> bakeryCategoryList;
-        Sort sortOption;
+        List<Bakery> bakeryList;
 
         if (categoryList.isEmpty()) {
-            sortOption = sort.equals("review") ? Sort.by(Sort.Direction.DESC, "reviewCount") : Sort.by(Sort.Direction.DESC, "bakeryId");
-            List<Bakery> bakeryList = bakeryRepository.findAll(sortOption);
+            Sort sortOption = sort.equals("review") ? Sort.by(Sort.Direction.DESC, "reviewCount") : Sort.by(Sort.Direction.DESC, "bakeryId");
+            bakeryList = bakeryRepository.findAll(sortOption);
             for (Bakery bakery : bakeryList) {
                 breadType = getBreadType(bakery);
                 isBookMarked = isBookMarked(memberId, bakery.getBakeryId());
@@ -55,12 +54,22 @@ public class BakeryService {
             return responseDtoList;
         }
 
-        sortOption = sort.equals("review") ? Sort.by(Sort.Direction.DESC, "bakery.reviewCount") : Sort.by(Sort.Direction.DESC, "bakery.bakeryId");
-        bakeryCategoryList = bakeryCategoryRepository.findDistinctByCategoryIn(categoryList, sortOption);
-        for (BakeryCategory bakeryCategory : bakeryCategoryList) {
-            breadType = getBreadType(bakeryCategory.getBakery());
-            isBookMarked = isBookMarked(memberId, bakeryCategory.getBakery().getBakeryId());
-            BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(bakeryCategory.getBakery(), isBookMarked, breadType);
+        if(sort.equals("review")){
+            bakeryList = bakeryRepository.findBakeriesByCategoryAndReview(categoryList);
+            for (Bakery bakery : bakeryList) {
+                breadType = getBreadType(bakery);
+                isBookMarked = isBookMarked(memberId, bakery.getBakeryId());
+                BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(bakery, isBookMarked, breadType);
+                responseDtoList.add(bakeryListResponseDto);
+            }
+            return responseDtoList;
+        }
+
+        bakeryList = bakeryRepository.findBakeriesByCategory(categoryList);
+        for (Bakery bakery : bakeryList) {
+            breadType = getBreadType(bakery);
+            isBookMarked = isBookMarked(memberId, bakery.getBakeryId());
+            BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(bakery, isBookMarked, breadType);
             responseDtoList.add(bakeryListResponseDto);
         }
         return responseDtoList;
