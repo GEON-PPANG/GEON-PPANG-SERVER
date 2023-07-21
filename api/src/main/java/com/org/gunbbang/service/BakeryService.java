@@ -140,7 +140,7 @@ public class BakeryService {
         alreadyFoundBakeryIds.addAll(
                 bestBakeries.stream().map(Bakery::getBakeryId).collect(Collectors.toList()));
 
-        log.info("빵유형 일치 베이커리 조회 시작");
+        log.info("빵유형 일치 베이커리 조회 시작. 현재까지 조회된 베이커리 수: " + bestBakeries.size());
         bestPageRequest = PageRequest.of(0, maxBestBakeryCount - bestBakeries.size());
         bestBakeries.addAll(bakeryRepository.findRestBakeriesByBreadTypeId(
                         foundMember.getBreadType(),
@@ -157,7 +157,7 @@ public class BakeryService {
         );
 
         bestPageRequest = PageRequest.of(0, maxBestBakeryCount - bestBakeries.size());
-        log.info("찐 나머지만 고르는 베이커리");
+        log.info("찐 나머지만 고르는 베이커리. 현재까지 조회된 베이커리 수: " + bestBakeries.size());
         bestBakeries.addAll(bakeryRepository.findRestBakeriesRandomly(
                 alreadyFoundBakeryIds,
                 bestPageRequest));

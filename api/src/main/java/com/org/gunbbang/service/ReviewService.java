@@ -174,6 +174,7 @@ public class ReviewService {
     public List<BestReviewListResponseDTO> getBestReviews(Long memberId) {
         List<Long> alreadyFoundReviews = new ArrayList<>();
         alreadyFoundReviews.add(Long.MAX_VALUE);
+        System.out.println("alreadyFoundReviewsIds 값 확인: " + alreadyFoundReviews);
 
         PageRequest bestPageRequest = PageRequest.of(0, maxBestBakeryCount);
         Member foundMember = memberRepository
@@ -186,12 +187,14 @@ public class ReviewService {
                 bestPageRequest);
 
         if (bestReviews.size() == maxBestBakeryCount){
+            log.info("베스트 리뷰 10개 조회 완료. 추가 조회 쿼리 없이 바로 반환");
             return getBestReviewsListResponseDTO(memberId, bestReviews);
         }
 
+        log.info("랜덤 리뷰 조회 시작. 현재까지 조회된 리뷰 수: " + bestReviews.size());
         alreadyFoundReviews.addAll(
                 bestReviews.stream().map(BestReviewDTO::getReviewId).collect(Collectors.toList()));
-        PageRequest restPageRequest = PageRequest.of(0, maxBestBakeryCount - alreadyFoundReviews.size());
+        PageRequest restPageRequest = PageRequest.of(0, maxBestBakeryCount - bestReviews.size());
 
         bestReviews.addAll(
                 reviewRepository.findRestBestReviewDTOListByBreadType(alreadyFoundReviews, restPageRequest)
