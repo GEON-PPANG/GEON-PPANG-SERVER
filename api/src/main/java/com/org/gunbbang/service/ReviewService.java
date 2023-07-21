@@ -189,7 +189,8 @@ public class ReviewService {
             return getBestReviewsListResponseDTO(memberId, bestReviews);
         }
 
-        alreadyFoundReviews = bestReviews.stream().map(BestReviewDTO::getReviewId).collect(Collectors.toList());
+        alreadyFoundReviews.addAll(
+                bestReviews.stream().map(BestReviewDTO::getReviewId).collect(Collectors.toList()));
         PageRequest restPageRequest = PageRequest.of(0, maxBestBakeryCount - alreadyFoundReviews.size());
 
         bestReviews.addAll(
