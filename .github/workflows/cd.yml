@@ -60,7 +60,7 @@ jobs:
         pwd
         
         # GitHub-Actions 에서 설정한 값을 application.yml 파일에 쓰기
-        echo "${{ secrets.GUNBBANG_SECRET }}" >> ./api/src/main/resources/application.yml
+        echo "${{ secrets.GUNBBANG_SECRET_API_APPLICATION_YML }}" >> ./api/src/main/resources/application.yml
         echo "${{ secrets.GUNBBANG_SECRET_DB_CORE_APPLICATION_YML }}" >> ./storage/db-core/src/main/resources/application.yml
         echo "${{ secrets.GUNBBANG_SECRET_DB_CORE }}" >> ./storage/db-core/src/main/resources/db-core.yml
         echo "${{ secrets.GUNBBANG_SECRET_CLIENT }}" >> ./client/src/main/resources/client.yml
@@ -104,8 +104,8 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.GUNBBANG_ACCESS_KEY }}
-        aws-secret-access-key: ${{ secrets.GUNBBANG_SECRET_KEY }}
+        aws-access-key-id: ${{ secrets.GUNBBANG_AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.GUNBBANG_AWS_SECRET_KEY }}
         aws-region: ap-northeast-2
         
     - name: Upload to S3
@@ -114,8 +114,8 @@ jobs:
     # Deploy
     - name: Deploy
       env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.GUNBBANG_ACCESS_KEY }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.GUNBBANG_SECRET_KEY }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.GUNBBANG_AWS_ACCESS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.GUNBBANG_AWS_SECRET_KEY }}
       run:
         aws deploy create-deployment 
         --application-name gunbbang-server-codedeploy
