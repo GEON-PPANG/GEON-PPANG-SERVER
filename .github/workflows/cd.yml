@@ -118,8 +118,8 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.GUNBBANG_AWS_SECRET_KEY }}
       run:
         aws deploy create-deployment 
-        --application-name gunbbang-server-codedeploy
+        --application-name gunbbang-server-codedeploy 
         --deployment-group-name gunbbang-server-codedeploy-group
         --file-exists-behavior OVERWRITE 
-        --s3-location bucket=gunbbang-bucket,bundleType=zip,key=gunbbang_server.zip
+        --s3-location bucket=gunbbang-release-bucket,bundleType=zip,key=gunbbang_server.zip
         --region ap-northeast-2
