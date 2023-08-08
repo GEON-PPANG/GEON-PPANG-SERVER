@@ -3,6 +3,7 @@ package com.org.gunbbang.service;
 import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.CategoryType;
 import com.org.gunbbang.controller.DTO.response.*;
+import com.org.gunbbang.controller.DTO.response.BaseDTO.BaseBakeryResponseDTOV2;
 import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
@@ -199,11 +200,37 @@ public class BakeryService {
         for (Bakery foundBakery : foundBakeries) {
             Boolean isBookMarked = isBookMarked(memberId, foundBakery.getBakeryId());
             BreadTypeResponseDTO breadType = getBreadType(foundBakery);
-            BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(foundBakery, isBookMarked, breadType);
-            bakeryListResponseDTOs.add(bakeryListResponseDto);
+            BakeryListResponseDTO bakeryListResponseDTO = getBakeryResponseDTO(foundBakery, isBookMarked, breadType);
+            bakeryListResponseDTOs.add(bakeryListResponseDTO);
         }
 
         return BakerySearchResponseDTO.builder()
+                .resultCount(foundBakeries.size())
+                .bakeryList(bakeryListResponseDTOs)
+                .build();
+    }
+
+    /**
+     * TODO: 고민해볼거리
+     * 1. 상속을 쓰는게 맞을지? 컴포지션은?
+     * 2. Bakery라는 엔티티 객체 자체를 쌩으로 바로 넘기는게 맞을지? 매퍼를 사용할 생각은?
+     * 3. 서비스단에서 DTO를 알고 있어도 괜찮을지?
+     */
+    public BakerySearchResponseDTOV2 getBakeriesByNameV2(String bakeryName, Long memberId) {
+        if (bakeryName.isEmpty()) {
+            return BakerySearchResponseDTOV2.getEmptyBakerySearchResponseDTO();
+        }
+
+        List<Bakery> foundBakeries = bakeryRepository.findBakeryByBakeryName(bakeryName);
+        List<BakeryListResponseDTOV2> bakeryListResponseDTOs = new ArrayList<>();
+        for (Bakery foundBakery : foundBakeries) {
+            Boolean isBookMarked = isBookMarked(memberId, foundBakery.getBakeryId());
+            BreadTypeResponseDTO breadType = getBreadType(foundBakery);
+            BakeryListResponseDTOV2 bakeryListResponseDTOV2 = getBakeryResponseDTOV2(foundBakery, isBookMarked, breadType);
+            bakeryListResponseDTOs.add(bakeryListResponseDTOV2);
+        }
+
+        return BakerySearchResponseDTOV2.builder()
                 .resultCount(foundBakeries.size())
                 .bakeryList(bakeryListResponseDTOs)
                 .build();
@@ -252,6 +279,26 @@ public class BakeryService {
                 .bookMarkCount(bakery.getBookMarkCount())
                 .reviewCount(bakery.getReviewCount())
                 .breadType(breadType)
+                .build();
+    }
+
+    private BakeryListResponseDTOV2 getBakeryResponseDTOV2(Bakery bakery, Boolean isBookMarked, BreadTypeResponseDTO breadType) {
+        BaseBakeryResponseDTOV2 baseBakeryResponseDTOV2 = BaseBakeryResponseDTOV2.builder()
+                .bakeryId(bakery.getBakeryId())
+                .bakeryName(bakery.getBakeryName())
+                .bakeryPicture(bakery.getBakeryPicture())
+                .isHACCP(bakery.getIsHACCP())
+                .isVegan(bakery.getIsVegan())
+                .isNonGMO(bakery.getIsNonGMO())
+                .firstNearStation(bakery.getFirstNearStation())
+                .secondNearStation(bakery.getSecondNearStation())
+                .build();
+
+        return BakeryListResponseDTOV2.builder()
+                .baseBakeryResponseDTOV2(baseBakeryResponseDTOV2)
+                .breadType(breadType)
+                .reviewCount(bakery.getReviewCount())
+                .isBookMarked(isBookMarked)
                 .build();
     }
 
