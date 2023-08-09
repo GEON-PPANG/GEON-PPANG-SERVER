@@ -1,6 +1,7 @@
 package com.org.gunbbang.controller.DTO.response;
 
 import com.org.gunbbang.controller.DTO.response.BaseDTO.BaseBakeryResponseDTO;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -8,33 +9,12 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @NoArgsConstructor
 @SuperBuilder
+@AllArgsConstructor
 public class BestReviewListResponseDTO extends BaseBakeryResponseDTO {
     private Long reviewCount;
     private String reviewText;
     private String firstMaxRecommendKeyword;
     private String secondMaxRecommendKeyword;
-
-    public BestReviewListResponseDTO(
-            Long bakeryId,
-            String bakeryName,
-            String bakeryPicture,
-            Boolean isHACCP,
-            Boolean isVegan,
-            Boolean isNonGMO,
-            String firstNearStation,
-            String secondNearStation,
-            Boolean isBookMarked,
-            Long bookMarkCount,
-            Long reviewCount,
-            String reviewText,
-            String firstMaxRecommendKeyword,
-            String secondMaxRecommendKeyword
-    ) {
-        super(bakeryId, bakeryName, bakeryPicture, isHACCP, isVegan,
-                isNonGMO, firstNearStation, secondNearStation, isBookMarked, bookMarkCount);
-        this.reviewCount = reviewCount;
-        this.reviewText = reviewText;
-        this.firstMaxRecommendKeyword = firstMaxRecommendKeyword;
-        this.secondMaxRecommendKeyword = secondMaxRecommendKeyword;
-    }
+    private Boolean isBookMarked;
+    private Long bookMarkCount;
 }
