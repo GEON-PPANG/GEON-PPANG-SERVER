@@ -18,21 +18,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/search")
 public class SearchController {
 
-    private final BakeryService bakeryService;
+  private final BakeryService bakeryService;
 
+  @GetMapping("/bakeries")
+  @SearchApiLog
+  public ApiResponse<BakerySearchResponseDTO> searchBakery(@RequestParam String bakeryName) {
+    Long memberId = SecurityUtil.getLoginMemberId();
+    return ApiResponse.success(
+        SuccessType.SEARCH_BAKERIES_SUCCESS,
+        bakeryService.getBakeriesByName(bakeryName.strip(), memberId));
+  }
 
-    @GetMapping("/bakeries")
-    @SearchApiLog
-    public ApiResponse<BakerySearchResponseDTO> searchBakery(@RequestParam("bakeryName") String bakeryName) {
-        Long memberId = SecurityUtil.getLoginMemberId();
-        return ApiResponse.success(SuccessType.SEARCH_BAKERIES_SUCCESS, bakeryService.getBakeriesByName(bakeryName.strip(), memberId));
-    }
-
-    @GetMapping("/v2/bakeries")
-    @SearchApiLog
-    public ApiResponse<BakerySearchResponseDTOV2> searchBakeryV2(@RequestParam("bakeryName") String bakeryName) {
-        Long memberId = SecurityUtil.getLoginMemberId();
-        return ApiResponse.success(SuccessType.SEARCH_BAKERIES_SUCCESS, bakeryService.getBakeriesByNameV2(bakeryName.strip(), memberId));
-    }
-
+  @GetMapping("/v2/bakeries")
+  @SearchApiLog
+  public ApiResponse<BakerySearchResponseDTOV2> searchBakeryV2(@RequestParam String bakeryName) {
+    Long memberId = SecurityUtil.getLoginMemberId();
+    return ApiResponse.success(
+        SuccessType.SEARCH_BAKERIES_SUCCESS,
+        bakeryService.getBakeriesByNameV2(bakeryName.strip(), memberId));
+  }
 }
