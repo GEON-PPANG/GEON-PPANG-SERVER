@@ -211,8 +211,17 @@ public class BakeryService {
     }
 
     List<Bakery> foundBakeries = bakeryRepository.findBakeryByBakeryName(bakeryName);
+    List<BakeryListResponseDTO> bakeryListResponseDTOs =
+        getBakeryListResponseDTOList(memberId, foundBakeries);
 
+    return BakeryMapper.INSTANCE.toBakerySearchResponseDTO(
+        bakeryListResponseDTOs.size(), bakeryListResponseDTOs);
+  }
+
+  private List<BakeryListResponseDTO> getBakeryListResponseDTOList(
+      Long memberId, List<Bakery> foundBakeries) {
     List<BakeryListResponseDTO> bakeryListResponseDTOs = new ArrayList<>();
+
     for (Bakery foundBakery : foundBakeries) {
       Boolean isBookMarked = isBookMarked(memberId, foundBakery.getBakeryId());
       BreadTypeResponseDTO breadType =
@@ -222,8 +231,7 @@ public class BakeryService {
       bakeryListResponseDTOs.add(bakeryListResponseDTO);
     }
 
-    return BakeryMapper.INSTANCE.toBakerySearchResponseDTO(
-        bakeryListResponseDTOs.size(), bakeryListResponseDTOs);
+    return bakeryListResponseDTOs;
   }
 
   public BakerySearchResponseDTOV2 getBakeriesByNameV2(String bakeryName, Long memberId) {
@@ -250,14 +258,7 @@ public class BakeryService {
 
   public List<BakeryListResponseDTO> getBookMarkedBakeries(Long memberId) {
     List<Bakery> bookMarkedBakeries = bakeryRepository.findBookMarkedBakeries(memberId);
-    List<BakeryListResponseDTO> bakeryListResponseDTOs = new ArrayList<>();
-    for (Bakery bookMarkedBakery : bookMarkedBakeries) {
-      BreadTypeResponseDTO breadType = getBreadType(bookMarkedBakery);
-      BakeryListResponseDTO bakeryListResponseDto =
-          getBakeryResponseDTO(bookMarkedBakery, true, breadType);
-      bakeryListResponseDTOs.add(bakeryListResponseDto);
-    }
-    return bakeryListResponseDTOs;
+    return getBakeryListResponseDTOList(memberId, bookMarkedBakeries);
   }
 
   // TODO: 공통적으로 사용되는 메서드라 다른 곳으로는 못뺄지
