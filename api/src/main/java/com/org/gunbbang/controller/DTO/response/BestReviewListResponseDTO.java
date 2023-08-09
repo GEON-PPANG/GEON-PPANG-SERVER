@@ -11,10 +11,10 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 public class BestReviewListResponseDTO extends BaseBakeryResponseDTO {
-    private Long reviewCount;
-    private String reviewText;
-    private String firstMaxRecommendKeyword;
-    private String secondMaxRecommendKeyword;
-    private Boolean isBookMarked;
-    private Long bookMarkCount;
+  private Long reviewCount;
+  private String reviewText;
+  private String firstMaxRecommendKeyword;
+  private String secondMaxRecommendKeyword;
+  private Boolean isBookMarked;
+  private Long bookMarkCount;
 }

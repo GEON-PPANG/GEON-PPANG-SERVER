@@ -8,12 +8,12 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 public class BaseBakeryResponseDTO {
-    private Long bakeryId;
-    private String bakeryName;
-    private String bakeryPicture;
-    private Boolean isHACCP;
-    private Boolean isVegan;
-    private Boolean isNonGMO;
-    private String firstNearStation;
-    private String secondNearStation;
+  private Long bakeryId;
+  private String bakeryName;
+  private String bakeryPicture;
+  private Boolean isHACCP;
+  private Boolean isVegan;
+  private Boolean isNonGMO;
+  private String firstNearStation;
+  private String secondNearStation;
 }

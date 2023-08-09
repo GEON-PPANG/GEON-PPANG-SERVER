@@ -1,21 +1,17 @@
 package com.org.gunbbang.controller.DTO.request;
 
 import com.org.gunbbang.RecommendKeyword;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor
 public class RecommendKeywordNameRequestDTO {
-    @NotNull
-    RecommendKeyword keywordName;
+  @NotNull RecommendKeyword keywordName;
 
-    @Override
-    public String toString() {
-        return "RecommendKeywordNameRequestDTO{" +
-                "keywordName='" + keywordName + '\'' +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "RecommendKeywordNameRequestDTO{" + "keywordName='" + keywordName + '\'' + '}';
+  }
 }
