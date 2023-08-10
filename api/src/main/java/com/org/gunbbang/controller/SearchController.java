@@ -22,7 +22,7 @@ public class SearchController {
 
   @GetMapping("/bakeries")
   @SearchApiLog
-  public ApiResponse<BakerySearchResponseDTO> searchBakery(@RequestParam String bakeryName) {
+  public ApiResponse<BakerySearchResponseDTO> searchBakery(@RequestParam final String bakeryName) {
     Long memberId = SecurityUtil.getLoginMemberId();
     return ApiResponse.success(
         SuccessType.SEARCH_BAKERIES_SUCCESS,
@@ -31,7 +31,8 @@ public class SearchController {
 
   @GetMapping("/v2/bakeries")
   @SearchApiLog
-  public ApiResponse<BakerySearchResponseDTOV2> searchBakeryV2(@RequestParam String bakeryName) {
+  public ApiResponse<BakerySearchResponseDTOV2> searchBakeryV2(
+      @RequestParam final String bakeryName) {
     Long memberId = SecurityUtil.getLoginMemberId();
     return ApiResponse.success(
         SuccessType.SEARCH_BAKERIES_SUCCESS,

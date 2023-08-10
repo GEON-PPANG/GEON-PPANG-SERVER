@@ -34,36 +34,50 @@ public class BookMarkService {
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
 
     Optional<BookMark> foundBookMark =
-        bookMarkRepository.findByMemberAndBakery(foundMember, foundBakery);
+        bookMarkRepository.findByMemberIdAndBakeryId(memberId, bakeryId);
 
     if (isAddingBookMark) {
-      if (foundBookMark.isPresent()) { // 북마크 했는데 또 한경우
+      // 북마크 했는데 또 한경우
+      if (foundBookMark.isPresent()) {
         throw new DoubleBookMarkRequestException(ErrorType.ALREADY_BOOKMARKED_EXCEPTION);
       }
-      bookMarkRepository.saveAndFlush(
-          BookMark.builder().bakery(foundBakery).member(foundMember).build());
-
-      foundBakery.updateBookMarkCount(isAddingBookMark);
-      bakeryRepository.saveAndFlush(foundBakery);
-      // flush 안되는 문제 해결
-      return BookMarkResponseDTO.builder()
-          .bookMarkCount(foundBakery.getBookMarkCount())
-          .isBookMarked(true)
-          .build();
+      return addBookMark(isAddingBookMark, foundBakery, foundMember);
     }
 
-    // 북마크 취소 요청으로 왔는데 사실 북마크 안되어있는 경우
+    // 북마크 했는데 또 한경우
     if (foundBookMark.isEmpty()) {
       throw new DoubleBookMarkRequestException(ErrorType.ALREADY_CANCELED_BOOKMARK_EXCEPTION);
     }
+    return cancelBookMark(isAddingBookMark, foundBakery, foundMember);
+  }
 
+  private BookMarkResponseDTO cancelBookMark(
+      boolean isAddingBookMark, Bakery foundBakery, Member foundMember) {
+
+    updateBookMarkCount(isAddingBookMark, foundBakery);
     bookMarkRepository.deleteByMemberAndBakery(foundMember, foundBakery);
 
-    foundBakery.updateBookMarkCount(isAddingBookMark);
-    bakeryRepository.saveAndFlush(foundBakery);
     return BookMarkResponseDTO.builder()
         .bookMarkCount(foundBakery.getBookMarkCount())
         .isBookMarked(false)
         .build();
+  }
+
+  private BookMarkResponseDTO addBookMark(
+      boolean isAddingBookMark, Bakery foundBakery, Member foundMember) {
+
+    updateBookMarkCount(isAddingBookMark, foundBakery);
+    bookMarkRepository.saveAndFlush(
+        BookMark.builder().bakery(foundBakery).member(foundMember).build());
+
+    return BookMarkResponseDTO.builder()
+        .bookMarkCount(foundBakery.getBookMarkCount())
+        .isBookMarked(true)
+        .build();
+  }
+
+  private void updateBookMarkCount(boolean isAddingBookMark, Bakery foundBakery) {
+    foundBakery.updateBookMarkCount(isAddingBookMark);
+    bakeryRepository.saveAndFlush(foundBakery);
   }
 }
