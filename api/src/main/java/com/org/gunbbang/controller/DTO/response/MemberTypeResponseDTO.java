@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MemberTypesResponseDTO {
+public class MemberTypeResponseDTO {
   @NotNull private Long memberId;
   @NotNull private MainPurpose mainPurpose;
   @NotNull private BreadTypeResponseDTO breadType;

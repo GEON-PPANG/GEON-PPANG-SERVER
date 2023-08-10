@@ -61,7 +61,7 @@ public class ReviewService {
     Review review =
         reviewRepository
             .findById(reviewId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_REVIEW));
+            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_REVIEW_EXCEPTION));
     Bakery bakery =
         bakeryRepository
             .findById(review.getBakery().getBakeryId())
@@ -86,7 +86,7 @@ public class ReviewService {
     Review review =
         reviewRepository
             .findById(reviewId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_REVIEW));
+            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_REVIEW_EXCEPTION));
     if (currentMemberId.equals(review.getMember().getMemberId())) {
       List<RecommendKeywordResponseDTO> recommendKeywordList = new ArrayList<>();
       if (review.getIsLike()) {
