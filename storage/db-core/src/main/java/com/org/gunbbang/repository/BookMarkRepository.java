@@ -10,8 +10,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface BookMarkRepository extends JpaRepository<BookMark, Long> {
-  Optional<BookMark> findByMemberAndBakery(Member member, Bakery bakery);
-
   @Query(
       value =
           "SELECT bm FROM BookMark bm WHERE bm.member.memberId = :memberId AND bm.bakery.bakeryId ="

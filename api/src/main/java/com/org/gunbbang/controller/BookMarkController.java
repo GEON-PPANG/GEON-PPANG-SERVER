@@ -21,13 +21,12 @@ public class BookMarkController {
   @PostMapping("/{bakeryId}")
   @BakeryIdApiLog
   public ApiResponse<BookMarkResponseDTO> doBookMark(
-      @PathVariable("bakeryId") Long bakeryId,
-      @RequestBody @Valid final BookMarkRequestDTO request) {
+      @PathVariable final Long bakeryId, @RequestBody @Valid final BookMarkRequestDTO request) {
     Long memberId = SecurityUtil.getLoginMemberId();
     BookMarkResponseDTO response =
         bookMarkService.doBookMark(request.getIsAddingBookMark(), bakeryId, memberId);
 
-    if (request.getIsAddingBookMark()) {
+    if (response.getIsBookMarked()) {
       return ApiResponse.success(SuccessType.CREATE_BOOKMARK_SUCCESS, response);
     }
     return ApiResponse.success(SuccessType.CANCEL_BOOKMARK_SUCCESS, response);
