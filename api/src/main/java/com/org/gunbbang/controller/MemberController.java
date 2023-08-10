@@ -31,8 +31,7 @@ public class MemberController {
   }
 
   @PostMapping("/types")
-  @ResponseStatus(HttpStatus.OK)
-  public ApiResponse<MemberTypesResponseDTO> updateMemberTypes(
+  public ApiResponse<MemberTypeResponseDTO> updateMemberTypes(
       @Valid @RequestBody final MemberTypesRequestDTO request) {
     Long memberId = SecurityUtil.getLoginMemberId();
     return ApiResponse.success(
@@ -41,8 +40,7 @@ public class MemberController {
   }
 
   @GetMapping("/types")
-  @ResponseStatus(HttpStatus.OK)
-  public ApiResponse<MemberTypesResponseDTO> getMemberTypes() {
+  public ApiResponse<MemberTypeResponseDTO> getMemberTypes() {
     Long memberId = SecurityUtil.getLoginMemberId();
     return ApiResponse.success(
         SuccessType.GET_MEMBER_TYPES_SUCCESS, memberService.getMemberTypes(memberId));
@@ -61,6 +59,6 @@ public class MemberController {
   public ApiResponse<List<BakeryListResponseDTO>> getBookMarkedBakeries() {
     Long memberId = SecurityUtil.getLoginMemberId();
     return ApiResponse.success(
-        SuccessType.GET_BOOKMARKED_BAKERIES, bakeryService.getBookMarkedBakeries(memberId));
+        SuccessType.GET_BOOKMARKED_BAKERIES_SUCCESS, bakeryService.getBookMarkedBakeries(memberId));
   }
 }

@@ -16,6 +16,9 @@ import com.org.gunbbang.repository.BreadTypeRepository;
 import com.org.gunbbang.repository.MemberRepository;
 import com.org.gunbbang.repository.NutrientTypeRepository;
 import com.org.gunbbang.util.Security.SecurityUtil;
+import com.org.gunbbang.util.mapper.BreadTypeMapper;
+import com.org.gunbbang.util.mapper.MemberTypeMapper;
+import com.org.gunbbang.util.mapper.NutrientTypeMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -104,7 +107,7 @@ public class MemberService {
         .build();
   }
 
-  public MemberTypesResponseDTO updateMemberTypes(MemberTypesRequestDTO request, Long memberId) {
+  public MemberTypeResponseDTO updateMemberTypes(MemberTypesRequestDTO request, Long memberId) {
     Member foundMember =
         memberRepository
             .findById(memberId)
@@ -132,69 +135,34 @@ public class MemberService {
     foundMember.updateMainPurpose(request.getMainPurpose());
     memberRepository.saveAndFlush(foundMember);
 
-    // TODO: 이거 구체적으로 어떻게 돌아가는건지???
-    BreadType foundMemberBreadType = foundMember.getBreadType();
-    BreadTypeResponseDTO breadTypeResponse =
-        BreadTypeResponseDTO.builder()
-            .breadTypeId(foundMemberBreadType.getBreadTypeId())
-            .breadTypeName(foundMemberBreadType.getBreadTypeName())
-            .isGlutenFree(foundMemberBreadType.getIsGlutenFree())
-            .isVegan(foundMemberBreadType.getIsVegan())
-            .isNutFree(foundMemberBreadType.getIsNutFree())
-            .isSugarFree(foundMemberBreadType.getIsSugarFree())
-            .build();
+    BreadTypeResponseDTO breadTypeResponseDTO =
+        BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(foundMember.getBreadType());
+    NutrientTypeResponseDTO nutrientTypeResponseDTO =
+        NutrientTypeMapper.INSTANCE.toNutrientTypeResponseDTO(foundMember.getNutrientType());
 
-    NutrientType foundMemberNutrientType = foundMember.getNutrientType();
-    NutrientTypeResponseDTO nutrientTypeResponse =
-        NutrientTypeResponseDTO.builder()
-            .nutrientTypeId(foundMemberNutrientType.getNutrientTypeId())
-            .nutrientTypeName(foundMemberNutrientType.getNutrientTypeName())
-            .isNutrientOpen(foundMemberNutrientType.getIsNutrientOpen())
-            .isIngredientOpen(foundMemberNutrientType.getIsIngredientOpen())
-            .isNotOpen(foundMemberNutrientType.getIsNotOpen())
-            .build();
-
-    return MemberTypesResponseDTO.builder()
-        .memberId(foundMember.getMemberId())
-        .mainPurpose(foundMember.getMainPurpose())
-        .breadType(breadTypeResponse)
-        .nutrientType(nutrientTypeResponse)
-        .build();
+    return MemberTypeMapper.INSTANCE.toMemberTypeResponseDTO(
+        foundMember.getMemberId(),
+        foundMember.getMainPurpose(),
+        breadTypeResponseDTO,
+        nutrientTypeResponseDTO);
   }
 
-  public MemberTypesResponseDTO getMemberTypes(Long memberId) {
+  public MemberTypeResponseDTO getMemberTypes(Long memberId) {
     Member foundMember =
         memberRepository
             .findById(memberId)
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
 
-    BreadType foundMemberBreadType = foundMember.getBreadType();
-    BreadTypeResponseDTO breadType =
-        BreadTypeResponseDTO.builder()
-            .breadTypeId(foundMemberBreadType.getBreadTypeId())
-            .breadTypeName(foundMemberBreadType.getBreadTypeName())
-            .isGlutenFree(foundMemberBreadType.getIsGlutenFree())
-            .isVegan(foundMemberBreadType.getIsVegan())
-            .isNutFree(foundMemberBreadType.getIsNutFree())
-            .isSugarFree(foundMemberBreadType.getIsSugarFree())
-            .build();
+    BreadTypeResponseDTO breadTypeResponseDTO =
+        BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(foundMember.getBreadType());
+    NutrientTypeResponseDTO nutrientTypeResponseDTO =
+        NutrientTypeMapper.INSTANCE.toNutrientTypeResponseDTO(foundMember.getNutrientType());
 
-    NutrientType foundMemberNutrientType = foundMember.getNutrientType();
-    NutrientTypeResponseDTO nutrientTypeResponse =
-        NutrientTypeResponseDTO.builder()
-            .nutrientTypeId(foundMemberNutrientType.getNutrientTypeId())
-            .nutrientTypeName(foundMemberNutrientType.getNutrientTypeName())
-            .isNutrientOpen(foundMemberNutrientType.getIsNutrientOpen())
-            .isIngredientOpen(foundMemberNutrientType.getIsIngredientOpen())
-            .isNotOpen(foundMemberNutrientType.getIsNotOpen())
-            .build();
-
-    return MemberTypesResponseDTO.builder()
-        .memberId(foundMember.getMemberId())
-        .mainPurpose(foundMember.getMainPurpose())
-        .breadType(breadType)
-        .nutrientType(nutrientTypeResponse)
-        .build();
+    return MemberTypeMapper.INSTANCE.toMemberTypeResponseDTO(
+        foundMember.getMemberId(),
+        foundMember.getMainPurpose(),
+        breadTypeResponseDTO,
+        nutrientTypeResponseDTO);
   }
 
   public void checkDuplicatedNickname(String nickname) {
