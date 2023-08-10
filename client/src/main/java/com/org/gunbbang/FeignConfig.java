@@ -1,4 +1,3 @@
 package com.org.gunbbang;
 
-public class FeignConfig {
-}
+public class FeignConfig {}

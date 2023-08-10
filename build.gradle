@@ -12,6 +12,10 @@ buildscript {
 	}
 }
 
+plugins {
+	id("com.diffplug.spotless") version "6.20.0"
+}
+
 // 현재 root 프로젝트와 앞으로 추가될 서브 모듈 설정
 allprojects {}
 
@@ -20,6 +24,7 @@ subprojects {
 	apply plugin: 'java'
 	apply plugin: 'org.springframework.boot'
 	apply plugin: 'io.spring.dependency-management'
+	apply plugin: 'com.diffplug.spotless'
 
 	group = 'com.org.gunbbang'
 	version = '0.0.1-SNAPSHOT'
@@ -40,13 +45,19 @@ subprojects {
 	}
 
     // true로 설정하면 실행가능한 jar 파일을 만듦
-	// TODO: cicd 안될 것 같은데,,,,?
 	bootJar {
 		enabled = false
 	}
 
 	jar {
 		enabled = true
+	}
+
+	// java formatter용
+	spotless {
+		java {
+			googleJavaFormat()
+		}
 	}
 
 }

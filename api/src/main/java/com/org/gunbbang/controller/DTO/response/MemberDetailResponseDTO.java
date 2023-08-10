@@ -9,14 +9,15 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberDetailResponseDTO {
-    private String memberNickname;
-    private MainPurpose mainPurpose;
-    private BreadTypeResponseDTO breadType;
+  private String memberNickname;
+  private MainPurpose mainPurpose;
+  private BreadTypeResponseDTO breadType;
 
-    @Builder
-    public MemberDetailResponseDTO(String memberNickname, MainPurpose mainPurpose, BreadTypeResponseDTO breadType) {
-        this.memberNickname = memberNickname;
-        this.mainPurpose = mainPurpose;
-        this.breadType = breadType;
-    }
+  @Builder
+  public MemberDetailResponseDTO(
+      String memberNickname, MainPurpose mainPurpose, BreadTypeResponseDTO breadType) {
+    this.memberNickname = memberNickname;
+    this.mainPurpose = mainPurpose;
+    this.breadType = breadType;
+  }
 }

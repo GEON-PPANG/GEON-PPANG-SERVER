@@ -37,6 +37,10 @@ dependencies {
     implementation 'com.slack.api:slack-app-backend:1.28.0'
     implementation 'com.slack.api:slack-api-model:1.28.0'
 
+    // 매퍼 의존성 추가
+    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+
 }
 
 test {

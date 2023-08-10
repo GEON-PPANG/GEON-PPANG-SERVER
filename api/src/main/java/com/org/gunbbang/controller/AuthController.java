@@ -16,11 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthController {
-    private final MemberService memberService;
+  private final MemberService memberService;
 
-    @PostMapping("/signup")
-    @SignupApiLog
-    public ApiResponse<MemberSignUpResponseDTO> signUp(@RequestBody final MemberSignUpRequestDTO request) throws Exception {
-        return ApiResponse.success(SuccessType.SIGNUP_SUCCESS, memberService.signUp(request));
-    }
+  @PostMapping("/signup")
+  @SignupApiLog
+  public ApiResponse<MemberSignUpResponseDTO> signUp(
+      @RequestBody final MemberSignUpRequestDTO request) {
+    return ApiResponse.success(SuccessType.SIGNUP_SUCCESS, memberService.signUp(request));
+  }
 }

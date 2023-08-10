@@ -5,51 +5,27 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @SuperBuilder
 public class BaseBakeryResponseDTO {
-    private Long bakeryId;
-    private String bakeryName;
-    private String bakeryPicture;
-    private Boolean isHACCP;
-    private Boolean isVegan;
-    private Boolean isNonGMO;
-    private String firstNearStation;
-    private String secondNearStation;
-    private Boolean isBookMarked;
-    private Long bookMarkCount;
+  private Long bakeryId;
+  private String bakeryName;
+  private String bakeryPicture;
+  private boolean isHACCP;
+  private boolean isVegan;
+  private boolean isNonGMO;
+  private String firstNearStation;
+  private String secondNearStation;
 
-    public BaseBakeryResponseDTO (
-            Long bakeryId,
-            String bakeryName,
-            String bakeryPicture,
-            Boolean isHACCP,
-            Boolean isVegan,
-            Boolean isNonGMO,
-            String firstNearStation,
-            String secondNearStation,
-            Boolean isBookMarkeded,
-            Long bookMarkCount
-    ) {
-         this.bakeryId = bakeryId;
-         this.bakeryName = bakeryName;
-         this.bakeryPicture = bakeryPicture;
-         this.isHACCP = isHACCP;
-         this.isVegan = isVegan;
-         this.isNonGMO = isNonGMO;
-         this.firstNearStation = firstNearStation;
-         this.secondNearStation = secondNearStation;
-         this.isBookMarked = isBookMarkeded;
-         this.bookMarkCount = bookMarkCount;
-    }
+  public boolean getIsHACCP() {
+    return isHACCP;
+  }
 
-    public BaseBakeryResponseDTO(Long bakeryId, String bakeryName, String bakeryPicture, Boolean isHACCP, Boolean isVegan, Boolean isNonGMO, String firstNearStation, String secondNearStation) {
-        this.bakeryId = bakeryId;
-        this.bakeryName = bakeryName;
-        this.bakeryPicture = bakeryPicture;
-        this.isHACCP = isHACCP;
-        this.isVegan = isVegan;
-        this.isNonGMO = isNonGMO;
-        this.firstNearStation = firstNearStation;
-        this.secondNearStation = secondNearStation;
-    }
+  public boolean getIsVegan() {
+    return isVegan;
+  }
+
+  public boolean getIsNonGMO() {
+    return isNonGMO;
+  }
 }
