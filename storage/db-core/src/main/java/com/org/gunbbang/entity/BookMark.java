@@ -2,14 +2,13 @@ package com.org.gunbbang.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
 public class BookMark {
 
   @Id
@@ -25,10 +24,4 @@ public class BookMark {
   @JoinColumn(name = "bakery_id")
   @NotNull
   private Bakery bakery;
-
-  @Builder
-  public BookMark(Member member, Bakery bakery) {
-    this.member = member;
-    this.bakery = bakery;
-  }
 }

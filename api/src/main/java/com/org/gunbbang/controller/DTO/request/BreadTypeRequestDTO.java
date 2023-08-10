@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class BreadTypeRequestDTO {
-  @NotNull private Boolean isGlutenFree;
-  @NotNull private Boolean isVegan;
-  @NotNull private Boolean isNutFree;
-  @NotNull private Boolean isSugarFree;
+  @NotNull private boolean isGlutenFree;
+  @NotNull private boolean isVegan;
+  @NotNull private boolean isNutFree;
+  @NotNull private boolean isSugarFree;
 
   @Override
   public String toString() {
@@ -24,5 +24,21 @@ public class BreadTypeRequestDTO {
         + ", isSugarFree="
         + isSugarFree
         + '}';
+  }
+
+  public boolean getIsGlutenFree() {
+    return isGlutenFree;
+  }
+
+  public boolean getIsVegan() {
+    return isVegan;
+  }
+
+  public boolean getIsNutFree() {
+    return isNutFree;
+  }
+
+  public boolean getIsSugarFree() {
+    return isSugarFree;
   }
 }

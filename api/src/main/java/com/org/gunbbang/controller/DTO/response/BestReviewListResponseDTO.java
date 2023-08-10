@@ -15,6 +15,10 @@ public class BestReviewListResponseDTO extends BaseBakeryResponseDTO {
   private String reviewText;
   private String firstMaxRecommendKeyword;
   private String secondMaxRecommendKeyword;
-  private Boolean isBookMarked;
+  private boolean isBookMarked;
   private Long bookMarkCount;
+
+  public boolean getIsBookMarked() {
+    return isBookMarked;
+  }
 }

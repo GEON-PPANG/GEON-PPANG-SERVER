@@ -2,14 +2,13 @@ package com.org.gunbbang.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
 public class ReviewRecommendKeyword {
 
   @Id
@@ -25,10 +24,4 @@ public class ReviewRecommendKeyword {
   @JoinColumn(name = "recommend_keyword_id")
   @NotNull
   private RecommendKeyword recommendKeyword;
-
-  @Builder
-  public ReviewRecommendKeyword(Review review, RecommendKeyword recommendKeyword) {
-    this.review = review;
-    this.recommendKeyword = recommendKeyword;
-  }
 }

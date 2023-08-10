@@ -26,9 +26,9 @@ public class BakeriesController {
   @ResponseStatus(HttpStatus.OK)
   public ApiResponse<List<BakeryListResponseDTO>> getBakeryList(
       @RequestParam("sort") String sort,
-      @RequestParam("isHard") Boolean isHard,
-      @RequestParam("isDessert") Boolean isDessert,
-      @RequestParam("isBrunch") Boolean isBrunch) {
+      @RequestParam("isHard") boolean isHard,
+      @RequestParam("isDessert") boolean isDessert,
+      @RequestParam("isBrunch") boolean isBrunch) {
     Long memberId = SecurityUtil.getLoginMemberId();
     List<BakeryListResponseDTO> bakeryListResponseDto =
         bakeryService.getBakeryList(memberId, sort, isHard, isDessert, isBrunch);

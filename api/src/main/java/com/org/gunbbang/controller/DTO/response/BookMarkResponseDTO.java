@@ -10,6 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class BookMarkResponseDTO {
-  private Long bookMarkCount;
-  private Boolean isBookMarked;
+  private long bookMarkCount;
+  private boolean isBookMarked;
+
+  public boolean getIsBookMarked() {
+    return isBookMarked;
+  }
 }

@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BreadTypeRepository extends JpaRepository<BreadType, Long> {
   Optional<BreadType> findBreadTypeByIsGlutenFreeAndIsVeganAndIsNutFreeAndIsSugarFree(
-      Boolean isGlutenFree, Boolean isVegan, Boolean isNutFree, Boolean isSugarFree);
+      boolean isGlutenFree, boolean isVegan, boolean isNutFree, boolean isSugarFree);
 }

@@ -46,13 +46,13 @@ public class Bakery {
 
   @ColumnDefault("false")
   @Column(name = "is_haccp")
-  private Boolean isHACCP;
+  private boolean isHACCP;
 
   @ColumnDefault("false")
-  private Boolean isVegan;
+  private boolean isVegan;
 
   @ColumnDefault("false")
-  private Boolean isNonGMO;
+  private boolean isNonGMO;
 
   @NotNull private String bakeryPicture;
 
@@ -65,22 +65,22 @@ public class Bakery {
   @NotNull private String addressRest;
 
   @ColumnDefault("0")
-  private Long bookMarkCount;
+  private long bookMarkCount;
 
   @ColumnDefault("0")
-  private Long reviewCount;
+  private long reviewCount;
 
   @ColumnDefault("0")
-  private Long keywordDeliciousCount;
+  private long keywordDeliciousCount;
 
   @ColumnDefault("0")
-  private Long keywordKindCount;
+  private long keywordKindCount;
 
   @ColumnDefault("0")
-  private Long keywordSpecialCount;
+  private long keywordSpecialCount;
 
   @ColumnDefault("0")
-  private Long keywordZeroWasteCount;
+  private long keywordZeroWasteCount;
 
   public void reviewCountChange(boolean status) {
     if (status) {
@@ -108,12 +108,24 @@ public class Bakery {
     }
   }
 
-  public Long updateBookMarkCount(boolean isAddingBookMark) {
+  public long updateBookMarkCount(boolean isAddingBookMark) {
     if (isAddingBookMark) {
       this.bookMarkCount += 1;
       return this.bookMarkCount;
     }
     this.bookMarkCount -= 1;
     return this.bookMarkCount;
+  }
+
+  public boolean getIsHACCP() {
+    return this.isHACCP;
+  }
+
+  public boolean getIsVegan() {
+    return this.isVegan;
+  }
+
+  public boolean getIsNonGMO() {
+    return this.isHACCP;
   }
 }

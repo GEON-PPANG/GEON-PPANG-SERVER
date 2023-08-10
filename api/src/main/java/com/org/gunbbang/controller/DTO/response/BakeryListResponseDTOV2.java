@@ -12,18 +12,22 @@ public class BakeryListResponseDTOV2 {
 
   private BaseBakeryResponseDTOV2 baseBakeryResponseDTOV2;
   private BreadTypeResponseDTO breadType;
-  private Long reviewCount;
-  private Boolean isBookMarked;
+  private long reviewCount;
+  private boolean isBookMarked;
 
   @Builder
   public BakeryListResponseDTOV2(
       BreadTypeResponseDTO breadType,
       BaseBakeryResponseDTOV2 baseBakeryResponseDTOV2,
-      Long reviewCount,
-      Boolean isBookMarked) {
+      long reviewCount,
+      boolean isBookMarked) {
     this.reviewCount = reviewCount;
     this.breadType = breadType;
     this.baseBakeryResponseDTOV2 = baseBakeryResponseDTOV2;
     this.isBookMarked = isBookMarked;
+  }
+
+  public boolean getIsBookMarked() {
+    return isBookMarked;
   }
 }

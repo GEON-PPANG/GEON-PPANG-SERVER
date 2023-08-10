@@ -8,15 +8,15 @@ public class BestReviewDTO {
   private final Long bakeryId;
   private final String bakeryName;
   private final String bakeryPicture;
-  private final Boolean isHACCP;
-  private final Boolean isVegan;
-  private final Boolean isNonGMO;
+  private final boolean isHACCP;
+  private final boolean isVegan;
+  private final boolean isNonGMO;
   private final String firstNearStation;
   private final String secondNearStation;
-  private final Long bookMarkCount;
+  private final long bookMarkCount;
 
-  private final Long reviewId;
-  private final Long reviewCount;
+  private final long reviewId;
+  private final long reviewCount;
   private final String reviewText;
 
   private final Long keywordDeliciousCount;
@@ -30,19 +30,19 @@ public class BestReviewDTO {
       Long bakeryId,
       String bakeryName,
       String bakeryPicture,
-      Boolean isHACCP,
-      Boolean isVegan,
-      Boolean isNonGMO,
+      boolean isHACCP,
+      boolean isVegan,
+      boolean isNonGMO,
       String firstNearStation,
       String secondNearStation,
-      Long bookMarkCount,
-      Long reviewId,
-      Long reviewCount,
+      long bookMarkCount,
+      long reviewId,
+      long reviewCount,
       String reviewText,
-      Long keywordDeliciousCount,
-      Long keywordKindCount,
-      Long keywordSpecialCount,
-      Long keywordZeroWasteCount,
+      long keywordDeliciousCount,
+      long keywordKindCount,
+      long keywordSpecialCount,
+      long keywordZeroWasteCount,
       LocalDateTime createdAt) {
     this.bakeryId = bakeryId;
     this.bakeryName = bakeryName;
@@ -61,5 +61,17 @@ public class BestReviewDTO {
     this.keywordSpecialCount = keywordSpecialCount;
     this.keywordZeroWasteCount = keywordZeroWasteCount;
     this.createdAt = createdAt;
+  }
+
+  public boolean getIsHACCP() {
+    return isHACCP;
+  }
+
+  public boolean getIsVegan() {
+    return isVegan;
+  }
+
+  public boolean getIsNonGMO() {
+    return isNonGMO;
   }
 }

@@ -9,7 +9,19 @@ import lombok.*;
 public class NutrientTypeResponseDTO {
   private Long nutrientTypeId;
   private String nutrientTypeName;
-  private Boolean isNutrientOpen;
-  private Boolean isIngredientOpen;
-  private Boolean isNotOpen;
+  private boolean isNutrientOpen;
+  private boolean isIngredientOpen;
+  private boolean isNotOpen;
+
+  public boolean getIsNutrientOpen() {
+    return isNutrientOpen;
+  }
+
+  public boolean getIsIngredientOpen() {
+    return isIngredientOpen;
+  }
+
+  public boolean getIsNotOpen() {
+    return isNotOpen;
+  }
 }

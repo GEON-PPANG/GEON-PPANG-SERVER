@@ -21,7 +21,7 @@ public class AuthController {
   @PostMapping("/signup")
   @SignupApiLog
   public ApiResponse<MemberSignUpResponseDTO> signUp(
-      @RequestBody final MemberSignUpRequestDTO request) throws Exception {
+      @RequestBody final MemberSignUpRequestDTO request) {
     return ApiResponse.success(SuccessType.SIGNUP_SUCCESS, memberService.signUp(request));
   }
 }

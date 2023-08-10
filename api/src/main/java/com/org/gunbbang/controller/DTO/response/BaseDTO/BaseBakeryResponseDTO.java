@@ -11,9 +11,21 @@ public class BaseBakeryResponseDTO {
   private Long bakeryId;
   private String bakeryName;
   private String bakeryPicture;
-  private Boolean isHACCP;
-  private Boolean isVegan;
-  private Boolean isNonGMO;
+  private boolean isHACCP;
+  private boolean isVegan;
+  private boolean isNonGMO;
   private String firstNearStation;
   private String secondNearStation;
+
+  public boolean getIsHACCP() {
+    return isHACCP;
+  }
+
+  public boolean getIsVegan() {
+    return isVegan;
+  }
+
+  public boolean getIsNonGMO() {
+    return isNonGMO;
+  }
 }

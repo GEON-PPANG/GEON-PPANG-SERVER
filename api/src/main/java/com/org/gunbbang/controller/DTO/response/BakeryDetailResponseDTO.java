@@ -21,6 +21,10 @@ public class BakeryDetailResponseDTO extends BaseBakeryResponseDTO {
   private String closedDay;
   private String phoneNumber;
   private List<MenuResponseDTO> menuList;
-  private Boolean isBookMarked;
-  private Long bookMarkCount;
+  private boolean isBookMarked;
+  private long bookMarkCount;
+
+  public boolean getIsBookMarked() {
+    return isBookMarked;
+  }
 }

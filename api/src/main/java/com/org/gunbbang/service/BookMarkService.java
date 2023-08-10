@@ -48,7 +48,7 @@ public class BookMarkService {
       // flush 안되는 문제 해결
       return BookMarkResponseDTO.builder()
           .bookMarkCount(foundBakery.getBookMarkCount())
-          .isBookMarked(Boolean.TRUE)
+          .isBookMarked(true)
           .build();
     }
 
@@ -63,7 +63,7 @@ public class BookMarkService {
     bakeryRepository.saveAndFlush(foundBakery);
     return BookMarkResponseDTO.builder()
         .bookMarkCount(foundBakery.getBookMarkCount())
-        .isBookMarked(Boolean.FALSE)
+        .isBookMarked(false)
         .build();
   }
 }

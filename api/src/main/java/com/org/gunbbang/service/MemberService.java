@@ -8,7 +8,6 @@ import com.org.gunbbang.common.AuthType;
 import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import com.org.gunbbang.controller.DTO.request.MemberTypesRequestDTO;
 import com.org.gunbbang.controller.DTO.response.*;
-import com.org.gunbbang.controller.VO.CurrentMemberVO;
 import com.org.gunbbang.entity.BreadType;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.entity.NutrientType;
@@ -103,21 +102,6 @@ public class MemberService {
         .type(AuthType.SIGN_UP)
         .email(member.getEmail())
         .build();
-  }
-
-  public CurrentMemberVO getCurrentMemberVO() {
-    Long memberId = SecurityUtil.getLoginMemberId();
-    Member foundMember =
-        memberRepository
-            .findById(memberId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
-
-    return CurrentMemberVO.of(
-        foundMember.getMemberId(),
-        foundMember.getEmail(),
-        foundMember.getPassword(),
-        foundMember.getNickname(),
-        foundMember.getMainPurpose());
   }
 
   public MemberTypesResponseDTO updateMemberTypes(MemberTypesRequestDTO request, Long memberId) {

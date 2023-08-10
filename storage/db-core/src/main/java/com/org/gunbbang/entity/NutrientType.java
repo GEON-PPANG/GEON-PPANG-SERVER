@@ -19,9 +19,21 @@ public class NutrientType {
 
   @NotNull private String nutrientTypeName;
 
-  @NotNull private Boolean isNutrientOpen; // 영양성분 공개
+  @NotNull private boolean isNutrientOpen; // 영양성분 공개
 
-  @NotNull private Boolean isIngredientOpen; // 원재료 공개
+  @NotNull private boolean isIngredientOpen; // 원재료 공개
 
-  @NotNull private Boolean isNotOpen; // 비공개
+  @NotNull private boolean isNotOpen; // 비공개
+
+  public boolean getIsNutrientOpen() {
+    return isNutrientOpen;
+  }
+
+  public boolean getIsIngredientOpen() {
+    return isIngredientOpen;
+  }
+
+  public boolean getIsNotOpen() {
+    return isNotOpen;
+  }
 }

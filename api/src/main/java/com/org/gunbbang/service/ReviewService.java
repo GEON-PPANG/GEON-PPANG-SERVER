@@ -45,8 +45,8 @@ public class ReviewService {
     Review review =
         reviewRepository.saveAndFlush(
             Review.builder()
-                .memberId(member)
-                .bakeryId(bakery)
+                .member(member)
+                .bakery(bakery)
                 .isLike(reviewRequestDto.getIsLike())
                 .reviewText(reviewRequestDto.getReviewText())
                 .build());
@@ -120,7 +120,7 @@ public class ReviewService {
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
     List<Review> reviewList = reviewRepository.findAllByBakeryOrderByCreatedAtDesc(bakery);
     List<ReviewResponseDTO> reviewListDto = new ArrayList<>();
-    Long reviewCount;
+    long reviewCount;
 
     for (Review review : reviewList) {
       List<RecommendKeywordResponseDTO> recommendKeywordList = new ArrayList<>();
@@ -154,7 +154,7 @@ public class ReviewService {
         .specialPercent(calculatorPercentage(reviewCount, bakery.getKeywordSpecialCount()))
         .kindPercent(calculatorPercentage(reviewCount, bakery.getKeywordKindCount()))
         .zeroPercent(calculatorPercentage(reviewCount, bakery.getKeywordZeroWasteCount()))
-        .totalReviewCount(bakery.getReviewCount().intValue())
+        .totalReviewCount((int) bakery.getReviewCount())
         .reviewList(reviewListDto)
         .build();
   }
@@ -246,7 +246,7 @@ public class ReviewService {
       Long memberId, List<BestReviewDTO> bestReviews) {
     List<BestReviewListResponseDTO> responseDtoList = new ArrayList();
     for (BestReviewDTO bestReview : bestReviews) {
-      Boolean isBookMarked = isBookMarked(memberId, bestReview.getBakeryId());
+      boolean isBookMarked = isBookMarked(memberId, bestReview.getBakeryId());
       List<String> recommendKeywords = getMaxRecommendKeywords(bestReview);
 
       // max인 리뷰 키워드 두 개 넣기
@@ -273,11 +273,11 @@ public class ReviewService {
     return responseDtoList;
   }
 
-  private Boolean isBookMarked(Long memberId, Long bakeryId) {
+  private boolean isBookMarked(Long memberId, Long bakeryId) {
     if (bookMarkRepository.findByMemberIdAndBakeryId(memberId, bakeryId).isPresent()) {
-      return Boolean.TRUE;
+      return true;
     }
-    return Boolean.FALSE;
+    return false;
   }
 
   private List<String> getMaxRecommendKeywords(BestReviewDTO bestReview) {

@@ -12,14 +12,18 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @SuperBuilder
 public class ReviewDetailResponseDTO extends BaseReviewResponseDTO {
-  @NotNull Boolean isLike;
+  @NotNull boolean isLike;
 
   public ReviewDetailResponseDTO(
       Long reviewId,
       List<RecommendKeywordResponseDTO> recommendKeywordList,
       String reviewText,
-      Boolean isLike) {
+      boolean isLike) {
     super(reviewId, recommendKeywordList, reviewText);
     this.isLike = isLike;
+  }
+
+  public boolean getIsLike() {
+    return isLike;
   }
 }

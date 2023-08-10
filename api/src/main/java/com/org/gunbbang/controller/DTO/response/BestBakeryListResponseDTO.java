@@ -12,7 +12,11 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 public class BestBakeryListResponseDTO extends BaseBakeryResponseDTO {
-  private Long reviewCount;
-  private Boolean isBookMarked;
-  private Long bookMarkCount;
+  private long reviewCount;
+  private boolean isBookMarked;
+  private long bookMarkCount;
+
+  public boolean getIsBookMarked() {
+    return isBookMarked;
+  }
 }

@@ -2,14 +2,13 @@ package com.org.gunbbang.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class Review extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,15 +22,11 @@ public class Review extends BaseEntity {
   @JoinColumn(name = "member_id")
   private Member member;
 
-  @NotNull private Boolean isLike;
+  @NotNull private boolean isLike;
 
   private String reviewText;
 
-  @Builder
-  public Review(Bakery bakeryId, Member memberId, Boolean isLike, String reviewText) {
-    this.bakery = bakeryId;
-    this.member = memberId;
-    this.isLike = isLike;
-    this.reviewText = reviewText;
+  public boolean getIsLike() {
+    return this.isLike;
   }
 }

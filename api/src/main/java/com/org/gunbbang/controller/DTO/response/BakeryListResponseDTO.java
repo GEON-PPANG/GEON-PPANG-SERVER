@@ -9,8 +9,12 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @SuperBuilder
 public class BakeryListResponseDTO extends BaseBakeryResponseDTO {
-  private Long reviewCount;
+  private long reviewCount;
   private BreadTypeResponseDTO breadType;
-  private Boolean isBookMarked;
-  private Long bookMarkCount;
+  private boolean isBookMarked;
+  private long bookMarkCount;
+
+  public boolean getIsBookMarked() {
+    return isBookMarked;
+  }
 }
