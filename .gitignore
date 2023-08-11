@@ -43,5 +43,6 @@ out/
 .vscode/
 
 ### log files ###
+log/
 *.log
 *.gz
