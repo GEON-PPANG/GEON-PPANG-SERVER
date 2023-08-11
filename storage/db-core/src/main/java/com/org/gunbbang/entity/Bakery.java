@@ -32,6 +32,8 @@ public class Bakery {
 
   @NotNull private String bakeryName;
 
+  @NotNull private String mapUrl;
+
   private String homepage;
 
   private String firstNearStation;
