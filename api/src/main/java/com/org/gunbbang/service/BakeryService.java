@@ -112,6 +112,7 @@ public class BakeryService {
         .isBookMarked(isBookMarked)
         .bookMarkCount(bakery.getBookMarkCount())
         .reviewCount(bakery.getReviewCount())
+        .mapUrl(bakery.getMapUrl())
         .homepage(bakery.getHomepage())
         .address(
             bakery.getState()

@@ -22,6 +22,7 @@ create table bakery
     city                     varchar(255)          not null,
     closed_day               varchar(255),
     first_near_station       varchar(255),
+    map_url                  varchar(255)          not null,
     homepage                 varchar(255),
     is_haccp                 boolean default false not null,
     is_nongmo                boolean default false not null,
