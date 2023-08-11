@@ -43,6 +43,4 @@ out/
 .vscode/
 
 ### log files ###
-!/logs/api.log
-!/logs/api-error.log
-!/logs/api*.gz
+/logs/
