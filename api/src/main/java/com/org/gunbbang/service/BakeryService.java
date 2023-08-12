@@ -7,7 +7,6 @@ import com.org.gunbbang.controller.DTO.response.BaseDTO.BaseBakeryResponseDTOV2;
 import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
-import com.org.gunbbang.util.Security.SecurityUtil;
 import com.org.gunbbang.util.mapper.BakeryMapper;
 import com.org.gunbbang.util.mapper.BreadTypeMapper;
 import java.util.*;
@@ -25,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BakeryService {
   private final CategoryRepository categoryRepository;
-  private final BakeryCategoryRepository bakeryCategoryRepository;
   private final BookMarkRepository bookMarkRepository;
   private final MemberRepository memberRepository;
   private final BakeryRepository bakeryRepository;
@@ -129,81 +127,67 @@ public class BakeryService {
         .build();
   }
 
-  public List<BestBakeryListResponseDTO> getBestBakeries() {
-    Long memberId = SecurityUtil.getLoginMemberId();
+  public List<BestBakeryListResponseDTO> getBestBakeries(Long memberId) {
     List<Long> alreadyFoundBakeryIds = new ArrayList<>();
-    alreadyFoundBakeryIds.add(Long.MAX_VALUE);
-    System.out.println("alreadyFoundBakeryIds 값 확인: " + alreadyFoundBakeryIds);
+    alreadyFoundBakeryIds.add(-1L);
 
     Member foundMember =
         memberRepository
             .findById(memberId)
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
 
+    List<Bakery> bestBakeries = getBestBakeries(foundMember);
+
+    if (bestBakeries.size() == maxBestBakeryCount) {
+      log.info("베스트 베이커리 10개 조회 완료. 추가 조회 쿼리 없이 바로 반환");
+      return BakeryMapper.INSTANCE.toBestBakeryListResponseDTO(bestBakeries);
+    }
+
+    setAlreadyFoundBakeryIds(alreadyFoundBakeryIds, bestBakeries);
+    getRestBakeries(alreadyFoundBakeryIds, foundMember.getBreadType(), bestBakeries);
+
+    if (bestBakeries.size() == maxBestBakeryCount) {
+      log.info("빵유형 10개 조회 완료. 추가 조회 쿼리 없이 바로 반환");
+      return BakeryMapper.INSTANCE.toBestBakeryListResponseDTO(bestBakeries);
+    }
+
+    setAlreadyFoundBakeryIds(alreadyFoundBakeryIds, bestBakeries);
+    getRandomBakeries(alreadyFoundBakeryIds, bestBakeries);
+
+    return BakeryMapper.INSTANCE.toBestBakeryListResponseDTO(bestBakeries);
+  }
+
+  private void setAlreadyFoundBakeryIds(
+      List<Long> alreadyFoundBakeryIds, List<Bakery> bestBakeries) {
+    alreadyFoundBakeryIds.addAll(
+        bestBakeries.stream().map(Bakery::getBakeryId).collect(Collectors.toList()));
+  }
+
+  private void getRandomBakeries(List<Long> alreadyFoundBakeryIds, List<Bakery> bestBakeries) {
+    PageRequest bestPageRequest = PageRequest.of(0, maxBestBakeryCount - bestBakeries.size());
+    log.info("나머지만 랜덤으로 고르는 베이커리. 현재까지 조회된 베이커리 수: " + bestBakeries.size());
+    bestBakeries.addAll(
+        bakeryRepository.findRestBakeriesRandomly(alreadyFoundBakeryIds, bestPageRequest));
+  }
+
+  private void getRestBakeries(
+      List<Long> alreadyFoundBakeryIds, BreadType breadType, List<Bakery> bestBakeries) {
+    log.info("빵유형 일치 베이커리 조회 시작. 현재까지 조회된 베이커리 수: " + bestBakeries.size());
+    PageRequest bestPageRequest = PageRequest.of(0, maxBestBakeryCount - bestBakeries.size());
+    bestBakeries.addAll(
+        bakeryRepository.findRestBakeriesByBreadTypeId(
+            breadType, alreadyFoundBakeryIds, bestPageRequest));
+  }
+
+  private List<Bakery> getBestBakeries(Member foundMember) {
+    log.info("베스트 건빵집 조회 시작.");
     PageRequest bestPageRequest = PageRequest.of(0, maxBestBakeryCount);
     List<Bakery> bestBakeries =
         bakeryRepository.findBestBakeries(
             foundMember.getBreadType().getBreadTypeId(),
             foundMember.getMainPurpose(),
-            bestPageRequest // TODO: 일케하는게맞냐????
-            );
-
-    if (bestBakeries.size() == maxBestBakeryCount) {
-      log.info("베스트 베이커리 10개 조회 완료. 추가 조회 쿼리 없이 바로 반환");
-      return getResponseBakeries(foundMember, bestBakeries);
-    }
-
-    System.out.println("alreadyFoundBakeryIds 값 확인: " + alreadyFoundBakeryIds);
-    System.out.println("alreadyFoundBakeryIds 엠티 여부: " + alreadyFoundBakeryIds.isEmpty());
-
-    alreadyFoundBakeryIds.addAll(
-        bestBakeries.stream().map(Bakery::getBakeryId).collect(Collectors.toList()));
-
-    log.info("빵유형 일치 베이커리 조회 시작. 현재까지 조회된 베이커리 수: " + bestBakeries.size());
-    bestPageRequest = PageRequest.of(0, maxBestBakeryCount - bestBakeries.size());
-    bestBakeries.addAll(
-        bakeryRepository.findRestBakeriesByBreadTypeId(
-            foundMember.getBreadType(), alreadyFoundBakeryIds, bestPageRequest));
-
-    if (bestBakeries.size() == maxBestBakeryCount) {
-      log.info("빵유형 10개 조회 완료. 추가 조회 쿼리 없이 바로 반환");
-      return getResponseBakeries(foundMember, bestBakeries);
-    }
-
-    alreadyFoundBakeryIds.addAll(
-        bestBakeries.stream().map(Bakery::getBakeryId).collect(Collectors.toList()));
-
-    bestPageRequest = PageRequest.of(0, maxBestBakeryCount - bestBakeries.size());
-    log.info("찐 나머지만 고르는 베이커리. 현재까지 조회된 베이커리 수: " + bestBakeries.size());
-    bestBakeries.addAll(
-        bakeryRepository.findRestBakeriesRandomly(alreadyFoundBakeryIds, bestPageRequest));
-
-    return getResponseBakeries(foundMember, bestBakeries);
-  }
-
-  // TODO: 이거 DTO 안에 static 메서드로 못빼나??
-  private List<BestBakeryListResponseDTO> getResponseBakeries(
-      Member member, List<Bakery> bakeries) {
-    List<BestBakeryListResponseDTO> responseDtoList = new ArrayList<>();
-    for (Bakery bestBakery : bakeries) {
-      boolean isBookMarked = isBookMarked(member.getMemberId(), bestBakery.getBakeryId());
-      BestBakeryListResponseDTO response =
-          BestBakeryListResponseDTO.builder()
-              .bakeryId(bestBakery.getBakeryId())
-              .bakeryName(bestBakery.getBakeryName())
-              .bakeryPicture(bestBakery.getBakeryPicture())
-              .isHACCP(bestBakery.getIsHACCP())
-              .isVegan(bestBakery.getIsVegan())
-              .isNonGMO(bestBakery.getIsNonGMO())
-              .firstNearStation(bestBakery.getFirstNearStation())
-              .secondNearStation(bestBakery.getSecondNearStation())
-              .isBookMarked(isBookMarked)
-              .bookMarkCount(bestBakery.getBookMarkCount())
-              .reviewCount(bestBakery.getReviewCount())
-              .build();
-      responseDtoList.add(response);
-    }
-    return responseDtoList;
+            bestPageRequest);
+    return bestBakeries;
   }
 
   public BakerySearchResponseDTO getBakeriesByName(String bakeryName, Long memberId) {

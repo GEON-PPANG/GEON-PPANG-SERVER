@@ -7,6 +7,7 @@ import com.org.gunbbang.entity.Category;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -26,18 +27,17 @@ public interface BakeryRepository extends JpaRepository<Bakery, Long> {
   List<Bakery> findBestBakeries(
       @Param("currentMemberBreadType") Long currentMemberBreadType,
       @Param("currentMemberMainPurpose") MainPurpose currentMemberMainPurpose,
-      PageRequest pageRequest);
+      Pageable pageRequest);
 
   @Query(
       value =
           "SELECT b FROM Bakery b "
               + "WHERE b.breadType = :breadTypeId "
-              + "AND b.bakeryId not in :alreadyFoundBakeries ")
+              + "AND b.bakeryId not in :alreadyFoundBakeryIds ")
   List<Bakery> findRestBakeriesByBreadTypeId(
-      BreadType breadTypeId, List<Long> alreadyFoundBakeries, PageRequest pageRequest);
-
-  @Query(value = "SELECT b FROM Bakery b " + "WHERE b.breadType = :breadTypeId ")
-  List<Bakery> findBakeriesByBreadTypeId(BreadType breadTypeId, PageRequest pageRequest);
+      @Param("breadTypeId") BreadType breadTypeId,
+      @Param("alreadyFoundBakeryIds") List<Long> alreadyFoundBakeryIds,
+      Pageable pageRequest);
 
   @Query(value = "SELECT b FROM Bakery b " + "WHERE b.bakeryName like %:bakeryName% ")
   List<Bakery> findBakeryByBakeryName(@Param("bakeryName") String bakeryName);
@@ -53,9 +53,10 @@ public interface BakeryRepository extends JpaRepository<Bakery, Long> {
   @Query(
       value =
           "SELECT b FROM Bakery b "
-              + "WHERE b.bakeryId not in :alreadyFoundBakeries "
+              + "WHERE b.bakeryId NOT IN :alreadyFoundBakeryIds "
               + "ORDER BY RAND() ")
-  List<Bakery> findRestBakeriesRandomly(List<Long> alreadyFoundBakeries, PageRequest pageRequest);
+  List<Bakery> findRestBakeriesRandomly(
+      @Param("alreadyFoundBakeryIds") List<Long> alreadyFoundBakeryIds, Pageable pageRequest);
 
   @Query(value = "SELECT b FROM Bakery b " + "ORDER BY RAND() ")
   List<Bakery> findBakeriesRandomly(PageRequest pageRequest);

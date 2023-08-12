@@ -10,6 +10,7 @@ import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
 import com.org.gunbbang.util.Security.SecurityUtil;
+import com.org.gunbbang.util.mapper.ReviewMapper;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -208,65 +209,60 @@ public class ReviewService {
   }
 
   public List<BestReviewListResponseDTO> getBestReviews(Long memberId) {
-    List<Long> alreadyFoundReviews = new ArrayList<>();
-    alreadyFoundReviews.add(Long.MAX_VALUE);
-    System.out.println("alreadyFoundReviewsIds 값 확인: " + alreadyFoundReviews);
+    List<Long> alreadyFoundReviewIds = new ArrayList<>();
+    alreadyFoundReviewIds.add(-1L);
 
-    PageRequest bestPageRequest = PageRequest.of(0, maxBestBakeryCount);
     Member foundMember =
         memberRepository
             .findById(memberId)
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
 
+    List<BestReviewDTO> bestReviews = getBestReviews(foundMember);
+
+    if (bestReviews.size() == maxBestBakeryCount) {
+      log.info("베스트 리뷰 10개 조회 완료. 추가 조회 쿼리 없이 바로 반환");
+      return getBestReviewsListResponseDTO(bestReviews);
+    }
+
+    log.info("랜덤 리뷰 조회 시작. 현재까지 조회된 리뷰 수: " + bestReviews.size());
+    setAlreadyFoundReviewIds(alreadyFoundReviewIds, bestReviews);
+    getRandomReviews(alreadyFoundReviewIds, bestReviews);
+
+    return getBestReviewsListResponseDTO(bestReviews);
+  }
+
+  private void getRandomReviews(List<Long> alreadyFoundReviewIds, List<BestReviewDTO> bestReviews) {
+    PageRequest restPageRequest = PageRequest.of(0, maxBestBakeryCount - bestReviews.size());
+    bestReviews.addAll(
+        reviewRepository.findRestBestReviewDTOListByBreadType(
+            alreadyFoundReviewIds, restPageRequest));
+  }
+
+  private void setAlreadyFoundReviewIds(
+      List<Long> alreadyFoundReviews, List<BestReviewDTO> bestReviews) {
+    alreadyFoundReviews.addAll(
+        bestReviews.stream().map(BestReviewDTO::getReviewId).collect(Collectors.toList()));
+  }
+
+  private List<BestReviewDTO> getBestReviews(Member foundMember) {
+    PageRequest bestPageRequest = PageRequest.of(0, maxBestBakeryCount);
     List<BestReviewDTO> bestReviews =
         reviewRepository.findBestReviewDTOList(
             foundMember.getBreadType().getBreadTypeId(),
             foundMember.getMainPurpose(),
             bestPageRequest);
-
-    if (bestReviews.size() == maxBestBakeryCount) {
-      log.info("베스트 리뷰 10개 조회 완료. 추가 조회 쿼리 없이 바로 반환");
-      return getBestReviewsListResponseDTO(memberId, bestReviews);
-    }
-
-    log.info("랜덤 리뷰 조회 시작. 현재까지 조회된 리뷰 수: " + bestReviews.size());
-    alreadyFoundReviews.addAll(
-        bestReviews.stream().map(BestReviewDTO::getReviewId).collect(Collectors.toList()));
-    PageRequest restPageRequest = PageRequest.of(0, maxBestBakeryCount - bestReviews.size());
-
-    bestReviews.addAll(
-        reviewRepository.findRestBestReviewDTOListByBreadType(
-            alreadyFoundReviews, restPageRequest));
-
-    return getBestReviewsListResponseDTO(memberId, bestReviews);
+    return bestReviews;
   }
 
-  // TODO: 이거 DTO 안에 static 메서드로 못빼나??
   private List<BestReviewListResponseDTO> getBestReviewsListResponseDTO(
-      Long memberId, List<BestReviewDTO> bestReviews) {
+      List<BestReviewDTO> bestReviews) {
     List<BestReviewListResponseDTO> responseDtoList = new ArrayList();
     for (BestReviewDTO bestReview : bestReviews) {
-      boolean isBookMarked = isBookMarked(memberId, bestReview.getBakeryId());
-      List<String> recommendKeywords = getMaxRecommendKeywords(bestReview);
+      String[] recommendKeywords = getMaxRecommendKeywords(bestReview);
 
-      // max인 리뷰 키워드 두 개 넣기
       BestReviewListResponseDTO response =
-          BestReviewListResponseDTO.builder()
-              .bakeryId(bestReview.getBakeryId())
-              .bakeryName(bestReview.getBakeryName())
-              .bakeryPicture(bestReview.getBakeryPicture())
-              .isHACCP(bestReview.getIsHACCP())
-              .isVegan(bestReview.getIsVegan())
-              .isNonGMO(bestReview.getIsNonGMO())
-              .firstNearStation(bestReview.getFirstNearStation())
-              .secondNearStation(bestReview.getSecondNearStation())
-              .isBookMarked(isBookMarked)
-              .bookMarkCount(bestReview.getBookMarkCount())
-              .reviewCount(bestReview.getReviewCount())
-              .reviewText(bestReview.getReviewText())
-              .firstMaxRecommendKeyword(recommendKeywords.get(0))
-              .secondMaxRecommendKeyword(recommendKeywords.get(1))
-              .build();
+          ReviewMapper.INSTANCE.toBestReviewListResponseDTO(
+              bestReview, recommendKeywords[0], recommendKeywords[1]);
 
       responseDtoList.add(response);
     }
@@ -280,7 +276,7 @@ public class ReviewService {
     return false;
   }
 
-  private List<String> getMaxRecommendKeywords(BestReviewDTO bestReview) {
+  private String[] getMaxRecommendKeywords(BestReviewDTO bestReview) {
 
     Map<String, Long> recommendKeywordsMap = new HashMap<>();
     recommendKeywordsMap.put(
@@ -318,6 +314,6 @@ public class ReviewService {
       secondMaxKey = null;
     }
 
-    return Arrays.asList(maxKey, secondMaxKey);
+    return new String[] {maxKey, secondMaxKey};
   }
 }
