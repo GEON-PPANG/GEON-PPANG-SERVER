@@ -48,14 +48,14 @@
         </rollingPolicy>
     </appender>
 
-    <springProfile name="local">
-        <!-- logger name에 LoggingAspect 클래스 위치해있는 패키지 경로 지정-->
-        <logger name="com.org.gunbbang.AOP.LoggingAspect" level="INFO">
-            <appender-ref ref="Console" />
-            <appender-ref ref="ApiLogFile" />
-            <appender-ref ref="ErrorLogFile" />
-        </logger>
-    </springProfile>
+<!--    <springProfile name="local">-->
+<!--        &lt;!&ndash; logger name에 LoggingAspect 클래스 위치해있는 패키지 경로 지정&ndash;&gt;-->
+<!--        <logger name="com.org.gunbbang.AOP.LoggingAspect" level="INFO">-->
+<!--            <appender-ref ref="Console" />-->
+<!--            <appender-ref ref="ApiLogFile" />-->
+<!--            <appender-ref ref="ErrorLogFile" />-->
+<!--        </logger>-->
+<!--    </springProfile>-->
 
     <springProfile name="dev-set1">
         <logger name="com.org.gunbbang.AOP.LoggingAspect" level="INFO">
