@@ -18,8 +18,7 @@ public interface BakeryMapper {
   @Mapping(source = "bakery.isHACCP", target = "isHACCP")
   @Mapping(source = "bakery.isVegan", target = "isVegan")
   @Mapping(source = "bakery.isNonGMO", target = "isNonGMO")
-  BakeryListResponseDTO toBakeryListResponseDTO(
-      Bakery bakery, boolean isBookMarked, BreadTypeResponseDTO breadType);
+  BakeryListResponseDTO toBakeryListResponseDTO(Bakery bakery, BreadTypeResponseDTO breadType);
 
   BakerySearchResponseDTO toBakerySearchResponseDTO(
       int resultCount, List<BakeryListResponseDTO> bakeryList);

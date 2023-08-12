@@ -269,13 +269,6 @@ public class ReviewService {
     return responseDtoList;
   }
 
-  private boolean isBookMarked(Long memberId, Long bakeryId) {
-    if (bookMarkRepository.findByMemberIdAndBakeryId(memberId, bakeryId).isPresent()) {
-      return true;
-    }
-    return false;
-  }
-
   private String[] getMaxRecommendKeywords(BestReviewDTO bestReview) {
 
     Map<String, Long> recommendKeywordsMap = new HashMap<>();
