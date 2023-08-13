@@ -34,7 +34,9 @@ public class Bakery {
 
   @NotNull private String mapUrl;
 
-  private String homepage;
+  private String homepageUrl;
+
+  private String instagramUrl;
 
   private String firstNearStation;
 
