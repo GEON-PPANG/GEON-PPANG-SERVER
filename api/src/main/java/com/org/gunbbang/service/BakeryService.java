@@ -113,7 +113,8 @@ public class BakeryService {
         .bookMarkCount(bakery.getBookMarkCount())
         .reviewCount(bakery.getReviewCount())
         .mapUrl(bakery.getMapUrl())
-        .homepage(bakery.getHomepage())
+        .homepageUrl(bakery.getHomepageUrl())
+        .instagramUrl(bakery.getInstagramUrl())
         .address(
             bakery.getState()
                 + " "
