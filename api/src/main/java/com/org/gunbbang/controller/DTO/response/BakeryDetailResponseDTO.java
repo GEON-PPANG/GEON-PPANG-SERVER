@@ -16,7 +16,8 @@ public class BakeryDetailResponseDTO extends BaseBakeryResponseDTO {
   private Long reviewCount;
   private BreadTypeResponseDTO breadType;
   private String mapUrl;
-  private String homepage;
+  private String homepageUrl;
+  private String instagramUrl;
   private String address;
   private String openingTime;
   private String closedDay;

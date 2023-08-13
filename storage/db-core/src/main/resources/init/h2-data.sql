@@ -70,89 +70,89 @@ INSERT INTO category (category_id, category_name)
 
 -- bakery
 INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
-                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count, map_url)
-VALUES (1,1,2,'1152-5','펄스브레드샵','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
-        '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
-        '010-1111-1111','일산역','고양시','정발산동', 1, 10, 8, 2, 0, 0, 'url');
+                    first_near_station, map_url, homepage_url, instagram_url, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
+                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count)
+    VALUES (1,1,2,'1152-5','펄스브레드샵','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+    '경기도','일요일, 월요일','풍산역', 'https://naver.me/5K8QhR8u','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile','https://www.instagram.com/sung._.silver',true,false,true,'화~토 11:00 ~ 19:00',
+            '010-1111-1111','일산역','고양시','정발산동', 1, 9, 0, 0, 0, 9);
 INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
-                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count, map_url)
-VALUES (2,1,2,'1152-5','펄스브레드샵2','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
-        '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
-        '010-1111-1111','일산역','고양시','정발산동', 2, 9, 0, 5, 1, 3, 'url');
+                    first_near_station, map_url, homepage_url, instagram_url, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
+                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count)
+    VALUES (2,1,2,'1152-5','펄스브레드샵2','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+        '경기도','일요일, 월요일','풍산역', 'https://naver.me/5K8QhR8u', 'https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile','https://www.instagram.com/sung._.silver',true,false,true,'화~토 11:00 ~ 19:00',
+        '010-1111-1111','일산역','고양시','정발산동', 2, 9, 0, 5, 1, 3);
 INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
-                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count, map_url)
-VALUES (3, 1,3,'11-5','건대초코빵','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
-        '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
-        '010-1111-1111','일산역','고양시','정발산동', 3, 1, 0, 0, 1, 0, 'url');
+                    first_near_station, map_url, homepage_url, instagram_url, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
+                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count)
+    VALUES (3, 1,3,'11-5','건대초코빵','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+        '경기도','일요일, 월요일','풍산역','https://naver.me/5K8QhR8u','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile','https://www.instagram.com/sung._.silver',true,false,true,'화~토 11:00 ~ 19:00',
+        '010-1111-1111','일산역','고양시','정발산동', 3, 5, 1, 1, 1, 2);
 INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
-                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count, map_url)
-VALUES (4,1,1,'52-5','비건비건','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
-        '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
-        '010-1111-1111','일산역','고양시','정발산동', 4, 1, 0, 0, 1, 0, 'url');
+                    first_near_station, map_url, homepage_url, instagram_url, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
+                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count)
+    VALUES (4,1,1,'52-5','비건비건','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+        '경기도','일요일, 월요일','풍산역','https://naver.me/5K8QhR8u','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile','https://www.instagram.com/sung._.silver',true,false,true,'화~토 11:00 ~ 19:00',
+        '010-1111-1111','일산역','고양시','정발산동', 4, 1, 0, 1, 0, 0);
 INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
-                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count, map_url)
-VALUES (5,7,1,'52-5','저당빵만판다','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
-        '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
-        '010-1111-1111','일산역','고양시','정발산동', 5, 14, 5, 4, 3, 2, 'url');
+                    first_near_station, map_url, homepage_url, instagram_url, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
+                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count)
+    VALUES (5,7,1,'52-5','저당빵만판다','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+        '경기도','일요일, 월요일','풍산역','https://naver.me/5K8QhR8u','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile','https://www.instagram.com/sung._.silver',true,false,true,'화~토 11:00 ~ 19:00',
+        '010-1111-1111','일산역','고양시','정발산동', 5, 14, 5, 4, 3, 2);
 INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
-                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count, map_url)
-VALUES (6,3,6,'5211-5','졸려','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
-        '경기도','일요일, 월요일','풍산역','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile',true,false,true,'화~토 11:00 ~ 19:00',
-        '010-1111-1111','일산역','고양시','정발산동', 6, 7, 0, 7, 0, 0, 'url');
+                    first_near_station, map_url, homepage_url, instagram_url, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
+                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count)
+    VALUES (6,3,6,'5211-5','졸려','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+        '경기도','일요일, 월요일','풍산역','https://naver.me/5K8QhR8u','https://www.idus.com/w/artist/1f6a0a08-7292-403d-8185-316f8d704d58/profile','https://www.instagram.com/sung._.silver',true,false,true,'화~토 11:00 ~ 19:00',
+        '010-1111-1111','일산역','고양시','정발산동', 6, 7, 0, 7, 0, 0);
 INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
-                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count, map_url)
-VALUES (7,1,6,'51-5','졸빵집','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
-        '경기도','일요일, 월요일','풍산역',null,true,false,true,'화~토 11:00 ~ 19:00',
-        '010-1111-1111','일산역','고양시','정발산동', 7, 8, 1, 7, 0, 0, 'url');
+                    first_near_station, map_url, homepage_url, instagram_url, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
+                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count)
+    VALUES (7,1,6,'51-5','졸빵집','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+        '경기도','일요일, 월요일','풍산역','https://naver.me/5K8QhR8u',null,null,true,false,true,'화~토 11:00 ~ 19:00',
+        '010-1111-1111','일산역','고양시','정발산동', 7, 8, 1, 7, 0, 0);
 INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
-                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count, map_url)
-VALUES (8,1,6,'51-5','졸빵집','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
-        '경기도','일요일, 월요일','풍산역',null,true,false,true,'화~토 11:00 ~ 19:00',
-        '010-1111-1111','일산역','고양시','정발산동', 7, 8, 1, 7, 0, 0, 'url');
+                    first_near_station, map_url, homepage_url, instagram_url, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
+                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count)
+    VALUES (8,1,6,'51-5','졸빵집','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+        '경기도','일요일, 월요일','풍산역','https://naver.me/5K8QhR8u',null,null,true,false,true,'화~토 11:00 ~ 19:00',
+        '010-1111-1111','일산역','고양시','정발산동', 7, 8, 1, 7, 0, 0);
 INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
-                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count, map_url)
-VALUES (9,3,6,'51-5','졸빵집','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
-        '경기도','일요일, 월요일','풍산역',null,true,false,true,'화~토 11:00 ~ 19:00',
-        '010-1111-1111','일산역','고양시','정발산동', 7, 8, 1, 7, 0, 0, 'url');
+                    first_near_station, map_url, homepage_url, instagram_url, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
+                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count)
+    VALUES (9,3,6,'51-5','졸빵집','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+        '경기도','일요일, 월요일','풍산역','https://naver.me/5K8QhR8u',null,null,true,false,true,'화~토 11:00 ~ 19:00',
+        '010-1111-1111','일산역','고양시','정발산동', 7, 8, 1, 7, 0, 0);
 INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
-                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count, map_url)
-VALUES (10,5,6,'51-5','졸빵집','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
-        '경기도','일요일, 월요일','풍산역',null,true,false,true,'화~토 11:00 ~ 19:00',
-        '010-1111-1111','일산역','고양시','정발산동', 7, 8, 1, 7, 0, 0, 'url');
+                    first_near_station, map_url, homepage_url, instagram_url, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
+                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count)
+    VALUES (10,5,6,'51-5','졸빵집','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+        '경기도','일요일, 월요일','풍산역','https://naver.me/5K8QhR8u',null,null,true,false,true,'화~토 11:00 ~ 19:00',
+        '010-1111-1111','일산역','고양시','정발산동', 7, 8, 1, 7, 0, 0);
 INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
-                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count, map_url)
-VALUES (11,5,6,'51-5','빵빵빵','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
-        '경기도','일요일, 월요일','풍산역',null,true,false,true,'화~토 11:00 ~ 19:00',
-        '010-1111-1111','일산역','고양시','정발산동', 7, 8, 1, 7, 0, 0, 'url');
+                    first_near_station, map_url, homepage_url, instagram_url, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
+                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count)
+    VALUES (11,5,6,'51-5','빵빵빵','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+        '경기도','일요일, 월요일','풍산역','https://naver.me/5K8QhR8u',null,null,true,false,true,'화~토 11:00 ~ 19:00',
+        '010-1111-1111','일산역','고양시','정발산동', 7, 8, 1, 7, 0, 0);
 INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
-                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count, map_url)
-VALUES (12,6,6,'51-5','흠냐링빵집','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
-        '경기도','일요일, 월요일','풍산역',null,true,false,true,'화~토 11:00 ~ 19:00',
-        '010-1111-1111','일산역','고양시','정발산동', 7, 8, 1, 7, 0, 0, 'url');
+                    first_near_station, map_url, homepage_url, instagram_url, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
+                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count)
+    VALUES (12,6,6,'51-5','흠냐링빵집','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+        '경기도','일요일, 월요일','풍산역','https://naver.me/5K8QhR8u',null,null,true,false,true,'화~토 11:00 ~ 19:00',
+        '010-1111-1111','일산역','고양시','정발산동', 7, 8, 1, 7, 0, 0);
 INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
-                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count, map_url)
-VALUES (13,7,6,'51-5','맛있는빵집','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
-        '경기도','일요일, 월요일','풍산역',null,true,false,true,'화~토 11:00 ~ 19:00',
-        '010-1111-1111','일산역','고양시','정발산동', 7, 8, 1, 7, 0, 0, 'url');
+                    first_near_station, map_url, homepage_url, instagram_url, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
+                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count)
+    VALUES (13,7,6,'51-5','맛있는빵집','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+        '경기도','일요일, 월요일','풍산역','https://naver.me/5K8QhR8u',null,null,true,false,true,'화~토 11:00 ~ 19:00',
+        '010-1111-1111','일산역','고양시','정발산동', 7, 8, 1, 7, 0, 0);
 INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, bakery_name,bakery_picture, city, closed_day,
-                    first_near_station, homepage, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
-                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count, map_url)
-VALUES (14,3,6,'51-5','죽빵집','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
-        '경기도','일요일, 월요일','풍산역',null,true,false,true,'화~토 11:00 ~ 19:00',
-        '010-1111-1111','일산역','고양시','정발산동', 7, 8, 1, 7, 0, 0, 'url');
+                    first_near_station, map_url, homepage_url, instagram_url, is_haccp,is_nongmo, is_vegan, opening_hours, phone_number, second_near_station, state, town,
+                    book_mark_count, review_count, keyword_delicious_count, keyword_kind_count, keyword_special_count, keyword_zero_waste_count)
+    VALUES (14,3,6,'51-5','죽빵집','https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220526_91%2F1653554529250qdOYp_JPEG%2F0E35EAC3-F936-41C7-BEE4-645B83AED8B1.jpeg',
+        '경기도','일요일, 월요일','풍산역','https://naver.me/5K8QhR8u',null,null,true,false,true,'화~토 11:00 ~ 19:00',
+        '010-1111-1111','일산역','고양시','정발산동', 7, 8, 1, 7, 0, 0);
 
 
 -- bakery_category
