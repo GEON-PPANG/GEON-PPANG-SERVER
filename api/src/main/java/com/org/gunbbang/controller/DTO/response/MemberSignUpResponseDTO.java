@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class MemberSignUpResponseDTO {
+  private Long memberId;
   private AuthType type;
   private String email;
 }
