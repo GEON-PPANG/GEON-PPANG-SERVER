@@ -6,7 +6,7 @@ import com.org.gunbbang.controller.DTO.response.BakerySearchResponseDTO;
 import com.org.gunbbang.controller.DTO.response.BakerySearchResponseDTOV2;
 import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.service.BakeryService;
-import com.org.gunbbang.util.Security.SecurityUtil;
+import com.org.gunbbang.util.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

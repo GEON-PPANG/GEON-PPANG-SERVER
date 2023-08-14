@@ -1,12 +1,9 @@
 package com.org.gunbbang.controller.DTO.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @Builder
 public class BookMarkResponseDTO {

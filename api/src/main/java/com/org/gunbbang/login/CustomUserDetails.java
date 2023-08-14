@@ -13,12 +13,10 @@ public class CustomUserDetails implements UserDetails {
   private Long memberId;
   private String password;
   private boolean enabled = true;
-
   private MainPurpose mainPurpose;
-
   private Long breadTypeId;
-
   private Long nutrientTypeId;
+  private String nickName;
 
   public CustomUserDetails(
       String username,
@@ -26,13 +24,15 @@ public class CustomUserDetails implements UserDetails {
       Long memberId,
       MainPurpose mainPurpose,
       Long breadTypeId,
-      Long nutrientTypeId) {
+      Long nutrientTypeId,
+      String nickname) {
     this.username = username;
     this.password = password;
     this.memberId = memberId;
     this.mainPurpose = mainPurpose;
     this.breadTypeId = breadTypeId;
     this.nutrientTypeId = nutrientTypeId;
+    this.nickName = nickname;
   }
 
   @Override
@@ -67,6 +67,10 @@ public class CustomUserDetails implements UserDetails {
 
   public Long getNutrientTypeId() {
     return nutrientTypeId;
+  }
+
+  public String getNickname() {
+    return nickName;
   }
 
   @Override

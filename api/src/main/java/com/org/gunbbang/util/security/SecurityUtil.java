@@ -1,4 +1,4 @@
-package com.org.gunbbang.util.Security;
+package com.org.gunbbang.util.security;
 
 import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.login.CustomUserDetails;
@@ -21,6 +21,10 @@ public class SecurityUtil {
 
   public static Long getLoginMemberNutrientTypeId() {
     return getCustomUserDetails().getNutrientTypeId();
+  }
+
+  public static String getLoginMemberNickname() {
+    return getCustomUserDetails().getNickname();
   }
 
   public static Map<String, Object> getLoginMemberInfo() {

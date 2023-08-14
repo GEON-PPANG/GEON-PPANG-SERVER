@@ -8,7 +8,7 @@ import com.org.gunbbang.controller.DTO.response.ReviewListResponseDTO;
 import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.service.BakeryService;
 import com.org.gunbbang.service.ReviewService;
-import com.org.gunbbang.util.Security.SecurityUtil;
+import com.org.gunbbang.util.security.SecurityUtil;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

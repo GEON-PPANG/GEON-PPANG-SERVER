@@ -15,10 +15,10 @@ import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.BreadTypeRepository;
 import com.org.gunbbang.repository.MemberRepository;
 import com.org.gunbbang.repository.NutrientTypeRepository;
-import com.org.gunbbang.util.Security.SecurityUtil;
 import com.org.gunbbang.util.mapper.BreadTypeMapper;
 import com.org.gunbbang.util.mapper.MemberTypeMapper;
 import com.org.gunbbang.util.mapper.NutrientTypeMapper;
+import com.org.gunbbang.util.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -176,4 +176,13 @@ public class MemberService {
       throw new BadRequestException(ErrorType.ALREADY_EXIST_EMAIL_EXCEPTION);
     }
   }
+
+  //  public MemberNicknameResponseDTO getMemberNickname(Long memberId) {
+  //    Optional<String> nickname =
+  //            memberRepository
+  //                    .findNicknameById(memberId)
+  //                    .orElseThrow();
+  //    return
+  //  }
+
 }
