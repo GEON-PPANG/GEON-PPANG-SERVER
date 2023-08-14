@@ -1,4 +1,4 @@
-package com.org.gunbbang.util.Security;
+package com.org.gunbbang.util.security;
 
 import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.login.CustomUserDetails;
