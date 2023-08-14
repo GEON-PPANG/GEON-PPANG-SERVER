@@ -22,11 +22,9 @@ public class SearchController {
 
   @GetMapping("/bakeries")
   @SearchApiLog
-  public ApiResponse<BakerySearchResponseDTO> searchBakery(@RequestParam final String bakeryName) {
-    Long memberId = SecurityUtil.getLoginMemberId();
+  public ApiResponse<BakerySearchResponseDTO> searchBakery(@RequestParam final String searchTerm) {
     return ApiResponse.success(
-        SuccessType.SEARCH_BAKERIES_SUCCESS,
-        bakeryService.getBakeriesByName(bakeryName.strip(), memberId));
+        SuccessType.SEARCH_BAKERIES_SUCCESS, bakeryService.getBakeriesBySearch(searchTerm.trim()));
   }
 
   @GetMapping("/v2/bakeries")

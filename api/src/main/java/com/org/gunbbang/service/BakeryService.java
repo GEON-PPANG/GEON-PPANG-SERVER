@@ -7,6 +7,7 @@ import com.org.gunbbang.controller.DTO.response.BaseDTO.BaseBakeryResponseDTOV2;
 import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
+import com.org.gunbbang.service.specification.BakerySpecifications;
 import com.org.gunbbang.util.mapper.BakeryMapper;
 import com.org.gunbbang.util.mapper.BreadTypeMapper;
 import java.util.*;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -184,12 +186,20 @@ public class BakeryService {
     return bestBakeries;
   }
 
-  public BakerySearchResponseDTO getBakeriesByName(String bakeryName, Long memberId) {
-    if (bakeryName.isEmpty()) {
+  public BakerySearchResponseDTO getBakeriesBySearch(String searchTerm) {
+    if (searchTerm.isEmpty()) {
       return BakerySearchResponseDTO.getEmptyBakerySearchResponseDTO();
     }
+    List<String> searchWordList = new ArrayList<>(Arrays.asList(searchTerm.split("\\s+")));
 
-    List<Bakery> foundBakeries = bakeryRepository.findBakeryByBakeryName(bakeryName);
+    Specification<Bakery> spec = Specification.where(null);
+
+    for (String keyword : searchWordList) {
+      Specification<Bakery> keywordSpec = BakerySpecifications.searchBakery(keyword);
+      spec = spec.and(keywordSpec);
+    }
+
+    List<Bakery> foundBakeries = bakeryRepository.findAll(spec);
     List<BakeryListResponseDTO> bakeryListResponseDTOs =
         getBakeryListResponseDTOList(foundBakeries);
 
