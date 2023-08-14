@@ -29,6 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         member.getMemberId(),
         member.getMainPurpose(),
         member.getBreadType().getBreadTypeId(),
-        member.getNutrientType().getNutrientTypeId());
+        member.getNutrientType().getNutrientTypeId(),
+        member.getNickname());
   }
 }
