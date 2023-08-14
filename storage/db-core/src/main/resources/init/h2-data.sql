@@ -30,6 +30,8 @@ INSERT INTO bread_type (bread_type_id, bread_type_name, is_gluten_free, is_vegan
     VALUES (14, '비건빵/넛프리/슈가프리', false, true, true, true);
 INSERT INTO bread_type (bread_type_id, bread_type_name, is_gluten_free, is_vegan, is_nut_free, is_sugar_free)
     VALUES (15, '글루텐프리/비건빵/넛프리/저당무설탕', true, true, true, true);
+INSERT INTO bread_type (bread_type_id, bread_type_name, is_gluten_free, is_vegan, is_nut_free, is_sugar_free)
+    VALUES (16, '빵유형 필터 선택 안함', false, false, false, false);
 
 -- nutrient_type
 
@@ -47,6 +49,8 @@ INSERT INTO nutrient_type (nutrient_type_id, nutrient_type_name, is_ingredient_o
     VALUES (6, '원재료 공개/비공개', false, true, true);
 INSERT INTO nutrient_type (nutrient_type_id, nutrient_type_name, is_ingredient_open, is_nutrient_open, is_not_open)
     VALUES (7, '영양성분 공개/원재료 공개/비공개', true, true, true);
+INSERT INTO nutrient_type (nutrient_type_id, nutrient_type_name, is_ingredient_open, is_nutrient_open, is_not_open)
+    VALUES (8, '영양성분 타입 선택 안함', false, false, false);
 
 -- member
 INSERT INTO member (email, password, platform_type, main_purpose, nickname, role, bread_type_id, nutrient_type_id, created_at, updated_at)
