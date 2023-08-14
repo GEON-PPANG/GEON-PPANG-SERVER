@@ -82,6 +82,14 @@ public class BakeryService {
     BreadTypeResponseDTO breadType = getBreadType(bakery);
     boolean isBookMarked = isBookMarked(memberId, bakeryId);
     List<MenuResponseDTO> menuList = new ArrayList<>();
+    String address =
+        bakery.getState()
+            + " "
+            + bakery.getCity()
+            + " "
+            + bakery.getTown()
+            + " "
+            + bakery.getAddressRest();
 
     for (Menu menu : bakeryMenu) {
       menuList.add(
@@ -92,35 +100,8 @@ public class BakeryService {
               .build());
     }
 
-    return BakeryDetailResponseDTO.builder()
-        .bakeryId(bakery.getBakeryId())
-        .bakeryName(bakery.getBakeryName())
-        .bakeryPicture(bakery.getBakeryPicture())
-        .isHACCP(bakery.getIsHACCP())
-        .isVegan(bakery.getIsVegan())
-        .isNonGMO(bakery.getIsNonGMO())
-        .breadType(breadType)
-        .firstNearStation(bakery.getFirstNearStation())
-        .secondNearStation(bakery.getSecondNearStation())
-        .isBookMarked(isBookMarked)
-        .bookMarkCount(bakery.getBookMarkCount())
-        .reviewCount(bakery.getReviewCount())
-        .mapUrl(bakery.getMapUrl())
-        .homepageUrl(bakery.getHomepageUrl())
-        .instagramUrl(bakery.getInstagramUrl())
-        .address(
-            bakery.getState()
-                + " "
-                + bakery.getCity()
-                + " "
-                + bakery.getTown()
-                + " "
-                + bakery.getAddressRest())
-        .openingTime(bakery.getOpeningHours())
-        .closedDay(bakery.getClosedDay())
-        .phoneNumber(bakery.getPhoneNumber())
-        .menuList(menuList)
-        .build();
+    return BakeryMapper.INSTANCE.toBakeryDetailResponseDTO(
+        bakery, address, breadType, isBookMarked, menuList);
   }
 
   public List<BestBakeryListResponseDTO> getBestBakeries(Long memberId) {

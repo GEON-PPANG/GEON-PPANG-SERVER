@@ -1,9 +1,6 @@
 package com.org.gunbbang.util.mapper;
 
-import com.org.gunbbang.controller.DTO.response.BakeryListResponseDTO;
-import com.org.gunbbang.controller.DTO.response.BakerySearchResponseDTO;
-import com.org.gunbbang.controller.DTO.response.BestBakeryListResponseDTO;
-import com.org.gunbbang.controller.DTO.response.BreadTypeResponseDTO;
+import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.Bakery;
 import java.util.List;
 import org.mapstruct.Mapper;
@@ -24,4 +21,14 @@ public interface BakeryMapper {
       int resultCount, List<BakeryListResponseDTO> bakeryList);
 
   List<BestBakeryListResponseDTO> toBestBakeryListResponseDTO(List<Bakery> bakeries);
+
+  @Mapping(source = "bakery.isHACCP", target = "isHACCP")
+  @Mapping(source = "bakery.isVegan", target = "isVegan")
+  @Mapping(source = "bakery.isNonGMO", target = "isNonGMO")
+  BakeryDetailResponseDTO toBakeryDetailResponseDTO(
+      Bakery bakery,
+      String address,
+      BreadTypeResponseDTO breadType,
+      boolean isBookMarked,
+      List<MenuResponseDTO> menuList);
 }
