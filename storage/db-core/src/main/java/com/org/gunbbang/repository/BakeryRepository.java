@@ -43,6 +43,10 @@ public interface BakeryRepository extends JpaRepository<Bakery, Long> {
   List<Bakery> findBakeryByBakeryName(@Param("bakeryName") String bakeryName);
 
   @Query(
+      "SELECT b FROM Bakery b WHERE CONCAT(b.state, ', ', b.city, ', ', b.town) Like :searchWord")
+  List<Bakery> findBakeryBySearch(@Param("searchWord") List<String> searcWordList);
+
+  @Query(
       value =
           "SELECT distinct b FROM Bakery b "
               + "INNER JOIN BookMark bm ON b.bakeryId = bm.bakery.bakeryId "

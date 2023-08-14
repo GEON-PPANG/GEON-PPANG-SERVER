@@ -197,6 +197,20 @@ public class BakeryService {
         bakeryListResponseDTOs.size(), bakeryListResponseDTOs);
   }
 
+  public BakerySearchResponseDTO getBakeriesBySearch(String searchTerm) {
+    if (searchTerm.isEmpty()) {
+      return BakerySearchResponseDTO.getEmptyBakerySearchResponseDTO();
+    }
+    System.out.println("searchTerm = " + searchTerm);
+    List<String> searchWordList = new ArrayList<>(Arrays.asList(searchTerm.split("\\s+")));
+    List<Bakery> foundBakeries = bakeryRepository.findBakeryBySearch(searchWordList);
+    List<BakeryListResponseDTO> bakeryListResponseDTOs =
+        getBakeryListResponseDTOList(foundBakeries);
+
+    return BakeryMapper.INSTANCE.toBakerySearchResponseDTO(
+        bakeryListResponseDTOs.size(), bakeryListResponseDTOs);
+  }
+
   private List<BakeryListResponseDTO> getBakeryListResponseDTOList(List<Bakery> foundBakeries) {
     List<BakeryListResponseDTO> bakeryListResponseDTOs = new ArrayList<>();
 
