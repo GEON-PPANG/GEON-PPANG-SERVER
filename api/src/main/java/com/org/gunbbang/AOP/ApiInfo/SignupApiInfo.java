@@ -12,41 +12,9 @@ import org.springframework.core.ParameterNameDiscoverer;
 @Getter
 public class SignupApiInfo extends RequestApiInfo {
   private String platformType = null;
-  private String mainPurpose = null;
-
-  private Boolean isGlutenFree = null;
-  private Boolean isVegan = null;
-  private Boolean isNutFree = null;
-  private Boolean isSugarFree = null;
-
-  private Boolean isNutrientOpen = null;
-  private Boolean isIngredientOpen = null;
-  private Boolean isNotOpen = null;
 
   public SignupApiInfo(JoinPoint joinPoint, Class clazz, ObjectMapper objectMapper) {
     super(joinPoint, clazz, objectMapper);
-    setTypeFields(joinPoint);
-    setMainPurpose(joinPoint);
-  }
-
-  private void setTypeFields(JoinPoint joinPoint) {
-    MemberSignUpRequestDTO requestDTO = getMemberSignupRequestDTO(joinPoint);
-
-    try {
-      if (requestDTO != null) {
-        this.isGlutenFree = requestDTO.getBreadType().getIsGlutenFree();
-        this.isVegan = requestDTO.getBreadType().getIsVegan();
-        this.isNutFree = requestDTO.getBreadType().getIsNutFree();
-        this.isSugarFree = requestDTO.getBreadType().getIsSugarFree();
-
-        this.isIngredientOpen = requestDTO.getNutrientType().getIsIngredientOpen();
-        this.isNutrientOpen = requestDTO.getNutrientType().getIsNutrientOpen();
-        this.isNotOpen = requestDTO.getNutrientType().getIsNotOpen();
-      }
-    } catch (Exception e) {
-      System.out.println(" extract 시 에러 발생");
-      e.printStackTrace();
-    }
   }
 
   private MemberSignUpRequestDTO getMemberSignupRequestDTO(JoinPoint joinPoint) {
@@ -71,19 +39,6 @@ public class SignupApiInfo extends RequestApiInfo {
       System.out.println("MemberSignUpRequestDTO extract 시 에러 발생");
       e.printStackTrace();
       return null;
-    }
-  }
-
-  private void setMainPurpose(JoinPoint joinPoint) {
-    MemberSignUpRequestDTO requestDTO = getMemberSignupRequestDTO(joinPoint);
-
-    try {
-      if (requestDTO != null) {
-        this.mainPurpose = requestDTO.getMainPurpose();
-      }
-    } catch (Exception e) {
-      System.out.println("mainPurpose extract 시 에러 발생");
-      e.printStackTrace();
     }
   }
 }
