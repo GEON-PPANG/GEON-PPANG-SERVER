@@ -1,5 +1,7 @@
 package com.org.gunbbang.service;
 
+import static com.org.gunbbang.util.ConstantVO.BLANK_SPACE;
+
 import com.org.gunbbang.CategoryType;
 import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.controller.DTO.response.*;
@@ -10,6 +12,7 @@ import com.org.gunbbang.repository.*;
 import com.org.gunbbang.service.specification.BakerySpecifications;
 import com.org.gunbbang.util.mapper.BakeryMapper;
 import com.org.gunbbang.util.mapper.BreadTypeMapper;
+import com.org.gunbbang.util.mapper.MenuMapper;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -78,49 +81,20 @@ public class BakeryService {
         bakeryRepository
             .findById(bakeryId)
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
-    List<Menu> bakeryMenu = menuRepository.findAllByBakery(bakery);
-    BreadTypeResponseDTO breadType = getBreadType(bakery);
+    BreadTypeResponseDTO breadType =
+        BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(bakery.getBreadType());
     boolean isBookMarked = isBookMarked(memberId, bakeryId);
-    List<MenuResponseDTO> menuList = new ArrayList<>();
+    List<Menu> bakeryMenuList = menuRepository.findAllByBakery(bakery);
+    List<MenuResponseDTO> menuList = MenuMapper.INSTANCE.toMenuResponseDTOList(bakeryMenuList);
+    String address =
+        getAddress(bakery.getState(), bakery.getCity(), bakery.getTown(), bakery.getAddressRest());
 
-    for (Menu menu : bakeryMenu) {
-      menuList.add(
-          MenuResponseDTO.builder()
-              .menuId(menu.getMenuId())
-              .menuName(menu.getMenuName())
-              .menuPrice(menu.getMenuPrice())
-              .build());
-    }
+    return BakeryMapper.INSTANCE.toBakeryDetailResponseDTO(
+        bakery, address, breadType, isBookMarked, menuList);
+  }
 
-    return BakeryDetailResponseDTO.builder()
-        .bakeryId(bakery.getBakeryId())
-        .bakeryName(bakery.getBakeryName())
-        .bakeryPicture(bakery.getBakeryPicture())
-        .isHACCP(bakery.getIsHACCP())
-        .isVegan(bakery.getIsVegan())
-        .isNonGMO(bakery.getIsNonGMO())
-        .breadType(breadType)
-        .firstNearStation(bakery.getFirstNearStation())
-        .secondNearStation(bakery.getSecondNearStation())
-        .isBookMarked(isBookMarked)
-        .bookMarkCount(bakery.getBookMarkCount())
-        .reviewCount(bakery.getReviewCount())
-        .mapUrl(bakery.getMapUrl())
-        .homepageUrl(bakery.getHomepageUrl())
-        .instagramUrl(bakery.getInstagramUrl())
-        .address(
-            bakery.getState()
-                + " "
-                + bakery.getCity()
-                + " "
-                + bakery.getTown()
-                + " "
-                + bakery.getAddressRest())
-        .openingTime(bakery.getOpeningHours())
-        .closedDay(bakery.getClosedDay())
-        .phoneNumber(bakery.getPhoneNumber())
-        .menuList(menuList)
-        .build();
+  String getAddress(String state, String city, String town, String addressRest) {
+    return state + BLANK_SPACE + city + BLANK_SPACE + town + BLANK_SPACE + addressRest;
   }
 
   public List<BestBakeryListResponseDTO> getBestBakeries(Long memberId) {

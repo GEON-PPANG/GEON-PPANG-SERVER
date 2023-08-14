@@ -19,7 +19,7 @@ public class BakeryDetailResponseDTO extends BaseBakeryResponseDTO {
   private String homepageUrl;
   private String instagramUrl;
   private String address;
-  private String openingTime;
+  private String openingHours;
   private String closedDay;
   private String phoneNumber;
   private List<MenuResponseDTO> menuList;
