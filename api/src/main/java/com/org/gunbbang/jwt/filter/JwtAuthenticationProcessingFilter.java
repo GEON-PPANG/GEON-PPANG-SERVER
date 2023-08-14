@@ -130,7 +130,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
             myMember.getMemberId(),
             myMember.getMainPurpose(),
             myMember.getBreadType().getBreadTypeId(),
-            myMember.getNutrientType().getNutrientTypeId());
+            myMember.getNutrientType().getNutrientTypeId(),
+            myMember.getNickname());
 
     Authentication authentication =
         new UsernamePasswordAuthenticationToken(

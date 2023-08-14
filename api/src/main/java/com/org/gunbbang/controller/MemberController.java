@@ -7,7 +7,7 @@ import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.service.BakeryService;
 import com.org.gunbbang.service.MemberService;
 import com.org.gunbbang.service.ReviewService;
-import com.org.gunbbang.util.Security.SecurityUtil;
+import com.org.gunbbang.util.security.*;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -60,5 +60,13 @@ public class MemberController {
     Long memberId = SecurityUtil.getLoginMemberId();
     return ApiResponse.success(
         SuccessType.GET_BOOKMARKED_BAKERIES_SUCCESS, bakeryService.getBookMarkedBakeries(memberId));
+  }
+
+  @GetMapping("/nickname")
+  public ApiResponse<MemberNicknameResponseDTO> getLoginMemberNickname() {
+    String nickname = SecurityUtil.getLoginMemberNickname();
+    return ApiResponse.success(
+        SuccessType.GET_MEMBER_NICKNAME_SUCCESS,
+        MemberNicknameResponseDTO.builder().nickname(nickname).build());
   }
 }
