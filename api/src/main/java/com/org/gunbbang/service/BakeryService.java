@@ -79,10 +79,10 @@ public class BakeryService {
         bakeryRepository
             .findById(bakeryId)
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
-    List<Menu> bakeryMenu = menuRepository.findAllByBakery(bakery);
     BreadTypeResponseDTO breadType = getBreadType(bakery);
     boolean isBookMarked = isBookMarked(memberId, bakeryId);
-    List<MenuResponseDTO> menuList = MenuMapper.INSTANCE.toMenuResponseDTOList(bakeryMenu);
+    List<MenuResponseDTO> menuList =
+        MenuMapper.INSTANCE.toMenuResponseDTOList(menuRepository.findAllByBakery(bakery));
     String address =
         bakery.getState()
             + " "
