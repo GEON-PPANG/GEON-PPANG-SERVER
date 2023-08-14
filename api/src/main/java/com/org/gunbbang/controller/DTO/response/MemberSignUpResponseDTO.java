@@ -4,7 +4,7 @@ import com.org.gunbbang.common.AuthType;
 import lombok.*;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @Builder
 public class MemberSignUpResponseDTO {
