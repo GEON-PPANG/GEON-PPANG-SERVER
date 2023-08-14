@@ -1,5 +1,7 @@
 package com.org.gunbbang.service;
 
+import static com.org.gunbbang.util.ConstantVO.BLANK_SPACE;
+
 import com.org.gunbbang.CategoryType;
 import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.controller.DTO.response.*;
@@ -79,21 +81,20 @@ public class BakeryService {
         bakeryRepository
             .findById(bakeryId)
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
-    BreadTypeResponseDTO breadType = getBreadType(bakery);
+    BreadTypeResponseDTO breadType =
+        BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(bakery.getBreadType());
     boolean isBookMarked = isBookMarked(memberId, bakeryId);
-    List<MenuResponseDTO> menuList =
-        MenuMapper.INSTANCE.toMenuResponseDTOList(menuRepository.findAllByBakery(bakery));
+    List<Menu> bakeryMenuList = menuRepository.findAllByBakery(bakery);
+    List<MenuResponseDTO> menuList = MenuMapper.INSTANCE.toMenuResponseDTOList(bakeryMenuList);
     String address =
-        bakery.getState()
-            + " "
-            + bakery.getCity()
-            + " "
-            + bakery.getTown()
-            + " "
-            + bakery.getAddressRest();
+        getAddress(bakery.getState(), bakery.getCity(), bakery.getTown(), bakery.getAddressRest());
 
     return BakeryMapper.INSTANCE.toBakeryDetailResponseDTO(
         bakery, address, breadType, isBookMarked, menuList);
+  }
+
+  String getAddress(String state, String city, String town, String addressRest) {
+    return state + BLANK_SPACE + city + BLANK_SPACE + town + BLANK_SPACE + addressRest;
   }
 
   public List<BestBakeryListResponseDTO> getBestBakeries(Long memberId) {
