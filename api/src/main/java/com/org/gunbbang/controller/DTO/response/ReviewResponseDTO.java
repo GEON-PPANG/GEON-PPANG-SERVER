@@ -3,13 +3,12 @@ package com.org.gunbbang.controller.DTO.response;
 import com.org.gunbbang.controller.DTO.response.BaseDTO.BaseReviewResponseDTO;
 import java.util.List;
 import javax.validation.constraints.NotNull;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 @SuperBuilder
 public class ReviewResponseDTO extends BaseReviewResponseDTO {
   @NotNull String memberNickname;
