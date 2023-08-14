@@ -22,10 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 
-/**
- * 인증은 CustomJsonUsernamePasswordAuthenticationFilter에서 authenticate()로 인증된 사용자로 처리
- * JwtAuthenticationProcessingFilter는 AccessToken, RefreshToken 재발급
- */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -76,8 +72,7 @@ public class SecurityConfig {
         .anyRequest()
         .authenticated();
 
-    // 원래 스프링 시큐리티 필터 순서가 LogoutFilter 이후에 로그인 필터 동작
-    // 순서 : LogoutFilter -> JwtAuthenticationProcessingFilter ->
+    // 필터 동작 순서: LogoutFilter -> JwtAuthenticationProcessingFilter ->
     // CustomJsonUsernamePasswordAuthenticationFilter
     http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
     http.addFilterBefore(
@@ -100,12 +95,6 @@ public class SecurityConfig {
     return customJsonUsernamePasswordAuthenticationFilter;
   }
 
-  /**
-   * AuthenticationManager 설정 후 등록 PasswordEncoder를 사용하는 AuthenticationProvider 지정 FormLogin(기존 스프링
-   * 시큐리티 로그인)과 동일하게 DaoAuthenticationProvider 사용, 유저네임과 비밀번호를 기반으로 사용 UserDetailsService는 커스텀
-   * LoginService로 등록 또한, FormLogin과 동일하게 AuthenticationManager로는 구현체인 ProviderManager 사용(return
-   * ProviderManager)
-   */
   @Bean
   public AuthenticationManager authenticationManager() {
     DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -119,7 +108,6 @@ public class SecurityConfig {
     return PasswordEncoderFactories.createDelegatingPasswordEncoder();
   }
 
-  /** 로그인 성공 시 호출되는 LoginSuccessJWTProviderHandler 빈 등록 */
   @Bean
   public LoginSuccessHandler loginSuccessHandler() {
     return new LoginSuccessHandler(jwtService, memberRepository);
