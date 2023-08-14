@@ -23,6 +23,10 @@ public class SecurityUtil {
     return getCustomUserDetails().getNutrientTypeId();
   }
 
+  public static String getLoginMemberNickname() {
+    return getCustomUserDetails().getNickname();
+  }
+
   public static Map<String, Object> getLoginMemberInfo() {
     Map<String, Object> memberInfoMap = new HashMap<>();
     memberInfoMap.put("memberId", getLoginMemberId());
