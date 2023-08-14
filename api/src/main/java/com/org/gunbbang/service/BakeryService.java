@@ -186,19 +186,6 @@ public class BakeryService {
     return bestBakeries;
   }
 
-  //  public BakerySearchResponseDTO getBakeriesByName(String bakeryName, Long memberId) {
-  //    if (bakeryName.isEmpty()) {
-  //      return BakerySearchResponseDTO.getEmptyBakerySearchResponseDTO();
-  //    }
-  //
-  //    List<Bakery> foundBakeries = bakeryRepository.findBakeryByBakeryName(bakeryName);
-  //    List<BakeryListResponseDTO> bakeryListResponseDTOs =
-  //        getBakeryListResponseDTOList(foundBakeries);
-  //
-  //    return BakeryMapper.INSTANCE.toBakerySearchResponseDTO(
-  //        bakeryListResponseDTOs.size(), bakeryListResponseDTOs);
-  //  }
-
   public BakerySearchResponseDTO getBakeriesBySearch(String searchTerm) {
     if (searchTerm.isEmpty()) {
       return BakerySearchResponseDTO.getEmptyBakerySearchResponseDTO();
