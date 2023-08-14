@@ -10,6 +10,7 @@ import com.org.gunbbang.repository.*;
 import com.org.gunbbang.service.specification.BakerySpecifications;
 import com.org.gunbbang.util.mapper.BakeryMapper;
 import com.org.gunbbang.util.mapper.BreadTypeMapper;
+import com.org.gunbbang.util.mapper.MenuMapper;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -81,7 +82,7 @@ public class BakeryService {
     List<Menu> bakeryMenu = menuRepository.findAllByBakery(bakery);
     BreadTypeResponseDTO breadType = getBreadType(bakery);
     boolean isBookMarked = isBookMarked(memberId, bakeryId);
-    List<MenuResponseDTO> menuList = new ArrayList<>();
+    List<MenuResponseDTO> menuList = MenuMapper.INSTANCE.toMenuResponseDTOList(bakeryMenu);
     String address =
         bakery.getState()
             + " "
@@ -90,15 +91,6 @@ public class BakeryService {
             + bakery.getTown()
             + " "
             + bakery.getAddressRest();
-
-    for (Menu menu : bakeryMenu) {
-      menuList.add(
-          MenuResponseDTO.builder()
-              .menuId(menu.getMenuId())
-              .menuName(menu.getMenuName())
-              .menuPrice(menu.getMenuPrice())
-              .build());
-    }
 
     return BakeryMapper.INSTANCE.toBakeryDetailResponseDTO(
         bakery, address, breadType, isBookMarked, menuList);
