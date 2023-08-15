@@ -53,13 +53,17 @@ public class ReviewService {
                 .isLike(reviewRequestDto.getIsLike())
                 .reviewText(reviewRequestDto.getReviewText())
                 .build());
-    // 리뷰 작성되면 review count 증가
+
+    if (reviewRequestDto.getIsLike()) {
+      createReviewRecommendKeyword(reviewRequestDto.getKeywordList(), review.getReviewId());
+    }
+
     bakery.reviewCountChange(true);
     bakeryRepository.saveAndFlush(bakery);
     return review.getReviewId();
   }
 
-  public void createReviewRecommendKeyword(
+  private void createReviewRecommendKeyword(
       List<RecommendKeywordNameRequestDTO> keywordNameRequestDtoList, Long reviewId) {
     Review review =
         reviewRepository
