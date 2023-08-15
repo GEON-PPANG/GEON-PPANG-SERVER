@@ -6,6 +6,7 @@ import com.org.gunbbang.controller.DTO.response.RecommendKeywordResponseDTO;
 import com.org.gunbbang.controller.DTO.response.ReviewListResponseDTO;
 import com.org.gunbbang.controller.DTO.response.ReviewResponseDTO;
 import com.org.gunbbang.entity.Review;
+import com.org.gunbbang.util.RecommendKeywordPercentage;
 import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -26,11 +27,12 @@ public interface ReviewMapper {
   ReviewResponseDTO toReviewResponseDTO(
       Review review, String createdAt, List<RecommendKeywordResponseDTO> recommendKeywordList);
 
+  @Mapping(source = "recommendKeywordPercentage.deliciousPercent", target = "deliciousPercent")
+  @Mapping(source = "recommendKeywordPercentage.specialPercent", target = "specialPercent")
+  @Mapping(source = "recommendKeywordPercentage.kindPercent", target = "kindPercent")
+  @Mapping(source = "recommendKeywordPercentage.zeroWastePercent", target = "zeroWastePercent")
   ReviewListResponseDTO toReviewListResponseDTO(
-      float deliciousPercent,
-      float specialPercent,
-      float kindPercent,
-      float zeroPercent,
+      RecommendKeywordPercentage recommendKeywordPercentage,
       long totalReviewCount,
       List<ReviewResponseDTO> reviewList);
 }

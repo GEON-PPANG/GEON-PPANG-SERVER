@@ -9,6 +9,7 @@ import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
+import com.org.gunbbang.util.RecommendKeywordPercentage;
 import com.org.gunbbang.util.mapper.RecommendKeywordMapper;
 import com.org.gunbbang.util.mapper.ReviewMapper;
 import com.org.gunbbang.util.security.SecurityUtil;
@@ -141,13 +142,16 @@ public class ReviewService {
           ReviewMapper.INSTANCE.toReviewResponseDTO(review, createdAt, recommendKeywordList));
     }
 
+    RecommendKeywordPercentage recommendKeywordPercentage =
+        RecommendKeywordPercentage.builder()
+            .deliciousPercent(calculatorPercentage(reviewCount, bakery.getKeywordDeliciousCount()))
+            .specialPercent(calculatorPercentage(reviewCount, bakery.getKeywordDeliciousCount()))
+            .kindPercent(calculatorPercentage(reviewCount, bakery.getKeywordKindCount()))
+            .zeroWastePercent(calculatorPercentage(reviewCount, bakery.getKeywordZeroWasteCount()))
+            .build();
+
     return ReviewMapper.INSTANCE.toReviewListResponseDTO(
-        calculatorPercentage(reviewCount, bakery.getKeywordDeliciousCount()),
-        calculatorPercentage(reviewCount, bakery.getKeywordSpecialCount()),
-        calculatorPercentage(reviewCount, bakery.getKeywordKindCount()),
-        calculatorPercentage(reviewCount, bakery.getKeywordZeroWasteCount()),
-        reviewCount,
-        reviewListDto);
+        recommendKeywordPercentage, reviewCount, reviewListDto);
   }
 
   private float calculatorPercentage(long reviewCount, long keywordCount) {

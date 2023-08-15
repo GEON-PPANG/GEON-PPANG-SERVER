@@ -21,13 +21,13 @@ public class ReviewListResponseDTO {
       float deliciousPercent,
       float specialPercent,
       float kindPercent,
-      float zeroPercent,
+      float zeroWastePercent,
       long totalReviewCount,
       List<ReviewResponseDTO> reviewList) {
     this.deliciousPercent = deliciousPercent;
     this.specialPercent = specialPercent;
     this.kindPercent = kindPercent;
-    this.zeroPercent = zeroPercent;
+    this.zeroWastePercent = zeroWastePercent;
     this.totalReviewCount = totalReviewCount;
     this.reviewList = reviewList;
   }
