@@ -19,10 +19,10 @@ public class ReviewListResponseDTO {
 
   @Builder
   public ReviewListResponseDTO(
-      Float tastePercent,
-      Float specialPercent,
-      Float kindPercent,
-      Float zeroPercent,
+      float tastePercent,
+      float specialPercent,
+      float kindPercent,
+      float zeroPercent,
       int totalReviewCount,
       List<ReviewResponseDTO> reviewList) {
     this.tastePercent = tastePercent;

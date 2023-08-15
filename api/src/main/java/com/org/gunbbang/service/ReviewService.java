@@ -121,7 +121,7 @@ public class ReviewService {
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
     List<Review> reviewList = reviewRepository.findAllByBakeryOrderByCreatedAtDesc(bakery);
     List<ReviewResponseDTO> reviewListDto = new ArrayList<>();
-    long reviewCount;
+    long reviewCount = bakery.getReviewCount();
 
     for (Review review : reviewList) {
       List<RecommendKeywordResponseDTO> recommendKeywordList = new ArrayList<>();
@@ -148,8 +148,6 @@ public class ReviewService {
               .build());
     }
 
-    reviewCount = bakery.getReviewCount();
-
     return ReviewListResponseDTO.builder()
         .tastePercent(calculatorPercentage(reviewCount, bakery.getKeywordDeliciousCount()))
         .specialPercent(calculatorPercentage(reviewCount, bakery.getKeywordSpecialCount()))
@@ -160,7 +158,7 @@ public class ReviewService {
         .build();
   }
 
-  private Float calculatorPercentage(Long reviewCount, Long keywordCount) {
+  private float calculatorPercentage(long reviewCount, long keywordCount) {
     if (reviewCount == 0) {
       return 0f;
     }
