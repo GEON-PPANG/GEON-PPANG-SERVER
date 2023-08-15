@@ -1,7 +1,6 @@
 package com.org.gunbbang.controller.DTO.response;
 
 import java.util.List;
-import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,22 +9,22 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReviewListResponseDTO {
-  @NotNull Float tastePercent;
-  @NotNull Float specialPercent;
-  @NotNull Float kindPercent;
-  @NotNull Float zeroPercent;
-  @NotNull int totalReviewCount;
+  float deliciousPercent;
+  float specialPercent;
+  float kindPercent;
+  float zeroPercent;
+  long totalReviewCount;
   List<ReviewResponseDTO> reviewList;
 
   @Builder
   public ReviewListResponseDTO(
-      float tastePercent,
+      float deliciousPercent,
       float specialPercent,
       float kindPercent,
       float zeroPercent,
-      int totalReviewCount,
+      long totalReviewCount,
       List<ReviewResponseDTO> reviewList) {
-    this.tastePercent = tastePercent;
+    this.deliciousPercent = deliciousPercent;
     this.specialPercent = specialPercent;
     this.kindPercent = kindPercent;
     this.zeroPercent = zeroPercent;

@@ -21,17 +21,15 @@ public interface ReviewMapper {
       String firstMaxRecommendKeyword,
       String secondMaxRecommendKeyword);
 
-  @Mapping(
-      target = "createdAt",
-      expression = "java( review.getCreatedAt().format(DateTimeFormatter.ofPattern(\"yy.MM.dd\") )")
+  @Mapping(target = "memberNickname", expression = "java( review.getMember().getNickname() )")
   ReviewResponseDTO toReviewResponseDTO(
-      Review review, List<RecommendKeywordResponseDTO> recommendKeywordResponseDTOList);
+      Review review, String createdAt, List<RecommendKeywordResponseDTO> recommendKeywordList);
 
   ReviewListResponseDTO toReviewListResponseDTO(
-      float tastePercent,
+      float deliciousPercent,
       float specialPercent,
       float kindPercent,
       float zeroPercent,
-      int totalReviewCount,
-      List<ReviewResponseDTO> reviewResponseDTOList);
+      long totalReviewCount,
+      List<ReviewResponseDTO> reviewList);
 }
