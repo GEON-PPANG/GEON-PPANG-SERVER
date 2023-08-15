@@ -12,7 +12,7 @@ public class ReviewListResponseDTO {
   float deliciousPercent;
   float specialPercent;
   float kindPercent;
-  float zeroPercent;
+  float zeroWastePercent;
   long totalReviewCount;
   List<ReviewResponseDTO> reviewList;
 
