@@ -22,6 +22,7 @@ public interface ReviewMapper {
       String secondMaxRecommendKeyword);
 
   @Mapping(target = "memberNickname", expression = "java( review.getMember().getNickname() )")
+  @Mapping(source = "createdAt", target = "createdAt")
   ReviewResponseDTO toReviewResponseDTO(
       Review review, String createdAt, List<RecommendKeywordResponseDTO> recommendKeywordList);
 
