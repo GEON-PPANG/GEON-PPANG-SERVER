@@ -124,18 +124,7 @@ public class LoggingAspect {
             apiInfo.getHeader().toString(),
             apiInfo.getParameters(),
             apiInfo.getBody(),
-            apiInfo.getIpAddress(),
-            apiInfo.getIsGlutenFree(),
-            apiInfo.getIsVegan(),
-            apiInfo.getIsNutFree(),
-            apiInfo.getIsSugarFree(),
-            apiInfo.getIsNutrientOpen(),
-            apiInfo.getIsIngredientOpen(),
-            apiInfo.getIsNotOpen(),
-            apiInfo.getMainPurpose()
-            //                apiInfo.getMemberId()
-
-            );
+            apiInfo.getIpAddress());
 
     System.out.println("회원가입 로깅");
     return doLogging(joinPoint, signupLogInfo);
