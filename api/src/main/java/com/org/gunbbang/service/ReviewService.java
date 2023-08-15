@@ -9,6 +9,8 @@ import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
+import com.org.gunbbang.util.RecommendKeywordPercentage;
+import com.org.gunbbang.util.mapper.RecommendKeywordMapper;
 import com.org.gunbbang.util.mapper.ReviewMapper;
 import com.org.gunbbang.util.security.SecurityUtil;
 import java.time.format.DateTimeFormatter;
@@ -121,46 +123,44 @@ public class ReviewService {
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
     List<Review> reviewList = reviewRepository.findAllByBakeryOrderByCreatedAtDesc(bakery);
     List<ReviewResponseDTO> reviewListDto = new ArrayList<>();
-    long reviewCount;
+    long reviewCount = bakery.getReviewCount();
+    String createdAt;
 
     for (Review review : reviewList) {
-      List<RecommendKeywordResponseDTO> recommendKeywordList = new ArrayList<>();
-      if (review.getIsLike()) {
-        List<ReviewRecommendKeyword> reviewRecommendKeywordList =
-            reviewRecommendKeywordRepository.findAllByReview(review);
-        for (ReviewRecommendKeyword reviewRecommendKeyword : reviewRecommendKeywordList) {
-          recommendKeywordList.add(
-              RecommendKeywordResponseDTO.builder()
-                  .recommendKeywordId(
-                      reviewRecommendKeyword.getRecommendKeyword().getRecommendKeywordId())
-                  .recommendKeywordName(
-                      reviewRecommendKeyword.getRecommendKeyword().getKeywordName())
-                  .build());
-        }
-      }
+      List<RecommendKeywordResponseDTO> recommendKeywordList =
+          getReCommendKeywordListResponseDTO(review);
+      createdAt = review.getCreatedAt().format(DateTimeFormatter.ofPattern("yy.MM.dd"));
       reviewListDto.add(
-          ReviewResponseDTO.builder()
-              .reviewId(review.getReviewId())
-              .memberNickname(review.getMember().getNickname())
-              .recommendKeywordList(recommendKeywordList)
-              .reviewText(review.getReviewText())
-              .createdAt(review.getCreatedAt().format(DateTimeFormatter.ofPattern("yy.MM.dd")))
-              .build());
+          ReviewMapper.INSTANCE.toReviewResponseDTO(review, createdAt, recommendKeywordList));
     }
 
-    reviewCount = bakery.getReviewCount();
+    RecommendKeywordPercentage recommendKeywordPercentage =
+        RecommendKeywordPercentage.builder()
+            .deliciousPercent(calculatorPercentage(reviewCount, bakery.getKeywordDeliciousCount()))
+            .specialPercent(calculatorPercentage(reviewCount, bakery.getKeywordDeliciousCount()))
+            .kindPercent(calculatorPercentage(reviewCount, bakery.getKeywordKindCount()))
+            .zeroWastePercent(calculatorPercentage(reviewCount, bakery.getKeywordZeroWasteCount()))
+            .build();
 
-    return ReviewListResponseDTO.builder()
-        .tastePercent(calculatorPercentage(reviewCount, bakery.getKeywordDeliciousCount()))
-        .specialPercent(calculatorPercentage(reviewCount, bakery.getKeywordSpecialCount()))
-        .kindPercent(calculatorPercentage(reviewCount, bakery.getKeywordKindCount()))
-        .zeroPercent(calculatorPercentage(reviewCount, bakery.getKeywordZeroWasteCount()))
-        .totalReviewCount((int) bakery.getReviewCount())
-        .reviewList(reviewListDto)
-        .build();
+    return ReviewMapper.INSTANCE.toReviewListResponseDTO(
+        recommendKeywordPercentage, reviewCount, reviewListDto);
   }
 
-  private Float calculatorPercentage(Long reviewCount, Long keywordCount) {
+  private List<RecommendKeywordResponseDTO> getReCommendKeywordListResponseDTO(Review review) {
+    List<RecommendKeywordResponseDTO> recommendKeywordList = new ArrayList<>();
+    if (review.getIsLike()) {
+      List<ReviewRecommendKeyword> reviewRecommendKeywordList =
+          reviewRecommendKeywordRepository.findAllByReview(review);
+      for (ReviewRecommendKeyword reviewRecommendKeyword : reviewRecommendKeywordList) {
+        recommendKeywordList.add(
+            RecommendKeywordMapper.INSTANCE.toRecommendKeywordResponseDTO(reviewRecommendKeyword));
+      }
+      return recommendKeywordList;
+    }
+    return recommendKeywordList;
+  }
+
+  private float calculatorPercentage(long reviewCount, long keywordCount) {
     if (reviewCount == 0) {
       return 0f;
     }
