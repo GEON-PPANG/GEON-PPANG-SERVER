@@ -127,16 +127,8 @@ public class ReviewService {
     String createdAt;
 
     for (Review review : reviewList) {
-      List<RecommendKeywordResponseDTO> recommendKeywordList = new ArrayList<>();
-      if (review.getIsLike()) {
-        List<ReviewRecommendKeyword> reviewRecommendKeywordList =
-            reviewRecommendKeywordRepository.findAllByReview(review);
-        for (ReviewRecommendKeyword reviewRecommendKeyword : reviewRecommendKeywordList) {
-          recommendKeywordList.add(
-              RecommendKeywordMapper.INSTANCE.toRecommendKeywordResponseDTO(
-                  reviewRecommendKeyword));
-        }
-      }
+      List<RecommendKeywordResponseDTO> recommendKeywordList =
+          getReCommendKeywordListResponseDTO(review);
       createdAt = review.getCreatedAt().format(DateTimeFormatter.ofPattern("yy.MM.dd"));
       reviewListDto.add(
           ReviewMapper.INSTANCE.toReviewResponseDTO(review, createdAt, recommendKeywordList));
@@ -152,6 +144,20 @@ public class ReviewService {
 
     return ReviewMapper.INSTANCE.toReviewListResponseDTO(
         recommendKeywordPercentage, reviewCount, reviewListDto);
+  }
+
+  private List<RecommendKeywordResponseDTO> getReCommendKeywordListResponseDTO(Review review) {
+    List<RecommendKeywordResponseDTO> recommendKeywordList = new ArrayList<>();
+    if (review.getIsLike()) {
+      List<ReviewRecommendKeyword> reviewRecommendKeywordList =
+          reviewRecommendKeywordRepository.findAllByReview(review);
+      for (ReviewRecommendKeyword reviewRecommendKeyword : reviewRecommendKeywordList) {
+        recommendKeywordList.add(
+            RecommendKeywordMapper.INSTANCE.toRecommendKeywordResponseDTO(reviewRecommendKeyword));
+      }
+      return recommendKeywordList;
+    }
+    return recommendKeywordList;
   }
 
   private float calculatorPercentage(long reviewCount, long keywordCount) {
