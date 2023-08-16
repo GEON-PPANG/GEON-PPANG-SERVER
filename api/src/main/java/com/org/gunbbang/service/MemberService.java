@@ -37,27 +37,19 @@ public class MemberService {
   private final NutrientTypeRepository nutrientTypeRepository;
 
   public MemberDetailResponseDTO getMemberDetail() {
-    Long currentMemberId = SecurityUtil.getLoginMemberId();
+    String memberNickname = SecurityUtil.getLoginMemberNickname();
+    MainPurpose memberMainPurpose = SecurityUtil.getLoginMemberMainPurpose();
+    Long memberBreadTypeId = SecurityUtil.getLoginMemberBreadTypeId();
 
-    Member member =
-        memberRepository
-            .findById(currentMemberId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
-    BreadTypeResponseDTO breadType =
-        BreadTypeResponseDTO.builder()
-            .breadTypeId(member.getBreadType().getBreadTypeId())
-            .breadTypeName(member.getBreadType().getBreadTypeName())
-            .isVegan(member.getBreadType().getIsVegan())
-            .isGlutenFree(member.getBreadType().getIsGlutenFree())
-            .isSugarFree(member.getBreadType().getIsSugarFree())
-            .isNutFree(member.getBreadType().getIsNutFree())
-            .build();
+    BreadType breadType =
+        breadTypeRepository
+            .findById(memberBreadTypeId)
+            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION));
+    BreadTypeResponseDTO breadTypeResponseDTO =
+        BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(breadType);
 
-    return MemberDetailResponseDTO.builder()
-        .memberNickname(member.getNickname())
-        .mainPurpose(member.getMainPurpose())
-        .breadType(breadType)
-        .build();
+    return MemberTypeMapper.INSTANCE.toMemberDetailResponseDTO(
+        memberNickname, memberMainPurpose, breadTypeResponseDTO);
   }
 
   public MemberSignUpResponseDTO signUp(MemberSignUpRequestDTO memberSignUpRequestDTO) {
