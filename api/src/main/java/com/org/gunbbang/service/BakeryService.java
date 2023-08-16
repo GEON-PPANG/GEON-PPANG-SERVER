@@ -1,7 +1,5 @@
 package com.org.gunbbang.service;
 
-import static com.org.gunbbang.util.ConstantVO.BLANK_SPACE;
-
 import com.org.gunbbang.CategoryType;
 import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.controller.DTO.response.*;
@@ -34,6 +32,7 @@ public class BakeryService {
   private final BakeryRepository bakeryRepository;
   private final MenuRepository menuRepository;
 
+  private final String BLANK_SPACE = " ";
   private final int maxBestBakeryCount = 10;
 
   public List<BakeryListResponseDTO> getBakeryList(
