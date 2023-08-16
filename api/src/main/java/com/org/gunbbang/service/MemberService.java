@@ -1,6 +1,7 @@
 package com.org.gunbbang.service;
 
 import com.org.gunbbang.BadRequestException;
+import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.common.AuthType;
 import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;

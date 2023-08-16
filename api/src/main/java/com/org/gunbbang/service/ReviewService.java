@@ -95,26 +95,9 @@ public class ReviewService {
             .findById(reviewId)
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_REVIEW_EXCEPTION));
     if (currentMemberId.equals(review.getMember().getMemberId())) {
-      List<RecommendKeywordResponseDTO> recommendKeywordList = new ArrayList<>();
-      if (review.getIsLike()) {
-        List<ReviewRecommendKeyword> reviewRecommendKeywordList =
-            reviewRecommendKeywordRepository.findAllByReview(review);
-        for (ReviewRecommendKeyword reviewRecommendKeyword : reviewRecommendKeywordList) {
-          recommendKeywordList.add(
-              RecommendKeywordResponseDTO.builder()
-                  .recommendKeywordId(
-                      reviewRecommendKeyword.getRecommendKeyword().getRecommendKeywordId())
-                  .recommendKeywordName(
-                      reviewRecommendKeyword.getRecommendKeyword().getKeywordName())
-                  .build());
-        }
-      }
-      return ReviewDetailResponseDTO.builder()
-          .reviewId(review.getReviewId())
-          .isLike(review.getIsLike())
-          .recommendKeywordList(recommendKeywordList)
-          .reviewText(review.getReviewText())
-          .build();
+      List<RecommendKeywordResponseDTO> recommendKeywordList =
+          getReCommendKeywordListResponseDTO(review);
+      return ReviewMapper.INSTANCE.toReviewDetailResponseDTO(review, recommendKeywordList);
     } else {
       throw new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION);
     }
@@ -155,11 +138,8 @@ public class ReviewService {
     if (review.getIsLike()) {
       List<ReviewRecommendKeyword> reviewRecommendKeywordList =
           reviewRecommendKeywordRepository.findAllByReview(review);
-      for (ReviewRecommendKeyword reviewRecommendKeyword : reviewRecommendKeywordList) {
-        recommendKeywordList.add(
-            RecommendKeywordMapper.INSTANCE.toRecommendKeywordResponseDTO(reviewRecommendKeyword));
-      }
-      return recommendKeywordList;
+      return RecommendKeywordMapper.INSTANCE.toRecommendKeywordListResponseDTO(
+          reviewRecommendKeywordList);
     }
     return recommendKeywordList;
   }
