@@ -40,7 +40,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
               member.updateRefreshToken(refreshToken);
               memberRepository.saveAndFlush(member);
             });
-    log.info("로그인 요청 성공. 이메일 : {} memberId : {} ", email, memberId);
+    log.info("로그인 요청 성공. 이메일 : {} || memberId : {} ", email, memberId);
   }
 
   private String extractUsername(Authentication authentication) {
