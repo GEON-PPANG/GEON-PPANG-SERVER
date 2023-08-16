@@ -1,10 +1,7 @@
 package com.org.gunbbang.util.mapper;
 
 import com.org.gunbbang.BestReviewDTO;
-import com.org.gunbbang.controller.DTO.response.BestReviewListResponseDTO;
-import com.org.gunbbang.controller.DTO.response.RecommendKeywordResponseDTO;
-import com.org.gunbbang.controller.DTO.response.ReviewListResponseDTO;
-import com.org.gunbbang.controller.DTO.response.ReviewResponseDTO;
+import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.Review;
 import com.org.gunbbang.util.RecommendKeywordPercentage;
 import java.util.List;
@@ -35,4 +32,7 @@ public interface ReviewMapper {
       RecommendKeywordPercentage recommendKeywordPercentage,
       long totalReviewCount,
       List<ReviewResponseDTO> reviewList);
+
+  ReviewDetailResponseDTO toReviewDetailResponseDTO(
+      Review review, List<RecommendKeywordResponseDTO> recommendKeywordList);
 }
