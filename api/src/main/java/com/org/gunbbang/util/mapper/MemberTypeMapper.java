@@ -2,6 +2,7 @@ package com.org.gunbbang.util.mapper;
 
 import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.controller.DTO.response.BreadTypeResponseDTO;
+import com.org.gunbbang.controller.DTO.response.MemberDetailResponseDTO;
 import com.org.gunbbang.controller.DTO.response.MemberTypeResponseDTO;
 import com.org.gunbbang.controller.DTO.response.NutrientTypeResponseDTO;
 import org.mapstruct.Mapper;
@@ -17,4 +18,7 @@ public interface MemberTypeMapper {
       MainPurpose mainPurpose,
       BreadTypeResponseDTO breadType,
       NutrientTypeResponseDTO nutrientType);
+
+  MemberDetailResponseDTO toMemberDetailResponseDTO(
+      String memberNickname, MainPurpose mainPurpose, BreadTypeResponseDTO breadType);
 }
