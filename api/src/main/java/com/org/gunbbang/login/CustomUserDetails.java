@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+/** UserDetails을 커스텀한 클래스 */
 public class CustomUserDetails implements UserDetails {
   private String username; // email
   private Long memberId;

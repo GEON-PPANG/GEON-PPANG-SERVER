@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+/** SecurityContextHolder로부터 얻은 Authentication 객체에서 현재 접속 회원 정보를 얻어오는 유틸 클래스 */
 public class SecurityUtil {
   public static Long getLoginMemberId() {
     return getCustomUserDetails().getMemberId();

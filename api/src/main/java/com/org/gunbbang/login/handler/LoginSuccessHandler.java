@@ -12,24 +12,25 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
-/** 로그인 성공 시 처리되는 handler */
+/** 로그인 성공 시 호출되는 handler */
 @Slf4j
 @RequiredArgsConstructor
 public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
   private final JwtService jwtService;
   private final MemberRepository memberRepository;
 
-  @Value("${jwt.access.expiration")
+  @Value("${jwt.access.expiration}")
   private String accessTokenExpiration;
 
   @Override
   public void onAuthenticationSuccess(
       HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-    String email = extractUsername(authentication); // 인증 정보에서 Username(햔재 코드 상 email) 추출
+    String email = extractUsername(authentication);
     Long memberId = extractMemberId(authentication);
-    String accessToken = jwtService.createAccessToken(email, memberId); // 여기 memberId 들어가야함
-    String refreshToken = jwtService.createRefreshToken(); // refreshToken 발급
+    String accessToken = jwtService.createAccessToken(email, memberId);
+    String refreshToken = jwtService.createRefreshToken();
 
+    // accessToken 및 refreshToken 헤더에 전송
     jwtService.sendAccessAndRefreshToken(response, accessToken, refreshToken);
 
     memberRepository
@@ -39,9 +40,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
               member.updateRefreshToken(refreshToken);
               memberRepository.saveAndFlush(member);
             });
-    log.info("로그인에 성공하였습니다. 이메일 : {}", email);
-    log.info("로그인에 성공하였습니다. AccessToken : {}", accessToken);
-    log.info("발급된 AccessToken 만료 기간 : {}", accessTokenExpiration);
+    log.info("로그인 요청 성공. 이메일 : {} || memberId : {} ", email, memberId);
   }
 
   private String extractUsername(Authentication authentication) {

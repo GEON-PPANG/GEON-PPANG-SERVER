@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
+// @Builder
 public class Member extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,11 +30,10 @@ public class Member extends BaseEntity {
   @NotNull private String nickname;
 
   @Enumerated(EnumType.STRING)
-  private Role role;
+  private Role role = Role.USER;
 
-  @NotNull
   @Enumerated(EnumType.STRING)
-  private MainPurpose mainPurpose; // 테이블로 뺄까 고민
+  private MainPurpose mainPurpose = MainPurpose.NONE;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "bread_type_id")
@@ -67,5 +66,25 @@ public class Member extends BaseEntity {
 
   public void updateMainPurpose(MainPurpose mainPurpose) {
     this.mainPurpose = mainPurpose;
+  }
+
+  @Builder
+  public Member(
+      Long memberId,
+      String email,
+      String password,
+      PlatformType platformType,
+      String nickname,
+      BreadType breadType,
+      NutrientType nutrientType,
+      String refreshToken) {
+    this.memberId = memberId;
+    this.email = email;
+    this.password = password;
+    this.platformType = platformType;
+    this.nickname = nickname;
+    this.breadType = breadType;
+    this.nutrientType = nutrientType;
+    this.refreshToken = refreshToken;
   }
 }

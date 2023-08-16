@@ -135,6 +135,7 @@ public class JwtService {
             () -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
   }
 
+  // TODO: 여기서 false 반환하면 어케되는지? 바로 에러나야되는거 아닌가?
   public boolean isTokenValid(String token) {
     try {
       getVerifiedJWT(token);

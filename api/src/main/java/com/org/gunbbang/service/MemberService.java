@@ -1,9 +1,7 @@
 package com.org.gunbbang.service;
 
 import com.org.gunbbang.BadRequestException;
-import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.NotFoundException;
-import com.org.gunbbang.Role;
 import com.org.gunbbang.common.AuthType;
 import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import com.org.gunbbang.controller.DTO.request.MemberTypesRequestDTO;
@@ -16,6 +14,7 @@ import com.org.gunbbang.repository.BreadTypeRepository;
 import com.org.gunbbang.repository.MemberRepository;
 import com.org.gunbbang.repository.NutrientTypeRepository;
 import com.org.gunbbang.util.mapper.BreadTypeMapper;
+import com.org.gunbbang.util.mapper.MemberMapper;
 import com.org.gunbbang.util.mapper.MemberTypeMapper;
 import com.org.gunbbang.util.mapper.NutrientTypeMapper;
 import com.org.gunbbang.util.security.SecurityUtil;
@@ -61,41 +60,27 @@ public class MemberService {
       throw new BadRequestException(ErrorType.ALREADY_EXIST_NICKNAME_EXCEPTION);
     }
 
-    BreadType breadType =
+    BreadType defaultBreadType =
         breadTypeRepository
             .findBreadTypeByIsGlutenFreeAndIsVeganAndIsNutFreeAndIsSugarFree(
-                memberSignUpRequestDTO.getBreadType().getIsGlutenFree(),
-                memberSignUpRequestDTO.getBreadType().getIsVegan(),
-                memberSignUpRequestDTO.getBreadType().getIsNutFree(),
-                memberSignUpRequestDTO.getBreadType().getIsSugarFree())
+                false, false, false, false)
             .orElseThrow();
 
-    NutrientType nutrientType =
+    NutrientType defaultNutrientType =
         nutrientTypeRepository
-            .findByIsNutrientOpenAndIsIngredientOpenAndIsNotOpen(
-                memberSignUpRequestDTO.getNutrientType().getIsNutrientOpen(),
-                memberSignUpRequestDTO.getNutrientType().getIsIngredientOpen(),
-                memberSignUpRequestDTO.getNutrientType().getIsNotOpen())
+            .findByIsNutrientOpenAndIsIngredientOpenAndIsNotOpen(false, false, false)
             .orElseThrow();
 
     Member member =
-        Member.builder()
-            .email(memberSignUpRequestDTO.getEmail().strip())
-            .password(memberSignUpRequestDTO.getPassword().strip())
-            .platformType(memberSignUpRequestDTO.getPlatformType())
-            .nickname(memberSignUpRequestDTO.getNickname().strip())
-            .role(Role.USER)
-            .breadType(breadType)
-            .nutrientType(nutrientType)
-            .mainPurpose(MainPurpose.valueOf(memberSignUpRequestDTO.getMainPurpose()))
-            .build();
-
-    member.passwordEncode(passwordEncoder); // security에서 제공하는 PasswordEncoder로 유저의 비밀번호 인코딩해서 저장
-    memberRepository.saveAndFlush(member);
+        MemberMapper.INSTANCE.toMemberEntity(
+            memberSignUpRequestDTO, defaultBreadType, defaultNutrientType);
+    member.passwordEncode(passwordEncoder);
+    Member savedMember = memberRepository.saveAndFlush(member);
 
     return MemberSignUpResponseDTO.builder()
+        .memberId(savedMember.getMemberId())
         .type(AuthType.SIGN_UP)
-        .email(member.getEmail())
+        .email(savedMember.getEmail())
         .build();
   }
 
@@ -168,13 +153,4 @@ public class MemberService {
       throw new BadRequestException(ErrorType.ALREADY_EXIST_EMAIL_EXCEPTION);
     }
   }
-
-  //  public MemberNicknameResponseDTO getMemberNickname(Long memberId) {
-  //    Optional<String> nickname =
-  //            memberRepository
-  //                    .findNicknameById(memberId)
-  //                    .orElseThrow();
-  //    return
-  //  }
-
 }
