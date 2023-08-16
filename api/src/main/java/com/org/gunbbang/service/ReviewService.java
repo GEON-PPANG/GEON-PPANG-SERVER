@@ -138,11 +138,8 @@ public class ReviewService {
     if (review.getIsLike()) {
       List<ReviewRecommendKeyword> reviewRecommendKeywordList =
           reviewRecommendKeywordRepository.findAllByReview(review);
-      for (ReviewRecommendKeyword reviewRecommendKeyword : reviewRecommendKeywordList) {
-        recommendKeywordList.add(
-            RecommendKeywordMapper.INSTANCE.toRecommendKeywordResponseDTO(reviewRecommendKeyword));
-      }
-      return recommendKeywordList;
+      return RecommendKeywordMapper.INSTANCE.toRecommendKeywordListResponseDTO(
+          reviewRecommendKeywordList);
     }
     return recommendKeywordList;
   }
