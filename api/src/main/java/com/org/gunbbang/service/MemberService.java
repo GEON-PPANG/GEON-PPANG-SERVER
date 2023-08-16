@@ -38,25 +38,24 @@ public class MemberService {
 
   public MemberDetailResponseDTO getMemberDetail() {
     Long currentMemberId = SecurityUtil.getLoginMemberId();
+    String memberNickname = SecurityUtil.getLoginMemberNickname();
+    MainPurpose memberMainPurpose = SecurityUtil.getLoginMemberMainPurpose();
+    Long memberBreadTypeId = SecurityUtil.getLoginMemberBreadTypeId();
 
-    Member member =
-        memberRepository
-            .findById(currentMemberId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
-    BreadTypeResponseDTO breadType =
-        BreadTypeResponseDTO.builder()
-            .breadTypeId(member.getBreadType().getBreadTypeId())
-            .breadTypeName(member.getBreadType().getBreadTypeName())
-            .isVegan(member.getBreadType().getIsVegan())
-            .isGlutenFree(member.getBreadType().getIsGlutenFree())
-            .isSugarFree(member.getBreadType().getIsSugarFree())
-            .isNutFree(member.getBreadType().getIsNutFree())
-            .build();
+    //    BreadTypeResponseDTO breadType =
+    //        BreadTypeResponseDTO.builder()
+    //            .breadTypeId(member.getBreadType().getBreadTypeId())
+    //            .breadTypeName(member.getBreadType().getBreadTypeName())
+    //            .isVegan(member.getBreadType().getIsVegan())
+    //            .isGlutenFree(member.getBreadType().getIsGlutenFree())
+    //            .isSugarFree(member.getBreadType().getIsSugarFree())
+    //            .isNutFree(member.getBreadType().getIsNutFree())
+    //            .build();
 
     return MemberDetailResponseDTO.builder()
-        .memberNickname(member.getNickname())
-        .mainPurpose(member.getMainPurpose())
-        .breadType(breadType)
+        .memberNickname(memberNickname)
+        .mainPurpose(memberMainPurpose)
+        //        .breadType(breadType)
         .build();
   }
 
