@@ -96,7 +96,7 @@ public class ReviewService {
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_REVIEW_EXCEPTION));
     if (currentMemberId.equals(review.getMember().getMemberId())) {
       List<RecommendKeywordResponseDTO> recommendKeywordList =
-          getReCommendKeywordListResponseDTO(review);
+          getRecommendKeywordListResponseDTO(review);
       return ReviewMapper.INSTANCE.toReviewDetailResponseDTO(review, recommendKeywordList);
     } else {
       throw new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION);
@@ -114,7 +114,7 @@ public class ReviewService {
 
     for (Review review : reviewList) {
       List<RecommendKeywordResponseDTO> recommendKeywordList =
-          getReCommendKeywordListResponseDTO(review);
+          getRecommendKeywordListResponseDTO(review);
       reviewListDto.add(ReviewMapper.INSTANCE.toReviewResponseDTO(review, recommendKeywordList));
     }
 
@@ -130,7 +130,7 @@ public class ReviewService {
         recommendKeywordPercentage, reviewCount, reviewListDto);
   }
 
-  private List<RecommendKeywordResponseDTO> getReCommendKeywordListResponseDTO(Review review) {
+  private List<RecommendKeywordResponseDTO> getRecommendKeywordListResponseDTO(Review review) {
     List<RecommendKeywordResponseDTO> recommendKeywordList = new ArrayList<>();
     if (review.getIsLike()) {
       List<ReviewRecommendKeyword> reviewRecommendKeywordList =
