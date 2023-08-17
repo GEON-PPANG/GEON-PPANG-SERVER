@@ -10,10 +10,11 @@ import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
 import com.org.gunbbang.util.RecommendKeywordPercentage;
+import com.org.gunbbang.util.mapper.BakeryMapper;
+import com.org.gunbbang.util.mapper.BreadTypeMapper;
 import com.org.gunbbang.util.mapper.RecommendKeywordMapper;
 import com.org.gunbbang.util.mapper.ReviewMapper;
 import com.org.gunbbang.util.security.SecurityUtil;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,6 @@ public class ReviewService {
   private final BakeryRepository bakeryRepository;
   private final MemberRepository memberRepository;
   private final RecommendKeywordRepository recommendKeywordRepository;
-  private final BookMarkRepository bookMarkRepository;
   private final int maxBestBakeryCount = 10;
 
   public Long createReview(Long bakeryId, ReviewRequestDTO reviewRequestDto) {
@@ -96,7 +96,7 @@ public class ReviewService {
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_REVIEW_EXCEPTION));
     if (currentMemberId.equals(review.getMember().getMemberId())) {
       List<RecommendKeywordResponseDTO> recommendKeywordList =
-          getReCommendKeywordListResponseDTO(review);
+          getRecommendKeywordListResponseDTO(review);
       return ReviewMapper.INSTANCE.toReviewDetailResponseDTO(review, recommendKeywordList);
     } else {
       throw new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION);
@@ -111,14 +111,11 @@ public class ReviewService {
     List<Review> reviewList = reviewRepository.findAllByBakeryOrderByCreatedAtDesc(bakery);
     List<ReviewResponseDTO> reviewListDto = new ArrayList<>();
     long reviewCount = bakery.getReviewCount();
-    String createdAt;
 
     for (Review review : reviewList) {
       List<RecommendKeywordResponseDTO> recommendKeywordList =
-          getReCommendKeywordListResponseDTO(review);
-      createdAt = review.getCreatedAt().format(DateTimeFormatter.ofPattern("yy.MM.dd"));
-      reviewListDto.add(
-          ReviewMapper.INSTANCE.toReviewResponseDTO(review, createdAt, recommendKeywordList));
+          getRecommendKeywordListResponseDTO(review);
+      reviewListDto.add(ReviewMapper.INSTANCE.toReviewResponseDTO(review, recommendKeywordList));
     }
 
     RecommendKeywordPercentage recommendKeywordPercentage =
@@ -133,7 +130,7 @@ public class ReviewService {
         recommendKeywordPercentage, reviewCount, reviewListDto);
   }
 
-  private List<RecommendKeywordResponseDTO> getReCommendKeywordListResponseDTO(Review review) {
+  private List<RecommendKeywordResponseDTO> getRecommendKeywordListResponseDTO(Review review) {
     List<RecommendKeywordResponseDTO> recommendKeywordList = new ArrayList<>();
     if (review.getIsLike()) {
       List<ReviewRecommendKeyword> reviewRecommendKeywordList =
@@ -163,30 +160,9 @@ public class ReviewService {
 
     for (Review review : reviewList) {
       breadType =
-          BreadTypeResponseDTO.builder()
-              .breadTypeId(review.getBakery().getBreadType().getBreadTypeId())
-              .breadTypeName(review.getBakery().getBreadType().getBreadTypeName())
-              .isGlutenFree(review.getBakery().getBreadType().getIsGlutenFree())
-              .isVegan(review.getBakery().getBreadType().getIsVegan())
-              .isNutFree(review.getBakery().getBreadType().getIsNutFree())
-              .isSugarFree(review.getBakery().getBreadType().getIsSugarFree())
-              .build();
-
+          BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(review.getBakery().getBreadType());
       bakeryListReviewedByMemberDto =
-          BakeryListReviewedByMemberDTO.builder()
-              .bakeryId(review.getBakery().getBakeryId())
-              .bakeryName(review.getBakery().getBakeryName())
-              .bakeryPicture(review.getBakery().getBakeryPicture())
-              .isHACCP(review.getBakery().getIsHACCP())
-              .isVegan(review.getBakery().getIsVegan())
-              .isNonGMO(review.getBakery().getIsNonGMO())
-              .breadType(breadType)
-              .firstNearStation(review.getBakery().getFirstNearStation())
-              .secondNearStation(review.getBakery().getSecondNearStation())
-              .reviewId(review.getReviewId())
-              .createdAt(review.getCreatedAt().format(DateTimeFormatter.ofPattern("yy.MM.dd")))
-              .build();
-
+          BakeryMapper.INSTANCE.toListReviewedByMemberDTO(review.getBakery(), review, breadType);
       responseDtoList.add(bakeryListReviewedByMemberDto);
     }
     return responseDtoList;

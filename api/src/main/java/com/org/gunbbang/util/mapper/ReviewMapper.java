@@ -19,10 +19,10 @@ public interface ReviewMapper {
       String firstMaxRecommendKeyword,
       String secondMaxRecommendKeyword);
 
-  @Mapping(target = "memberNickname", expression = "java( review.getMember().getNickname() )")
-  @Mapping(source = "createdAt", target = "createdAt")
+  @Mapping(source = "review.member.nickname", target = "memberNickname")
+  @Mapping(source = "review.createdAt", target = "createdAt", dateFormat = "yy.MM.dd")
   ReviewResponseDTO toReviewResponseDTO(
-      Review review, String createdAt, List<RecommendKeywordResponseDTO> recommendKeywordList);
+      Review review, List<RecommendKeywordResponseDTO> recommendKeywordList);
 
   @Mapping(source = "recommendKeywordPercentage.deliciousPercent", target = "deliciousPercent")
   @Mapping(source = "recommendKeywordPercentage.specialPercent", target = "specialPercent")
