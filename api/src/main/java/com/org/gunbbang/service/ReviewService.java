@@ -15,7 +15,6 @@ import com.org.gunbbang.util.mapper.BreadTypeMapper;
 import com.org.gunbbang.util.mapper.RecommendKeywordMapper;
 import com.org.gunbbang.util.mapper.ReviewMapper;
 import com.org.gunbbang.util.security.SecurityUtil;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -113,14 +112,11 @@ public class ReviewService {
     List<Review> reviewList = reviewRepository.findAllByBakeryOrderByCreatedAtDesc(bakery);
     List<ReviewResponseDTO> reviewListDto = new ArrayList<>();
     long reviewCount = bakery.getReviewCount();
-    String createdAt;
 
     for (Review review : reviewList) {
       List<RecommendKeywordResponseDTO> recommendKeywordList =
           getReCommendKeywordListResponseDTO(review);
-      createdAt = review.getCreatedAt().format(DateTimeFormatter.ofPattern("yy.MM.dd"));
-      reviewListDto.add(
-          ReviewMapper.INSTANCE.toReviewResponseDTO(review, createdAt, recommendKeywordList));
+      reviewListDto.add(ReviewMapper.INSTANCE.toReviewResponseDTO(review, recommendKeywordList));
     }
 
     RecommendKeywordPercentage recommendKeywordPercentage =
