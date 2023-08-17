@@ -33,7 +33,6 @@ public class ReviewService {
   private final BakeryRepository bakeryRepository;
   private final MemberRepository memberRepository;
   private final RecommendKeywordRepository recommendKeywordRepository;
-  private final BookMarkRepository bookMarkRepository;
   private final int maxBestBakeryCount = 10;
 
   public Long createReview(Long bakeryId, ReviewRequestDTO reviewRequestDto) {
