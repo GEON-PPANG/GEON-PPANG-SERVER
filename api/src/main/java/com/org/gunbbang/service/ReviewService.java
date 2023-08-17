@@ -10,6 +10,8 @@ import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
 import com.org.gunbbang.util.RecommendKeywordPercentage;
+import com.org.gunbbang.util.mapper.BakeryMapper;
+import com.org.gunbbang.util.mapper.BreadTypeMapper;
 import com.org.gunbbang.util.mapper.RecommendKeywordMapper;
 import com.org.gunbbang.util.mapper.ReviewMapper;
 import com.org.gunbbang.util.security.SecurityUtil;
@@ -163,30 +165,9 @@ public class ReviewService {
 
     for (Review review : reviewList) {
       breadType =
-          BreadTypeResponseDTO.builder()
-              .breadTypeId(review.getBakery().getBreadType().getBreadTypeId())
-              .breadTypeName(review.getBakery().getBreadType().getBreadTypeName())
-              .isGlutenFree(review.getBakery().getBreadType().getIsGlutenFree())
-              .isVegan(review.getBakery().getBreadType().getIsVegan())
-              .isNutFree(review.getBakery().getBreadType().getIsNutFree())
-              .isSugarFree(review.getBakery().getBreadType().getIsSugarFree())
-              .build();
-
+          BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(review.getBakery().getBreadType());
       bakeryListReviewedByMemberDto =
-          BakeryListReviewedByMemberDTO.builder()
-              .bakeryId(review.getBakery().getBakeryId())
-              .bakeryName(review.getBakery().getBakeryName())
-              .bakeryPicture(review.getBakery().getBakeryPicture())
-              .isHACCP(review.getBakery().getIsHACCP())
-              .isVegan(review.getBakery().getIsVegan())
-              .isNonGMO(review.getBakery().getIsNonGMO())
-              .breadType(breadType)
-              .firstNearStation(review.getBakery().getFirstNearStation())
-              .secondNearStation(review.getBakery().getSecondNearStation())
-              .reviewId(review.getReviewId())
-              .createdAt(review.getCreatedAt().format(DateTimeFormatter.ofPattern("yy.MM.dd")))
-              .build();
-
+          BakeryMapper.INSTANCE.toListReviewedByMemberDTO(review.getBakery(), review, breadType);
       responseDtoList.add(bakeryListReviewedByMemberDto);
     }
     return responseDtoList;

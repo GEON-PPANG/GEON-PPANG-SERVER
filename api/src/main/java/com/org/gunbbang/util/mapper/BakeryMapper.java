@@ -2,6 +2,7 @@ package com.org.gunbbang.util.mapper;
 
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.Bakery;
+import com.org.gunbbang.entity.Review;
 import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -31,4 +32,13 @@ public interface BakeryMapper {
       BreadTypeResponseDTO breadType,
       boolean isBookMarked,
       List<MenuResponseDTO> menuList);
+
+  @Mapping(source = "bakery.isHACCP", target = "isHACCP")
+  @Mapping(source = "bakery.isVegan", target = "isVegan")
+  @Mapping(source = "bakery.isNonGMO", target = "isNonGMO")
+  @Mapping(source = "breadType", target = "breadType")
+  @Mapping(source = "review.reviewId", target = "reviewId")
+  @Mapping(source = "review.createdAt", target = "createdAt", dateFormat = "yy.MM.dd")
+  BakeryListReviewedByMemberDTO toListReviewedByMemberDTO(
+      Bakery bakery, Review review, BreadTypeResponseDTO breadType);
 }
