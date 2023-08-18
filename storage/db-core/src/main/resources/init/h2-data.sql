@@ -160,9 +160,11 @@ INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, ba
 
 
 -- bakery_category
-INSERT INTO bakery_category (bakery_id,category_id) values (1,2);
+INSERT INTO bakery_category (bakery_id,category_id) values (3,1);
+INSERT INTO bakery_category (bakery_id,category_id) values (3,2);
+INSERT INTO bakery_category (bakery_id,category_id) values (3,3);
+INSERT INTO bakery_category (bakery_id,category_id) values (2,1);
 INSERT INTO bakery_category (bakery_id,category_id) values (2,2);
-INSERT INTO bakery_category (bakery_id,category_id) values (1,3);
 INSERT INTO bakery_category (bakery_id,category_id) values (1,1);
 
 

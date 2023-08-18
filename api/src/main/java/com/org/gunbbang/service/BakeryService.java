@@ -32,6 +32,7 @@ public class BakeryService {
   private final BakeryRepository bakeryRepository;
   private final MenuRepository menuRepository;
   private final BreadTypeRepository breadTypeRepository;
+  private final BakeryCategoryRepository bakeryCategoryRepository;
 
   private final String BLANK_SPACE = " ";
   private final int maxBestBakeryCount = 10;
@@ -92,7 +93,7 @@ public class BakeryService {
                     true, true, true, true)
                 .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION));
 
-    List<Bakery> filteredBakeries =
+    List<Bakery> filteredBakeryList =
         bakeryRepository.findFilteredBakeries(
             categoryList,
             breadType.getIsGlutenFree(),
@@ -101,13 +102,32 @@ public class BakeryService {
             breadType.getIsSugarFree());
 
     if ("review".equals(sortingOption)) {
-      filteredBakeries.sort(
+      filteredBakeryList.sort(
           Comparator.comparing(Bakery::getReviewCount, Collections.reverseOrder()));
-      return filteredBakeries;
+    } else if ("default".equals(sortingOption)) {
+      filteredBakeryList.sort(
+          Comparator.comparing(Bakery::getBakeryId, Collections.reverseOrder()));
     }
 
-    filteredBakeries.sort(Comparator.comparing(Bakery::getBakeryId, Collections.reverseOrder()));
-    return filteredBakeries;
+    return getSortedByCategoryBakeryList(filteredBakeryList);
+  }
+
+  private List<Bakery> getSortedByCategoryBakeryList(List<Bakery> bakeryList) {
+    Map<Bakery, Long> bakeryCategoryCounts = new HashMap<>();
+
+    for (Bakery bakery : bakeryList) {
+      long count = bakeryCategoryRepository.countBakeryCategoriesByBakery(bakery);
+      System.out.println("bakeryName:" + bakery.getBakeryName() + "count:" + count);
+      bakeryCategoryCounts.put(bakery, count);
+    }
+
+    List<Bakery> sortedByCategoryBakeryList =
+        bakeryCategoryCounts.entrySet().stream()
+            .sorted(Map.Entry.<Bakery, Long>comparingByValue().reversed())
+            .map(Map.Entry::getKey)
+            .collect(Collectors.toList());
+
+    return sortedByCategoryBakeryList;
   }
 
   public BakeryDetailResponseDTO getBakeryDetail(Long memberId, Long bakeryId) {
