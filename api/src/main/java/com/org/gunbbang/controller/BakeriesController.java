@@ -25,13 +25,13 @@ public class BakeriesController {
   @GetMapping("")
   @ResponseStatus(HttpStatus.OK)
   public ApiResponse<List<BakeryListResponseDTO>> getBakeryList(
-      @RequestParam("sort") String sort,
+      @RequestParam("sortingOption") String sortingOption,
+      @RequestParam("personalFilter") boolean personalFilter,
       @RequestParam("isHard") boolean isHard,
       @RequestParam("isDessert") boolean isDessert,
       @RequestParam("isBrunch") boolean isBrunch) {
-    Long memberId = SecurityUtil.getLoginMemberId();
     List<BakeryListResponseDTO> bakeryListResponseDto =
-        bakeryService.getBakeryList(memberId, sort, isHard, isDessert, isBrunch);
+        bakeryService.getBakeryList(sortingOption, personalFilter, isHard, isDessert, isBrunch);
     return ApiResponse.success(SuccessType.GET_BAKERY_LIST_SUCCESS, bakeryListResponseDto);
   }
 
