@@ -6,7 +6,6 @@ import com.org.gunbbang.entity.BreadType;
 import com.org.gunbbang.entity.Category;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -60,9 +59,6 @@ public interface BakeryRepository
   List<Bakery> findRestBakeriesRandomly(
       @Param("alreadyFoundBakeryIds") List<Long> alreadyFoundBakeryIds, Pageable pageRequest);
 
-  @Query(value = "SELECT b FROM Bakery b " + "ORDER BY RAND() ")
-  List<Bakery> findBakeriesRandomly(PageRequest pageRequest);
-
   @Query(
       "SELECT DISTINCT b FROM Bakery b "
           + "INNER JOIN BakeryCategory bc ON b.bakeryId = bc.bakery.bakeryId "
@@ -77,13 +73,4 @@ public interface BakeryRepository
       @Param("isVegan") boolean isVegan,
       @Param("isNutFree") boolean isNutFree,
       @Param("isSugarFree") boolean isSugarFree);
-
-  @Query(
-      value =
-          "SELECT DISTINCT b FROM Bakery b "
-              + "INNER JOIN BakeryCategory bc ON b.bakeryId = bc.bakery.bakeryId "
-              + "INNER JOIN Category c ON bc.category.categoryId = c.categoryId "
-              + "WHERE c IN :categoryList "
-              + "ORDER BY b.bakeryId DESC")
-  List<Bakery> findBakeriesByCategory(List<Category> categoryList);
 }
