@@ -36,7 +36,7 @@ public class BakeryService {
   private final int maxBestBakeryCount = 10;
 
   public List<BakeryListResponseDTO> getBakeryList(
-      Long memberId, String sort, boolean isHard, boolean isDessert, boolean isBrunch) {
+      String sort, boolean isHard, boolean isDessert, boolean isBrunch) {
     List<Category> categoryList = getCategoryList(isHard, isDessert, isBrunch);
     List<BakeryListResponseDTO> responseDtoList = new ArrayList<>();
     BreadTypeResponseDTO breadType;
