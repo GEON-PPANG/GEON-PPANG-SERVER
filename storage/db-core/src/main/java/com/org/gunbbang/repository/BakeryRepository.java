@@ -64,13 +64,19 @@ public interface BakeryRepository
   List<Bakery> findBakeriesRandomly(PageRequest pageRequest);
 
   @Query(
-      value =
-          "SELECT DISTINCT b FROM Bakery b "
-              + "INNER JOIN BakeryCategory bc ON b.bakeryId = bc.bakery.bakeryId "
-              + "INNER JOIN Category c ON bc.category.categoryId = c.categoryId "
-              + "WHERE c IN :categoryList "
-              + "ORDER BY b.reviewCount DESC")
-  List<Bakery> findBakeriesByCategoryAndReview(List<Category> categoryList);
+      "SELECT DISTINCT b FROM Bakery b "
+          + "INNER JOIN BakeryCategory bc ON b.bakeryId = bc.bakery.bakeryId "
+          + "INNER JOIN Category c ON bc.category.categoryId = c.categoryId "
+          + "WHERE c IN :categoryList "
+          + "AND (b.breadType.isGlutenFree = :isGlutenFree OR b.breadType.isVegan = :isVegan "
+          + "OR b.breadType.isNutFree = :isNutFree OR b.breadType.isSugarFree = :isSugarFree) "
+          + "ORDER BY (SELECT COUNT(cat) FROM Category cat WHERE cat IN :categoryList) DESC")
+  List<Bakery> findFilteredBakeries(
+      @Param("categoryList") List<Category> categoryList,
+      @Param("isGlutenFree") boolean isGlutenFree,
+      @Param("isVegan") boolean isVegan,
+      @Param("isNutFree") boolean isNutFree,
+      @Param("isSugarFree") boolean isSugarFree);
 
   @Query(
       value =

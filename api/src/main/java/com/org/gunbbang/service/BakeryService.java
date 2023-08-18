@@ -11,12 +11,12 @@ import com.org.gunbbang.service.specification.BakerySpecifications;
 import com.org.gunbbang.util.mapper.BakeryMapper;
 import com.org.gunbbang.util.mapper.BreadTypeMapper;
 import com.org.gunbbang.util.mapper.MenuMapper;
+import com.org.gunbbang.util.security.SecurityUtil;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +31,7 @@ public class BakeryService {
   private final MemberRepository memberRepository;
   private final BakeryRepository bakeryRepository;
   private final MenuRepository menuRepository;
+  private final BreadTypeRepository breadTypeRepository;
 
   private final String BLANK_SPACE = " ";
   private final int maxBestBakeryCount = 10;
@@ -41,29 +42,11 @@ public class BakeryService {
       boolean isHard,
       boolean isDessert,
       boolean isBrunch) {
+    Long memberBreadTypeId = SecurityUtil.getLoginMemberBreadTypeId();
     List<Category> categoryList = getCategoryList(isHard, isDessert, isBrunch);
-    List<BakeryListResponseDTO> responseDtoList;
-    List<Bakery> bakeryList;
-
-    if (categoryList.isEmpty()) {
-      Sort sortOption =
-          sortingOption.equals("review")
-              ? Sort.by(Sort.Direction.DESC, "reviewCount")
-              : Sort.by(Sort.Direction.DESC, "bakeryId");
-      bakeryList = bakeryRepository.findAll(sortOption);
-      responseDtoList = getBakeryListResponseDTOList(bakeryList);
-      return responseDtoList;
-    }
-
-    if (sortingOption.equals("review")) {
-      bakeryList = bakeryRepository.findBakeriesByCategoryAndReview(categoryList);
-      responseDtoList = getBakeryListResponseDTOList(bakeryList);
-      return responseDtoList;
-    }
-
-    bakeryList = bakeryRepository.findBakeriesByCategory(categoryList);
-    responseDtoList = getBakeryListResponseDTOList(bakeryList);
-    return responseDtoList;
+    List<Bakery> bakeryList =
+        getFilterAndSortBakeries(personalFilter, memberBreadTypeId, categoryList, sortingOption);
+    return getBakeryListResponseDTOList(bakeryList);
   }
 
   private List<Category> getCategoryList(boolean isHard, boolean isDessert, boolean isBrunch) {
@@ -95,6 +78,36 @@ public class BakeryService {
     }
 
     return categoryList;
+  }
+
+  private List<Bakery> getFilterAndSortBakeries(
+      boolean personalFilter, Long breadTypeId, List<Category> categoryList, String sortingOption) {
+    BreadType breadType =
+        personalFilter
+            ? breadTypeRepository
+                .findById(breadTypeId)
+                .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION))
+            : breadTypeRepository
+                .findBreadTypeByIsGlutenFreeAndIsVeganAndIsNutFreeAndIsSugarFree(
+                    true, true, true, true)
+                .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION));
+
+    List<Bakery> filteredBakeries =
+        bakeryRepository.findFilteredBakeries(
+            categoryList,
+            breadType.getIsGlutenFree(),
+            breadType.getIsVegan(),
+            breadType.getIsNutFree(),
+            breadType.getIsSugarFree());
+
+    if ("review".equals(sortingOption)) {
+      filteredBakeries.sort(
+          Comparator.comparing(Bakery::getReviewCount, Collections.reverseOrder()));
+      return filteredBakeries;
+    }
+
+    filteredBakeries.sort(Comparator.comparing(Bakery::getBakeryId, Collections.reverseOrder()));
+    return filteredBakeries;
   }
 
   public BakeryDetailResponseDTO getBakeryDetail(Long memberId, Long bakeryId) {
