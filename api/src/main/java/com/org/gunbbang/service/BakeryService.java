@@ -36,43 +36,65 @@ public class BakeryService {
   private final int maxBestBakeryCount = 10;
 
   public List<BakeryListResponseDTO> getBakeryList(
-      String sort, boolean isHard, boolean isDessert, boolean isBrunch) {
+      String sortingOption,
+      boolean personalFilter,
+      boolean isHard,
+      boolean isDessert,
+      boolean isBrunch) {
     List<Category> categoryList = getCategoryList(isHard, isDessert, isBrunch);
-    List<BakeryListResponseDTO> responseDtoList = new ArrayList<>();
-    BreadTypeResponseDTO breadType;
+    List<BakeryListResponseDTO> responseDtoList;
     List<Bakery> bakeryList;
 
     if (categoryList.isEmpty()) {
       Sort sortOption =
-          sort.equals("review")
+          sortingOption.equals("review")
               ? Sort.by(Sort.Direction.DESC, "reviewCount")
               : Sort.by(Sort.Direction.DESC, "bakeryId");
       bakeryList = bakeryRepository.findAll(sortOption);
-      for (Bakery bakery : bakeryList) {
-        breadType = getBreadType(bakery);
-        BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(bakery, breadType);
-        responseDtoList.add(bakeryListResponseDto);
-      }
+      responseDtoList = getBakeryListResponseDTOList(bakeryList);
       return responseDtoList;
     }
 
-    if (sort.equals("review")) {
+    if (sortingOption.equals("review")) {
       bakeryList = bakeryRepository.findBakeriesByCategoryAndReview(categoryList);
-      for (Bakery bakery : bakeryList) {
-        breadType = getBreadType(bakery);
-        BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(bakery, breadType);
-        responseDtoList.add(bakeryListResponseDto);
-      }
+      responseDtoList = getBakeryListResponseDTOList(bakeryList);
       return responseDtoList;
     }
 
     bakeryList = bakeryRepository.findBakeriesByCategory(categoryList);
-    for (Bakery bakery : bakeryList) {
-      breadType = getBreadType(bakery);
-      BakeryListResponseDTO bakeryListResponseDto = getBakeryResponseDTO(bakery, breadType);
-      responseDtoList.add(bakeryListResponseDto);
-    }
+    responseDtoList = getBakeryListResponseDTOList(bakeryList);
     return responseDtoList;
+  }
+
+  private List<Category> getCategoryList(boolean isHard, boolean isDessert, boolean isBrunch) {
+    List<Category> categoryList = new ArrayList<>();
+
+    Map<CategoryType, Boolean> categoryMap = new HashMap<>();
+    categoryMap.put(CategoryType.HARD_BREAD, isHard);
+    categoryMap.put(CategoryType.DESSERT, isDessert);
+    categoryMap.put(CategoryType.BRUNCH, isBrunch);
+
+    for (Map.Entry<CategoryType, Boolean> entry : categoryMap.entrySet()) {
+      if (entry.getValue()) { // true인 값만 해당되어 category에 추가된다
+        Category category =
+            categoryRepository
+                .findByCategoryName(entry.getKey().getName())
+                .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION));
+        categoryList.add(category);
+      }
+    }
+
+    if (categoryList.isEmpty()) { // 카테고리가를 선택하지 않은 경우에는 모두 추가된다
+      for (CategoryType categoryType : CategoryType.values()) {
+        Category category =
+            categoryRepository
+                .findByCategoryName(categoryType.getName())
+                .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION));
+        categoryList.add(category);
+      }
+    }
+
+    return categoryList;
   }
 
   public BakeryDetailResponseDTO getBakeryDetail(Long memberId, Long bakeryId) {
@@ -229,34 +251,6 @@ public class BakeryService {
     return false;
   }
 
-  private BreadTypeResponseDTO getBreadType(Bakery bakery) {
-    return BreadTypeResponseDTO.builder()
-        .breadTypeId(bakery.getBreadType().getBreadTypeId())
-        .breadTypeName(bakery.getBreadType().getBreadTypeName())
-        .isGlutenFree(bakery.getBreadType().getIsGlutenFree())
-        .isVegan(bakery.getBreadType().getIsVegan())
-        .isNutFree(bakery.getBreadType().getIsNutFree())
-        .isSugarFree(bakery.getBreadType().getIsSugarFree())
-        .build();
-  }
-
-  private BakeryListResponseDTO getBakeryResponseDTO(
-      Bakery bakery, BreadTypeResponseDTO breadType) {
-    return BakeryListResponseDTO.builder()
-        .bakeryId(bakery.getBakeryId())
-        .bakeryName(bakery.getBakeryName())
-        .bakeryPicture(bakery.getBakeryPicture())
-        .isHACCP(bakery.getIsHACCP())
-        .isVegan(bakery.getIsVegan())
-        .isNonGMO(bakery.getIsNonGMO())
-        .firstNearStation(bakery.getFirstNearStation())
-        .secondNearStation(bakery.getSecondNearStation())
-        .bookMarkCount(bakery.getBookMarkCount())
-        .reviewCount(bakery.getReviewCount())
-        .breadType(breadType)
-        .build();
-  }
-
   private BakeryListResponseDTOV2 getBakeryResponseDTOV2(
       Bakery bakery, boolean isBookMarked, BreadTypeResponseDTO breadType) {
     BaseBakeryResponseDTOV2 baseBakeryResponseDTOV2 =
@@ -277,28 +271,5 @@ public class BakeryService {
         .reviewCount(bakery.getReviewCount())
         .isBookMarked(isBookMarked)
         .build();
-  }
-
-  private List<Category> getCategoryList(boolean isHard, boolean isDessert, boolean isBrunch) {
-    List<Category> categoryList = new ArrayList<>();
-    if (isHard) {
-      categoryList.add(
-          categoryRepository
-              .findByCategoryName(CategoryType.HARD_BREAD.getName())
-              .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
-    }
-    if (isDessert) {
-      categoryList.add(
-          categoryRepository
-              .findByCategoryName(CategoryType.DESSERT.getName())
-              .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
-    }
-    if (isBrunch) {
-      categoryList.add(
-          categoryRepository
-              .findByCategoryName(CategoryType.BRUNCH.getName())
-              .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION)));
-    }
-    return categoryList;
   }
 }
