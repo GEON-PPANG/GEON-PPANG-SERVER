@@ -160,12 +160,18 @@ INSERT INTO bakery (bakery_id, bread_type_id, nutrient_type_id, address_rest, ba
 
 
 -- bakery_category
-INSERT INTO bakery_category (bakery_id,category_id) values (3,1);
-INSERT INTO bakery_category (bakery_id,category_id) values (3,2);
-INSERT INTO bakery_category (bakery_id,category_id) values (3,3);
+INSERT INTO bakery_category (bakery_id,category_id) values (1,1);
+INSERT INTO bakery_category (bakery_id,category_id) values (1,2);
+INSERT INTO bakery_category (bakery_id,category_id) values (1,3);
 INSERT INTO bakery_category (bakery_id,category_id) values (2,1);
 INSERT INTO bakery_category (bakery_id,category_id) values (2,2);
-INSERT INTO bakery_category (bakery_id,category_id) values (1,1);
+INSERT INTO bakery_category (bakery_id,category_id) values (2,3);
+INSERT INTO bakery_category (bakery_id,category_id) values (3,1);
+INSERT INTO bakery_category (bakery_id,category_id) values (3,2);
+INSERT INTO bakery_category (bakery_id,category_id) values (4,1);
+INSERT INTO bakery_category (bakery_id,category_id) values (4,2);
+INSERT INTO bakery_category (bakery_id,category_id) values (5,1);
+INSERT INTO bakery_category (bakery_id,category_id) values (5,2);
 
 
 -- menu
@@ -191,20 +197,20 @@ INSERT INTO book_mark (bakery_id, member_id) values (7, 5);
 
 -- review
 INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)
-    VALUES (1, true, 'review_id: 1 | 제일최근 리뷰+좋아요+멤버빵유형 및 주목적 일치', 1, 2, '2023-07-13T18:00:29.68338Z', null);
+    VALUES (1, true, 'review_id: 1 | 제일최근 리뷰+좋아요+멤버빵유형 및 주목적 일치', 5, 2, '2023-07-13T18:00:29.68338Z', null);
 INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)
-    VALUES (2, true, 'review_id: 2 | 두번째+좋아요+멤버빵유형 및 주목적 일치', 1, 2, '2023-07-12T18:00:29.68338Z', null);
+    VALUES (2, true, 'review_id: 2 | 두번째+좋아요+멤버빵유형 및 주목적 일치', 5, 2, '2023-07-12T18:00:29.68338Z', null);
 INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)
-    VALUES (3, true, 'review_id: 3 | 세번째+좋아요+멤버빵유형 및 주목적 일치', 1, 2, '2023-07-11T18:00:29.68338Z', null);
+    VALUES (3, true, 'review_id: 3 | 세번째+좋아요+멤버빵유형 및 주목적 일치', 5, 2, '2023-07-11T18:00:29.68338Z', null);
 INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)
     VALUES (4, true, 'review_id: 4 | 네번째+좋아요+멤버빵유형 및 주목적 일치', 4, 2, '2023-07-10T18:00:29.68338Z', null);
 INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)
-    VALUES (5, true, 'review_id: 5 | 다섯+좋아요++멤버빵유형 및 주목적 일치', 5, 3, '2023-07-09T18:00:29.68338Z', null);
+    VALUES (5, true, 'review_id: 5 | 다섯+좋아요++멤버빵유형 및 주목적 일치', 4, 3, '2023-07-09T18:00:29.68338Z', null);
 
 -- 여기까지 best 리뷰에서 조회되어야 하는 데이터
 
 INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)
-    VALUES (6, true, 'review_id: 6 | 좋아요+빵유형만 일치 이거 나오면 안됨', 1, 4, '2023-07-11T18:00:29.68338Z', null);
+    VALUES (6, true, 'review_id: 6 | 좋아요+빵유형만 일치 이거 나오면 안됨', 3, 4, '2023-07-11T18:00:29.68338Z', null);
 INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)
     VALUES (7, true, 'review_id: 7 | 좋아요+주목적만 일치 이거 나오면 안됨', 1, 5, '2023-07-13T18:00:29.68338Z', null);
 INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)

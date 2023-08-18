@@ -46,7 +46,8 @@ public class BakeryService {
     Long memberBreadTypeId = SecurityUtil.getLoginMemberBreadTypeId();
     List<Category> categoryList = getCategoryList(isHard, isDessert, isBrunch);
     List<Bakery> bakeryList =
-        getFilterAndSortBakeries(personalFilter, memberBreadTypeId, categoryList, sortingOption);
+        getFilteredAndSortedBakeryList(
+            personalFilter, memberBreadTypeId, categoryList, sortingOption);
     return getBakeryListResponseDTOList(bakeryList);
   }
 
@@ -68,7 +69,7 @@ public class BakeryService {
       }
     }
 
-    if (categoryList.isEmpty()) { // 카테고리가를 선택하지 않은 경우에는 모두 추가된다
+    if (categoryList.isEmpty()) { // 카테고리가 빈 경우
       for (CategoryType categoryType : CategoryType.values()) {
         Category category =
             categoryRepository
@@ -81,7 +82,7 @@ public class BakeryService {
     return categoryList;
   }
 
-  private List<Bakery> getFilterAndSortBakeries(
+  private List<Bakery> getFilteredAndSortedBakeryList(
       boolean personalFilter, Long breadTypeId, List<Category> categoryList, String sortingOption) {
     BreadType breadType =
         personalFilter
@@ -101,15 +102,17 @@ public class BakeryService {
             breadType.getIsNutFree(),
             breadType.getIsSugarFree());
 
+    List<Bakery> getSortedByCategoryBakeryList = getSortedByCategoryBakeryList(filteredBakeryList);
+
     if ("review".equals(sortingOption)) {
-      filteredBakeryList.sort(
+      getSortedByCategoryBakeryList.sort(
           Comparator.comparing(Bakery::getReviewCount, Collections.reverseOrder()));
-    } else if ("default".equals(sortingOption)) {
-      filteredBakeryList.sort(
+    } else if ("default".equals(sortingOption) && (!personalFilter)) {
+      getSortedByCategoryBakeryList.sort(
           Comparator.comparing(Bakery::getBakeryId, Collections.reverseOrder()));
     }
 
-    return getSortedByCategoryBakeryList(filteredBakeryList);
+    return getSortedByCategoryBakeryList;
   }
 
   private List<Bakery> getSortedByCategoryBakeryList(List<Bakery> bakeryList) {
@@ -121,13 +124,10 @@ public class BakeryService {
       bakeryCategoryCounts.put(bakery, count);
     }
 
-    List<Bakery> sortedByCategoryBakeryList =
-        bakeryCategoryCounts.entrySet().stream()
-            .sorted(Map.Entry.<Bakery, Long>comparingByValue().reversed())
-            .map(Map.Entry::getKey)
-            .collect(Collectors.toList());
-
-    return sortedByCategoryBakeryList;
+    return bakeryCategoryCounts.entrySet().stream()
+        .sorted(Map.Entry.<Bakery, Long>comparingByValue().reversed())
+        .map(Map.Entry::getKey)
+        .collect(Collectors.toList());
   }
 
   public BakeryDetailResponseDTO getBakeryDetail(Long memberId, Long bakeryId) {
