@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.org.gunbbang.jwt.filter.JwtAuthenticationProcessingFilter;
 import com.org.gunbbang.jwt.filter.JwtExceptionFilter;
 import com.org.gunbbang.jwt.service.JwtService;
-import com.org.gunbbang.jwt.service.JwtServiceV2;
 import com.org.gunbbang.login.filter.CustomJsonUsernamePasswordAuthenticationFilter;
 import com.org.gunbbang.login.handler.LoginFailureHandler;
 import com.org.gunbbang.login.handler.LoginSuccessHandler;
@@ -12,6 +11,7 @@ import com.org.gunbbang.login.service.CustomUserDetailsService;
 import com.org.gunbbang.repository.MemberRepository;
 import javax.servlet.Filter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,14 +19,12 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 @Configuration
 @EnableWebSecurity
@@ -35,11 +33,11 @@ public class SecurityConfig {
 
   private final CustomUserDetailsService customUserDetailsService;
   private final JwtService jwtService;
-  private final JwtServiceV2 jwtServiceV2;
   private final MemberRepository memberRepository;
   private final ObjectMapper objectMapper;
-  private final AuthenticationEntryPoint authEntryPoint;
-  private final AccessDeniedHandler accessDeniedHandler;
+
+  @Qualifier("handlerExceptionResolver")
+  private final HandlerExceptionResolver handlerExceptionResolver;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -60,51 +58,38 @@ public class SecurityConfig {
         .and()
         .authorizeRequests()
         .antMatchers(
-            "/h2-console/**" // 여기!
-            )
+            "/",
+            "/css/**",
+            "/images/**",
+            "/js/**",
+            "/favicon.ico",
+            "/h2-console/**",
+            "/health",
+            "/profile",
+            "/auth/signup",
+            "/validation/nickname",
+            "/validation/email",
+            "/profile",
+            "/actuator/health")
         .permitAll()
         .and()
-        .exceptionHandling()
-        .authenticationEntryPoint(authEntryPoint)
-        //        .accessDeniedHandler(accessDeniedHandler)
-        .and()
-        .addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class)
-        //        .addFilterBefore(
-        //            jwtAuthenticationProcessingFilter(),
-        //            CustomJsonUsernamePasswordAuthenticationFilter.class)
-        //        .addFilterBefore(jwtExceptionFilter(), JwtAuthenticationProcessingFilter.class);
+
+        // 필터 순서: JwtExceptionFilter -> JwtAuthenticationProcessingFilter -> LogoutFilter ->
+        // CustomJsonUsernamePasswordAuthenticationFilter
         .addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class)
         .addFilterBefore(
             jwtAuthenticationProcessingFilter(),
-            CustomJsonUsernamePasswordAuthenticationFilter.class);
+            CustomJsonUsernamePasswordAuthenticationFilter.class)
+        .addFilterBefore(jwtExceptionFilter(), JwtAuthenticationProcessingFilter.class);
 
     return http.build();
-  }
-
-  // @Bean
-  public WebSecurityCustomizer webSecurityCustomizer() {
-    return (web) ->
-        web.ignoring()
-            .antMatchers(
-                "/",
-                "/css/**",
-                "/images/**",
-                "/js/**",
-                "/favicon.ico",
-                "/h2-console/**",
-                "/health",
-                "/profile",
-                "/auth/signup",
-                "/validation/nickname",
-                "/validation/email",
-                "/actuator/health");
   }
 
   @Bean
   public CustomJsonUsernamePasswordAuthenticationFilter
       customJsonUsernamePasswordAuthenticationFilter() {
     CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordAuthenticationFilter =
-        new CustomJsonUsernamePasswordAuthenticationFilter(objectMapper, jwtService);
+        new CustomJsonUsernamePasswordAuthenticationFilter(objectMapper);
     customJsonUsernamePasswordAuthenticationFilter.setAuthenticationManager(
         authenticationManager());
     customJsonUsernamePasswordAuthenticationFilter.setAuthenticationSuccessHandler(
@@ -132,7 +117,7 @@ public class SecurityConfig {
     return new LoginSuccessHandler(jwtService, memberRepository);
   }
 
-  // @Bean
+  @Bean
   public LoginFailureHandler loginFailureHandler() {
     return new LoginFailureHandler();
   }
@@ -140,12 +125,12 @@ public class SecurityConfig {
   @Bean
   public Filter jwtAuthenticationProcessingFilter() {
     JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter =
-        new JwtAuthenticationProcessingFilter(jwtService, jwtServiceV2, memberRepository);
+        new JwtAuthenticationProcessingFilter(jwtService, memberRepository);
     return jwtAuthenticationProcessingFilter;
   }
 
   @Bean
   public JwtExceptionFilter jwtExceptionFilter() {
-    return new JwtExceptionFilter(objectMapper);
+    return new JwtExceptionFilter(handlerExceptionResolver);
   }
 }

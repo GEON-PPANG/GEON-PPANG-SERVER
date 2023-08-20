@@ -6,8 +6,6 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.org.gunbbang.NotFoundException;
-import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.MemberRepository;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
@@ -65,13 +63,6 @@ public class JwtService {
         .withSubject(REFRESH_TOKEN_SUBJECT)
         .withExpiresAt(new Date(now.getTime() + refreshTokenExpirationPeriod))
         .sign(Algorithm.HMAC512(secretKey));
-  }
-
-  /** accessToken 재발급 후 header에 넣어서 리턴 */
-  public void sendAccessToken(HttpServletResponse response, String accessToken) {
-    response.setStatus(HttpServletResponse.SC_OK);
-    response.setHeader(accessHeader, accessToken);
-    log.info("토큰 재발급 완료: {}", accessToken);
   }
 
   /** accessToken, refreshToken 재발급 후 header에 넣어서 리턴 */
@@ -165,18 +156,6 @@ public class JwtService {
 
   public DecodedJWT getVerifiedJWT(String jwtToken) {
     return JWT.require(Algorithm.HMAC512(secretKey)).build().verify(jwtToken);
-  }
-
-  public String getVerifiedJWTAsString(String jwtToken) {
-    return JWT.require(Algorithm.HMAC512(secretKey)).build().verify(jwtToken).toString();
-  }
-
-  public void updateRefreshToken(String email, String refreshToken) {
-    memberRepository
-        .findByEmail(email)
-        .ifPresentOrElse(
-            member -> member.updateRefreshToken(refreshToken),
-            () -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
   }
 
   public boolean isTokenValid(String token) {
