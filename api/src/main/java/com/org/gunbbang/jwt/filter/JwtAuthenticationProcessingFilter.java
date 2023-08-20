@@ -1,10 +1,16 @@
 package com.org.gunbbang.jwt.filter;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.org.gunbbang.AbusedRefreshTokenException;
+import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.entity.Member;
+import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.jwt.service.JwtService;
+import com.org.gunbbang.jwt.service.JwtServiceV2;
 import com.org.gunbbang.login.CustomUserDetails;
 import com.org.gunbbang.repository.MemberRepository;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -12,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
@@ -23,49 +30,108 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
-  private static final String WHITE_LIST = "/auth/login"; // 로그인 요청은 필터에서 제외
-
+  private static final String H2_PREFIX = "/h2-console"; // 로그인 요청은 필터에서 제외
   private final JwtService jwtService;
+  private final JwtServiceV2 jwtServiceV2;
   private final MemberRepository memberRepository;
+  private static final List<String> WHITE_LIST =
+      List.of(
+          "/auth/signup",
+          "/auth/login",
+          "/health",
+          "/profile",
+          "/validation/nickname",
+          "/validation/email",
+          "/actuator/health",
+          "/favicon.ico*");
 
   private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
+
+  @Override
+  protected boolean shouldNotFilter(HttpServletRequest request) {
+    String path = request.getRequestURI();
+    return WHITE_LIST.contains(path) || path.startsWith(H2_PREFIX);
+  }
 
   @Override
   protected void doFilterInternal(
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
-    if (request.getRequestURI().equals(WHITE_LIST)) {
-      filterChain.doFilter(request, response);
-      return; // 그대로 return해서 로그인 요청은 다음 필터로 넘김
-    }
+    log.info("JwtAuthenticationProcessingFilter 진입 시작.");
 
-    String refreshToken =
-        jwtService.extractRefreshToken(request).filter(jwtService::isTokenValid).orElse(null);
+    //    String accessToken = null;
+    try {
+      //      accessToken = jwtService.extractAccessTokenAsString(request);
+      //      DecodedJWT decodedJWT = jwtService.getVerifiedJWT(accessToken);
+      //      final Claims claims = jwtServiceV2.getBody(accessToken);
+      //      String refreshToken =
+      //              jwtService
+      //                      .extractRefreshToken(request)
+      //                      .filter(jwtService::isTokenValid)
+      //                      .orElse(null);
 
-    /** 헤더에 유효한 refreshToken이 담겨져서 요청된 경우 토큰 재발급 요청 refresh와 access 둘 다 재발급해서 반환 */
-    if (refreshToken != null) {
-      ReIssueTokensAndUpdateRefreshToken(response, refreshToken);
-      return;
-    }
+      /** 헤더에 유효한 refreshToken이 담겨져서 요청된 경우 토큰 재발급 요청 refresh와 access 둘 다 재발급해서 반환 */
+      if (jwtService.isRefreshTokenExist(request)) {
+        refreshAccessAndRefreshTokens(
+            request, response, filterChain); // 왜 여기 안에서 발생하는 똑같은 토큰 만료 에러는 컨트롤러 어드바이저에서 처리가 안됨??
+        return;
+      }
 
-    /** refreshToken가 null인 경우 -> 일반적인 인증인 경우 accesssToken이 유효한지 검사 후 유효하면 접근 허용, 유효하지 않으면 에러 응답 */
-    if (refreshToken == null) {
+      /**
+       * refreshToken가 null인 경우 -> 일반적인 인증인 경우 accesssToken이 유효한지 검사 후 유효하면 접근 허용, 유효하지 않으면 에러 응답
+       */
       checkAccessTokenAndAuthentication(request, response, filterChain);
+
+    } catch (Exception e) {
+      request.setAttribute("exception", e);
+      System.out.println("제일 outer 에러 클래스: " + e.getClass().getName());
+      System.out.println("제일 outer 에러 메시지: " + e.getMessage());
     }
+    filterChain.doFilter(request, response); // 이게 무조건 try-catch 밖에 있어야 함
+  }
+
+  // TODO: 리프레시 토큰이 만료된 경우는 어떻게??
+  // TODO: 왜 여기서는 어드바이저가 안걸리는지??
+  private void refreshAccessAndRefreshTokens(
+      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws JsonProcessingException {
+    log.info("토큰 리프레시 접근 요청 처리 시작.");
+
+    String accessToken = jwtService.extractAccessTokenAsString(request);
+    String refreshToken = jwtService.extractRefreshTokenAsString(request);
+    jwtService.getVerifiedJWT(refreshToken);
+
+    // at가 만료되지 않을 경우 에러
+    if (!jwtService.isTokenExpired(accessToken)) {
+      log.info("만료되지 않은 엑세스 토큰을 재발급하려는 시도");
+      throw new AuthenticationServiceException(
+          ErrorType.NOT_EXPIRED_ACCESS_TOKEN_EXCEPTION.toString());
+    }
+
+    Long memberId = jwtService.extractMemberIdClaimFromExpiredToken(accessToken);
+    Member foundMember =
+        memberRepository
+            .findById(memberId)
+            .orElseThrow(() -> new BadRequestException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+
+    // 해당 member의 rt가 요청에서 온 rt랑 일치하는지 판단, 일치하지 않는 경우: 이미 해당 rt로 재발급을 한번은 했다는 의미이므로 이 경우에는 해당 rt를
+    // invalid 처리
+    if (foundMember.getRefreshToken() != null
+        && !foundMember.getRefreshToken().equals(refreshToken)) {
+      log.info("재발급 용도로 한번 사용된 정황이 의심되는 rt를 다시 사용하려는 시도. 로그인 페이지로 이동 요청");
+      throw new AbusedRefreshTokenException(ErrorType.ABUSED_REFRESH_TOKEN_EXCEPTION);
+    }
+
+    ReIssueTokensAndUpdateRefreshToken(response, foundMember);
   }
 
   private void ReIssueTokensAndUpdateRefreshToken(
-      HttpServletResponse response, String refreshToken) {
-    memberRepository
-        .findByRefreshToken(refreshToken)
-        .ifPresent(
-            member -> {
-              String reIssuedRefreshToken = reIssueAndUpdateRefreshToken(member);
-              String reIssuedAccessToken =
-                  jwtService.createAccessToken(member.getEmail(), member.getMemberId());
-              jwtService.sendAccessAndRefreshToken(
-                  response, reIssuedAccessToken, reIssuedRefreshToken);
-            });
+      HttpServletResponse response, Member foundMember) {
+    String reIssuedRefreshToken = reIssueAndUpdateRefreshToken(foundMember);
+    String reIssuedAccessToken =
+        jwtService.createAccessToken(foundMember.getEmail(), foundMember.getMemberId());
+    jwtService.sendAccessAndRefreshToken(response, reIssuedAccessToken, reIssuedRefreshToken);
+    log.info("엑세스 토큰 및 리프레시 토큰 재발급 완료");
   }
 
   /** refreshToken 재발급하고 디비에 반영 후 flush */
@@ -83,21 +149,15 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
   public void checkAccessTokenAndAuthentication(
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
-    log.info("엑세스 토큰 유효성 검사 시작");
-    jwtService
-        .extractAccessToken(request)
-        .filter(jwtService::isTokenValid)
-        .ifPresent(
-            accessToken ->
-                jwtService
-                    .extractMemberIdClaim(accessToken)
-                    .ifPresent(
-                        memberId ->
-                            memberRepository
-                                .findById(memberId)
-                                .ifPresent(this::saveAuthentication)));
+    log.info("일반적인 리소스 접근 요청. 엑세스 토큰 유효성 검사 시작");
 
-    filterChain.doFilter(request, response);
+    // 밑에서 엑세스토큰을 추출할 때 엑세스토큰이 없는 경우 에러 응답 필요
+    String accessToken = jwtService.extractAccessTokenAsString(request);
+    Long memberId = jwtService.extractMemberIdClaim(accessToken);
+
+    memberRepository.findById(memberId).ifPresent(this::saveAuthentication);
+
+    filterChain.doFilter(request, response); // 이게 무조건 try-catch 밖에 있어야 함
   }
 
   /** SecurityContext에 Authentication 객체를 저장 */

@@ -19,6 +19,8 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-data-jpa" // 이거 개선해야됨
     implementation "org.springframework.security:spring-security-web"
     implementation "org.springframework.security:spring-security-config"
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+//    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '3.1.0'
     implementation 'mysql:mysql-connector-java:8.0.32'
     implementation 'com.auth0:java-jwt:4.2.1'
     implementation 'org.jetbrains:annotations:24.0.0'
@@ -40,6 +42,11 @@ dependencies {
     // 매퍼 의존성 추가
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+
+    // JWT
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
 
 }
 

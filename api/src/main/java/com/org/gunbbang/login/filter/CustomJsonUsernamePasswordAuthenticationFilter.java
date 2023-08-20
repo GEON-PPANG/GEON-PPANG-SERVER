@@ -1,6 +1,8 @@
 package com.org.gunbbang.login.filter;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.org.gunbbang.jwt.service.JwtService;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -27,9 +29,13 @@ public class CustomJsonUsernamePasswordAuthenticationFilter
 
   private final ObjectMapper objectMapper;
 
-  public CustomJsonUsernamePasswordAuthenticationFilter(ObjectMapper objectMapper) {
+  private final JwtService jwtService;
+
+  public CustomJsonUsernamePasswordAuthenticationFilter(
+      ObjectMapper objectMapper, JwtService jwtService) {
     super(DEFAULT_LOGIN_PATH_REQUEST_MATCHER);
     this.objectMapper = objectMapper;
+    this.jwtService = jwtService;
   }
 
   /** usernamePasswordAuthenticationToken 생성 후 AuthenticationManager에 전달하여 인증 처리 시도 */
@@ -54,6 +60,9 @@ public class CustomJsonUsernamePasswordAuthenticationFilter
     // request 요청에서 받은 email, password로 usernamePasswordAuthenticationToken 생성
     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
         new UsernamePasswordAuthenticationToken(email, password);
+
+    String accessToken = jwtService.extractAccessTokenAsString(request);
+    DecodedJWT decodedJWT = jwtService.getVerifiedJWT(accessToken);
 
     // usernamePasswordAuthenticationToken을 AuthenticationManager에 전달
     // 성공 시 완전한 Authentication(usernamePasswordAuthenticationToken 타입) 반환

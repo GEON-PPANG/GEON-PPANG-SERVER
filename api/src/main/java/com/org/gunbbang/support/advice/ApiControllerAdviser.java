@@ -1,5 +1,9 @@
 package com.org.gunbbang.support.advice;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.org.gunbbang.AbusedRefreshTokenException;
 import com.org.gunbbang.HandleException;
 import com.org.gunbbang.common.dto.ApiResponse;
 import com.org.gunbbang.errorType.ErrorType;
@@ -67,18 +71,48 @@ public class ApiControllerAdviser {
         String.format("%s. (%s)", ErrorType.REQUEST_BIND_EXCEPTION, e.getBindingResult()));
   }
 
-  @ExceptionHandler(HandleException.class)
-  protected ResponseEntity<ApiResponse> handleCustomException(HandleException e) {
-    return ResponseEntity.status(e.getHttpStatus()).body(ApiResponse.error(e.getErrorType()));
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
+  @ExceptionHandler(AbusedRefreshTokenException.class)
+  protected ApiResponse handleBindingException(final AbusedRefreshTokenException e) {
+    System.out.println("어드바이저 에러 catch");
+    return ApiResponse.error(
+        ErrorType.ABUSED_REFRESH_TOKEN_EXCEPTION,
+        String.format("%s. (%s)", ErrorType.ABUSED_REFRESH_TOKEN_EXCEPTION, e.getMessage()));
   }
 
   @ExceptionHandler(Exception.class)
-  protected ResponseEntity<ApiResponse> handleException(Exception e, HttpServletRequest request)
-      throws IOException {
+  protected ResponseEntity<ApiResponse> handleException(
+      final Exception e, HttpServletRequest request) throws IOException, Exception {
+    System.out.println("어드바이저 에러 catch");
+
+    System.out.println(e.getClass().getName());
     System.out.println(e.getMessage());
-    System.out.println(e.getStackTrace().toString());
     slackUtil.sendAlert(e, request);
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(ApiResponse.error(ErrorType.INTERNAL_SERVER_ERROR));
+  }
+
+  @ExceptionHandler(SignatureVerificationException.class)
+  public ResponseEntity<ApiResponse> handleSignatureVerificationException(
+      final SignatureVerificationException e) {
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        .body(ApiResponse.error(ErrorType.NOT_VALID_TOKEN_EXCEPTION));
+  }
+
+  @ExceptionHandler(TokenExpiredException.class)
+  public ResponseEntity<ApiResponse> handleTokenExpiredException() {
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        .body(ApiResponse.error(ErrorType.EXPIRED_TOKEN_EXCEPTION));
+  }
+
+  @ExceptionHandler(JWTVerificationException.class)
+  public ResponseEntity<ApiResponse> handleJWTVerificationException(Exception e) {
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        .body(ApiResponse.error(401, e.getMessage()));
+  }
+
+  @ExceptionHandler(HandleException.class)
+  protected ResponseEntity<ApiResponse> handleCustomException(final HandleException e) {
+    return ResponseEntity.status(e.getHttpStatus()).body(ApiResponse.error(e.getErrorType()));
   }
 }

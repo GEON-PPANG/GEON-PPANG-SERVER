@@ -19,6 +19,17 @@ public enum ErrorType {
   NO_REQUEST_PARAMETER_EXCEPTION(HttpStatus.BAD_REQUEST, "필요한 요청 값이 오지 않았습니다"),
   PARAMETER_TYPE_MISMATCH_EXCEPTION(HttpStatus.BAD_REQUEST, "요청 값의 타입이 올바르지 않습니다"),
   REQUEST_BIND_EXCEPTION(HttpStatus.BAD_REQUEST, "요청 값 바인딩에 실패했습니다"),
+  NOT_VALID_ACCESS_TOKEN_EXCEPTION(HttpStatus.BAD_REQUEST, "유효하지 않은 엑세스 토큰입니다"),
+  NOT_VALID_REFRESH_TOKEN_EXCEPTION(HttpStatus.BAD_REQUEST, "유효하지 않은 리프레시 토큰입니다"),
+  NOT_VALID_TOKEN_EXCEPTION(HttpStatus.BAD_REQUEST, "유효하지 않은 토큰입니다"),
+  NOT_EXPIRED_ACCESS_TOKEN_EXCEPTION(HttpStatus.BAD_REQUEST, "만료되지 않은 엑세스 토큰입니다"),
+  NOT_EXPIRED_EXPIRED_TOKEN_EXCEPTION(HttpStatus.BAD_REQUEST, "만료되지 않은 리프레시 토큰입니다"),
+  EXPIRED_TOKEN_EXCEPTION(HttpStatus.BAD_REQUEST, "만료된 토큰입니다"),
+  NOT_EXIST_ACCESS_TOKEN_EXCEPTION(HttpStatus.BAD_REQUEST, "엑세스 토큰이 없습니다"),
+
+  /** 401 */
+  ABUSED_REFRESH_TOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다"),
+
   /** 404 NOT FOUND */
   NOT_FOUND_USER_EXCEPTION(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다"),
   NOT_FOUND_IMAGE_EXCEPTION(HttpStatus.NOT_FOUND, "존재하지 않는 이미지입니다"),
