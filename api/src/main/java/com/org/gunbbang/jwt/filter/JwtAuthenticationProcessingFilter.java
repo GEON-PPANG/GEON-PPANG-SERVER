@@ -42,7 +42,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
           "/actuator/health",
           "/favicon.ico");
 
-  private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
+  private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) {
@@ -62,17 +62,17 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     // 헤더에 유효한 refreshToken이 담겨져서 요청된 경우 토큰 재발급 요청 refresh와 access 둘 다 재발급해서 반환
     if (jwtService.isRefreshTokenExist(request)) {
-      refreshAccessAndRefreshTokens(request, response, filterChain);
+      refreshAccessAndRefreshTokens(request, response);
       return;
     }
 
     // refreshToken가 null인 경우 -> 일반적인 인증인 경우 accesssToken이 유효한지 검사 후 유효하면 접근 허용, 유효하지 않으면 에러 응답
-    checkAccessTokenAndAuthentication(request, response, filterChain);
+    checkAccessTokenAndAuthentication(request);
+    filterChain.doFilter(request, response);
   }
 
   private void refreshAccessAndRefreshTokens(
-      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-      throws JsonProcessingException {
+      HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
     log.info("토큰 리프레시 접근 요청 처리 시작.");
 
     String accessToken = jwtService.extractAccessTokenAsString(request);
@@ -125,8 +125,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
    * accessToken 유효성 검사 후 해당 토큰에서 추출한 memberId로 회원 객체 조회 성공 시 saveAuthentication() 호출해서
    * Authentication 객체 생성 후 SecurityContext에 저장
    */
-  public void checkAccessTokenAndAuthentication(
-      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+  public void checkAccessTokenAndAuthentication(HttpServletRequest request)
       throws ServletException, IOException {
     log.info("일반적인 리소스 접근 요청. 엑세스 토큰 유효성 검사 시작");
 
@@ -134,8 +133,6 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     Long memberId = jwtService.extractMemberIdClaim(accessToken);
 
     memberRepository.findById(memberId).ifPresent(this::saveAuthentication);
-
-    filterChain.doFilter(request, response);
   }
 
   /** SecurityContext에 Authentication 객체를 저장 */
