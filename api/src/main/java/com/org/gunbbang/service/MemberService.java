@@ -21,6 +21,7 @@ import com.org.gunbbang.util.mapper.NutrientTypeMapper;
 import com.org.gunbbang.util.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -153,5 +154,17 @@ public class MemberService {
     if (memberRepository.findByEmail(email).isPresent()) {
       throw new BadRequestException(ErrorType.ALREADY_EXIST_EMAIL_EXCEPTION);
     }
+  }
+
+  public MemberWithdrawResponseDTO withdraw(Long memberId) {
+    Long deletedMemberCount = memberRepository.deleteMemberByMemberId(memberId).get();
+
+    if (deletedMemberCount == 0) {
+      throw new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION);
+    }
+
+    SecurityContextHolder.clearContext();
+
+    return MemberWithdrawResponseDTO.builder().memberId(memberId).build();
   }
 }

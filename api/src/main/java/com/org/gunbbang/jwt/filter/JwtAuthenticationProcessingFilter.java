@@ -68,7 +68,6 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     // refreshToken가 null인 경우 -> 일반적인 인증인 경우 accesssToken이 유효한지 검사 후 유효하면 접근 허용, 유효하지 않으면 에러 응답
     checkAccessTokenAndAuthentication(request, response, filterChain);
-    filterChain.doFilter(request, response);
   }
 
   private void refreshAccessAndRefreshTokens(
