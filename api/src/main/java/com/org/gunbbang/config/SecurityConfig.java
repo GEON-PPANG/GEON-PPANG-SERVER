@@ -5,6 +5,8 @@ import com.org.gunbbang.jwt.filter.JwtAuthenticationProcessingFilter;
 import com.org.gunbbang.jwt.filter.JwtExceptionFilter;
 import com.org.gunbbang.jwt.service.JwtService;
 import com.org.gunbbang.login.filter.CustomJsonUsernamePasswordAuthenticationFilter;
+import com.org.gunbbang.login.handler.CustomLogoutHandler;
+import com.org.gunbbang.login.handler.CustomLogoutSuccessHandler;
 import com.org.gunbbang.login.handler.LoginFailureHandler;
 import com.org.gunbbang.login.handler.LoginSuccessHandler;
 import com.org.gunbbang.login.service.CustomUserDetailsService;
@@ -74,8 +76,15 @@ public class SecurityConfig {
         .permitAll()
         .and()
 
-        // 필터 순서: JwtExceptionFilter -> JwtAuthenticationProcessingFilter -> LogoutFilter ->
-        // CustomJsonUsernamePasswordAuthenticationFilter
+        // logout 구현
+        .logout()
+        .logoutUrl("/auth/logout") // 로그아웃 URL 설정
+        .addLogoutHandler(customlogoutHandler())
+        .logoutSuccessHandler(customLogoutSuccessHandler())
+        .and()
+
+        // 필터 순서: JwtExceptionFilter -> JwtAuthenticationProcessingFilter -> LogoutFilter
+        // -> CustomJsonUsernamePasswordAuthenticationFilter
         .addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class)
         .addFilterBefore(
             jwtAuthenticationProcessingFilter(),
@@ -130,5 +139,15 @@ public class SecurityConfig {
   @Bean
   public JwtExceptionFilter jwtExceptionFilter() {
     return new JwtExceptionFilter(handlerExceptionResolver);
+  }
+
+  @Bean
+  public CustomLogoutHandler customlogoutHandler() {
+    return new CustomLogoutHandler(memberRepository);
+  }
+
+  @Bean
+  public CustomLogoutSuccessHandler customLogoutSuccessHandler() {
+    return new CustomLogoutSuccessHandler();
   }
 }

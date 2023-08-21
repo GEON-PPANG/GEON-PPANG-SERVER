@@ -32,6 +32,7 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) {
     String path = request.getRequestURI();
+    System.out.println("path: " + path);
     return WHITE_LIST.contains(path) || path.startsWith(H2_PREFIX);
   }
 

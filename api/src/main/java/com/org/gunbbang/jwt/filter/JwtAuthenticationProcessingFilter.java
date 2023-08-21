@@ -28,7 +28,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
-  private static final String H2_PREFIX = "/h2-console"; // 로그인 요청은 필터에서 제외
+  private static final String H2_PREFIX = "/h2-console";
   private final JwtService jwtService;
   private final MemberRepository memberRepository;
   private static final List<String> WHITE_LIST =
