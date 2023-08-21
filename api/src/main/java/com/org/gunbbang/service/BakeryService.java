@@ -1,6 +1,7 @@
 package com.org.gunbbang.service;
 
 import com.org.gunbbang.CategoryType;
+import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.controller.DTO.response.BaseDTO.BaseBakeryResponseDTOV2;
@@ -160,6 +161,12 @@ public class BakeryService {
             .findById(memberId)
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
 
+    if (isFilterNotSelected(foundMember)) {
+      log.info("회원이 필터 선택 안한 경우. 랜덤으로 10개 건빵집 반환");
+      List<Bakery> randomBakeries = getOnlyRandomBakeries();
+      return BakeryMapper.INSTANCE.toBestBakeryListResponseDTO(randomBakeries);
+    }
+
     List<Bakery> bestBakeries = getBestBakeries(foundMember);
 
     if (bestBakeries.size() == maxBestBakeryCount) {
@@ -176,9 +183,22 @@ public class BakeryService {
     }
 
     setAlreadyFoundBakeryIds(alreadyFoundBakeryIds, bestBakeries);
-    getRandomBakeries(alreadyFoundBakeryIds, bestBakeries);
+    getOnlyRandomBakeries(alreadyFoundBakeryIds, bestBakeries);
 
     return BakeryMapper.INSTANCE.toBestBakeryListResponseDTO(bestBakeries);
+  }
+
+  private List<Bakery> getOnlyRandomBakeries() {
+    PageRequest bestPageRequest = PageRequest.of(0, maxBestBakeryCount);
+    return bakeryRepository.findBakeriesRandomly(bestPageRequest);
+  }
+
+  private static boolean isFilterNotSelected(Member foundMember) {
+    return foundMember.getBreadType().getIsGlutenFree() == false
+        && foundMember.getBreadType().getIsNutFree() == false
+        && foundMember.getBreadType().getIsSugarFree() == false
+        && foundMember.getBreadType().getIsVegan() == false
+        && foundMember.getMainPurpose() == MainPurpose.NONE;
   }
 
   private void setAlreadyFoundBakeryIds(
@@ -187,7 +207,7 @@ public class BakeryService {
         bestBakeries.stream().map(Bakery::getBakeryId).collect(Collectors.toList()));
   }
 
-  private void getRandomBakeries(List<Long> alreadyFoundBakeryIds, List<Bakery> bestBakeries) {
+  private void getOnlyRandomBakeries(List<Long> alreadyFoundBakeryIds, List<Bakery> bestBakeries) {
     PageRequest bestPageRequest = PageRequest.of(0, maxBestBakeryCount - bestBakeries.size());
     log.info("나머지만 랜덤으로 고르는 베이커리. 현재까지 조회된 베이커리 수: " + bestBakeries.size());
     bestBakeries.addAll(

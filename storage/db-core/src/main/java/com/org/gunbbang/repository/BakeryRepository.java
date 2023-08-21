@@ -59,6 +59,9 @@ public interface BakeryRepository
   List<Bakery> findRestBakeriesRandomly(
       @Param("alreadyFoundBakeryIds") List<Long> alreadyFoundBakeryIds, Pageable pageRequest);
 
+  @Query(value = "SELECT b FROM Bakery b " + "ORDER BY RAND() ")
+  List<Bakery> findBakeriesRandomly(Pageable pageRequest);
+
   @Query(
       "SELECT DISTINCT b FROM Bakery b "
           + "INNER JOIN BakeryCategory bc ON b.bakeryId = bc.bakery.bakeryId "
