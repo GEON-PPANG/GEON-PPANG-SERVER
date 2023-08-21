@@ -16,7 +16,7 @@ public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
   public void onLogoutSuccess(
       HttpServletRequest request, HttpServletResponse response, Authentication authentication)
       throws IOException, ServletException {
-    log.info("onLogoutSuccess 진입");
+    log.info("LogoutSuccessHandler 진입");
 
     response.setStatus(HttpServletResponse.SC_OK);
     response.setCharacterEncoding("UTF-8");
