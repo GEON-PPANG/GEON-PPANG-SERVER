@@ -11,7 +11,7 @@ import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuc
 
 @Slf4j
 @RequiredArgsConstructor
-public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
+public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
 
   public void onLogoutSuccess(
       HttpServletRequest request, HttpServletResponse response, Authentication authentication)
