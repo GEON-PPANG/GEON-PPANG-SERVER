@@ -39,9 +39,6 @@ public class SecurityUtil {
   }
 
   private static CustomUserDetails getCustomUserDetails() {
-    System.out.println(
-        "principal: "
-            + SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
     return (CustomUserDetails)
         SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }

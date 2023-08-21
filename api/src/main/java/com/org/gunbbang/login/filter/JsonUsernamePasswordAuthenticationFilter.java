@@ -15,7 +15,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.util.StreamUtils;
 
 /** 로그인 요청이 왔을 때 해당 유저가 유효한 유저인지 인증 처리하는 커스텀 필터 */
-public class CustomJsonUsernamePasswordAuthenticationFilter
+public class JsonUsernamePasswordAuthenticationFilter
     extends AbstractAuthenticationProcessingFilter {
   private static final String DEFAULT_LOGIN_REQUEST_URL = "/auth/login";
   private static final String HTTP_METHOD = "POST";
@@ -27,7 +27,7 @@ public class CustomJsonUsernamePasswordAuthenticationFilter
 
   private final ObjectMapper objectMapper;
 
-  public CustomJsonUsernamePasswordAuthenticationFilter(ObjectMapper objectMapper) {
+  public JsonUsernamePasswordAuthenticationFilter(ObjectMapper objectMapper) {
     super(DEFAULT_LOGIN_PATH_REQUEST_MATCHER);
     this.objectMapper = objectMapper;
   }
