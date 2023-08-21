@@ -23,7 +23,7 @@ public class CustomJsonUsernamePasswordAuthenticationFilter
   private static final String USERNAME_KEY = "email";
   private static final String PASSWORD_KEY = "password";
   private static final AntPathRequestMatcher DEFAULT_LOGIN_PATH_REQUEST_MATCHER =
-      new AntPathRequestMatcher(DEFAULT_LOGIN_REQUEST_URL, HTTP_METHOD); // 로그인 url로 온 요청에 매칭된다
+      new AntPathRequestMatcher(DEFAULT_LOGIN_REQUEST_URL, HTTP_METHOD); // 로그인 url로 온 요청에 매칭됨
 
   private final ObjectMapper objectMapper;
 

@@ -2,9 +2,10 @@ package com.org.gunbbang.jwt.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.org.gunbbang.NotFoundException;
-import com.org.gunbbang.errorType.ErrorType;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.org.gunbbang.repository.MemberRepository;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
@@ -43,6 +44,7 @@ public class JwtService {
   private static final String BEARER_PREFIX = "Bearer ";
 
   private final MemberRepository memberRepository;
+  private static final ObjectMapper objectMapper = new ObjectMapper(); // TODO: static 넣을지 뺄지??
 
   public String createAccessToken(String email, Long memberId) {
     Date now = new Date();
@@ -63,20 +65,13 @@ public class JwtService {
         .sign(Algorithm.HMAC512(secretKey));
   }
 
-  /** accessToken 재발급 후 header에 넣어서 리턴 */
-  public void sendAccessToken(HttpServletResponse response, String accessToken) {
-    response.setStatus(HttpServletResponse.SC_OK);
-    response.setHeader(accessHeader, accessToken);
-    log.info("토큰 재발급 완료: {}", accessToken);
-  }
-
   /** accessToken, refreshToken 재발급 후 header에 넣어서 리턴 */
   public void sendAccessAndRefreshToken(
       HttpServletResponse response, String accessToken, String refreshToken) {
     response.setStatus(HttpServletResponse.SC_OK);
     setAccessTokenHeader(response, accessToken);
     setRefreshTokenHeader(response, refreshToken);
-    log.info("accessToken, refreshToken 재설정 완료");
+    log.info("accessToken, refreshToken 헤더에 넣어서 반환 완료");
   }
 
   /** accessToken 헤더 설정 */
@@ -103,6 +98,30 @@ public class JwtService {
         .map(accessToken -> accessToken.replace(BEARER_PREFIX, ""));
   }
 
+  public String extractAccessTokenAsString(HttpServletRequest request) {
+    String header = request.getHeader(accessHeader);
+    if (header.startsWith(BEARER_PREFIX)) {
+      return header.replace(BEARER_PREFIX, "");
+    }
+    return null;
+  }
+
+  public String extractRefreshTokenAsString(HttpServletRequest request) {
+    String header = request.getHeader(refreshHeader);
+    if (header.startsWith(BEARER_PREFIX)) {
+      return header.replace(BEARER_PREFIX, "");
+    }
+    return null;
+  }
+
+  public boolean isAccessTokenExist(HttpServletRequest request) {
+    return request.getHeader(accessHeader) != null;
+  }
+
+  public boolean isRefreshTokenExist(HttpServletRequest request) {
+    return request.getHeader(refreshHeader) != null;
+  }
+
   public Optional<String> extractEmailClaim(String accessToken) {
     try {
       DecodedJWT decodedJWT = getVerifiedJWT(accessToken);
@@ -113,29 +132,32 @@ public class JwtService {
     }
   }
 
-  public Optional<Long> extractMemberIdClaim(String accessToken) {
+  public Long extractMemberIdClaim(String accessToken) {
     try {
       DecodedJWT decodedJWT = getVerifiedJWT(accessToken);
-      return Optional.ofNullable(decodedJWT.getClaim(MEMBER_ID_CLAIM).asLong());
+      return decodedJWT.getClaim(MEMBER_ID_CLAIM).asLong();
     } catch (Exception e) {
-      log.error("엑세스 토큰이 유효하지 않습니다");
-      return Optional.empty();
+      log.error("엑세스 토큰이 유효하지 않습니다. 에러 메시지: " + e.getMessage());
+      log.error("stack trace: " + Arrays.toString(e.getStackTrace()));
+      throw e;
     }
   }
 
-  private DecodedJWT getVerifiedJWT(String jwtToken) {
+  public Long extractMemberIdClaimFromExpiredToken(String accessToken)
+      throws JsonProcessingException {
+    Base64.Decoder decoder = Base64.getUrlDecoder();
+    String[] parts = accessToken.split("\\.");
+    String jwtPayload = new String(decoder.decode(parts[1]));
+
+    Map<String, Object> jwtPayloadMap = objectMapper.readValue(jwtPayload, Map.class);
+
+    return Long.valueOf(jwtPayloadMap.get(MEMBER_ID_CLAIM).toString());
+  }
+
+  public DecodedJWT getVerifiedJWT(String jwtToken) {
     return JWT.require(Algorithm.HMAC512(secretKey)).build().verify(jwtToken);
   }
 
-  public void updateRefreshToken(String email, String refreshToken) {
-    memberRepository
-        .findByEmail(email)
-        .ifPresentOrElse(
-            member -> member.updateRefreshToken(refreshToken),
-            () -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
-  }
-
-  // TODO: 여기서 false 반환하면 어케되는지? 바로 에러나야되는거 아닌가?
   public boolean isTokenValid(String token) {
     try {
       getVerifiedJWT(token);
@@ -143,6 +165,15 @@ public class JwtService {
     } catch (Exception e) {
       log.error("유효하지 않은 토큰 {}", e.getMessage());
       return false;
+    }
+  }
+
+  public boolean isTokenExpired(String token) {
+    try {
+      DecodedJWT decodedJWT = getVerifiedJWT(token);
+      return decodedJWT.getExpiresAt().before(new Date());
+    } catch (TokenExpiredException e) {
+      return true;
     }
   }
 }

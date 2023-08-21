@@ -1,5 +1,6 @@
 package com.org.gunbbang.support.advice;
 
+import com.auth0.jwt.exceptions.*;
 import com.org.gunbbang.HandleException;
 import com.org.gunbbang.common.dto.ApiResponse;
 import com.org.gunbbang.errorType.ErrorType;
@@ -67,16 +68,41 @@ public class ApiControllerAdviser {
         String.format("%s. (%s)", ErrorType.REQUEST_BIND_EXCEPTION, e.getBindingResult()));
   }
 
+  @ExceptionHandler(SignatureVerificationException.class)
+  public ResponseEntity<ApiResponse> handleSignatureVerificationException(
+      final SignatureVerificationException e) {
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        .body(ApiResponse.error(ErrorType.NOT_VALID_TOKEN_EXCEPTION));
+  }
+
+  @ExceptionHandler(TokenExpiredException.class)
+  public ResponseEntity<ApiResponse> handleTokenExpiredException() {
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        .body(ApiResponse.error(ErrorType.EXPIRED_TOKEN_EXCEPTION));
+  }
+
+  @ExceptionHandler(JWTDecodeException.class)
+  public ResponseEntity<ApiResponse> handleJWTDecodeException() {
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        .body(ApiResponse.error(ErrorType.JWT_DECODE_FAIL_EXCEPTION));
+  }
+
+  @ExceptionHandler(JWTVerificationException.class)
+  public ResponseEntity<ApiResponse> handleJWTVerificationException(Exception e) {
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        .body(ApiResponse.error(401, e.getMessage()));
+  }
+
   @ExceptionHandler(HandleException.class)
-  protected ResponseEntity<ApiResponse> handleCustomException(HandleException e) {
+  protected ResponseEntity<ApiResponse> handleCustomException(final HandleException e) {
     return ResponseEntity.status(e.getHttpStatus()).body(ApiResponse.error(e.getErrorType()));
   }
 
   @ExceptionHandler(Exception.class)
-  protected ResponseEntity<ApiResponse> handleException(Exception e, HttpServletRequest request)
-      throws IOException {
+  protected ResponseEntity<ApiResponse> handleException(
+      final Exception e, HttpServletRequest request) throws IOException, Exception {
+    System.out.println(e.getClass().getName());
     System.out.println(e.getMessage());
-    System.out.println(e.getStackTrace().toString());
     slackUtil.sendAlert(e, request);
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(ApiResponse.error(ErrorType.INTERNAL_SERVER_ERROR));
