@@ -9,12 +9,14 @@ drop table if exists member;
 drop table if exists bread_type;
 drop table if exists category;
 drop table if exists nutrient_type;
+drop table if exists review_report;
+
 
 create table bakery
 (
-    bakery_id                bigint not null auto_increment,
-    bread_type_id            bigint not null,
-    nutrient_type_id         bigint not null,
+    bakery_id                bigint                not null auto_increment,
+    bread_type_id            bigint                not null,
+    nutrient_type_id         bigint                not null,
     address_rest             varchar(255)          not null,
     bakery_name              varchar(255)          not null,
     bakery_picture           varchar(255)          not null,
@@ -22,7 +24,7 @@ create table bakery
     city                     varchar(255)          not null,
     closed_day               varchar(255),
     first_near_station       varchar(255),
-    map_url                  varchar(2500)          not null,
+    map_url                  varchar(2500)         not null,
     homepage_url             varchar(2500),
     instagram_url            varchar(2500),
     is_haccp                 boolean default false not null,
@@ -42,58 +44,61 @@ create table bakery
 );
 
 
-create table category (
-                          category_id bigint not null auto_increment,
-                          category_name varchar(255),
-                          primary key (category_id)
+create table category
+(
+    category_id   bigint not null auto_increment,
+    category_name varchar(255),
+    primary key (category_id)
 );
 
 
-create table bakery_category (
-                                 bakery_category_id bigint not null auto_increment,
-                                 bakery_id bigint not null,
-                                 category_id bigint not null,
-                                 primary key (bakery_category_id)
+create table bakery_category
+(
+    bakery_category_id bigint not null auto_increment,
+    bakery_id          bigint not null,
+    category_id        bigint not null,
+    primary key (bakery_category_id)
 );
 
-create table bread_type (
-                            bread_type_id bigint not null auto_increment,
-                            bread_type_name varchar(255) not null,
-                            is_gluten_free boolean not null,
-                            is_nut_free boolean not null,
-                            is_sugar_free boolean not null,
-                            is_vegan boolean not null,
-                            primary key (bread_type_id)
+create table bread_type
+(
+    bread_type_id   bigint       not null auto_increment,
+    bread_type_name varchar(255) not null,
+    is_gluten_free  boolean      not null,
+    is_nut_free     boolean      not null,
+    is_sugar_free   boolean      not null,
+    is_vegan        boolean      not null,
+    primary key (bread_type_id)
 );
 
 create table book_mark
 (
     book_mark_id bigint not null auto_increment,
-    bakery_id   bigint not null,
-    member_id   bigint not null,
+    bakery_id    bigint not null,
+    member_id    bigint not null,
     primary key (book_mark_id)
 );
 
 create table member
 (
-    member_id     bigint not null auto_increment,
-    bread_type_id            bigint not null,
-    nutrient_type_id         bigint not null,
-    email         varchar(255) not null,
-    main_purpose  varchar(255) not null,
-    nickname      varchar(255) not null,
-    password      varchar(255) not null,
-    platform_type varchar(255) not null,
-    role          varchar(255),
-    refresh_token  varchar(255),
-    created_at timestamp,
-    updated_at timestamp,
+    member_id        bigint       not null auto_increment,
+    bread_type_id    bigint       not null,
+    nutrient_type_id bigint       not null,
+    email            varchar(255) not null,
+    main_purpose     varchar(255) not null,
+    nickname         varchar(255) not null,
+    password         varchar(255) not null,
+    platform_type    varchar(255) not null,
+    role             varchar(255),
+    refresh_token    varchar(255),
+    created_at       timestamp,
+    updated_at       timestamp,
     primary key (member_id)
 );
 
 create table menu
 (
-    menu_id    bigint not null auto_increment,
+    menu_id    bigint       not null auto_increment,
     menu_name  varchar(255) not null,
     menu_price integer      not null,
     bakery_id  bigint       not null,
@@ -101,40 +106,53 @@ create table menu
 );
 
 
-create table nutrient_type (
-                               nutrient_type_id bigint not null auto_increment,
-                               is_ingredient_open boolean not null,
-                               is_not_open boolean not null,
-                               is_nutrient_open boolean not null,
-                               nutrient_type_name varchar(255) not null,
-                               primary key (nutrient_type_id)
+create table nutrient_type
+(
+    nutrient_type_id   bigint       not null auto_increment,
+    is_ingredient_open boolean      not null,
+    is_not_open        boolean      not null,
+    is_nutrient_open   boolean      not null,
+    nutrient_type_name varchar(255) not null,
+    primary key (nutrient_type_id)
 );
 
 create table recommend_keyword
 (
-    recommend_keyword_id bigint not null auto_increment,
-    keyword_name varchar(255) not null,
+    recommend_keyword_id bigint       not null auto_increment,
+    keyword_name         varchar(255) not null,
     primary key (recommend_keyword_id)
 );
 
 create table review
 (
-    review_id   bigint not null auto_increment,
+    review_id   bigint  not null auto_increment,
     is_like     boolean not null,
     review_text varchar(255),
     bakery_id   bigint,
     member_id   bigint,
-    created_at timestamp,
-    updated_at timestamp,
+    created_at  timestamp,
+    updated_at  timestamp,
     primary key (review_id)
 );
 
 create table review_recommend_keyword
 (
     review_recommend_keyword_id bigint not null auto_increment,
-    recommend_keyword_id         bigint not null,
-    review_id                    bigint not null,
+    recommend_keyword_id        bigint not null,
+    review_id                   bigint not null,
     primary key (review_recommend_keyword_id)
+);
+
+create table review_report
+(
+    review_report_id bigint not null auto_increment,
+    created_at       timestamp,
+    updated_at       timestamp,
+    content          varchar(255) not null,
+    report_category  varchar(20) not null,
+    member_id        bigint not null,
+    review_id        bigint not null,
+    primary key (review_report_id)
 );
 
 alter table bakery
@@ -150,12 +168,12 @@ alter table bakery
 alter table member
     add constraint fk3
         foreign key (bread_type_id)
-            references  bread_type (bread_type_id) ON DELETE CASCADE ON UPDATE CASCADE;
+            references bread_type (bread_type_id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 alter table member
     add constraint fk4
         foreign key (nutrient_type_id)
-            references  nutrient_type (nutrient_type_id) ON DELETE CASCADE ON UPDATE CASCADE;
+            references nutrient_type (nutrient_type_id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 alter table book_mark
     add constraint fk5
@@ -201,3 +219,14 @@ alter table bakery_category
     add constraint fk13
         foreign key (bakery_id)
             references bakery (bakery_id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+alter table review_report
+    add constraint fk14
+        foreign key (member_id)
+            references member (member_id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+alter table review_report
+    add constraint fk15
+        foreign key (review_id)
+            references review (review_id) ON DELETE CASCADE ON UPDATE CASCADE;
