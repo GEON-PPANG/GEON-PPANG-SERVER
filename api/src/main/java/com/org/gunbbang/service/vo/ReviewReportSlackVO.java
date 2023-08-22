@@ -17,27 +17,4 @@ public class ReviewReportSlackVO {
   private final String reportContent;
   private final String reviewContent;
   private final LocalDateTime reportedAt;
-
-  @Override
-  public String toString() {
-    return "ReviewReportSlackVO{"
-        + "bakeryName='"
-        + bakeryName
-        + '\''
-        + ", reporterId="
-        + reporterId
-        + ", reviewReportId="
-        + reviewReportId
-        + ", reportCategory="
-        + reportCategory
-        + ", reportContent='"
-        + reportContent
-        + '\''
-        + ", reviewContent='"
-        + reviewContent
-        + '\''
-        + ", reportedAt="
-        + reportedAt
-        + '}';
-  }
 }

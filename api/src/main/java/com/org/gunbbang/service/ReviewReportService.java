@@ -11,7 +11,7 @@ import com.org.gunbbang.repository.MemberRepository;
 import com.org.gunbbang.repository.ReviewReportRepository;
 import com.org.gunbbang.repository.ReviewRepository;
 import com.org.gunbbang.service.vo.ReviewReportSlackVO;
-import com.org.gunbbang.support.slack.SlackUtil;
+import com.org.gunbbang.support.slack.SlackSender;
 import com.org.gunbbang.util.mapper.ReviewReportMapper;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class ReviewReportService {
   private final ReviewReportRepository reviewReportRepository;
   private final MemberRepository memberRepository;
   private final ReviewRepository reviewRepository;
-  private final SlackUtil slackUtil;
+  private final SlackSender slackSender;
 
   public ReviewReportResponseDTO createReviewReport(
       ReviewReportRequestDTO request, Long memberId, Long reviewId) throws IOException {
@@ -51,6 +51,6 @@ public class ReviewReportService {
       throws IOException {
     ReviewReportSlackVO vo =
         ReviewReportMapper.INSTANCE.toReviewReportSlackVO(review, reviewReport);
-    slackUtil.sendReviewReportMessage(vo);
+    slackSender.sendReviewReportMessage(vo);
   }
 }

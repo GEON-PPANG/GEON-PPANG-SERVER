@@ -4,7 +4,7 @@ import com.auth0.jwt.exceptions.*;
 import com.org.gunbbang.HandleException;
 import com.org.gunbbang.common.dto.ApiResponse;
 import com.org.gunbbang.errorType.ErrorType;
-import com.org.gunbbang.support.slack.SlackUtil;
+import com.org.gunbbang.support.slack.SlackSender;
 import java.io.IOException;
 import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +24,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @RequiredArgsConstructor
 public class ApiControllerAdviser {
 
-  private final SlackUtil slackUtil;
+  private final SlackSender slackSender;
 
   // 요청이 스프링 MVC 유효성 검사에 실패한 경우
   @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -103,7 +103,7 @@ public class ApiControllerAdviser {
       final Exception e, HttpServletRequest request) throws IOException, Exception {
     System.out.println(e.getClass().getName());
     System.out.println(e.getMessage());
-    slackUtil.sendAlert(e, request);
+    slackSender.sendAlert(e, request);
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(ApiResponse.error(ErrorType.INTERNAL_SERVER_ERROR));
   }
