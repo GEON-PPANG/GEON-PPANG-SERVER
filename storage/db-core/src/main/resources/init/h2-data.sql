@@ -196,8 +196,10 @@ INSERT INTO book_mark (bakery_id, member_id) values (6, 4);
 INSERT INTO book_mark (bakery_id, member_id) values (7, 5);
 
 -- review
+-- INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)
+--     VALUES (1, true, 'review_id: 1 | 제일최근 리뷰+좋아요+멤버빵유형 및 주목적 일치', 5, 2, '2023-07-13T18:00:29.68338Z', null);
 INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)
-    VALUES (1, true, 'review_id: 1 | 제일최근 리뷰+좋아요+멤버빵유형 및 주목적 일치', 5, 2, '2023-07-13T18:00:29.68338Z', null);
+    VALUES (1, true, '테스트용 슬랙', 5, 2, '2023-07-13T18:00:29.68338Z', null);
 INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)
     VALUES (2, true, 'review_id: 2 | 두번째+좋아요+멤버빵유형 및 주목적 일치', 5, 2, '2023-07-12T18:00:29.68338Z', null);
 INSERT INTO review (review_id, is_like, review_text, bakery_id, member_id, created_at, updated_at)

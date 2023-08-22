@@ -10,7 +10,10 @@ import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.MemberRepository;
 import com.org.gunbbang.repository.ReviewReportRepository;
 import com.org.gunbbang.repository.ReviewRepository;
+import com.org.gunbbang.service.vo.ReviewReportSlackVO;
+import com.org.gunbbang.support.slack.SlackUtil;
 import com.org.gunbbang.util.mapper.ReviewReportMapper;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +23,10 @@ public class ReviewReportService {
   private final ReviewReportRepository reviewReportRepository;
   private final MemberRepository memberRepository;
   private final ReviewRepository reviewRepository;
+  private final SlackUtil slackUtil;
 
   public ReviewReportResponseDTO createReviewReport(
-      ReviewReportRequestDTO request, Long memberId, Long reviewId) {
+      ReviewReportRequestDTO request, Long memberId, Long reviewId) throws IOException {
     Member foundMember =
         memberRepository
             .findById(memberId)
@@ -34,13 +38,19 @@ public class ReviewReportService {
 
     ReviewReport reviewReport =
         ReviewReportMapper.INSTANCE.toReviewReportEntity(request, foundMember, foundReview);
-    System.out.println("review dto :" + request.toString());
 
-    System.out.println("review report :" + reviewReport.toString());
     ReviewReport savedReviewReport = reviewReportRepository.saveAndFlush(reviewReport);
+    sendReviewReportMessage(foundReview, savedReviewReport);
 
     return ReviewReportResponseDTO.builder()
         .reviewReportId(savedReviewReport.getReviewReportId())
         .build();
+  }
+
+  private void sendReviewReportMessage(Review review, ReviewReport reviewReport)
+      throws IOException {
+    ReviewReportSlackVO vo =
+        ReviewReportMapper.INSTANCE.toReviewReportSlackVO(review, reviewReport);
+    slackUtil.sendReviewReportMessage(vo);
   }
 }
