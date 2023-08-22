@@ -18,16 +18,6 @@ public interface ReviewReportMapper {
   @Mapping(source = "review", target = "review")
   ReviewReport toReviewReportEntity(ReviewReportRequestDTO request, Member member, Review review);
 
-  /*
-  private final String bakeryName; // review에 있음
-    private final Long reporterId; // ReviewReport 있음
-    private final Long reviewReportId; // ReviewReport 있음 이미됨
-    private final ReportCategory reportCategory; // ReviewReport 있음 이미됨
-    private final String reportContent; // ReviewReport 있음
-    private final String reviewContent; // review에 있음
-    private final LocalDateTime reportedAt; // ReviewReport에 있음
-   */
-
   @Mapping(source = "review.bakery.bakeryName", target = "bakeryName")
   @Mapping(source = "reviewReport.member.memberId", target = "reporterId")
   @Mapping(source = "reviewReport.content", target = "reportContent")
