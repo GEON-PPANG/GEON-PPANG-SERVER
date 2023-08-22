@@ -2,6 +2,7 @@ package com.org.gunbbang.support.slack;
 
 import static com.slack.api.model.block.composition.BlockCompositions.plainText;
 
+import com.org.gunbbang.service.vo.ReviewReportSlackVO;
 import com.slack.api.Slack;
 import com.slack.api.model.block.Blocks;
 import com.slack.api.model.block.LayoutBlock;
@@ -25,8 +26,11 @@ public class SlackUtil {
 
   private static final String NEW_LINE = "\n";
 
-  @Value("${slack.webhook.url}")
-  private String webhookUrl;
+  @Value("${slack.webhook.error-url}")
+  private String errorWebhookUrl;
+
+  @Value("${slack.webhook.report-url}")
+  private String reportWebhookUrl;
 
   @Value("${slack.isActive}")
   private String isActive;
@@ -36,15 +40,33 @@ public class SlackUtil {
 
   private StringBuilder sb = new StringBuilder();
 
+  public void sendReviewReportMessage(ReviewReportSlackVO vo) throws IOException {
+    List layoutBlocks = generateReportLayoutBlock(vo);
+    System.out.println("isActive: " + isActive);
+
+    if (Boolean.parseBoolean(isActive)) {
+      Slack.getInstance()
+          .send(reportWebhookUrl, WebhookPayloads.payload(p -> p.blocks(layoutBlocks)));
+    }
+  }
+
   public void sendAlert(Exception error, HttpServletRequest request) throws IOException {
 
     List layoutBlocks = generateLayoutBlock(error, request);
     System.out.println("isActive: " + isActive);
-    System.out.println("isActive boolean: " + Boolean.parseBoolean(isActive));
 
     if (Boolean.parseBoolean(isActive)) {
-      Slack.getInstance().send(webhookUrl, WebhookPayloads.payload(p -> p.blocks(layoutBlocks)));
+      Slack.getInstance()
+          .send(errorWebhookUrl, WebhookPayloads.payload(p -> p.blocks(layoutBlocks)));
     }
+  }
+
+  // 리뷰 신고 메시지 생성
+  private List generateReportLayoutBlock(ReviewReportSlackVO vo) {
+    return Blocks.asBlocks(
+        getHeader(SlackMessage.REPORT_REVIEW_TITLE),
+        Blocks.divider(),
+        getSection(generateReportReviewMessage(vo)));
   }
 
   // 예외 정보 메시지 생성
@@ -62,6 +84,19 @@ public class SlackUtil {
     sb.setLength(0);
     sb.append("*[Exception]*" + NEW_LINE + error.toString() + DOUBLE_NEW_LINE);
     sb.append("*[From]*" + NEW_LINE + readRootStackTrace(error) + DOUBLE_NEW_LINE);
+
+    return sb.toString();
+  }
+
+  private String generateReportReviewMessage(ReviewReportSlackVO vo) {
+    sb.setLength(0);
+    sb.append("*[빵집 이름]*" + NEW_LINE + vo.getBakeryName() + DOUBLE_NEW_LINE);
+    sb.append("*[신고자 id]*" + NEW_LINE + vo.getReporterId() + DOUBLE_NEW_LINE);
+    sb.append("*[신고 id]*" + NEW_LINE + vo.getReviewReportId() + DOUBLE_NEW_LINE);
+    sb.append("*[신고 유형]*" + NEW_LINE + vo.getReportCategory() + DOUBLE_NEW_LINE);
+    sb.append("*[신고 내용]*" + NEW_LINE + vo.getReportContent() + DOUBLE_NEW_LINE);
+    sb.append("*[신고된 리뷰 내용]*" + NEW_LINE + vo.getReviewContent() + DOUBLE_NEW_LINE);
+    sb.append("*[신고 일시]*" + NEW_LINE + vo.getReportedAt() + DOUBLE_NEW_LINE);
 
     return sb.toString();
   }
