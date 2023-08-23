@@ -3,8 +3,9 @@ package com.org.gunbbang.controller.DTO.response;
 import lombok.*;
 
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class ReviewReportResponseDTO {
-  private final Long reviewReportId;
+  private Long reviewReportId;
 }

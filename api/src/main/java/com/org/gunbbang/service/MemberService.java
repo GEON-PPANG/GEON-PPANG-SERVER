@@ -19,6 +19,7 @@ import com.org.gunbbang.util.mapper.MemberMapper;
 import com.org.gunbbang.util.mapper.MemberTypeMapper;
 import com.org.gunbbang.util.mapper.NutrientTypeMapper;
 import com.org.gunbbang.util.security.SecurityUtil;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -86,7 +87,8 @@ public class MemberService {
         .build();
   }
 
-  public MemberTypeResponseDTO updateMemberTypes(MemberTypesRequestDTO request, Long memberId) {
+  public MemberTypeResponseDTO updateMemberTypes(
+      MemberTypesRequestDTO request, Long memberId, String nickname) {
     Member foundMember =
         memberRepository
             .findById(memberId)
@@ -122,24 +124,30 @@ public class MemberService {
     return MemberTypeMapper.INSTANCE.toMemberTypeResponseDTO(
         foundMember.getMemberId(),
         foundMember.getMainPurpose(),
+        nickname,
         breadTypeResponseDTO,
         nutrientTypeResponseDTO);
   }
 
-  public MemberTypeResponseDTO getMemberTypes(Long memberId) {
-    Member foundMember =
-        memberRepository
-            .findById(memberId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+  public MemberTypeResponseDTO getMemberTypes(Map<String, Object> loginMemberInfo) {
+    BreadType breadType =
+        breadTypeRepository
+            .findById(Long.parseLong(loginMemberInfo.get("breadTypeId").toString()))
+            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION));
+    NutrientType nutrientType =
+        nutrientTypeRepository
+            .findById(Long.parseLong(loginMemberInfo.get("nutrientTypeId").toString()))
+            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_NUTRIENT_EXCEPTION));
 
     BreadTypeResponseDTO breadTypeResponseDTO =
-        BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(foundMember.getBreadType());
+        BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(breadType);
     NutrientTypeResponseDTO nutrientTypeResponseDTO =
-        NutrientTypeMapper.INSTANCE.toNutrientTypeResponseDTO(foundMember.getNutrientType());
+        NutrientTypeMapper.INSTANCE.toNutrientTypeResponseDTO(nutrientType);
 
     return MemberTypeMapper.INSTANCE.toMemberTypeResponseDTO(
-        foundMember.getMemberId(),
-        foundMember.getMainPurpose(),
+        Long.parseLong(loginMemberInfo.get("memberId").toString()),
+        (MainPurpose) loginMemberInfo.get("mainPurpose"),
+        loginMemberInfo.get("nickname").toString(),
         breadTypeResponseDTO,
         nutrientTypeResponseDTO);
   }
