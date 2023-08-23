@@ -107,12 +107,11 @@ public class BakeryService {
 
     if ("review".equals(sortingOption)) {
       getSortedByCategoryBakeryList.sort(
-          Comparator.comparing(Bakery::getReviewCount, Collections.reverseOrder()));
-    } else if ("default".equals(sortingOption) && (!personalFilter)) {
-      getSortedByCategoryBakeryList.sort(
-          Comparator.comparing(Bakery::getBakeryId, Collections.reverseOrder()));
+          Comparator.comparingLong(Bakery::getReviewCount).reversed());
+      return getSortedByCategoryBakeryList;
     }
 
+    getSortedByCategoryBakeryList.sort(Comparator.comparingLong(Bakery::getBakeryId).reversed());
     return getSortedByCategoryBakeryList;
   }
 
