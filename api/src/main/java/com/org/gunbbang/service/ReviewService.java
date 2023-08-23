@@ -2,6 +2,7 @@ package com.org.gunbbang.service;
 
 import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.BestReviewDTO;
+import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.controller.DTO.request.RecommendKeywordNameRequestDTO;
 import com.org.gunbbang.controller.DTO.request.ReviewRequestDTO;
@@ -169,30 +170,48 @@ public class ReviewService {
   }
 
   public List<BestReviewListResponseDTO> getBestReviews(Long memberId) {
-    List<Long> alreadyFoundReviewIds = new ArrayList<>();
-    alreadyFoundReviewIds.add(-1L);
-
     Member foundMember =
         memberRepository
             .findById(memberId)
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
 
-    List<BestReviewDTO> bestReviews = getBestReviews(foundMember);
+    if (isFilterNotSelected(foundMember)) {
+      log.info("회원이 필터 선택 안한 경우. 랜덤으로 10개 리뷰 반환");
+      List<BestReviewDTO> randomReviews = getOnlyRandomBestReviewDTOs();
+      return getBestReviewListResponseDTOs(randomReviews);
+    }
 
+    List<BestReviewDTO> bestReviews = getBestReviews(foundMember);
     if (bestReviews.size() == maxBestBakeryCount) {
       log.info("베스트 리뷰 10개 조회 완료. 추가 조회 쿼리 없이 바로 반환");
-      return getBestReviewsListResponseDTO(bestReviews);
+      return getBestReviewListResponseDTOs(bestReviews);
     }
 
     log.info("랜덤 리뷰 조회 시작. 현재까지 조회된 리뷰 수: " + bestReviews.size());
-    setAlreadyFoundReviewIds(alreadyFoundReviewIds, bestReviews);
-    getRandomReviews(alreadyFoundReviewIds, bestReviews);
+    List<Long> alreadyFoundReviewIds = new ArrayList<>();
+    alreadyFoundReviewIds.add(-1L);
+    getRestReviewsRandomly(alreadyFoundReviewIds, bestReviews);
 
-    return getBestReviewsListResponseDTO(bestReviews);
+    return getBestReviewListResponseDTOs(bestReviews);
   }
 
-  private void getRandomReviews(List<Long> alreadyFoundReviewIds, List<BestReviewDTO> bestReviews) {
+  private List<BestReviewDTO> getOnlyRandomBestReviewDTOs() {
+    PageRequest bestPageRequest = PageRequest.of(0, maxBestBakeryCount);
+    return reviewRepository.findRandomBestReviewDTOList(bestPageRequest);
+  }
+
+  private static boolean isFilterNotSelected(Member foundMember) {
+    return foundMember.getBreadType().getIsGlutenFree() == false
+        && foundMember.getBreadType().getIsNutFree() == false
+        && foundMember.getBreadType().getIsSugarFree() == false
+        && foundMember.getBreadType().getIsVegan() == false
+        && foundMember.getMainPurpose() == MainPurpose.NONE;
+  }
+
+  private void getRestReviewsRandomly(
+      List<Long> alreadyFoundReviewIds, List<BestReviewDTO> bestReviews) {
     PageRequest restPageRequest = PageRequest.of(0, maxBestBakeryCount - bestReviews.size());
+    setAlreadyFoundReviewIds(alreadyFoundReviewIds, bestReviews);
     bestReviews.addAll(
         reviewRepository.findRestBestReviewDTOListByBreadType(
             alreadyFoundReviewIds, restPageRequest));
@@ -214,7 +233,7 @@ public class ReviewService {
     return bestReviews;
   }
 
-  private List<BestReviewListResponseDTO> getBestReviewsListResponseDTO(
+  private List<BestReviewListResponseDTO> getBestReviewListResponseDTOs(
       List<BestReviewDTO> bestReviews) {
     List<BestReviewListResponseDTO> responseDtoList = new ArrayList();
     for (BestReviewDTO bestReview : bestReviews) {
