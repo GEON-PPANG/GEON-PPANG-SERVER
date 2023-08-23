@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -84,8 +83,12 @@ public class SlackSender {
 
   private String generateErrorMessage(Exception error) {
     sb.setLength(0);
-    sb.append("*[Exception Class Name]*" + NEW_LINE).append(error.getClass().getName()).append(DOUBLE_NEW_LINE);
-    sb.append("*[Stack Trace]*" + NEW_LINE).append(readRootStackTrace(error)).append(DOUBLE_NEW_LINE);
+    sb.append("*[Exception Class Name]*" + NEW_LINE)
+        .append(error.getClass().getName())
+        .append(DOUBLE_NEW_LINE);
+    sb.append("*[Stack Trace]*" + NEW_LINE)
+        .append(readRootStackTrace(error))
+        .append(DOUBLE_NEW_LINE);
 
     return sb.toString();
   }
@@ -106,8 +109,14 @@ public class SlackSender {
   private String readRootStackTrace(Exception error) {
     System.out.println("스택트레이스: " + Arrays.toString(error.getStackTrace()));
 
-    return error.getStackTrace()[0].toString() + NEW_LINE + error.getStackTrace()[1].toString() + NEW_LINE
-          + error.getStackTrace()[2].toString() + NEW_LINE + error.getStackTrace()[3].toString() + NEW_LINE;
+    return error.getStackTrace()[0].toString()
+        + NEW_LINE
+        + error.getStackTrace()[1].toString()
+        + NEW_LINE
+        + error.getStackTrace()[2].toString()
+        + NEW_LINE
+        + error.getStackTrace()[3].toString()
+        + NEW_LINE;
   }
 
   private LayoutBlock getHeader(String text) {
