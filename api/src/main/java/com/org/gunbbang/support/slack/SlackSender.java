@@ -9,7 +9,6 @@ import com.slack.api.model.block.LayoutBlock;
 import com.slack.api.model.block.composition.BlockCompositions;
 import com.slack.api.webhook.WebhookPayloads;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -89,7 +88,6 @@ public class SlackSender {
     sb.append("*[Stack Trace]*" + NEW_LINE)
         .append(readRootStackTrace(error))
         .append(DOUBLE_NEW_LINE);
-
     return sb.toString();
   }
 
@@ -107,8 +105,6 @@ public class SlackSender {
   }
 
   private String readRootStackTrace(Exception error) {
-    System.out.println("스택트레이스: " + Arrays.toString(error.getStackTrace()));
-
     return error.getStackTrace()[0].toString()
         + NEW_LINE
         + error.getStackTrace()[1].toString()
