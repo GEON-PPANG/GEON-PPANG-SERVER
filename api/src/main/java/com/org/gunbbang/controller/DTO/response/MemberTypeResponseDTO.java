@@ -11,6 +11,7 @@ import lombok.*;
 public class MemberTypeResponseDTO {
   @NotNull private Long memberId;
   @NotNull private MainPurpose mainPurpose;
+  @NotNull private String nickname;
   @NotNull private BreadTypeResponseDTO breadType;
   @NotNull private NutrientTypeResponseDTO nutrientType;
 }

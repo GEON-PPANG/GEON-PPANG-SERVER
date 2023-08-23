@@ -16,6 +16,7 @@ public interface MemberTypeMapper {
   MemberTypeResponseDTO toMemberTypeResponseDTO(
       Long memberId,
       MainPurpose mainPurpose,
+      String nickname,
       BreadTypeResponseDTO breadType,
       NutrientTypeResponseDTO nutrientType);
 

@@ -46,3 +46,7 @@ out/
 log/
 *.log
 *.gz
+
+### database files ###
+/storage/db-core/src/main/resources/init/h2-data.sql
+/storage/db-core/src/main/resources/init/h2-schema.sql
