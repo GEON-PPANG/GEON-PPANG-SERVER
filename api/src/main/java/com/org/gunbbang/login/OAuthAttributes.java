@@ -3,10 +3,9 @@ package com.org.gunbbang.login;
 import com.org.gunbbang.PlatformType;
 import com.org.gunbbang.Role;
 import com.org.gunbbang.entity.Member;
-import java.util.Map;
-
 import com.org.gunbbang.login.userinfo.KakaoOAuth2UserInfo;
 import com.org.gunbbang.login.userinfo.OAuth2UserInfo;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,7 +27,7 @@ public class OAuthAttributes {
   public static OAuthAttributes of(
       PlatformType platformType, String userNameAttribute, Map<String, Object> attributes) {
     if (platformType == PlatformType.APPLE) {
-      //return ofAppple(userNameAttribute, attributes);
+      // return ofAppple(userNameAttribute, attributes);
     }
     return ofKakao(userNameAttribute, attributes);
   }
@@ -47,12 +46,11 @@ public class OAuthAttributes {
   //    }
 
   public Member toEntity(PlatformType platformType, OAuth2UserInfo oauth2UserInfo) {
-    return
-            Member.builder()
-                    .platformType(platformType)
-            .email(oauth2UserInfo.getEmail())
-            .nickname("GUEST")
-                    .role(Role.GUEST)
-    .build();
+    return Member.builder()
+        .platformType(platformType)
+        .email(oauth2UserInfo.getEmail())
+        .nickname("GUEST")
+        .role(Role.GUEST)
+        .build();
   }
 }
