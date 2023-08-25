@@ -30,7 +30,7 @@ public class Member extends BaseEntity {
   @NotNull private String nickname;
 
   @Enumerated(EnumType.STRING)
-  private Role role = Role.USER;
+  private Role role;
 
   @Enumerated(EnumType.STRING)
   private MainPurpose mainPurpose = MainPurpose.NONE;
@@ -68,6 +68,11 @@ public class Member extends BaseEntity {
     this.mainPurpose = mainPurpose;
   }
 
+  // 유저 권한 설정 메소드
+  public void authorizeUser() {
+    this.role = Role.USER;
+  }
+
   @Builder
   public Member(
       Long memberId,
@@ -75,6 +80,7 @@ public class Member extends BaseEntity {
       String password,
       PlatformType platformType,
       String nickname,
+      Role role,
       BreadType breadType,
       NutrientType nutrientType,
       String refreshToken) {
@@ -83,6 +89,7 @@ public class Member extends BaseEntity {
     this.password = password;
     this.platformType = platformType;
     this.nickname = nickname;
+    this.role = role;
     this.breadType = breadType;
     this.nutrientType = nutrientType;
     this.refreshToken = refreshToken;
