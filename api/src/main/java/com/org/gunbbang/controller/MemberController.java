@@ -9,6 +9,7 @@ import com.org.gunbbang.service.MemberService;
 import com.org.gunbbang.service.ReviewService;
 import com.org.gunbbang.util.security.*;
 import java.util.List;
+import java.util.Map;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,16 +35,17 @@ public class MemberController {
   public ApiResponse<MemberTypeResponseDTO> updateMemberTypes(
       @Valid @RequestBody final MemberTypesRequestDTO request) {
     Long memberId = SecurityUtil.getLoginMemberId();
+    String nickname = SecurityUtil.getLoginMemberNickname();
     return ApiResponse.success(
         SuccessType.UPDATE_MEMBER_TYPES_SUCCESS,
-        memberService.updateMemberTypes(request, memberId));
+        memberService.updateMemberTypes(request, memberId, nickname));
   }
 
   @GetMapping("/types")
   public ApiResponse<MemberTypeResponseDTO> getMemberTypes() {
-    Long memberId = SecurityUtil.getLoginMemberId();
+    Map<String, Object> loginMemberInfo = SecurityUtil.getLoginMemberInfo();
     return ApiResponse.success(
-        SuccessType.GET_MEMBER_TYPES_SUCCESS, memberService.getMemberTypes(memberId));
+        SuccessType.GET_MEMBER_TYPES_SUCCESS, memberService.getMemberTypes(loginMemberInfo));
   }
 
   @GetMapping("/reviews")

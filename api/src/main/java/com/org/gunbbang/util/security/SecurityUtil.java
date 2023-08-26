@@ -34,6 +34,7 @@ public class SecurityUtil {
     memberInfoMap.put("breadTypeId", getLoginMemberBreadTypeId());
     memberInfoMap.put("mainPurpose", getLoginMemberMainPurpose());
     memberInfoMap.put("nutrientTypeId", getLoginMemberNutrientTypeId());
+    memberInfoMap.put("nickname", getLoginMemberNickname());
 
     return memberInfoMap;
   }
