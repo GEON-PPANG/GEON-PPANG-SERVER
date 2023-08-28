@@ -201,10 +201,12 @@ public class ReviewService {
   }
 
   private static boolean isFilterNotSelected(Member foundMember) {
-    return foundMember.getBreadType().getIsGlutenFree() == false
-        && foundMember.getBreadType().getIsNutFree() == false
-        && foundMember.getBreadType().getIsSugarFree() == false
-        && foundMember.getBreadType().getIsVegan() == false
+    BreadType foundBreadType = foundMember.getBreadType();
+
+    return !foundBreadType.getIsGlutenFree()
+        && !foundBreadType.getIsNutFree()
+        && !foundBreadType.getIsSugarFree()
+        && !foundBreadType.getIsVegan()
         && foundMember.getMainPurpose() == MainPurpose.NONE;
   }
 
