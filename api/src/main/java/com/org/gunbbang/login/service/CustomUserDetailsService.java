@@ -23,13 +23,18 @@ public class CustomUserDetailsService implements UserDetailsService {
             .findByEmail(userName)
             .orElseThrow(() -> new UsernameNotFoundException("해당 이메일이 존재하지 않습니다."));
 
-    return new CustomUserDetails(
-        member.getEmail(),
-        member.getPassword(),
-        member.getMemberId(),
-        member.getMainPurpose(),
-        member.getBreadType().getBreadTypeId(),
-        member.getNutrientType().getNutrientTypeId(),
-        member.getNickname());
+    CustomUserDetails userDetailsUser =
+        new CustomUserDetails(
+            member.getEmail(),
+            member.getPassword(),
+            member.getMemberId(),
+            member.getMainPurpose(),
+            member.getBreadType().getBreadTypeId(),
+            member.getNutrientType().getNutrientTypeId(),
+            member.getNickname(),
+            member.getRole().toString());
+
+    System.out.println("로그인 요청 시 userDetails: " + userDetailsUser);
+    return userDetailsUser;
   }
 }
