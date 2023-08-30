@@ -150,7 +150,10 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
             myMember.getMainPurpose(),
             myMember.getBreadType().getBreadTypeId(),
             myMember.getNutrientType().getNutrientTypeId(),
-            myMember.getNickname());
+            myMember.getNickname(),
+            myMember.getRole().toString());
+
+    System.out.println("엑세스 요청 성공 시 userDetails: " + userDetailsUser);
 
     Authentication authentication =
         new UsernamePasswordAuthenticationToken(

@@ -18,6 +18,7 @@ public class CustomUserDetails implements UserDetails {
   private Long breadTypeId;
   private Long nutrientTypeId;
   private String nickName;
+  private String role;
 
   public CustomUserDetails(
       String username,
@@ -26,7 +27,8 @@ public class CustomUserDetails implements UserDetails {
       MainPurpose mainPurpose,
       Long breadTypeId,
       Long nutrientTypeId,
-      String nickname) {
+      String nickname,
+      String role) {
     this.username = username;
     this.password = password;
     this.memberId = memberId;
@@ -34,14 +36,14 @@ public class CustomUserDetails implements UserDetails {
     this.breadTypeId = breadTypeId;
     this.nutrientTypeId = nutrientTypeId;
     this.nickName = nickname;
+    this.role = role;
   }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     List<GrantedAuthority> auth = new ArrayList<>();
-    auth.add(new SimpleGrantedAuthority("USER"));
+    auth.add(new SimpleGrantedAuthority(this.role));
     return auth;
-    //        return null;
   }
 
   @Override
@@ -92,5 +94,33 @@ public class CustomUserDetails implements UserDetails {
   @Override
   public boolean isEnabled() {
     return enabled;
+  }
+
+  @Override
+  public String toString() {
+    return "CustomUserDetails{"
+        + "username='"
+        + username
+        + '\''
+        + ", memberId="
+        + memberId
+        + ", password='"
+        + password
+        + '\''
+        + ", enabled="
+        + enabled
+        + ", mainPurpose="
+        + mainPurpose
+        + ", breadTypeId="
+        + breadTypeId
+        + ", nutrientTypeId="
+        + nutrientTypeId
+        + ", nickName='"
+        + nickName
+        + '\''
+        + ", role='"
+        + role
+        + '\''
+        + '}';
   }
 }

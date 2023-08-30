@@ -5,7 +5,6 @@ import com.org.gunbbang.HandleException;
 import com.org.gunbbang.common.dto.ApiResponse;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.support.slack.SlackSender;
-import java.io.IOException;
 import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -100,9 +99,7 @@ public class ApiControllerAdviser {
 
   @ExceptionHandler(Exception.class)
   protected ResponseEntity<ApiResponse> handleException(
-      final Exception e, HttpServletRequest request) throws IOException, Exception {
-    System.out.println(e.getClass().getName());
-    System.out.println(e.getMessage());
+      final Exception e, HttpServletRequest request) throws Exception {
     slackSender.sendAlert(e, request);
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(ApiResponse.error(ErrorType.INTERNAL_SERVER_ERROR));

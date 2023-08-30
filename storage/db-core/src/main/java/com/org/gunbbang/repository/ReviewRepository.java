@@ -1,6 +1,6 @@
 package com.org.gunbbang.repository;
 
-import com.org.gunbbang.BestReviewDTO;
+import com.org.gunbbang.DTO.BestReviewDTO;
 import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.entity.Bakery;
 import com.org.gunbbang.entity.BreadType;
@@ -35,7 +35,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
   // 나와 같은 목적을 선택하고 같은 빵 유형을 선택한 다른 유저들이 작성한 리뷰 중 10개의 좋아요 리뷰 최신순
   @Query(
       value =
-          "SELECT distinct new com.org.gunbbang.BestReviewDTO("
+          "SELECT distinct new com.org.gunbbang.DTO.BestReviewDTO("
               + "b.bakeryId, "
               + "b.bakeryName, "
               + "b.bakeryPicture, "
@@ -66,7 +66,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
   @Query(
       value =
-          "SELECT distinct new com.org.gunbbang.BestReviewDTO("
+          "SELECT distinct new com.org.gunbbang.DTO.BestReviewDTO("
               + "b.bakeryId, "
               + "b.bakeryName, "
               + "b.bakeryPicture, "
@@ -94,7 +94,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
   @Query(
       value =
-          "SELECT distinct new com.org.gunbbang.BestReviewDTO("
+          "SELECT distinct new com.org.gunbbang.DTO.BestReviewDTO("
               + "b.bakeryId, "
               + "b.bakeryName, "
               + "b.bakeryPicture, "

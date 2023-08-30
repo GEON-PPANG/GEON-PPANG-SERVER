@@ -5,7 +5,9 @@ include(
     "common:util",
     "common:domain",
     "common:exception",
+    "client:client-feign",
     "api",
-    "client",
+    "client:client-feign",
     "storage:db-core",
 )
+

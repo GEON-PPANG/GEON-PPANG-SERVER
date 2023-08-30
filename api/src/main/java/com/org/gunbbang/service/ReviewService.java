@@ -1,7 +1,7 @@
 package com.org.gunbbang.service;
 
 import com.org.gunbbang.BadRequestException;
-import com.org.gunbbang.BestReviewDTO;
+import com.org.gunbbang.DTO.BestReviewDTO;
 import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.controller.DTO.request.RecommendKeywordNameRequestDTO;
