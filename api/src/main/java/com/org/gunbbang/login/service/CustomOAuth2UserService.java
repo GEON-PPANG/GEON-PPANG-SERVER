@@ -78,11 +78,9 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
   // SocialType과 Email을 통해 회원가입한 회원을 찾고 없으면 가입시킨다
   // TODO: Email은 같으나 SocialType이 다르게 들어온 요청의 경우 어떻게 처리해야할 지 고민해야한다
   private Member getUser(OAuthAttributes attributes, PlatformType platformType) {
-    Member findUser =
-        memberRepository
-            .findByPlatformTypeAndEmail(platformType, attributes.getOauth2UserInfo().getEmail())
-            .orElse(() -> saveUser(attributes, platformType));
-    return findUser;
+    return memberRepository
+        .findByPlatformTypeAndEmail(platformType, attributes.getOauth2UserInfo().getEmail())
+        .orElse(saveUser(attributes, platformType));
   }
 
   // OAuthAttributes의 toEntity() 메서드를 통해 빌터로 Member 객체 생성 후 반환한다

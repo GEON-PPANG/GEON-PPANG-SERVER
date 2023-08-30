@@ -5,10 +5,8 @@ import com.org.gunbbang.jwt.filter.JwtAuthenticationProcessingFilter;
 import com.org.gunbbang.jwt.filter.JwtExceptionFilter;
 import com.org.gunbbang.jwt.service.JwtService;
 import com.org.gunbbang.login.filter.JsonUsernamePasswordAuthenticationFilter;
-import com.org.gunbbang.login.handler.CustomLogoutHandler;
-import com.org.gunbbang.login.handler.LoginFailureHandler;
-import com.org.gunbbang.login.handler.LoginSuccessHandler;
-import com.org.gunbbang.login.handler.LogoutSuccessHandler;
+import com.org.gunbbang.login.handler.*;
+import com.org.gunbbang.login.service.CustomOAuth2UserService;
 import com.org.gunbbang.login.service.CustomUserDetailsService;
 import com.org.gunbbang.repository.MemberRepository;
 import javax.servlet.Filter;
@@ -37,6 +35,9 @@ public class SecurityConfig {
   private final JwtService jwtService;
   private final MemberRepository memberRepository;
   private final ObjectMapper objectMapper;
+  private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+  private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
+  private final CustomOAuth2UserService customOAuth2UserService;
 
   @Qualifier("handlerExceptionResolver")
   private final HandlerExceptionResolver handlerExceptionResolver;
@@ -73,19 +74,26 @@ public class SecurityConfig {
             "/validation/email",
             "/profile",
             "/actuator/health")
-        .permitAll()
-        .and()
+        .permitAll();
 
-        // logout 구현
-        .logout()
+    // 소셜 로그인 설정
+    http.oauth2Login()
+        .userInfoEndpoint()
+        .userService(customOAuth2UserService)
+        .and()
+        .successHandler(oAuth2LoginSuccessHandler) // 동의하고 계속하기를 눌렀을 때
+        .failureHandler(oAuth2LoginFailureHandler) // 소셜 로그인 실패 시 핸들러 설정
+        .permitAll(); // customUserService 설정
+
+    // logout 구현
+    http.logout()
         .logoutUrl("/auth/logout") // 로그아웃 URL 설정
         .addLogoutHandler(customlogoutHandler())
-        .logoutSuccessHandler(customLogoutSuccessHandler())
-        .and()
+        .logoutSuccessHandler(customLogoutSuccessHandler());
 
-        // 필터 순서: JwtExceptionFilter -> JwtAuthenticationProcessingFilter -> LogoutFilter
-        // -> CustomJsonUsernamePasswordAuthenticationFilter
-        .addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class)
+    // 필터 순서: JwtExceptionFilter -> JwtAuthenticationProcessingFilter -> LogoutFilter
+    // -> CustomJsonUsernamePasswordAuthenticationFilter
+    http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class)
         .addFilterBefore(
             jwtAuthenticationProcessingFilter(), JsonUsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(jwtExceptionFilter(), JwtAuthenticationProcessingFilter.class);

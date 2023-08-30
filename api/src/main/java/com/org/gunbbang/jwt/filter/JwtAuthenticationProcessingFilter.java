@@ -40,7 +40,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
           "/validation/nickname",
           "/validation/email",
           "/actuator/health",
-          "/favicon.ico");
+          "/favicon.ico",
+          "/oauth2/authorization/kakao");
 
   private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
