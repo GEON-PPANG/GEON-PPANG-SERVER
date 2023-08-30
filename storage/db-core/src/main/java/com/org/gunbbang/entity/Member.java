@@ -21,10 +21,11 @@ public class Member extends BaseEntity {
 
   @NotNull private String email;
 
-  @NotNull private String password;
+  // @NotNull
+  private String password;
 
   @Enumerated(EnumType.STRING)
-  @NotNull
+  // @NotNull
   private PlatformType platformType;
 
   @NotNull private String nickname;
@@ -37,12 +38,12 @@ public class Member extends BaseEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "bread_type_id")
-  @NotNull
+  // @NotNull
   private BreadType breadType;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "nutrient_type_id")
-  @NotNull
+  // @NotNull
   private NutrientType nutrientType;
 
   private String refreshToken;

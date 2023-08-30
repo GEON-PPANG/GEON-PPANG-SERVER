@@ -78,12 +78,10 @@ public class SecurityConfig {
 
     // 소셜 로그인 설정
     http.oauth2Login()
+        .successHandler(oAuth2LoginSuccessHandler)
+        .failureHandler(oAuth2LoginFailureHandler)
         .userInfoEndpoint()
-        .userService(customOAuth2UserService)
-        .and()
-        .successHandler(oAuth2LoginSuccessHandler) // 동의하고 계속하기를 눌렀을 때
-        .failureHandler(oAuth2LoginFailureHandler) // 소셜 로그인 실패 시 핸들러 설정
-        .permitAll(); // customUserService 설정
+        .userService(customOAuth2UserService);
 
     // logout 구현
     http.logout()

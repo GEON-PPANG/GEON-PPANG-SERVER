@@ -5,6 +5,8 @@ import com.org.gunbbang.Role;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.login.userinfo.KakaoOAuth2UserInfo;
 import com.org.gunbbang.login.userinfo.OAuth2UserInfo;
+import com.org.gunbbang.repository.BreadTypeRepository;
+import com.org.gunbbang.repository.NutrientTypeRepository;
 import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,6 +20,8 @@ import lombok.Getter;
 public class OAuthAttributes {
   private String nameAttributeKey; // OAuth2 로그인 진행 시 키가 되는 필드 값
   private OAuth2UserInfo oauth2UserInfo; // 소셜 타입별 로그인 유저 정보
+  private BreadTypeRepository breadTypeRepository;
+  private NutrientTypeRepository nutrientTypeRepository;
 
   /**
    * SocialType에 맞는 메소드 호출하여 OAuthAttributes 객체 변환 파라미터: userNameAttributeName -> OAuth2 로그인 시
@@ -45,6 +49,7 @@ public class OAuthAttributes {
   //
   //    }
 
+  // TODO: breadtype, mainpurpose,
   public Member toEntity(PlatformType platformType, OAuth2UserInfo oauth2UserInfo) {
     return Member.builder()
         .platformType(platformType)

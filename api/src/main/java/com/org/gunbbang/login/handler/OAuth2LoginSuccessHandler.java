@@ -23,14 +23,16 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
   public void onAuthenticationSuccess(
       HttpServletRequest request, HttpServletResponse response, Authentication authentication)
       throws IOException, ServletException {
+    System.out.println("OAuth2 Login 성공!");
     log.info("OAuth2 Login 성공!");
     try {
       CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
+      System.out.println("oAuth2User = " + oAuth2User);
 
       // User의 Role이 GUEST일 경우 처음 요청한 회원이므로 닉네임 설정으로 갈 수 있도록 값을 알려줌
       // TODO: 닉네임 업데이트 시 Role.GUEST인 경우에는 변경 완료되면 Role을 업데이트해야함
       if (oAuth2User.getRole() == Role.GUEST) {
-        String accessToken = jwtService.createAccessToken(oAuth2User.getEmail());
+        String accessToken = jwtService.createAccessToken(oAuth2User.getEmail(), 6L);
         response.addHeader(jwtService.getAccessHeader(), "Bearer " + accessToken);
       } else {
         loginSuccess(response, oAuth2User);
@@ -42,7 +44,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
   private void loginSuccess(HttpServletResponse response, CustomOAuth2User oAuth2User)
       throws IOException {
-    String accessToken = jwtService.createAccessToken(oAuth2User.getEmail());
+    String accessToken = jwtService.createAccessToken(oAuth2User.getEmail(), 6L);
     String refreshToken = jwtService.createRefreshToken();
     response.addHeader(jwtService.getAccessHeader(), "Bearer " + accessToken);
     response.addHeader(jwtService.getRefreshHeader(), "Bearer " + accessToken);
