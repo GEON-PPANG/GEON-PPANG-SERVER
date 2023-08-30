@@ -1,11 +1,20 @@
 package com.org.gunbbang.login.service;
 
+import com.org.gunbbang.MainPurpose;
+import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.PlatformType;
+import com.org.gunbbang.entity.BreadType;
 import com.org.gunbbang.entity.Member;
+import com.org.gunbbang.entity.NutrientType;
+import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.login.CustomOAuth2User;
 import com.org.gunbbang.login.OAuthAttributes;
+import com.org.gunbbang.login.userinfo.KakaoOAuth2UserInfo;
+import com.org.gunbbang.repository.BreadTypeRepository;
 import com.org.gunbbang.repository.MemberRepository;
+import com.org.gunbbang.repository.NutrientTypeRepository;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,16 +23,21 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
   private final MemberRepository memberRepository;
+  private final BreadTypeRepository breadTypeRepository;
+  private final NutrientTypeRepository nutrientTypeRepository;
 
   private static final String KAKAO = "kakao";
+  private static final String KAKAO_USER_INFO_ENDPOINT = "https://kapi.kakao.com/v2/user/me";
 
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -59,6 +73,17 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     Member createdUser =
         getUser(extractAttributes, platformType); // getUser() 메소드로 Member 객체 생성 후 반환
 
+    BreadType defaultBreadType =
+        breadTypeRepository
+            .findBreadTypeByIsGlutenFreeAndIsVeganAndIsNutFreeAndIsSugarFree(
+                false, false, false, false)
+            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION));
+
+    NutrientType defaultNutrientType =
+        nutrientTypeRepository
+            .findByIsNutrientOpenAndIsIngredientOpenAndIsNotOpen(false, false, false)
+            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_NUTRIENT_EXCEPTION));
+
     // DefaultOAuth2User를 구현한 CustomOAuth2User 객체를 생성해서 반환
     return new CustomOAuth2User(
         Collections.singleton(new SimpleGrantedAuthority(createdUser.getRole().getDesc())),
@@ -66,11 +91,62 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         extractAttributes.getNameAttributeKey(),
         createdUser.getMemberId(),
         createdUser.getEmail(),
+        MainPurpose.NONE,
+        defaultBreadType.getBreadTypeId(),
+        defaultNutrientType.getNutrientTypeId(),
         createdUser.getRole());
   }
 
-  private PlatformType getPlatformType(String registrationId) {
-    if (KAKAO.equals(registrationId)) {
+  public OAuth2User loadUserByToken(String accessToken, String platformTypeName)
+      throws OAuth2AuthenticationException {
+    RestTemplate restTemplate = new RestTemplate();
+    PlatformType platformType = getPlatformType(platformTypeName);
+
+    // 카카오 API로 사용자 정보 요청
+    KakaoOAuth2UserInfo userInfoResponse =
+        restTemplate.getForObject(KAKAO_USER_INFO_ENDPOINT, KakaoOAuth2UserInfo.class, accessToken);
+
+    if (userInfoResponse != null && userInfoResponse.getEmail() != null) {
+      Map<String, Object> attributes = new HashMap<>();
+      attributes.put("email", userInfoResponse.getEmail());
+      // 기타 사용자 정보를 attributes에 추가
+
+      OAuthAttributes extractAttributes = OAuthAttributes.of(platformType, "email", attributes);
+
+      Member createdUser =
+          getUser(extractAttributes, platformType); // getUser() 메소드로 Member 객체 생성 후 반환
+
+      BreadType defaultBreadType =
+          breadTypeRepository
+              .findBreadTypeByIsGlutenFreeAndIsVeganAndIsNutFreeAndIsSugarFree(
+                  false, false, false, false)
+              .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION));
+
+      NutrientType defaultNutrientType =
+          nutrientTypeRepository
+              .findByIsNutrientOpenAndIsIngredientOpenAndIsNotOpen(false, false, false)
+              .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_NUTRIENT_EXCEPTION));
+
+      // DefaultOAuth2User를 구현한 CustomOAuth2User 객체를 생성해서 반환
+      return new CustomOAuth2User(
+          Collections.singleton(new SimpleGrantedAuthority(createdUser.getRole().getDesc())),
+          attributes,
+          extractAttributes.getNameAttributeKey(),
+          createdUser.getMemberId(),
+          createdUser.getEmail(),
+          MainPurpose.NONE,
+          defaultBreadType.getBreadTypeId(),
+          defaultNutrientType.getNutrientTypeId(),
+          createdUser.getRole());
+    } else {
+      throw new OAuth2AuthenticationException(
+          new OAuth2Error("kakao_user_info_error"),
+          "Failed to fetch user information from Kakao API");
+    }
+  }
+
+  private PlatformType getPlatformType(String platformTypeName) {
+    if (KAKAO.equals(platformTypeName)) {
       return PlatformType.KAKAO;
     }
     return PlatformType.APPLE;
