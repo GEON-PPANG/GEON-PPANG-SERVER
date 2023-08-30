@@ -40,7 +40,9 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
           "/validation/nickname",
           "/validation/email",
           "/actuator/health",
-          "/favicon.ico");
+          "/favicon.ico",
+          "/oauth2/authorization/kakao",
+          "/login/oauth2/code/kakao");
 
   private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
@@ -131,6 +133,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     String accessToken = jwtService.extractAccessTokenAsString(request);
     Long memberId = jwtService.extractMemberIdClaim(accessToken);
+    System.out.println("memberId = " + memberId);
 
     memberRepository.findById(memberId).ifPresent(this::saveAuthentication);
   }
@@ -156,7 +159,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         new UsernamePasswordAuthenticationToken(
             userDetailsUser, // principle
             null, // credential (보통 비밀번호. 인증 시에는 null로 들어감)
-            authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));
+            authoritiesMapper.mapAuthorities(
+                userDetailsUser.getAuthorities())); // 여기서 반환되는 값이 달라져야할거같은디
 
     // SecurityContext에 Authentication 객체 저장
     SecurityContextHolder.getContext().setAuthentication(authentication);

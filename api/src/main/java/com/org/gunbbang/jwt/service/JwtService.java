@@ -56,6 +56,16 @@ public class JwtService {
         .sign(Algorithm.HMAC512(secretKey));
   }
 
+  // role.guest인 유저가 닉네임 변경할 수 있도록 발급할 액세스 토큰을 생성하는 로직
+  //  public String createAccessToken(String email) {
+  //    Date now = new Date();
+  //    return JWT.create()
+  //        .withSubject(ACCESS_TOKEN_SUBJECT) // jwt의 subject 지정 (AccessToken으로 지정)
+  //        .withExpiresAt(new Date(now.getTime() + accessTokenExpirationPeriod)) // 토큰 만료시간 지정
+  //        .withClaim(EMAIL_CLAIM, email)
+  //        .sign(Algorithm.HMAC512(secretKey));
+  //  }
+
   // refreshToken 생성
   public String createRefreshToken() {
     Date now = new Date();
@@ -175,5 +185,15 @@ public class JwtService {
     } catch (TokenExpiredException e) {
       return true;
     }
+  }
+
+  public void updateRefreshToken(String email, String refreshToken) {
+    memberRepository
+        .findByEmail(email)
+        .ifPresent(
+            member -> {
+              member.updateRefreshToken(refreshToken);
+              memberRepository.saveAndFlush(member);
+            });
   }
 }
