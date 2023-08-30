@@ -27,7 +27,9 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
           "/validation/nickname",
           "/validation/email",
           "/actuator/health",
-          "/favicon.ico");
+          "/favicon.ico",
+          "/oauth2/authorization/kakao",
+          "login/oauth2/code/kakao");
 
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) {
