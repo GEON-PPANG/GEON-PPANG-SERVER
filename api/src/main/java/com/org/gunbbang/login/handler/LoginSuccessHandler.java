@@ -33,14 +33,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     // accessToken 및 refreshToken 헤더에 전송
     jwtService.sendAccessAndRefreshToken(response, accessToken, refreshToken);
-
-    memberRepository
-        .findByEmail(email)
-        .ifPresent(
-            member -> {
-              member.updateRefreshToken(refreshToken);
-              memberRepository.saveAndFlush(member);
-            });
+    jwtService.updateRefreshToken(email, refreshToken);
     log.info("로그인 요청 성공. 이메일 : {} || memberId : {} ", email, memberId);
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     log.info("auth: {}", auth.toString());

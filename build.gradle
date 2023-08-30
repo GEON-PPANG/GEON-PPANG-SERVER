@@ -43,6 +43,7 @@ subprojects {
     	annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
 		testImplementation 'org.springframework.boot:spring-boot-starter-test'
 		implementation group: 'org.springframework', name: 'spring-web', version: '5.3.23'
+		implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	}
 
     // true로 설정하면 실행가능한 jar 파일을 만듦

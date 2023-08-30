@@ -21,28 +21,29 @@ public class Member extends BaseEntity {
 
   @NotNull private String email;
 
-  @NotNull private String password;
+  // @NotNull
+  private String password;
 
   @Enumerated(EnumType.STRING)
-  @NotNull
+  // @NotNull
   private PlatformType platformType;
 
   @NotNull private String nickname;
 
   @Enumerated(EnumType.STRING)
-  private Role role = Role.USER;
+  private Role role;
 
   @Enumerated(EnumType.STRING)
   private MainPurpose mainPurpose = MainPurpose.NONE;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "bread_type_id")
-  @NotNull
+  // @NotNull
   private BreadType breadType;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "nutrient_type_id")
-  @NotNull
+  // @NotNull
   private NutrientType nutrientType;
 
   private String refreshToken;
@@ -68,6 +69,11 @@ public class Member extends BaseEntity {
     this.mainPurpose = mainPurpose;
   }
 
+  // 유저 권한 설정 메소드
+  public void authorizeUser() {
+    this.role = Role.USER;
+  }
+
   @Builder
   public Member(
       Long memberId,
@@ -75,6 +81,7 @@ public class Member extends BaseEntity {
       String password,
       PlatformType platformType,
       String nickname,
+      Role role,
       BreadType breadType,
       NutrientType nutrientType,
       String refreshToken) {
@@ -83,6 +90,7 @@ public class Member extends BaseEntity {
     this.password = password;
     this.platformType = platformType;
     this.nickname = nickname;
+    this.role = role;
     this.breadType = breadType;
     this.nutrientType = nutrientType;
     this.refreshToken = refreshToken;
