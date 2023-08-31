@@ -94,7 +94,7 @@ public class MemberService {
 
     Member member =
         MemberMapper.INSTANCE.toMemberEntity(
-            memberSignUpRequestDTO, defaultBreadType, defaultNutrientType);
+            memberSignUpRequestDTO, defaultBreadType, defaultNutrientType, Role.USER);
     member.passwordEncode(passwordEncoder);
     Member savedMember = memberRepository.saveAndFlush(member);
 

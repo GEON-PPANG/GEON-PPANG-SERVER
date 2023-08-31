@@ -12,7 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-// @Builder
 public class Member extends BaseEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,16 +20,16 @@ public class Member extends BaseEntity {
 
   @NotNull private String email;
 
-  // @NotNull
   private String password;
 
   @Enumerated(EnumType.STRING)
-  // @NotNull
+  @NotNull
   private PlatformType platformType;
 
-  @NotNull private String nickname;
+  private String nickname;
 
   @Enumerated(EnumType.STRING)
+  @NotNull
   private Role role;
 
   @Enumerated(EnumType.STRING)
@@ -38,12 +37,12 @@ public class Member extends BaseEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "bread_type_id")
-  // @NotNull
+  @NotNull
   private BreadType breadType;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "nutrient_type_id")
-  // @NotNull
+  @NotNull
   private NutrientType nutrientType;
 
   private String refreshToken;
