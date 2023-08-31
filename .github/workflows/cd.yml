@@ -66,11 +66,6 @@ jobs:
         echo "${{ secrets.GUNBBANG_SECRET_CLIENT }}" >> ./client/client-feign/src/main/resources/client.yml
         echo "${{ secrets.GUNBBANG_SECRET_CLIENT_APPLICATION_YML }}" >> ./client/client-feign/src/main/resources/application.yml
         pwd
-        
-        # application.yml 파일 확인
-        cat ./api/src/main/resources/application.yml
-        cat ./client/src/main/resources/application.yml
-        cat ./storage/db-core/src/main/resources/application.yml
 
       shell: bash
         
