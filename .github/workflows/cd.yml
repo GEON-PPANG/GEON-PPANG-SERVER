@@ -42,8 +42,8 @@ jobs:
         
         
         ## create application.yml in client module
-        mkdir ./client/src/main/resources
-        cd ./client/src/main/resources
+        mkdir ./client/client-feign/src/main/resources
+        cd ./client/client-feign/src/main/resources
         touch ./application.yml
         touch ./client.yml    
         ls -al
