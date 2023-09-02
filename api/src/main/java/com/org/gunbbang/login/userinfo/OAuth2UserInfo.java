@@ -1,13 +1,13 @@
-package com.org.gunbbang.login.userinfo;
-
-import java.util.Map;
-
-public abstract class OAuth2UserInfo {
-  protected Map<String, Object> attributes;
-
-  public OAuth2UserInfo(Map<String, Object> attributes) {
-    this.attributes = attributes;
-  }
-
-  public abstract String getEmail();
-}
+// package com.org.gunbbang.login.userinfo;
+//
+// public class OAuth2UserInfo {
+//
+//  private String email;
+//
+//  public OAuth2UserInfo(String email) {
+//    this.email = email;
+//  }
+//  public String getEmail(){
+//    return email;
+//  };
+// }

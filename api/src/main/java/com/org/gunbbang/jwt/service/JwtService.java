@@ -84,6 +84,12 @@ public class JwtService {
     log.info("accessToken, refreshToken 헤더에 넣어서 반환 완료");
   }
 
+  public void sendAccessToken(HttpServletResponse response, String accessToken) {
+    response.setStatus(HttpServletResponse.SC_OK);
+    setAccessTokenHeader(response, accessToken);
+    log.info("accessToken 헤더에 넣어서 반환 완료");
+  }
+
   /** accessToken 헤더 설정 */
   public void setAccessTokenHeader(HttpServletResponse response, String accessToken) {
     response.setHeader(accessHeader, accessToken);
