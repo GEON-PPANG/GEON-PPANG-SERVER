@@ -10,6 +10,11 @@ public class HandleException extends RuntimeException {
     this.errorType = errorType;
   }
 
+  public HandleException(ErrorType errorType, String message) {
+    super(message);
+    this.errorType = errorType;
+  }
+
   public int getHttpStatus() {
     return errorType.getHttpStatusCode();
   }

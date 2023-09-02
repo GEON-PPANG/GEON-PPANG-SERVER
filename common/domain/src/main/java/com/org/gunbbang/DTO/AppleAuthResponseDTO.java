@@ -11,11 +11,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class AppleRefreshTokenResponseDTO {
-  String accessToken;
-  String tokenType;
-  String expiresIn;
-  String refreshToken;
-  String idToken;
+//@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+public class AppleAuthResponseDTO {
+  String access_token;
+  String token_type;
+  String expires_in;
+  String refresh_token;
+  String id_token;
 }

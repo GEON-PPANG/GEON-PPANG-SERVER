@@ -5,7 +5,7 @@ import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.CustomJwtTokenException;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.errorType.ErrorType;
-import com.org.gunbbang.jwt.service.JwtService;
+import com.org.gunbbang.jwt.util.JwtService;
 import com.org.gunbbang.login.CustomUserDetails;
 import com.org.gunbbang.repository.MemberRepository;
 import java.io.IOException;

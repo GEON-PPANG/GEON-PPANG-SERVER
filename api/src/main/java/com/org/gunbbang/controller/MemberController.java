@@ -1,7 +1,8 @@
 package com.org.gunbbang.controller;
 
-import com.org.gunbbang.common.dto.ApiResponse;
+import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.controller.DTO.request.MemberTypesRequestDTO;
+import com.org.gunbbang.controller.DTO.request.NicknameUpdateRequestDTO;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.service.BakeryService;
@@ -70,5 +71,15 @@ public class MemberController {
     return ApiResponse.success(
         SuccessType.GET_MEMBER_NICKNAME_SUCCESS,
         MemberNicknameResponseDTO.builder().nickname(nickname).build());
+  }
+
+  // TODO: 원래 게스트였던 회원의 경우 refresh 토큰 발급 & 업데이트 & 반환해야 함
+  @PostMapping("/nickname")
+  public ApiResponse<NicknameUpdateResponseDTO> updateLoginMemberNickname(
+      @RequestBody @Valid final NicknameUpdateRequestDTO request) {
+    Long memberId = SecurityUtil.getLoginMemberId();
+    NicknameUpdateResponseDTO response =
+        memberService.updateMemberNickname(memberId, request.getNickname());
+    return ApiResponse.success(SuccessType.UPDATE_MEMBER_NICKNAME_SUCCESS, response);
   }
 }

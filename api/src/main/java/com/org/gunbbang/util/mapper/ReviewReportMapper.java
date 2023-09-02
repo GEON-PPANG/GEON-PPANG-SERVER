@@ -4,7 +4,7 @@ import com.org.gunbbang.controller.DTO.request.ReviewReportRequestDTO;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.entity.Review;
 import com.org.gunbbang.entity.ReviewReport;
-import com.org.gunbbang.service.vo.ReviewReportSlackVO;
+import com.org.gunbbang.service.VO.ReviewReportSlackVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;

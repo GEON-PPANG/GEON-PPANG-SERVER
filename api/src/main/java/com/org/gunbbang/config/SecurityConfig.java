@@ -3,7 +3,7 @@ package com.org.gunbbang.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.org.gunbbang.jwt.filter.JwtAuthenticationProcessingFilter;
 import com.org.gunbbang.jwt.filter.JwtExceptionFilter;
-import com.org.gunbbang.jwt.service.JwtService;
+import com.org.gunbbang.jwt.util.JwtService;
 import com.org.gunbbang.login.filter.JsonUsernamePasswordAuthenticationFilter;
 import com.org.gunbbang.login.handler.*;
 import com.org.gunbbang.login.service.CustomUserDetailsService;

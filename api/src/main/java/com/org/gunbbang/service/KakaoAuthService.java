@@ -1,10 +1,13 @@
-package com.org.gunbbang.login.service;
+package com.org.gunbbang.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.org.gunbbang.PlatformType;
+import com.org.gunbbang.common.AuthType;
+import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.login.KakaoUserResponse;
+import com.org.gunbbang.service.AuthService;
+import com.org.gunbbang.service.VO.SignedUpMemberVO;
 import com.org.gunbbang.repository.BreadTypeRepository;
 import com.org.gunbbang.repository.MemberRepository;
 import com.org.gunbbang.repository.NutrientTypeRepository;
@@ -29,13 +32,13 @@ public class KakaoAuthService extends AuthService {
   }
 
   @Override
-  public Member loadMemberByToken(String accessToken, PlatformType platformType)
+  public SignedUpMemberVO saveMemberOrLogin(String platformToken, MemberSignUpRequestDTO request)
       throws JsonProcessingException {
     RestTemplate restTemplate = new RestTemplate();
 
     // 카카오 API로 사용자 정보 요청을 보낼 때 액세스 토큰을 Bearer 토큰 스키마로 전달하기 위한 헤더 설정
     HttpHeaders headers = new HttpHeaders();
-    headers.set("Authorization", "Bearer " + accessToken);
+    headers.set("Authorization", "Bearer " + platformToken);
     // 헤더를 포함한 HttpEntity 생성
     HttpEntity<String> entity = new HttpEntity<>(headers);
 
@@ -50,8 +53,16 @@ public class KakaoAuthService extends AuthService {
     KakaoUserResponse userInfoResponse = objectMapper.readValue(response, KakaoUserResponse.class);
 
     // 기타 사용자 정보를 attributes에 추가
-    return getUser(
-        platformType,
-        userInfoResponse.getKakaoAccount().getEmail()); // getUser() 메소드로 Member 객체 생성 후 반환
+//    return getUser(
+//            request.getPlatformType(),
+//        userInfoResponse.getKakaoAccount().getEmail()); // getUser() 메소드로 Member 객체 생성 후 반환
+
+    Member foundMember = getUser(request.getPlatformType(), userInfoResponse.getKakaoAccount().getEmail());
+    if(foundMember != null) {
+      return SignedUpMemberVO.of(foundMember, null, AuthType.LOGIN);
+    }
+
+    Member savedMember = saveUser(request, userInfoResponse.getKakaoAccount().getEmail());
+    return SignedUpMemberVO.of(savedMember, null, AuthType.SIGN_UP);
   }
 }

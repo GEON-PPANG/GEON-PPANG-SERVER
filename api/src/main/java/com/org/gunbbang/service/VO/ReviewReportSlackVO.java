@@ -1,4 +1,4 @@
-package com.org.gunbbang.service.vo;
+package com.org.gunbbang.service.VO;
 
 import com.org.gunbbang.ReportCategory;
 import java.time.LocalDateTime;

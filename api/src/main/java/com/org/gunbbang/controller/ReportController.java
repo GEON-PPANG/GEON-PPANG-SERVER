@@ -1,6 +1,6 @@
 package com.org.gunbbang.controller;
 
-import com.org.gunbbang.common.dto.ApiResponse;
+import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.controller.DTO.request.ReviewReportRequestDTO;
 import com.org.gunbbang.controller.DTO.response.ReviewReportResponseDTO;
 import com.org.gunbbang.errorType.SuccessType;

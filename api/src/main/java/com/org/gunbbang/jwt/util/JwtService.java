@@ -1,4 +1,4 @@
-package com.org.gunbbang.jwt.service;
+package com.org.gunbbang.jwt.util;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -6,6 +6,9 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.org.gunbbang.PlatformType;
+import com.org.gunbbang.Role;
+import com.org.gunbbang.service.VO.SignedUpMemberVO;
 import com.org.gunbbang.repository.MemberRepository;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
@@ -36,8 +39,12 @@ public class JwtService {
   @Value("${jwt.refresh.header}")
   private String refreshHeader;
 
+  @Value("${apple.refresh.header}")
+  private String appleRefreshHeader;
+
   private static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
   private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
+  private static final String APPLE_REFRESH_TOKEN_SUBJECT = "Apple-refresh";
   private static final String EMAIL_CLAIM = "email";
   private static final String MEMBER_ID_CLAIM = "memberId";
   private static final String BEARER_PREFIX = "Bearer ";
@@ -72,6 +79,21 @@ public class JwtService {
         .withSubject(REFRESH_TOKEN_SUBJECT)
         .withExpiresAt(new Date(now.getTime() + refreshTokenExpirationPeriod))
         .sign(Algorithm.HMAC512(secretKey));
+  }
+
+  public void setSignedUpMemberToken(SignedUpMemberVO vo, HttpServletResponse response) {
+    String accessToken = createAccessToken(vo.getEmail(), vo.getMemberId());
+    response.setHeader(accessHeader, accessToken);
+
+    if (vo.getRole().equals(Role.USER)) {
+      String refreshToken = createRefreshToken();
+      updateRefreshToken(vo.getEmail(), refreshToken);
+      response.setHeader(refreshHeader, refreshToken);
+    }
+
+    if (vo.getPlatformType().equals(PlatformType.APPLE)) {
+      response.setHeader(appleRefreshHeader, vo.getAppleRefreshToken());
+    }
   }
 
   /** accessToken, refreshToken 재발급 후 header에 넣어서 리턴 */

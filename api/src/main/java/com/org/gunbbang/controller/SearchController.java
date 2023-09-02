@@ -1,7 +1,7 @@
 package com.org.gunbbang.controller;
 
 import com.org.gunbbang.AOP.annotation.SearchApiLog;
-import com.org.gunbbang.common.dto.ApiResponse;
+import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.controller.DTO.response.BakerySearchResponseDTO;
 import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.service.BakeryService;

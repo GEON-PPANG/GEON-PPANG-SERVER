@@ -1,6 +1,6 @@
 package com.org.gunbbang.login.handler;
 
-import com.org.gunbbang.jwt.service.JwtService;
+import com.org.gunbbang.jwt.util.JwtService;
 import com.org.gunbbang.login.CustomUserDetails;
 import com.org.gunbbang.repository.MemberRepository;
 import javax.servlet.http.HttpServletRequest;

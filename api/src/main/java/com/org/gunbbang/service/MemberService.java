@@ -9,7 +9,7 @@ import com.org.gunbbang.entity.BreadType;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.entity.NutrientType;
 import com.org.gunbbang.errorType.ErrorType;
-import com.org.gunbbang.jwt.service.AppleJwtService;
+import com.org.gunbbang.jwt.util.AppleJwtService;
 import com.org.gunbbang.repository.BreadTypeRepository;
 import com.org.gunbbang.repository.MemberRepository;
 import com.org.gunbbang.repository.NutrientTypeRepository;
@@ -54,16 +54,8 @@ public class MemberService {
         memberNickname, memberMainPurpose, breadTypeResponseDTO);
   }
 
-  public MemberSignUpResponseDTO signUp(
-      MemberSignUpRequestDTO memberSignUpRequestDTO, String platformAccessToken) throws Exception {
-    appleJWTService.createAppleSecret();
-    if (memberSignUpRequestDTO.getPlatformType() == PlatformType.APPLE) {
-      String AuthorizationCode = null;
-      String email = appleJWTService.getEmailFromIdentityToken(platformAccessToken);
-      String appleRefreshToken = appleJWTService.getAppleRefreshToken(AuthorizationCode);
-      // 가져온 email로 새로운 member 객체 만들어서 save
-      // 가져온 appleRefreshToken를 헤더에 넣어서 반환
-    }
+  public MemberSignUpResponseDTO signUp(MemberSignUpRequestDTO memberSignUpRequestDTO)
+      throws Exception {
 
     if (memberRepository.findByEmail(memberSignUpRequestDTO.getEmail()).isPresent()) {
       throw new BadRequestException(ErrorType.ALREADY_EXIST_EMAIL_EXCEPTION);
@@ -196,5 +188,27 @@ public class MemberService {
             .findById(memberId)
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
     return foundMember.getPlatformType();
+  }
+
+  public NicknameUpdateResponseDTO updateMemberNickname(Long memberId, String nickname) {
+    if (memberRepository.findByNickname(nickname).isPresent()) {
+      throw new BadRequestException(ErrorType.ALREADY_EXIST_NICKNAME_EXCEPTION);
+    }
+    Member foundMember =
+        memberRepository
+            .findById(memberId)
+            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+
+    if (foundMember.getRole() == Role.GUEST) {
+      foundMember.authorizeUser();
+    }
+
+    foundMember.updateNickname(nickname);
+    Member savedMember = memberRepository.saveAndFlush(foundMember);
+
+    return NicknameUpdateResponseDTO.builder()
+        .nickname(savedMember.getNickname())
+        .role(savedMember.getRole())
+        .build();
   }
 }

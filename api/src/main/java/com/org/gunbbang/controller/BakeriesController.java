@@ -1,7 +1,7 @@
 package com.org.gunbbang.controller;
 
 import com.org.gunbbang.AOP.annotation.BakeryIdApiLog;
-import com.org.gunbbang.common.dto.ApiResponse;
+import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.controller.DTO.response.BakeryDetailResponseDTO;
 import com.org.gunbbang.controller.DTO.response.BakeryListResponseDTO;
 import com.org.gunbbang.controller.DTO.response.ReviewListResponseDTO;

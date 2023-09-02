@@ -1,7 +1,7 @@
 package com.org.gunbbang.login.handler;
 
 import com.org.gunbbang.Role;
-import com.org.gunbbang.jwt.service.JwtService;
+import com.org.gunbbang.jwt.util.JwtService;
 import com.org.gunbbang.login.CustomOAuth2User;
 import java.io.IOException;
 import javax.servlet.ServletException;
