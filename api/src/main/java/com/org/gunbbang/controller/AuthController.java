@@ -66,6 +66,14 @@ public class AuthController {
     }
   }
 
+  public ApiResponse<MemberSignUpResponseDTO> signUpV1(
+      @RequestBody final MemberSignUpRequestDTO request,
+      @RequestHeader(name = "PlatformAccessToken", required = false) String platformAccessToken)
+      throws Exception {
+    return ApiResponse.success(
+        SuccessType.SIGNUP_SUCCESS, memberService.signUp(request, platformAccessToken));
+  }
+
   @DeleteMapping("/withdraw")
   public ApiResponse<MemberWithdrawResponseDTO> withdraw(
       @RequestHeader(name = "Apple-refresh", required = false) String appleRefreshToken)

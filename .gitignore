@@ -50,3 +50,6 @@ log/
 ### database files ###
 /storage/db-core/src/main/resources/init/h2-data.sql
 /storage/db-core/src/main/resources/init/h2-schema.sql
+
+### apple private key-file ###
+/api/src/main/resources/*.p8
