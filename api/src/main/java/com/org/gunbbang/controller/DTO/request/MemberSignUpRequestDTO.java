@@ -8,9 +8,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class MemberSignUpRequestDTO {
-  @NotNull private String email;
-  @NotNull private String password;
-  @NotNull private String nickname;
+  private String email;
+  private String password;
+  private String nickname;
   @NotNull private PlatformType platformType;
-  private String platformAccessToken;
 }
