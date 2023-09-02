@@ -146,7 +146,9 @@ public class RequestApiInfo {
         if (parameterNames[i].equals("request")) {
           this.body = args[i].toString();
         } else {
-          this.parameters = args[i].toString();
+          if (args[i] != null) {
+            this.parameters = args[i].toString();
+          }
         }
       }
     } catch (Exception e) {

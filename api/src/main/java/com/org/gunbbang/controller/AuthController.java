@@ -67,8 +67,11 @@ public class AuthController {
   }
 
   @DeleteMapping("/withdraw")
-  public ApiResponse<MemberWithdrawResponseDTO> withdraw() {
+  public ApiResponse<MemberWithdrawResponseDTO> withdraw(
+      @RequestHeader(name = "Apple-refresh", required = false) String appleRefreshToken)
+      throws Exception {
     Long memberId = SecurityUtil.getLoginMemberId();
-    return ApiResponse.success(SuccessType.DELETE_MEMBER_SUCCESS, memberService.withdraw(memberId));
+    return ApiResponse.success(
+        SuccessType.DELETE_MEMBER_SUCCESS, memberService.withdraw(memberId, appleRefreshToken));
   }
 }

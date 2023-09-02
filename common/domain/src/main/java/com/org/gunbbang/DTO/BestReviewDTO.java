@@ -1,4 +1,4 @@
-package com.org.gunbbang;
+package com.org.gunbbang.DTO;
 
 import java.time.LocalDateTime;
 import lombok.Getter;

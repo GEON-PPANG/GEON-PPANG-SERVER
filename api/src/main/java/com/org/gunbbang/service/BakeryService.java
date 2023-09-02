@@ -4,7 +4,6 @@ import com.org.gunbbang.CategoryType;
 import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.controller.DTO.response.*;
-import com.org.gunbbang.controller.DTO.response.BaseDTO.BaseBakeryResponseDTOV2;
 import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
@@ -188,10 +187,12 @@ public class BakeryService {
   }
 
   private static boolean isFilterNotSelected(Member foundMember) {
-    return foundMember.getBreadType().getIsGlutenFree() == false
-        && foundMember.getBreadType().getIsNutFree() == false
-        && foundMember.getBreadType().getIsSugarFree() == false
-        && foundMember.getBreadType().getIsVegan() == false
+    BreadType foundBreadType = foundMember.getBreadType();
+
+    return !foundBreadType.getIsGlutenFree()
+        && !foundBreadType.getIsNutFree()
+        && !foundBreadType.getIsSugarFree()
+        && !foundBreadType.getIsVegan()
         && foundMember.getMainPurpose() == MainPurpose.NONE;
   }
 
@@ -265,28 +266,6 @@ public class BakeryService {
     return bakeryListResponseDTOs;
   }
 
-  public BakerySearchResponseDTOV2 getBakeriesByNameV2(String bakeryName, Long memberId) {
-    if (bakeryName.isEmpty()) {
-      return BakerySearchResponseDTOV2.getEmptyBakerySearchResponseDTO();
-    }
-
-    List<Bakery> foundBakeries = bakeryRepository.findBakeryByBakeryName(bakeryName);
-    List<BakeryListResponseDTOV2> bakeryListResponseDTOs = new ArrayList<>();
-    for (Bakery foundBakery : foundBakeries) {
-      boolean isBookMarked = isBookMarked(memberId, foundBakery.getBakeryId());
-      BreadTypeResponseDTO breadType =
-          BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(foundBakery.getBreadType());
-      BakeryListResponseDTOV2 bakeryListResponseDTOV2 =
-          getBakeryResponseDTOV2(foundBakery, isBookMarked, breadType);
-      bakeryListResponseDTOs.add(bakeryListResponseDTOV2);
-    }
-
-    return BakerySearchResponseDTOV2.builder()
-        .resultCount(foundBakeries.size())
-        .bakeryList(bakeryListResponseDTOs)
-        .build();
-  }
-
   public List<BakeryListResponseDTO> getBookMarkedBakeries(Long memberId) {
     List<Bakery> bookMarkedBakeries = bakeryRepository.findBookMarkedBakeries(memberId);
     return getBakeryListResponseDTOList(bookMarkedBakeries);
@@ -298,27 +277,5 @@ public class BakeryService {
       return true;
     }
     return false;
-  }
-
-  private BakeryListResponseDTOV2 getBakeryResponseDTOV2(
-      Bakery bakery, boolean isBookMarked, BreadTypeResponseDTO breadType) {
-    BaseBakeryResponseDTOV2 baseBakeryResponseDTOV2 =
-        BaseBakeryResponseDTOV2.builder()
-            .bakeryId(bakery.getBakeryId())
-            .bakeryName(bakery.getBakeryName())
-            .bakeryPicture(bakery.getBakeryPicture())
-            .isHACCP(bakery.getIsHACCP())
-            .isVegan(bakery.getIsVegan())
-            .isNonGMO(bakery.getIsNonGMO())
-            .firstNearStation(bakery.getFirstNearStation())
-            .secondNearStation(bakery.getSecondNearStation())
-            .build();
-
-    return BakeryListResponseDTOV2.builder()
-        .baseBakeryResponseDTOV2(baseBakeryResponseDTOV2)
-        .breadType(breadType)
-        .reviewCount(bakery.getReviewCount())
-        .isBookMarked(isBookMarked)
-        .build();
   }
 }

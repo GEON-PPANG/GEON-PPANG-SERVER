@@ -1,7 +1,7 @@
 package com.org.gunbbang.util.mapper;
 
+import com.org.gunbbang.Role;
 import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
-import com.org.gunbbang.controller.DTO.response.MemberSignUpResponseDTO;
 import com.org.gunbbang.entity.BreadType;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.entity.NutrientType;
@@ -14,7 +14,5 @@ public interface MemberMapper {
   MemberMapper INSTANCE = Mappers.getMapper(MemberMapper.class);
 
   Member toMemberEntity(
-      MemberSignUpRequestDTO request, BreadType breadType, NutrientType nutrientType);
-
-  MemberSignUpResponseDTO toMemberSignUpDTO(Member member);
+      MemberSignUpRequestDTO request, BreadType breadType, NutrientType nutrientType, Role role);
 }

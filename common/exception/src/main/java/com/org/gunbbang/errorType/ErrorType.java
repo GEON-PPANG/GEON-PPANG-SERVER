@@ -17,6 +17,7 @@ public enum ErrorType {
   ALREADY_BOOKMARKED_EXCEPTION(HttpStatus.BAD_REQUEST, "이미 북마크된 빵집입니다"),
   ALREADY_CANCELED_BOOKMARK_EXCEPTION(HttpStatus.BAD_REQUEST, "북마크되지 않은 건빵집의 북마크를 취소하려는 시도입니다"),
   NO_REQUEST_PARAMETER_EXCEPTION(HttpStatus.BAD_REQUEST, "필요한 요청 값이 오지 않았습니다"),
+  NO_REQUEST_HEADER_EXCEPTION(HttpStatus.BAD_REQUEST, "필요한 헤더 값이 오지 않았습니다"),
   PARAMETER_TYPE_MISMATCH_EXCEPTION(HttpStatus.BAD_REQUEST, "요청 값의 타입이 올바르지 않습니다"),
   REQUEST_BIND_EXCEPTION(HttpStatus.BAD_REQUEST, "요청 값 바인딩에 실패했습니다"),
 

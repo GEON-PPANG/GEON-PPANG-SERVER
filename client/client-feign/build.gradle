@@ -2,14 +2,20 @@ plugins {
     id 'java'
 }
 
-group = 'com.org'
-version = '0.0.1-SNAPSHOT'
+group = 'org.example'
+version = 'unspecified'
 
 repositories {
     mavenCentral()
 }
 
+ext {
+    set('springCloudVersion', "2021.0.5")
+}
+
 dependencies {
+    implementation project(':common:domain')
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.8'
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
