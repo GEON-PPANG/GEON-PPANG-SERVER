@@ -1,6 +1,6 @@
 package com.org.gunbbang.util.mapper;
 
-import com.org.gunbbang.BestReviewDTO;
+import com.org.gunbbang.DTO.BestReviewDTO;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.Review;
 import com.org.gunbbang.util.RecommendKeywordPercentage;

@@ -15,7 +15,7 @@ dependencies {
     implementation project(':common:domain')
     implementation project(':common:util')
     implementation project (path: ':storage:db-core')
-    implementation project(':client')
+    implementation project(':client:client-feign')
     implementation "org.springframework.boot:spring-boot-starter-data-jpa" // 이거 개선해야됨
     implementation "org.springframework.security:spring-security-web"
     implementation "org.springframework.security:spring-security-config"
@@ -42,6 +42,8 @@ dependencies {
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 //    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
 
 
 }
