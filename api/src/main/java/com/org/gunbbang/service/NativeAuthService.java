@@ -28,8 +28,22 @@ public class NativeAuthService extends AuthService {
   }
 
   @Override
-  public SignedUpMemberVO saveMemberOrLogin(String platformToken, MemberSignUpRequestDTO request)
-      throws Exception {
+  public SignedUpMemberVO saveMemberOrLogin(String platformToken, MemberSignUpRequestDTO request) {
+    if (isNullOrBlank(request.getPassword())
+        || isNullOrBlank(request.getNickname())
+        || isNullOrBlank(request.getEmail())) {
+      log.warn(
+          "자체로그인 시 필요한 요청 값이 오지 않음. pwd: {} nickname: {} email: {}",
+          request.getPassword(),
+          request.getNickname(),
+          request.getEmail());
+      throw new BadRequestException(
+          ErrorType.NO_REQUEST_PARAMETER_EXCEPTION,
+          ErrorType.NO_REQUEST_PARAMETER_EXCEPTION.getMessage()
+              + " email 필드 누락됨: "
+              + request.getEmail());
+    }
+
     if (memberRepository.findByEmail(request.getEmail()).isPresent()) {
       throw new BadRequestException(ErrorType.ALREADY_EXIST_EMAIL_EXCEPTION);
     }
@@ -40,5 +54,9 @@ public class NativeAuthService extends AuthService {
 
     Member savedMember = saveUser(request, request.getEmail());
     return SignedUpMemberVO.of(savedMember, null, AuthType.SIGN_UP);
+  }
+
+  private boolean isNullOrBlank(String input) {
+    return input == null || input.isBlank();
   }
 }
