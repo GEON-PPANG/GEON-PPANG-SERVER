@@ -1,8 +1,6 @@
 package com.org.gunbbang.service;
 
 import com.org.gunbbang.*;
-import com.org.gunbbang.common.AuthType;
-import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import com.org.gunbbang.controller.DTO.request.MemberTypesRequestDTO;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.BreadType;
@@ -14,7 +12,6 @@ import com.org.gunbbang.repository.BreadTypeRepository;
 import com.org.gunbbang.repository.MemberRepository;
 import com.org.gunbbang.repository.NutrientTypeRepository;
 import com.org.gunbbang.util.mapper.BreadTypeMapper;
-import com.org.gunbbang.util.mapper.MemberMapper;
 import com.org.gunbbang.util.mapper.MemberTypeMapper;
 import com.org.gunbbang.util.mapper.NutrientTypeMapper;
 import com.org.gunbbang.util.security.SecurityUtil;
@@ -22,7 +19,6 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
   private final MemberRepository memberRepository;
-  private final PasswordEncoder passwordEncoder;
   private final BreadTypeRepository breadTypeRepository;
   private final NutrientTypeRepository nutrientTypeRepository;
   private final AppleJwtService appleJWTService;
@@ -52,41 +47,6 @@ public class MemberService {
 
     return MemberTypeMapper.INSTANCE.toMemberDetailResponseDTO(
         memberNickname, memberMainPurpose, breadTypeResponseDTO);
-  }
-
-  public MemberSignUpResponseDTO signUp(MemberSignUpRequestDTO memberSignUpRequestDTO)
-      throws Exception {
-
-    if (memberRepository.findByEmail(memberSignUpRequestDTO.getEmail()).isPresent()) {
-      throw new BadRequestException(ErrorType.ALREADY_EXIST_EMAIL_EXCEPTION);
-    }
-
-    if (memberRepository.findByNickname(memberSignUpRequestDTO.getNickname()).isPresent()) {
-      throw new BadRequestException(ErrorType.ALREADY_EXIST_NICKNAME_EXCEPTION);
-    }
-
-    BreadType defaultBreadType =
-        breadTypeRepository
-            .findBreadTypeByIsGlutenFreeAndIsVeganAndIsNutFreeAndIsSugarFree(
-                false, false, false, false)
-            .orElseThrow();
-
-    NutrientType defaultNutrientType =
-        nutrientTypeRepository
-            .findByIsNutrientOpenAndIsIngredientOpenAndIsNotOpen(false, false, false)
-            .orElseThrow();
-
-    Member member =
-        MemberMapper.INSTANCE.toMemberEntity(
-            memberSignUpRequestDTO, defaultBreadType, defaultNutrientType, Role.USER);
-    member.passwordEncode(passwordEncoder);
-    Member savedMember = memberRepository.saveAndFlush(member);
-
-    return MemberSignUpResponseDTO.builder()
-        .memberId(savedMember.getMemberId())
-        .type(AuthType.SIGN_UP)
-        .email(savedMember.getEmail())
-        .build();
   }
 
   public MemberTypeResponseDTO updateMemberTypes(

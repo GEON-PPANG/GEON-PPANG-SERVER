@@ -89,19 +89,18 @@ public class JwtService {
     }
   }
 
-  public void reIssueTokensAndUpdateRefreshToken(
-          HttpServletResponse response, Member foundMember) {
+  public void reIssueTokensAndUpdateRefreshToken(HttpServletResponse response, Member foundMember) {
     String reIssuedRefreshToken = reIssueAndUpdateRefreshToken(foundMember);
     String reIssuedAccessToken =
-            createAccessToken(foundMember.getEmail(), foundMember.getMemberId());
+        createAccessToken(foundMember.getEmail(), foundMember.getMemberId());
     sendAccessAndRefreshToken(response, reIssuedAccessToken, reIssuedRefreshToken);
     log.info("엑세스 토큰 및 리프레시 토큰 재발급 완료");
   }
 
   /** GUEST였던 회원이 닉네임 변경하고 USER로 되었을 때 사용 */
-  public void reIssueTokensAndUpdateRefreshToken(
-          HttpServletResponse response, Long memberId) {
-    Member foundMember = memberRepository
+  public void reIssueTokensAndUpdateRefreshToken(HttpServletResponse response, Long memberId) {
+    Member foundMember =
+        memberRepository
             .findById(memberId)
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
     reIssueTokensAndUpdateRefreshToken(response, foundMember);
