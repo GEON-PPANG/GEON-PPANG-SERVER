@@ -1,4 +1,4 @@
-package com.org.gunbbang.jwt.util;
+package com.org.gunbbang.jwt.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -6,10 +6,13 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.PlatformType;
 import com.org.gunbbang.Role;
-import com.org.gunbbang.service.VO.SignedUpMemberVO;
+import com.org.gunbbang.entity.Member;
+import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.MemberRepository;
+import com.org.gunbbang.service.VO.SignedUpMemberVO;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,16 +65,6 @@ public class JwtService {
         .sign(Algorithm.HMAC512(secretKey));
   }
 
-  // role.guest인 유저가 닉네임 변경할 수 있도록 발급할 액세스 토큰을 생성하는 로직
-  //  public String createAccessToken(String email) {
-  //    Date now = new Date();
-  //    return JWT.create()
-  //        .withSubject(ACCESS_TOKEN_SUBJECT) // jwt의 subject 지정 (AccessToken으로 지정)
-  //        .withExpiresAt(new Date(now.getTime() + accessTokenExpirationPeriod)) // 토큰 만료시간 지정
-  //        .withClaim(EMAIL_CLAIM, email)
-  //        .sign(Algorithm.HMAC512(secretKey));
-  //  }
-
   // refreshToken 생성
   public String createRefreshToken() {
     Date now = new Date();
@@ -94,6 +87,31 @@ public class JwtService {
     if (vo.getPlatformType().equals(PlatformType.APPLE)) {
       response.setHeader(appleRefreshHeader, vo.getAppleRefreshToken());
     }
+  }
+
+  public void reIssueTokensAndUpdateRefreshToken(
+          HttpServletResponse response, Member foundMember) {
+    String reIssuedRefreshToken = reIssueAndUpdateRefreshToken(foundMember);
+    String reIssuedAccessToken =
+            createAccessToken(foundMember.getEmail(), foundMember.getMemberId());
+    sendAccessAndRefreshToken(response, reIssuedAccessToken, reIssuedRefreshToken);
+    log.info("엑세스 토큰 및 리프레시 토큰 재발급 완료");
+  }
+
+  /** GUEST였던 회원이 닉네임 변경하고 USER로 되었을 때 사용 */
+  public void reIssueTokensAndUpdateRefreshToken(
+          HttpServletResponse response, Long memberId) {
+    Member foundMember = memberRepository
+            .findById(memberId)
+            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+    reIssueTokensAndUpdateRefreshToken(response, foundMember);
+  }
+
+  private String reIssueAndUpdateRefreshToken(Member member) {
+    String reIssuedRefreshToken = createRefreshToken();
+    member.updateRefreshToken(reIssuedRefreshToken);
+    memberRepository.saveAndFlush(member);
+    return reIssuedRefreshToken;
   }
 
   /** accessToken, refreshToken 재발급 후 header에 넣어서 리턴 */

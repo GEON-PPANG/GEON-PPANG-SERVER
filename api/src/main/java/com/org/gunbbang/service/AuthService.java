@@ -32,17 +32,8 @@ public abstract class AuthService {
 
   @Autowired private PasswordEncoder passwordEncoder; // TODO: final 빼고 하는게 맞을지?
 
-  // TODO: 네이밍 추천좀
   public abstract SignedUpMemberVO saveMemberOrLogin(
       String platformToken, MemberSignUpRequestDTO request) throws Exception;
-
-  // SocialType과 Email을 통해 회원가입한 회원을 찾고 없으면 가입시킨다
-  // TODO: Email은 같으나 SocialType이 다르게 들어온 요청의 경우 어떻게 처리해야할 지 고민해야한다
-  //  protected Member getUser(PlatformType platformType, String email) {
-  //    return memberRepository
-  //        .findByPlatformTypeAndEmail(platformType, email) // 있으면 찾고
-  //        .orElse(saveUser(platformType, email)); // 없으면 가입시킨다
-  //  }
 
   protected Member getUser(PlatformType platformType, String email) {
     return memberRepository.findByPlatformTypeAndEmail(platformType, email).orElse(null);
@@ -98,7 +89,7 @@ public abstract class AuthService {
     return Member.builder()
         .platformType(request.getPlatformType())
         .email(email)
-        .nickname("GUEST " + UUID.randomUUID())
+        .nickname(Role.GUEST.name() + " " + UUID.randomUUID())
         .role(Role.GUEST)
         .breadType(defaultBreadType)
         .nutrientType(defaultNutrientType)

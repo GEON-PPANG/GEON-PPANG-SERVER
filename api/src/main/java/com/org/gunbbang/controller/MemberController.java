@@ -5,12 +5,14 @@ import com.org.gunbbang.controller.DTO.request.MemberTypesRequestDTO;
 import com.org.gunbbang.controller.DTO.request.NicknameUpdateRequestDTO;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.errorType.SuccessType;
+import com.org.gunbbang.jwt.service.JwtService;
 import com.org.gunbbang.service.BakeryService;
 import com.org.gunbbang.service.MemberService;
 import com.org.gunbbang.service.ReviewService;
 import com.org.gunbbang.util.security.*;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,7 @@ public class MemberController {
   private final MemberService memberService;
   private final ReviewService reviewService;
   private final BakeryService bakeryService;
+  private final JwtService jwtService;
 
   @GetMapping("")
   @ResponseStatus(HttpStatus.OK)
@@ -73,13 +76,14 @@ public class MemberController {
         MemberNicknameResponseDTO.builder().nickname(nickname).build());
   }
 
-  // TODO: 원래 게스트였던 회원의 경우 refresh 토큰 발급 & 업데이트 & 반환해야 함
+  /** 소셜로그인을 한 회원이 닉네임 설정 뷰에서 이탈하고(GUEST) 추후에 진입했을 때 사용되는 닉네임 변경 api */
   @PostMapping("/nickname")
   public ApiResponse<NicknameUpdateResponseDTO> updateLoginMemberNickname(
-      @RequestBody @Valid final NicknameUpdateRequestDTO request) {
+      @RequestBody @Valid final NicknameUpdateRequestDTO request, HttpServletResponse response) {
     Long memberId = SecurityUtil.getLoginMemberId();
-    NicknameUpdateResponseDTO response =
+    NicknameUpdateResponseDTO responseDTO =
         memberService.updateMemberNickname(memberId, request.getNickname());
-    return ApiResponse.success(SuccessType.UPDATE_MEMBER_NICKNAME_SUCCESS, response);
+    jwtService.reIssueTokensAndUpdateRefreshToken(response, responseDTO.getMemberId());
+    return ApiResponse.success(SuccessType.UPDATE_MEMBER_NICKNAME_SUCCESS, responseDTO);
   }
 }

@@ -94,7 +94,8 @@ public class ApiControllerAdviser {
 
   @ExceptionHandler(HandleException.class)
   protected ResponseEntity<ApiResponse> handleCustomException(final HandleException e) {
-    return ResponseEntity.status(e.getHttpStatus()).body(ApiResponse.error(e.getErrorType()));
+    return ResponseEntity.status(e.getHttpStatus())
+        .body(ApiResponse.error(e.getErrorType(), e.getMessage()));
   }
 
   @ExceptionHandler(Exception.class)

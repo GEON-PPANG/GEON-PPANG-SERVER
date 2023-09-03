@@ -4,7 +4,7 @@ import com.org.gunbbang.DTO.AppleAuthResponseDTO;
 import com.org.gunbbang.common.AuthType;
 import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import com.org.gunbbang.entity.Member;
-import com.org.gunbbang.jwt.util.AppleJwtService;
+import com.org.gunbbang.jwt.service.AppleJwtService;
 import com.org.gunbbang.repository.BreadTypeRepository;
 import com.org.gunbbang.repository.MemberRepository;
 import com.org.gunbbang.repository.NutrientTypeRepository;
@@ -30,13 +30,8 @@ public class AppleAuthService extends AuthService {
   public SignedUpMemberVO saveMemberOrLogin(String platformToken, MemberSignUpRequestDTO request)
       throws Exception {
 
-    log.info("#######  validateAuthorizationCode 시작  #######");
     AppleAuthResponseDTO response = appleJwtService.validateAuthorizationCode(platformToken);
-    log.info("#######  validateAuthorizationCode 끝  #######");
-
-    log.info("#######  getEmailFromIdentityToken 시작  #######");
     String email = appleJwtService.getEmailFromIdentityToken(response.getId_token());
-    log.info("#######  getEmailFromIdentityToken 끝  #######");
 
     Member foundMember = getUser(request.getPlatformType(), email);
     if (foundMember != null) {

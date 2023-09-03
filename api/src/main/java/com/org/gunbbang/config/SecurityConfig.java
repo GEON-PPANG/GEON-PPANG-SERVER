@@ -3,7 +3,7 @@ package com.org.gunbbang.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.org.gunbbang.jwt.filter.JwtAuthenticationProcessingFilter;
 import com.org.gunbbang.jwt.filter.JwtExceptionFilter;
-import com.org.gunbbang.jwt.util.JwtService;
+import com.org.gunbbang.jwt.service.JwtService;
 import com.org.gunbbang.login.filter.JsonUsernamePasswordAuthenticationFilter;
 import com.org.gunbbang.login.handler.*;
 import com.org.gunbbang.login.service.CustomUserDetailsService;
@@ -72,12 +72,6 @@ public class SecurityConfig {
             "/actuator/health")
         .permitAll();
 
-    // 소셜 로그인 설정
-    //    http.oauth2Login()
-    //        .successHandler(oAuth2LoginSuccessHandler) // 동의하고 계속하기를 눌렀을 때 Handler 설정
-    //        .failureHandler(oAuth2LoginFailureHandler) // 소셜 로그인 실패 시 핸들러 설정
-    //        .userInfoEndpoint().userService(customOAuth2UserService);
-
     // logout 구현
     http.logout()
         .logoutUrl("/auth/logout") // 로그아웃 URL 설정
@@ -119,7 +113,7 @@ public class SecurityConfig {
 
   @Bean
   public LoginSuccessHandler loginSuccessHandler() {
-    return new LoginSuccessHandler(jwtService, memberRepository);
+    return new LoginSuccessHandler(jwtService);
   }
 
   @Bean

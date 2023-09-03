@@ -9,7 +9,7 @@ import com.org.gunbbang.entity.BreadType;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.entity.NutrientType;
 import com.org.gunbbang.errorType.ErrorType;
-import com.org.gunbbang.jwt.util.AppleJwtService;
+import com.org.gunbbang.jwt.service.AppleJwtService;
 import com.org.gunbbang.repository.BreadTypeRepository;
 import com.org.gunbbang.repository.MemberRepository;
 import com.org.gunbbang.repository.NutrientTypeRepository;
@@ -199,16 +199,14 @@ public class MemberService {
             .findById(memberId)
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
 
-    if (foundMember.getRole() == Role.GUEST) {
-      foundMember.authorizeUser();
-    }
-
+    foundMember.authorizeUser();
     foundMember.updateNickname(nickname);
     Member savedMember = memberRepository.saveAndFlush(foundMember);
 
     return NicknameUpdateResponseDTO.builder()
         .nickname(savedMember.getNickname())
         .role(savedMember.getRole())
+        .memberId(savedMember.getMemberId())
         .build();
   }
 }

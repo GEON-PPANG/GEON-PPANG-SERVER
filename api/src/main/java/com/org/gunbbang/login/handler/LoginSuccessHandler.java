@@ -1,13 +1,11 @@
 package com.org.gunbbang.login.handler;
 
-import com.org.gunbbang.jwt.util.JwtService;
+import com.org.gunbbang.jwt.service.JwtService;
 import com.org.gunbbang.login.CustomUserDetails;
-import com.org.gunbbang.repository.MemberRepository;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -17,10 +15,6 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 @RequiredArgsConstructor
 public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
   private final JwtService jwtService;
-  private final MemberRepository memberRepository;
-
-  @Value("${jwt.access.expiration}")
-  private String accessTokenExpiration;
 
   @Override
   public void onAuthenticationSuccess(

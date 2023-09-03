@@ -2,15 +2,16 @@ package com.org.gunbbang.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.org.gunbbang.InvalidKakaoTokenException;
 import com.org.gunbbang.common.AuthType;
 import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import com.org.gunbbang.entity.Member;
-import com.org.gunbbang.login.KakaoUserResponse;
-import com.org.gunbbang.service.AuthService;
-import com.org.gunbbang.service.VO.SignedUpMemberVO;
+import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.BreadTypeRepository;
 import com.org.gunbbang.repository.MemberRepository;
 import com.org.gunbbang.repository.NutrientTypeRepository;
+import com.org.gunbbang.service.VO.KakaoUserVO;
+import com.org.gunbbang.service.VO.SignedUpMemberVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -44,25 +45,29 @@ public class KakaoAuthService extends AuthService {
 
     // HttpEntity를 사용하여 API 요청을 보내고 응답을 받음
     // ResponseEntity<String> 타입으로 response를 받음
-    String response =
-        restTemplate.exchange(kakaoUserInfoUri, HttpMethod.GET, entity, String.class).getBody();
+    try {
+      String response =
+          restTemplate.exchange(kakaoUserInfoUri, HttpMethod.GET, entity, String.class).getBody();
 
-    ObjectMapper objectMapper = new ObjectMapper();
+      ObjectMapper objectMapper = new ObjectMapper();
 
-    // KakaoOAuthUserInfo 로 반환 받은 값으로 바로 회원가입되게 변경
-    KakaoUserResponse userInfoResponse = objectMapper.readValue(response, KakaoUserResponse.class);
+      // KakaoOAuthUserInfo 로 반환 받은 값으로 바로 회원가입되게 변경
+      KakaoUserVO userInfoVO = objectMapper.readValue(response, KakaoUserVO.class);
 
-    // 기타 사용자 정보를 attributes에 추가
-//    return getUser(
-//            request.getPlatformType(),
-//        userInfoResponse.getKakaoAccount().getEmail()); // getUser() 메소드로 Member 객체 생성 후 반환
+      Member foundMember =
+          getUser(request.getPlatformType(), userInfoVO.getKakaoAccount().getEmail());
 
-    Member foundMember = getUser(request.getPlatformType(), userInfoResponse.getKakaoAccount().getEmail());
-    if(foundMember != null) {
-      return SignedUpMemberVO.of(foundMember, null, AuthType.LOGIN);
+      if (foundMember != null) {
+        return SignedUpMemberVO.of(foundMember, null, AuthType.LOGIN);
+      }
+
+      Member savedMember = saveUser(request, userInfoVO.getKakaoAccount().getEmail());
+      return SignedUpMemberVO.of(savedMember, null, AuthType.SIGN_UP);
+
+    } catch (Exception e) {
+      throw new InvalidKakaoTokenException(
+          ErrorType.INVALID_KAKAO_TOKEN_EXCEPTION,
+          ErrorType.INVALID_KAKAO_TOKEN_EXCEPTION.getMessage());
     }
-
-    Member savedMember = saveUser(request, userInfoResponse.getKakaoAccount().getEmail());
-    return SignedUpMemberVO.of(savedMember, null, AuthType.SIGN_UP);
   }
 }

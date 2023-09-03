@@ -1,4 +1,4 @@
-package com.org.gunbbang.jwt.util;
+package com.org.gunbbang.jwt.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -111,10 +111,6 @@ public class AppleJwtService {
     } catch (Exception e) {
       log.warn(
           "애플 key 가져오는 과정에서 에러 발생. 에러클래스: {} 에러메시지: {} ", e.getClass().getName(), e.getMessage());
-      log.warn(e.getStackTrace()[0].toString());
-      log.warn(e.getStackTrace()[1].toString());
-      log.warn(e.getStackTrace()[2].toString());
-
       throw e;
     }
   }

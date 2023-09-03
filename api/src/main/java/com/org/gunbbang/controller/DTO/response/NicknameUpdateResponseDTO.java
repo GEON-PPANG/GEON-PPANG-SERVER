@@ -10,4 +10,5 @@ import lombok.*;
 public class NicknameUpdateResponseDTO {
   private String nickname;
   private Role role;
+  private Long memberId;
 }

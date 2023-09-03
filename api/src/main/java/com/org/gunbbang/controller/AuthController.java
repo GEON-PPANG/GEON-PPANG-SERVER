@@ -1,14 +1,12 @@
 package com.org.gunbbang.controller;
 
 import com.org.gunbbang.AOP.annotation.SignupApiLog;
-import com.org.gunbbang.Role;
 import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import com.org.gunbbang.controller.DTO.response.MemberSignUpResponseDTO;
 import com.org.gunbbang.controller.DTO.response.MemberWithdrawResponseDTO;
-import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.errorType.SuccessType;
-import com.org.gunbbang.jwt.util.JwtService;
+import com.org.gunbbang.jwt.service.JwtService;
 import com.org.gunbbang.service.AuthServiceProvider;
 import com.org.gunbbang.service.MemberService;
 import com.org.gunbbang.service.VO.SignedUpMemberVO;
@@ -17,7 +15,6 @@ import com.org.gunbbang.util.security.SecurityUtil;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,7 +28,7 @@ public class AuthController {
 
   @PostMapping("/signup")
   @SignupApiLog
-  public ApiResponse<MemberSignUpResponseDTO> signUpV2(
+  public ApiResponse<MemberSignUpResponseDTO> signUp(
       @RequestHeader(value = "Platform-token", required = false) final String platformToken,
       @RequestBody final MemberSignUpRequestDTO request,
       HttpServletResponse response)
@@ -41,29 +38,10 @@ public class AuthController {
         authServiceProvider
             .getAuthService(request.getPlatformType())
             .saveMemberOrLogin(platformToken, request);
-    log.info("####### vo 받아온 내용  #######" + vo.toString());
 
     jwtService.setSignedUpMemberToken(vo, response);
     return ApiResponse.success(
         SuccessType.SIGNUP_SUCCESS, MemberMapper.INSTANCE.toMemberSignUpResponseDTO(vo));
-  }
-
-  private void getSocialLoginMemberToken(Member customOAuth2User, HttpHeaders httpHeaders) {
-    String accessToken =
-        jwtService.createAccessToken(customOAuth2User.getEmail(), customOAuth2User.getMemberId());
-    httpHeaders.add("Authorization", accessToken);
-    if (customOAuth2User.getRole().equals(Role.USER)) {
-      String refreshToken = jwtService.createRefreshToken();
-      jwtService.updateRefreshToken(customOAuth2User.getEmail(), refreshToken);
-      httpHeaders.add("Authorization-refresh", refreshToken);
-    }
-  }
-
-  public ApiResponse<MemberSignUpResponseDTO> signUp(
-      @RequestBody final MemberSignUpRequestDTO request,
-      @RequestHeader(name = "PlatformAccessToken", required = false) String platformAccessToken)
-      throws Exception {
-    return ApiResponse.success(SuccessType.SIGNUP_SUCCESS, memberService.signUp(request));
   }
 
   @DeleteMapping("/withdraw")

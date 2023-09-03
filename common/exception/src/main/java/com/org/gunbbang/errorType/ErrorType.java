@@ -31,7 +31,7 @@ public enum ErrorType {
   JWT_DECODE_FAIL_EXCEPTION(HttpStatus.UNAUTHORIZED, "토큰 디코딩에 실패했습니다"),
   REVOKE_APPLE_REFRESH_TOKEN_FAIL_EXCEPTION(HttpStatus.UNAUTHORIZED, "애플 리프레시 토큰 revoke에 실패했습니다."),
   INVALID_APPLE_AUTH_TOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "애플 authorization code가 유효하지 않습니다."),
-  //  JWT_FAIL_EXCEPTION(HttpStatus.UNAUTHORIZED, "JWT 관련 에러 발생"),
+  INVALID_KAKAO_TOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "카카오 엑세스 토큰이 유효하지 않습니다."),
 
   /** 404 NOT FOUND */
   NOT_FOUND_USER_EXCEPTION(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다"),
