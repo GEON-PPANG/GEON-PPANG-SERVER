@@ -27,7 +27,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     // accessToken 및 refreshToken 헤더에 전송
     jwtService.sendAccessAndRefreshToken(response, accessToken, refreshToken);
     jwtService.updateRefreshToken(email, refreshToken);
-    log.info("로그인 요청 성공. 이메일 : {} || memberId : {} ", email, memberId);
+    log.info("로그인 요청 성공. 이메일 : {} memberId : {} ", email, memberId);
   }
 
   private String extractUsername(Authentication authentication) {

@@ -75,7 +75,6 @@ public class AppleJwtService {
               .withClaim("aud", URL)
               .withClaim("sub", clientId)
               .sign(Algorithm.ECDSA256(getPrivateKey()));
-      System.out.println("appleSecret 생성: {}" + appleSecret);
 
       return appleSecret;
     } catch (Exception e) {

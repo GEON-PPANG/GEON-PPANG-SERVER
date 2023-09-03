@@ -43,7 +43,6 @@ public class SlackSender {
 
   public void sendReviewReportMessage(ReviewReportSlackVO vo) throws IOException {
     List layoutBlocks = generateReportLayoutBlock(vo);
-    System.out.println("isActive: " + isActive);
 
     if (Boolean.parseBoolean(isActive)) {
       Slack.getInstance()

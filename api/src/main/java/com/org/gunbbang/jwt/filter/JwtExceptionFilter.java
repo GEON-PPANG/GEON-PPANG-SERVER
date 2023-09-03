@@ -46,7 +46,10 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
     try {
       filterChain.doFilter(request, response);
     } catch (Exception e) {
-      log.info("JwtAuthenticationProcessingFilter에서 에러 발생. 에러 클래스 이름: " + e.getClass().getName());
+      log.info(
+          "JwtAuthenticationProcessingFilter에서 에러 발생. 에러 클래스 이름: {} 에러 메시지 이름: {}",
+          e.getClass().getName(),
+          e.getMessage());
       log.info(e.getStackTrace()[0].toString());
       log.info(e.getStackTrace()[1].toString());
       log.info(e.getStackTrace()[2].toString());

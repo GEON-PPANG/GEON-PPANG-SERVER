@@ -96,8 +96,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     if (foundMember.getRefreshToken() != null
         && !foundMember.getRefreshToken().equals(refreshToken)) {
       log.info("재발급 용도로 한번 사용된 정황이 의심되는 rt를 다시 사용하려는 시도. 로그인 페이지로 이동 요청");
-      log.info("요청으로 온 rt: " + refreshToken);
-      log.info("DB에서 조회된 rt: " + foundMember.getRefreshToken());
+      log.info("요청으로 온 rt: {}", refreshToken);
+      log.info("DB에서 조회된 rt: {}", foundMember.getRefreshToken());
 
       throw new CustomJwtTokenException(ErrorType.ABUSED_REFRESH_TOKEN_EXCEPTION);
     }
@@ -140,7 +140,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
             myMember.getNickname(),
             myMember.getRole().toString());
 
-    System.out.println("엑세스 요청 성공 시 userDetails: " + userDetailsUser);
+    log.info("엑세스 요청 성공 시 user id {}", userDetailsUser.getMemberId());
 
     Authentication authentication =
         new UsernamePasswordAuthenticationToken(

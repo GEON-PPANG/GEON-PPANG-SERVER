@@ -92,29 +92,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
   List<BestReviewDTO> findRestBestReviewDTOListByBreadType(
       @Param("alreadyFoundReviews") List<Long> alreadyFoundReviews, PageRequest pageRequest);
 
-  @Query(
-      value =
-          "SELECT distinct new com.org.gunbbang.DTO.BestReviewDTO("
-              + "b.bakeryId, "
-              + "b.bakeryName, "
-              + "b.bakeryPicture, "
-              + "b.isHACCP, "
-              + "b.isVegan, "
-              + "b.isNonGMO, "
-              + "b.firstNearStation, "
-              + "b.secondNearStation, "
-              + "b.bookMarkCount, "
-              + "r.reviewId, "
-              + "b.reviewCount, "
-              + "r.reviewText, "
-              + "b.keywordDeliciousCount, "
-              + "b.keywordKindCount, "
-              + "b.keywordSpecialCount, "
-              + "b.keywordZeroWasteCount, "
-              + "r.createdAt) FROM Review r "
-              + "INNER JOIN Bakery b ON b.bakeryId = r.bakery.bakeryId "
-              + "INNER JOIN Member m ON r.member.memberId = m.memberId "
-              + "AND r.isLike = true ")
-  //                          + "ORDER BY RAND() ")
-  List<BestReviewDTO> findRandomBestReviewDTOList(PageRequest pageRequest);
+  @Query("SELECT r FROM Review as r " + "WHERE r.isLike = true " + "ORDER BY RAND() ")
+  List<Review> findRandomReviews(PageRequest pageRequest);
 }

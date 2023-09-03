@@ -4,12 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import java.lang.reflect.Method;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.ParameterNameDiscoverer;
 
 @Getter
+@Slf4j
 public class SignupApiInfo extends RequestApiInfo {
   private String platformType = null;
 
@@ -36,7 +38,7 @@ public class SignupApiInfo extends RequestApiInfo {
 
       return null;
     } catch (Exception e) {
-      System.out.println("MemberSignUpRequestDTO extract 시 에러 발생");
+      log.warn("MemberSignUpRequestDTO extract 시 에러 발생");
       e.printStackTrace();
       return null;
     }
