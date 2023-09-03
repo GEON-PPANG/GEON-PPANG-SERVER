@@ -119,7 +119,7 @@ public class BakeryService {
 
     for (Bakery bakery : bakeryList) {
       long count = bakeryCategoryRepository.countBakeryCategoriesByBakery(bakery);
-      System.out.println("bakeryName:" + bakery.getBakeryName() + "count:" + count);
+      log.info("bakeryName: {} count: {}", bakery.getBakeryName(), count);
       bakeryCategoryCounts.put(bakery, count);
     }
 
@@ -203,7 +203,7 @@ public class BakeryService {
   }
 
   private void getRestRandomBakeries(List<Long> alreadyFoundBakeryIds, List<Bakery> bestBakeries) {
-    log.info("나머지만 랜덤으로 고르는 베이커리. 현재까지 조회된 베이커리 수: " + bestBakeries.size());
+    log.info("나머지만 랜덤으로 고르는 베이커리. 현재까지 조회된 베이커리 수: {}", bestBakeries.size());
     setAlreadyFoundBakeryIds(alreadyFoundBakeryIds, bestBakeries);
     PageRequest bestPageRequest = PageRequest.of(0, maxBestBakeryCount - bestBakeries.size());
     bestBakeries.addAll(
@@ -212,7 +212,7 @@ public class BakeryService {
 
   private void getRestBakeries(
       List<Long> alreadyFoundBakeryIds, BreadType breadType, List<Bakery> bestBakeries) {
-    log.info("빵유형 일치 베이커리 조회 시작. 현재까지 조회된 베이커리 수: " + bestBakeries.size());
+    log.info("빵유형 일치 베이커리 조회 시작. 현재까지 조회된 베이커리 수: {}", bestBakeries.size());
     setAlreadyFoundBakeryIds(alreadyFoundBakeryIds, bestBakeries);
     PageRequest bestPageRequest = PageRequest.of(0, maxBestBakeryCount - bestBakeries.size());
     bestBakeries.addAll(

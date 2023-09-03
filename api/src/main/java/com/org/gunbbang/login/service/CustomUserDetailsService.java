@@ -4,6 +4,7 @@ import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.login.CustomUserDetails;
 import com.org.gunbbang.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 /** DaoAuthenticationProvider로 인증처리를 하기 위해 필요한 커스텀 UserDetailsService 클래스 */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
 
   private final MemberRepository memberRepository;
@@ -34,7 +36,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             member.getNickname(),
             member.getRole().toString());
 
-    System.out.println("로그인 요청 시 userDetails: " + userDetailsUser);
     return userDetailsUser;
   }
 }

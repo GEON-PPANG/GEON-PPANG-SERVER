@@ -177,8 +177,10 @@ public class ReviewService {
 
     if (isFilterNotSelected(foundMember)) {
       log.info("회원이 필터 선택 안한 경우. 랜덤으로 10개 리뷰 반환");
-      List<BestReviewDTO> randomReviews = getOnlyRandomBestReviewDTOs();
-      return getBestReviewListResponseDTOs(randomReviews);
+      PageRequest randomPageRequest = PageRequest.of(0, maxBestBakeryCount);
+      List<Review> randomReviews =
+          reviewRepository.findRandomReviews(randomPageRequest); // 랜덤 리뷰 10개 조회
+      return getRandomReviewListResponseDTOs(randomReviews);
     }
 
     List<BestReviewDTO> bestReviews = getBestReviews(foundMember);
@@ -187,17 +189,12 @@ public class ReviewService {
       return getBestReviewListResponseDTOs(bestReviews);
     }
 
-    log.info("랜덤 리뷰 조회 시작. 현재까지 조회된 리뷰 수: " + bestReviews.size());
+    log.info("랜덤 리뷰 조회 시작. 현재까지 조회된 리뷰 수: {}", bestReviews.size());
     List<Long> alreadyFoundReviewIds = new ArrayList<>();
     alreadyFoundReviewIds.add(-1L);
     getRestReviewsRandomly(alreadyFoundReviewIds, bestReviews);
 
     return getBestReviewListResponseDTOs(bestReviews);
-  }
-
-  private List<BestReviewDTO> getOnlyRandomBestReviewDTOs() {
-    PageRequest bestPageRequest = PageRequest.of(0, maxBestBakeryCount);
-    return reviewRepository.findRandomBestReviewDTOList(bestPageRequest);
   }
 
   private static boolean isFilterNotSelected(Member foundMember) {
@@ -235,11 +232,36 @@ public class ReviewService {
     return bestReviews;
   }
 
+  private List<BestReviewListResponseDTO> getRandomReviewListResponseDTOs(
+      List<Review> randomReviews) {
+    List<BestReviewListResponseDTO> responseDtoList = new ArrayList();
+    for (Review randomReview : randomReviews) {
+      String[] recommendKeywords =
+          getMaxRecommendKeywords(
+              randomReview.getBakery().getKeywordDeliciousCount(),
+              randomReview.getBakery().getKeywordKindCount(),
+              randomReview.getBakery().getKeywordSpecialCount(),
+              randomReview.getBakery().getKeywordZeroWasteCount());
+
+      BestReviewListResponseDTO response =
+          ReviewMapper.INSTANCE.toBestReviewListResponseDTO(
+              randomReview, randomReview.getBakery(), recommendKeywords[0], recommendKeywords[1]);
+
+      responseDtoList.add(response);
+    }
+    return responseDtoList;
+  }
+
   private List<BestReviewListResponseDTO> getBestReviewListResponseDTOs(
       List<BestReviewDTO> bestReviews) {
     List<BestReviewListResponseDTO> responseDtoList = new ArrayList();
     for (BestReviewDTO bestReview : bestReviews) {
-      String[] recommendKeywords = getMaxRecommendKeywords(bestReview);
+      String[] recommendKeywords =
+          getMaxRecommendKeywords(
+              bestReview.getKeywordDeliciousCount(),
+              bestReview.getKeywordKindCount(),
+              bestReview.getKeywordSpecialCount(),
+              bestReview.getKeywordZeroWasteCount());
 
       BestReviewListResponseDTO response =
           ReviewMapper.INSTANCE.toBestReviewListResponseDTO(
@@ -250,20 +272,16 @@ public class ReviewService {
     return responseDtoList;
   }
 
-  private String[] getMaxRecommendKeywords(BestReviewDTO bestReview) {
+  private String[] getMaxRecommendKeywords(
+      Long deliciousCount, Long kindCount, Long specialCount, Long zeroWaste) {
 
     Map<String, Long> recommendKeywordsMap = new HashMap<>();
     recommendKeywordsMap.put(
-        com.org.gunbbang.RecommendKeyword.DELICIOUS.getMessage(),
-        bestReview.getKeywordDeliciousCount());
+        com.org.gunbbang.RecommendKeyword.DELICIOUS.getMessage(), deliciousCount);
+    recommendKeywordsMap.put(com.org.gunbbang.RecommendKeyword.KIND.getMessage(), kindCount);
     recommendKeywordsMap.put(
-        com.org.gunbbang.RecommendKeyword.KIND.getMessage(), bestReview.getKeywordKindCount());
-    recommendKeywordsMap.put(
-        com.org.gunbbang.RecommendKeyword.SPECIAL_MENU.getMessage(),
-        bestReview.getKeywordSpecialCount());
-    recommendKeywordsMap.put(
-        com.org.gunbbang.RecommendKeyword.ZERO_WASTE.getMessage(),
-        bestReview.getKeywordZeroWasteCount());
+        com.org.gunbbang.RecommendKeyword.SPECIAL_MENU.getMessage(), specialCount);
+    recommendKeywordsMap.put(com.org.gunbbang.RecommendKeyword.ZERO_WASTE.getMessage(), zeroWaste);
 
     Long maxValue = Long.MIN_VALUE;
     Long secondMaxValue = Long.MAX_VALUE;

@@ -13,19 +13,18 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Pointcut;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 // @Aspect
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class LoggingAspect {
 
-  private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
   private final ObjectMapper objectMapper;
 
   // AOP를 적용할 패키지 범위 설정
@@ -60,7 +59,7 @@ public class LoggingAspect {
             //                apiInfo.getMemberId()
             );
 
-    System.out.println("리뷰 id 로깅");
+    log.warn("리뷰 id 로깅");
     return doLogging(joinPoint, reviewIdLogInfo);
   }
 
@@ -83,7 +82,7 @@ public class LoggingAspect {
             //                apiInfo.getMemberId()
             );
 
-    System.out.println("베이커리 id 로깅");
+    log.info("베이커리 id 로깅");
     return doLogging(joinPoint, logInfo);
   }
 
@@ -104,7 +103,7 @@ public class LoggingAspect {
             //                apiInfo.getMemberId()
             );
 
-    System.out.println("기본 로깅");
+    log.info("기본 로깅");
     return doLogging(joinPoint, logInfo);
   }
 
@@ -125,7 +124,7 @@ public class LoggingAspect {
             apiInfo.getBody(),
             apiInfo.getIpAddress());
 
-    System.out.println("회원가입 로깅");
+    log.info("회원가입 로깅");
     return doLogging(joinPoint, signupLogInfo);
   }
 
@@ -149,7 +148,7 @@ public class LoggingAspect {
             //                apiInfo.getMemberId()
             );
 
-    System.out.println("서치 로깅");
+    log.warn("서치 로깅");
     return doLogging(joinPoint, searchLogInfo);
   }
 
@@ -158,7 +157,7 @@ public class LoggingAspect {
 
       final Object result = joinPoint.proceed(joinPoint.getArgs());
       final String logMessage = objectMapper.writeValueAsString(Map.entry("logInfo", logInfo));
-      logger.info(logMessage);
+      log.info(logMessage);
 
       return result;
 
@@ -177,7 +176,7 @@ public class LoggingAspect {
       logInfo.setException(truncatedStackTrace.toString());
       logInfo.setExceptionSimpleName(e.getClass().getSimpleName());
       final String logMessage = objectMapper.writeValueAsString(logInfo);
-      logger.error(logMessage);
+      log.error(logMessage);
 
       throw e;
     }

@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import javax.servlet.http.HttpServletRequest;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.CodeSignature;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -21,6 +22,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Getter
+@Slf4j
 public class RequestApiInfo {
 
   //    private Long memberId = null;
@@ -130,7 +132,7 @@ public class RequestApiInfo {
                       String.format("%s%s", baseUrl, methodUrl.length > 0 ? methodUrl[0] : "");
                   this.name = (String) mappingClass.getMethod("name").invoke(annotation);
                 } catch (Exception e) {
-                  System.out.println("method, url, name 빼낼때 에러");
+                  log.warn("method, url, name 빼낼때 에러");
                   e.printStackTrace();
                 }
               });

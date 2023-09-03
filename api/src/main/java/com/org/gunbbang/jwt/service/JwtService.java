@@ -191,8 +191,8 @@ public class JwtService {
       DecodedJWT decodedJWT = getVerifiedJWT(accessToken);
       return decodedJWT.getClaim(MEMBER_ID_CLAIM).asLong();
     } catch (Exception e) {
-      log.error("엑세스 토큰이 유효하지 않습니다. 에러 메시지: " + e.getMessage());
-      log.error("stack trace: " + Arrays.toString(e.getStackTrace()));
+      log.error("엑세스 토큰이 유효하지 않습니다. 에러 메시지: {}", e.getMessage());
+      log.error("stack trace: {}", Arrays.toString(e.getStackTrace()));
       throw e;
     }
   }
