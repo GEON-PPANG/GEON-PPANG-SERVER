@@ -17,13 +17,14 @@ public class ValidationController {
 
   @PostMapping("/nickname")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void checkDuplicatedNickname(@RequestBody @Valid ValidateNicknameRequestDTO request) {
+  public void checkDuplicatedNickname(
+      @RequestBody @Valid final ValidateNicknameRequestDTO request) {
     memberService.checkDuplicatedNickname(request.getNickname().strip());
   }
 
   @PostMapping("/email")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void checkDuplicatedEmail(@RequestBody @Valid ValidateEmailRequestDTO request) {
+  public void checkDuplicatedEmail(@RequestBody @Valid final ValidateEmailRequestDTO request) {
     memberService.checkDuplicatedEmail(request.getEmail().strip());
   }
 }
