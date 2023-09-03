@@ -13,6 +13,7 @@ import com.org.gunbbang.service.VO.SignedUpMemberVO;
 import com.org.gunbbang.util.mapper.MemberMapper;
 import com.org.gunbbang.util.security.SecurityUtil;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class AuthController {
   @SignupApiLog
   public ApiResponse<MemberSignUpResponseDTO> signUp(
       @RequestHeader(value = "Platform-token", required = false) final String platformToken,
-      @RequestBody final MemberSignUpRequestDTO request,
+      @RequestBody @Valid final MemberSignUpRequestDTO request,
       HttpServletResponse response)
       throws Exception {
 

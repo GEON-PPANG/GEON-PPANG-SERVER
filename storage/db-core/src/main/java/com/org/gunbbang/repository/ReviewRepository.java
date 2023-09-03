@@ -58,6 +58,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
               + "WHERE r.member.breadType.breadTypeId = :currentMemberBreadType "
               + "AND r.isLike = true "
               + "AND r.member.mainPurpose = :currentMemberMainPurpose "
+              //              + "AND r.reviewText <> \"\" "
               + "ORDER BY r.createdAt desc")
   List<BestReviewDTO> findBestReviewDTOList(
       @Param("currentMemberBreadType") Long currentMemberBreadType,
@@ -88,10 +89,16 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
               + "INNER JOIN Member m ON r.member.memberId = m.memberId "
               + "AND r.isLike = true "
               + "WHERE r.reviewId not in :alreadyFoundReviews "
+              //              + "AND r.reviewText <> \"\" "
               + "ORDER BY r.createdAt desc")
   List<BestReviewDTO> findRestBestReviewDTOListByBreadType(
       @Param("alreadyFoundReviews") List<Long> alreadyFoundReviews, PageRequest pageRequest);
 
-  @Query("SELECT r FROM Review as r " + "WHERE r.isLike = true " + "ORDER BY RAND() ")
+  @Query(
+      "SELECT r FROM Review as r "
+          + "WHERE r.isLike = true "
+          +
+          //          "AND r.reviewText <> \"\" " +
+          "ORDER BY RAND() ")
   List<Review> findRandomReviews(PageRequest pageRequest);
 }
