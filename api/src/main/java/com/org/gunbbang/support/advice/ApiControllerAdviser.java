@@ -2,7 +2,7 @@ package com.org.gunbbang.support.advice;
 
 import com.auth0.jwt.exceptions.*;
 import com.org.gunbbang.HandleException;
-import com.org.gunbbang.common.dto.ApiResponse;
+import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.support.slack.SlackSender;
 import java.util.Objects;
@@ -94,7 +94,8 @@ public class ApiControllerAdviser {
 
   @ExceptionHandler(HandleException.class)
   protected ResponseEntity<ApiResponse> handleCustomException(final HandleException e) {
-    return ResponseEntity.status(e.getHttpStatus()).body(ApiResponse.error(e.getErrorType()));
+    return ResponseEntity.status(e.getHttpStatus())
+        .body(ApiResponse.error(e.getErrorType(), e.getMessage()));
   }
 
   @ExceptionHandler(Exception.class)

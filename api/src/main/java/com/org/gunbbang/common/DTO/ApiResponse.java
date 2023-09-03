@@ -1,4 +1,4 @@
-package com.org.gunbbang.common.dto;
+package com.org.gunbbang.common.DTO;
 
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.errorType.SuccessType;

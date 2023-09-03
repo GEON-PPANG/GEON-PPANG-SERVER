@@ -3,6 +3,7 @@ package com.org.gunbbang.jwt.filter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.CustomJwtTokenException;
+import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.jwt.service.JwtService;
@@ -40,9 +41,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
           "/validation/nickname",
           "/validation/email",
           "/actuator/health",
-          "/favicon.ico",
-          "/oauth2/authorization/kakao",
-          "/login/oauth2/code/kakao");
+          "/favicon.ico");
 
   private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
@@ -103,39 +102,24 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
       throw new CustomJwtTokenException(ErrorType.ABUSED_REFRESH_TOKEN_EXCEPTION);
     }
 
-    ReIssueTokensAndUpdateRefreshToken(response, foundMember);
-  }
-
-  private void ReIssueTokensAndUpdateRefreshToken(
-      HttpServletResponse response, Member foundMember) {
-    String reIssuedRefreshToken = reIssueAndUpdateRefreshToken(foundMember);
-    String reIssuedAccessToken =
-        jwtService.createAccessToken(foundMember.getEmail(), foundMember.getMemberId());
-    jwtService.sendAccessAndRefreshToken(response, reIssuedAccessToken, reIssuedRefreshToken);
-    log.info("엑세스 토큰 및 리프레시 토큰 재발급 완료");
-  }
-
-  /** refreshToken 재발급하고 디비에 반영 후 flush */
-  private String reIssueAndUpdateRefreshToken(Member member) {
-    String reIssuedRefreshToken = jwtService.createRefreshToken();
-    member.updateRefreshToken(reIssuedRefreshToken);
-    memberRepository.saveAndFlush(member);
-    return reIssuedRefreshToken;
+    jwtService.reIssueTokensAndUpdateRefreshToken(response, foundMember);
   }
 
   /**
    * accessToken 유효성 검사 후 해당 토큰에서 추출한 memberId로 회원 객체 조회 성공 시 saveAuthentication() 호출해서
    * Authentication 객체 생성 후 SecurityContext에 저장
    */
-  public void checkAccessTokenAndAuthentication(HttpServletRequest request)
-      throws ServletException, IOException {
+  public void checkAccessTokenAndAuthentication(HttpServletRequest request) {
     log.info("일반적인 리소스 접근 요청. 엑세스 토큰 유효성 검사 시작");
 
     String accessToken = jwtService.extractAccessTokenAsString(request);
     Long memberId = jwtService.extractMemberIdClaim(accessToken);
-    System.out.println("memberId = " + memberId);
 
-    memberRepository.findById(memberId).ifPresent(this::saveAuthentication);
+    Member foundMember =
+        memberRepository
+            .findById(memberId)
+            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+    saveAuthentication(foundMember);
   }
 
   /** SecurityContext에 Authentication 객체를 저장 */

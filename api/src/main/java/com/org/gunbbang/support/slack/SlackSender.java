@@ -2,7 +2,7 @@ package com.org.gunbbang.support.slack;
 
 import static com.slack.api.model.block.composition.BlockCompositions.plainText;
 
-import com.org.gunbbang.service.vo.ReviewReportSlackVO;
+import com.org.gunbbang.service.VO.ReviewReportSlackVO;
 import com.slack.api.Slack;
 import com.slack.api.model.block.Blocks;
 import com.slack.api.model.block.LayoutBlock;
@@ -53,8 +53,6 @@ public class SlackSender {
 
   public void sendAlert(Exception error, HttpServletRequest request) throws IOException {
     List layoutBlocks = generateLayoutBlock(error, request);
-    System.out.println("isActive: " + isActive);
-
     if (Boolean.parseBoolean(isActive)) {
       Slack.getInstance()
           .send(errorWebhookUrl, WebhookPayloads.payload(p -> p.blocks(layoutBlocks)));

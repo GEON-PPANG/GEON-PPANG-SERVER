@@ -1,8 +1,6 @@
-package com.org.gunbbang.login;
+package com.org.gunbbang.service;
 
 import com.org.gunbbang.PlatformType;
-import com.org.gunbbang.login.service.AuthService;
-import com.org.gunbbang.login.service.KakaoAuthService;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.PostConstruct;
@@ -11,16 +9,19 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public
-class AuthServiceProvider { // TODO: AuthService으로 이름을 변경하고 MemberService 내에 구현되어있는 회원가입/회원탈퇴/로그아웃
-  // 등등을 빼는건 어떤지?
+// TODO: AuthService으로 이름을 변경하고 MemberService 내에 구현되어있는 회원가입/회원탈퇴/로그아웃 등등을 빼는건 어떤지?
+public class AuthServiceProvider {
   private static final Map<PlatformType, AuthService> authSerivceMap = new HashMap<>();
 
   private final KakaoAuthService kakaoAuthService;
+  private final AppleAuthService appleAuthService;
+  private final NativeAuthService nativeAuthService;
 
   @PostConstruct
   void initalAuthServiceMap() {
     authSerivceMap.put(PlatformType.KAKAO, kakaoAuthService);
+    authSerivceMap.put(PlatformType.APPLE, appleAuthService);
+    authSerivceMap.put(PlatformType.NONE, nativeAuthService);
   }
 
   public AuthService getAuthService(PlatformType platformType) {

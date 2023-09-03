@@ -1,30 +1,24 @@
 package com.org.gunbbang.service;
 
 import com.org.gunbbang.*;
-import com.org.gunbbang.DTO.RevokeAppleTokenRequestDTO;
-import com.org.gunbbang.common.AuthType;
-import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import com.org.gunbbang.controller.DTO.request.MemberTypesRequestDTO;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.BreadType;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.entity.NutrientType;
 import com.org.gunbbang.errorType.ErrorType;
-import com.org.gunbbang.jwt.service.AppleJWTService;
+import com.org.gunbbang.jwt.service.AppleJwtService;
 import com.org.gunbbang.repository.BreadTypeRepository;
 import com.org.gunbbang.repository.MemberRepository;
 import com.org.gunbbang.repository.NutrientTypeRepository;
 import com.org.gunbbang.util.mapper.BreadTypeMapper;
-import com.org.gunbbang.util.mapper.MemberMapper;
 import com.org.gunbbang.util.mapper.MemberTypeMapper;
 import com.org.gunbbang.util.mapper.NutrientTypeMapper;
 import com.org.gunbbang.util.security.SecurityUtil;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,26 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
   private final MemberRepository memberRepository;
-  private final PasswordEncoder passwordEncoder;
   private final BreadTypeRepository breadTypeRepository;
   private final NutrientTypeRepository nutrientTypeRepository;
-  private final AppleFeignClient appleFeignClient;
-  private final AppleJWTService appleJWTService;
-
-  @Value("${apple.api.key-id}")
-  private String keyId;
-
-  @Value("${apple.api.client-id}")
-  private String clientId;
-
-  @Value("${apple.api.team-id}")
-  private String teamId;
-
-  @Value("${apple.api.private-key}")
-  private String privateKey;
-
-  private static final String url = "https://appleid.apple.com";
-  private static final String alg = "ES256";
+  private final AppleJwtService appleJWTService;
 
   public MemberDetailResponseDTO getMemberDetail() {
     String memberNickname = SecurityUtil.getLoginMemberNickname();
@@ -70,39 +47,6 @@ public class MemberService {
 
     return MemberTypeMapper.INSTANCE.toMemberDetailResponseDTO(
         memberNickname, memberMainPurpose, breadTypeResponseDTO);
-  }
-
-  public MemberSignUpResponseDTO signUp(MemberSignUpRequestDTO memberSignUpRequestDTO) {
-    if (memberRepository.findByEmail(memberSignUpRequestDTO.getEmail()).isPresent()) {
-      throw new BadRequestException(ErrorType.ALREADY_EXIST_EMAIL_EXCEPTION);
-    }
-
-    if (memberRepository.findByNickname(memberSignUpRequestDTO.getNickname()).isPresent()) {
-      throw new BadRequestException(ErrorType.ALREADY_EXIST_NICKNAME_EXCEPTION);
-    }
-
-    BreadType defaultBreadType =
-        breadTypeRepository
-            .findBreadTypeByIsGlutenFreeAndIsVeganAndIsNutFreeAndIsSugarFree(
-                false, false, false, false)
-            .orElseThrow();
-
-    NutrientType defaultNutrientType =
-        nutrientTypeRepository
-            .findByIsNutrientOpenAndIsIngredientOpenAndIsNotOpen(false, false, false)
-            .orElseThrow();
-
-    Member member =
-        MemberMapper.INSTANCE.toMemberEntity(
-            memberSignUpRequestDTO, defaultBreadType, defaultNutrientType, Role.USER);
-    member.passwordEncode(passwordEncoder);
-    Member savedMember = memberRepository.saveAndFlush(member);
-
-    return MemberSignUpResponseDTO.builder()
-        .memberId(savedMember.getMemberId())
-        .type(AuthType.SIGN_UP)
-        .email(savedMember.getEmail())
-        .build();
   }
 
   public MemberTypeResponseDTO updateMemberTypes(
@@ -185,7 +129,7 @@ public class MemberService {
   public MemberWithdrawResponseDTO withdraw(Long memberId, String appleRefreshToken)
       throws Exception {
     if (getMemberPlatformType(memberId) == PlatformType.APPLE) {
-      revokeAppleTokens(appleRefreshToken);
+      appleJWTService.revokeAppleTokens(appleRefreshToken);
     }
 
     Long deletedMemberCount = memberRepository.deleteMemberByMemberId(memberId).get();
@@ -198,34 +142,31 @@ public class MemberService {
     return MemberWithdrawResponseDTO.builder().memberId(memberId).build();
   }
 
-  // 애플 refreshToken revoke처리
-  private void revokeAppleTokens(String appleRefreshToken) throws Exception {
-    if (appleRefreshToken == null) {
-      throw new BadRequestException(ErrorType.NO_REQUEST_HEADER_EXCEPTION);
-    }
-
-    String appleSecret = appleJWTService.createAppleSecret();
-    RevokeAppleTokenRequestDTO refreshRevokeRequest =
-        RevokeAppleTokenRequestDTO.builder()
-            .client_id(clientId)
-            .client_secret(appleSecret)
-            .token(appleRefreshToken)
-            .token_type_hint("refresh_token")
-            .build();
-
-    try {
-      appleFeignClient.revokeAppleToken(refreshRevokeRequest);
-    } catch (Exception e) {
-      log.warn("애플 토큰 revoke하는 과정에서 에러 발생: " + e.getMessage());
-      throw e;
-    }
-  }
-
   private PlatformType getMemberPlatformType(Long memberId) {
     Member foundMember =
         memberRepository
             .findById(memberId)
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
     return foundMember.getPlatformType();
+  }
+
+  public NicknameUpdateResponseDTO updateMemberNickname(Long memberId, String nickname) {
+    if (memberRepository.findByNickname(nickname).isPresent()) {
+      throw new BadRequestException(ErrorType.ALREADY_EXIST_NICKNAME_EXCEPTION);
+    }
+    Member foundMember =
+        memberRepository
+            .findById(memberId)
+            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+
+    foundMember.authorizeUser();
+    foundMember.updateNickname(nickname);
+    Member savedMember = memberRepository.saveAndFlush(foundMember);
+
+    return NicknameUpdateResponseDTO.builder()
+        .nickname(savedMember.getNickname())
+        .role(savedMember.getRole())
+        .memberId(savedMember.getMemberId())
+        .build();
   }
 }

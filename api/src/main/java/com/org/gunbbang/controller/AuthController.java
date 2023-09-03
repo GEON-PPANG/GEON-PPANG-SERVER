@@ -1,28 +1,26 @@
 package com.org.gunbbang.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.org.gunbbang.AOP.annotation.SignupApiLog;
-import com.org.gunbbang.PlatformType;
-import com.org.gunbbang.Role;
-import com.org.gunbbang.common.AuthType;
-import com.org.gunbbang.common.dto.ApiResponse;
+import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import com.org.gunbbang.controller.DTO.response.MemberSignUpResponseDTO;
 import com.org.gunbbang.controller.DTO.response.MemberWithdrawResponseDTO;
-import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.jwt.service.JwtService;
-import com.org.gunbbang.login.AuthServiceProvider;
+import com.org.gunbbang.service.AuthServiceProvider;
 import com.org.gunbbang.service.MemberService;
+import com.org.gunbbang.service.VO.SignedUpMemberVO;
+import com.org.gunbbang.util.mapper.MemberMapper;
 import com.org.gunbbang.util.security.SecurityUtil;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
+@Slf4j
 public class AuthController {
   private final MemberService memberService;
   private final AuthServiceProvider authServiceProvider;
@@ -30,40 +28,20 @@ public class AuthController {
 
   @PostMapping("/signup")
   @SignupApiLog
-  // public ApiResponse<MemberSignUpResponseDTO> signUp(
-  public ResponseEntity<MemberSignUpResponseDTO> signUp(
-      @RequestHeader(value = "Social-Authorization", required = false)
-          final String authorizationCode,
-      @RequestBody final MemberSignUpRequestDTO request)
-      throws JsonProcessingException {
-    if (request.getPlatformType().equals(PlatformType.NONE)) {
-      return ResponseEntity.ok().body(memberService.signUp(request));
-    }
-    Member customOAuth2User =
+  public ApiResponse<MemberSignUpResponseDTO> signUp(
+      @RequestHeader(value = "Platform-token", required = false) final String platformToken,
+      @RequestBody final MemberSignUpRequestDTO request,
+      HttpServletResponse response)
+      throws Exception {
+
+    SignedUpMemberVO vo =
         authServiceProvider
             .getAuthService(request.getPlatformType())
-            .loadMemberByToken(authorizationCode, request.getPlatformType());
-    HttpHeaders httpHeaders = new HttpHeaders();
-    getSocialLoginMemberToken(customOAuth2User, httpHeaders);
-    return ResponseEntity.ok()
-        .headers(httpHeaders)
-        .body(
-            MemberSignUpResponseDTO.builder()
-                .memberId(customOAuth2User.getMemberId())
-                .type(AuthType.LOGIN)
-                .email(customOAuth2User.getEmail())
-                .build());
-  }
+            .saveMemberOrLogin(platformToken, request);
 
-  private void getSocialLoginMemberToken(Member customOAuth2User, HttpHeaders httpHeaders) {
-    String accessToken =
-        jwtService.createAccessToken(customOAuth2User.getEmail(), customOAuth2User.getMemberId());
-    httpHeaders.add("Authorization", accessToken);
-    if (customOAuth2User.getRole().equals(Role.USER)) {
-      String refreshToken = jwtService.createRefreshToken();
-      jwtService.updateRefreshToken(customOAuth2User.getEmail(), refreshToken);
-      httpHeaders.add("Authorization-refresh", refreshToken);
-    }
+    jwtService.setSignedUpMemberToken(vo, response);
+    return ApiResponse.success(
+        SuccessType.SIGNUP_SUCCESS, MemberMapper.INSTANCE.toMemberSignUpResponseDTO(vo));
   }
 
   @DeleteMapping("/withdraw")

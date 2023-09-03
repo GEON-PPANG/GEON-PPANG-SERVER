@@ -68,6 +68,10 @@ public class Member extends BaseEntity {
     this.mainPurpose = mainPurpose;
   }
 
+  public void updateNickname(String nickname) {
+    this.nickname = nickname;
+  }
+
   // 유저 권한 설정 메소드
   public void authorizeUser() {
     this.role = Role.USER;

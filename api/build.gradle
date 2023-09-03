@@ -41,10 +41,12 @@ dependencies {
     // 매퍼 의존성 추가
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
-//    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
+
+   // annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
-
+    // feign
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.8'
 
 }
 

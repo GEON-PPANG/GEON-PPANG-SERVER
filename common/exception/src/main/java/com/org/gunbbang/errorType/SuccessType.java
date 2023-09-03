@@ -30,6 +30,7 @@ public enum SuccessType {
   GET_BOOKMARKED_BAKERIES_SUCCESS(HttpStatus.OK, "북마크된 건빵집 조회 성공"),
   GET_MEMBER_NICKNAME_SUCCESS(HttpStatus.OK, "현재 접속회원의 닉네임 조회 성공"),
   DELETE_MEMBER_SUCCESS(HttpStatus.OK, "회원 탈퇴에 성공했습니다"),
+  UPDATE_MEMBER_NICKNAME_SUCCESS(HttpStatus.OK, "현재 접속회원의 닉네임 변경 성공"),
 
   /** 201 CREATED */
   SIGNUP_SUCCESS(HttpStatus.CREATED, "회원가입이 완료됐습니다."),
