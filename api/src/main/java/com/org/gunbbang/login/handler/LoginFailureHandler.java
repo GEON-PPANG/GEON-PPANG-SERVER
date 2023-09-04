@@ -21,15 +21,7 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
   public void onAuthenticationFailure(
       HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
       throws IOException {
-
-    response.setStatus(HttpServletResponse.SC_OK);
-    response.setCharacterEncoding("UTF-8");
-    response.setContentType("application/json;charset=UTF-8");
-
-    // ApiResponse를 사용하여 JSON 응답 생성
-    ApiResponse responseBody = ApiResponse.error(ErrorType.LOGOUT_FAIL_EXCEPTION);
-    String jsonResponse = objectMapper.writeValueAsString(responseBody);
-
-    response.getWriter().write(jsonResponse);
+    log.warn("로그인 실패. error message: {}", exception.getMessage());
+    ApiResponse.sendErrorResponseBody(response, objectMapper, ErrorType.LOGIN_FAIL_EXCEPTION);
   }
 }
