@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 public enum SuccessType {
   /** 200 OK */
   LOGIN_SUCCESS(HttpStatus.OK, "로그인에 성공했습니다."),
+  LOGOUT_SUCCESS(HttpStatus.OK, "로그아웃에 성공했습니다."),
   GET_POST_LIST_SUCCESS(HttpStatus.OK, "게시물 리스트 조회에 성공했습니다."),
   GET_POST_SUCCESS(HttpStatus.OK, "게시물 조회에 성공했습니다."),
   GET_EMOTION_CALENDAR_SUCCESS(HttpStatus.OK, "감정 캘린더 조회에 성공했습니다."),
@@ -31,6 +32,7 @@ public enum SuccessType {
   GET_MEMBER_NICKNAME_SUCCESS(HttpStatus.OK, "현재 접속회원의 닉네임 조회 성공"),
   DELETE_MEMBER_SUCCESS(HttpStatus.OK, "회원 탈퇴에 성공했습니다"),
   UPDATE_MEMBER_NICKNAME_SUCCESS(HttpStatus.OK, "현재 접속회원의 닉네임 변경 성공"),
+  ISSUE_REFRESH_TOKEN_SUCCESS(HttpStatus.OK, "토큰 재발급에 성공했습니다"),
 
   /** 201 CREATED */
   SIGNUP_SUCCESS(HttpStatus.CREATED, "회원가입이 완료됐습니다."),

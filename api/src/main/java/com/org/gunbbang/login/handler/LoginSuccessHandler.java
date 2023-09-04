@@ -1,7 +1,11 @@
 package com.org.gunbbang.login.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.org.gunbbang.common.DTO.ApiResponse;
+import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.jwt.service.JwtService;
 import com.org.gunbbang.login.CustomUserDetails;
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +19,12 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 @RequiredArgsConstructor
 public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
   private final JwtService jwtService;
+  private final ObjectMapper objectMapper;
 
   @Override
   public void onAuthenticationSuccess(
-      HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+      HttpServletRequest request, HttpServletResponse response, Authentication authentication)
+      throws IOException {
     String email = extractUsername(authentication);
     Long memberId = extractMemberId(authentication);
     String accessToken = jwtService.createAccessToken(email, memberId);
@@ -27,6 +33,8 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     // accessToken 및 refreshToken 헤더에 전송
     jwtService.sendAccessAndRefreshToken(response, accessToken, refreshToken);
     jwtService.updateRefreshToken(email, refreshToken);
+
+    ApiResponse.sendSuccessResponseBody(response, objectMapper, SuccessType.LOGIN_SUCCESS);
     log.info("로그인 요청 성공. 이메일 : {} memberId : {} ", email, memberId);
   }
 

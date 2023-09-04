@@ -37,7 +37,7 @@ public class RequestApiInfo {
   private final String dateTime =
       LocalDateTime.now(ZoneId.of("Asia/Seoul"))
           .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-  ;
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   public RequestApiInfo(JoinPoint joinPoint, Class clazz, ObjectMapper objectMapper) {
 

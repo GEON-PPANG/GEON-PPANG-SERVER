@@ -113,17 +113,17 @@ public class SecurityConfig {
 
   @Bean
   public LoginSuccessHandler loginSuccessHandler() {
-    return new LoginSuccessHandler(jwtService);
+    return new LoginSuccessHandler(jwtService, objectMapper);
   }
 
   @Bean
   public LoginFailureHandler loginFailureHandler() {
-    return new LoginFailureHandler();
+    return new LoginFailureHandler(objectMapper);
   }
 
   @Bean
   public Filter jwtAuthenticationProcessingFilter() {
-    return new JwtAuthenticationProcessingFilter(jwtService, memberRepository);
+    return new JwtAuthenticationProcessingFilter(jwtService, memberRepository, objectMapper);
   }
 
   @Bean
@@ -138,6 +138,6 @@ public class SecurityConfig {
 
   @Bean
   public LogoutSuccessHandler customLogoutSuccessHandler() {
-    return new LogoutSuccessHandler();
+    return new LogoutSuccessHandler(objectMapper);
   }
 }

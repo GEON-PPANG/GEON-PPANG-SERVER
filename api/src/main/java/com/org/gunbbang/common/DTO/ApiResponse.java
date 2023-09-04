@@ -1,7 +1,10 @@
 package com.org.gunbbang.common.DTO;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.errorType.SuccessType;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,5 +37,31 @@ public class ApiResponse<T> {
 
   public static ApiResponse error(int errorCode, String message) {
     return new ApiResponse<>(errorCode, message);
+  }
+
+  public static void sendSuccessResponseBody(
+      HttpServletResponse response, ObjectMapper objectMapper, SuccessType successType)
+      throws IOException {
+    response.setStatus(successType.getHttpStatusCode());
+    response.setCharacterEncoding("UTF-8");
+    response.setContentType("application/json;charset=UTF-8");
+
+    ApiResponse responseBody = ApiResponse.success(successType);
+    String jsonResponse = objectMapper.writeValueAsString(responseBody);
+
+    response.getWriter().write(jsonResponse);
+  }
+
+  public static void sendErrorResponseBody(
+      HttpServletResponse response, ObjectMapper objectMapper, ErrorType errorType)
+      throws IOException {
+    response.setStatus(errorType.getHttpStatusCode());
+    response.setCharacterEncoding("UTF-8");
+    response.setContentType("application/json;charset=UTF-8");
+
+    ApiResponse responseBody = ApiResponse.error(errorType);
+    String jsonResponse = objectMapper.writeValueAsString(responseBody);
+
+    response.getWriter().write(jsonResponse);
   }
 }
