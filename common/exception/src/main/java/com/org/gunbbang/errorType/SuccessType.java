@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 public enum SuccessType {
   /** 200 OK */
   LOGIN_SUCCESS(HttpStatus.OK, "로그인에 성공했습니다."),
+  LOGOUT_SUCCESS(HttpStatus.OK, "로그아웃에 성공했습니다."),
   GET_POST_LIST_SUCCESS(HttpStatus.OK, "게시물 리스트 조회에 성공했습니다."),
   GET_POST_SUCCESS(HttpStatus.OK, "게시물 조회에 성공했습니다."),
   GET_EMOTION_CALENDAR_SUCCESS(HttpStatus.OK, "감정 캘린더 조회에 성공했습니다."),

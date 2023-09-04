@@ -32,6 +32,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
   private static final String H2_PREFIX = "/h2-console";
   private final JwtService jwtService;
   private final MemberRepository memberRepository;
+  private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
+
   private static final List<String> WHITE_LIST =
       List.of(
           "/auth/signup",
@@ -42,8 +44,6 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
           "/validation/email",
           "/actuator/health",
           "/favicon.ico");
-
-  private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) {

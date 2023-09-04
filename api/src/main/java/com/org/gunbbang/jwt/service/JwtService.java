@@ -53,7 +53,7 @@ public class JwtService {
   private static final String BEARER_PREFIX = "Bearer ";
 
   private final MemberRepository memberRepository;
-  private static final ObjectMapper objectMapper = new ObjectMapper(); // TODO: static 넣을지 뺄지??
+  private final ObjectMapper objectMapper;
 
   public String createAccessToken(String email, Long memberId) {
     Date now = new Date();

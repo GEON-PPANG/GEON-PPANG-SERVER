@@ -1,5 +1,8 @@
 package com.org.gunbbang.login.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.org.gunbbang.common.DTO.ApiResponse;
+import com.org.gunbbang.errorType.SuccessType;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +15,7 @@ import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuc
 @Slf4j
 @RequiredArgsConstructor
 public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
+  private final ObjectMapper objectMapper;
 
   public void onLogoutSuccess(
       HttpServletRequest request, HttpServletResponse response, Authentication authentication)
@@ -20,7 +24,12 @@ public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
 
     response.setStatus(HttpServletResponse.SC_OK);
     response.setCharacterEncoding("UTF-8");
-    response.setContentType("text/plain;charset=UTF-8/");
-    response.getWriter().write("로그아웃 성공.");
+    response.setContentType("application/json;charset=UTF-8");
+
+    // ApiResponse를 사용하여 JSON 응답 생성
+    ApiResponse responseBody = ApiResponse.success(SuccessType.LOGOUT_SUCCESS);
+    String jsonResponse = objectMapper.writeValueAsString(responseBody);
+
+    response.getWriter().write(jsonResponse);
   }
 }
