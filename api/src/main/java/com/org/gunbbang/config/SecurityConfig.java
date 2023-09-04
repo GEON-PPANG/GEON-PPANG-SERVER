@@ -118,7 +118,7 @@ public class SecurityConfig {
 
   @Bean
   public LoginFailureHandler loginFailureHandler() {
-    return new LoginFailureHandler();
+    return new LoginFailureHandler(objectMapper);
   }
 
   @Bean
