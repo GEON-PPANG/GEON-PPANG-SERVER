@@ -123,7 +123,7 @@ public class SecurityConfig {
 
   @Bean
   public Filter jwtAuthenticationProcessingFilter() {
-    return new JwtAuthenticationProcessingFilter(jwtService, memberRepository);
+    return new JwtAuthenticationProcessingFilter(jwtService, memberRepository, objectMapper);
   }
 
   @Bean

@@ -1,11 +1,13 @@
 package com.org.gunbbang.jwt.filter;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.CustomJwtTokenException;
 import com.org.gunbbang.NotFoundException;
+import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.errorType.ErrorType;
+import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.jwt.service.JwtService;
 import com.org.gunbbang.login.CustomUserDetails;
 import com.org.gunbbang.repository.MemberRepository;
@@ -32,6 +34,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
   private static final String H2_PREFIX = "/h2-console";
   private final JwtService jwtService;
   private final MemberRepository memberRepository;
+  private final ObjectMapper objectMapper;
   private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
   private static final List<String> WHITE_LIST =
@@ -73,7 +76,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
   }
 
   private void refreshAccessAndRefreshTokens(
-      HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
+      HttpServletRequest request, HttpServletResponse response) throws IOException {
     log.info("토큰 리프레시 접근 요청 처리 시작.");
 
     String accessToken = jwtService.extractAccessTokenAsString(request);
@@ -103,6 +106,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     }
 
     jwtService.reIssueTokensAndUpdateRefreshToken(response, foundMember);
+    ApiResponse.sendSuccessResponseBody(
+        response, objectMapper, SuccessType.ISSUE_REFRESH_TOKEN_SUCCESS);
   }
 
   /**
