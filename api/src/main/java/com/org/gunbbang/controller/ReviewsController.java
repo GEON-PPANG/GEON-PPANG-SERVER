@@ -1,12 +1,10 @@
 package com.org.gunbbang.controller;
 
 import com.org.gunbbang.AOP.annotation.BakeryIdApiLog;
-import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.controller.DTO.request.ReviewRequestDTO;
 import com.org.gunbbang.controller.DTO.response.ReviewCreateResponseDTO;
 import com.org.gunbbang.controller.DTO.response.ReviewDetailResponseDTO;
-import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.service.ReviewService;
 import javax.validation.Valid;
@@ -26,10 +24,6 @@ public class ReviewsController {
   public ApiResponse<ReviewCreateResponseDTO> createReview(
       @PathVariable("bakeryId") final Long bakeryId,
       @RequestBody @Valid final ReviewRequestDTO request) {
-    if (request.getIsLike().equals(Boolean.FALSE) && (!request.getKeywordList().isEmpty())) {
-      throw new BadRequestException(ErrorType.REQUEST_ISNOTLIKE_KEYWORDLIST_VALIDATION_EXCEPTION);
-    }
-
     Long reviewId = reviewService.createReview(bakeryId, request);
     return ApiResponse.success(
         SuccessType.CREATE_REVIEW_SUCCESS,
