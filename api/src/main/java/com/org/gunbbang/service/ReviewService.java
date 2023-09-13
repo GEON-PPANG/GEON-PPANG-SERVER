@@ -38,6 +38,12 @@ public class ReviewService {
 
   public Long createReview(Long bakeryId, ReviewRequestDTO reviewRequestDto) {
     Long currentMemberId = SecurityUtil.getLoginMemberId();
+
+    if (reviewRequestDto.getIsLike().equals(Boolean.FALSE)
+        && !reviewRequestDto.getKeywordList().isEmpty()) {
+      throw new BadRequestException(ErrorType.REQUEST_ISNOTLIKE_KEYWORDLIST_VALIDATION_EXCEPTION);
+    }
+
     Member member =
         memberRepository
             .findById(currentMemberId)
@@ -122,7 +128,7 @@ public class ReviewService {
     RecommendKeywordPercentage recommendKeywordPercentage =
         RecommendKeywordPercentage.builder()
             .deliciousPercent(calculatorPercentage(reviewCount, bakery.getKeywordDeliciousCount()))
-            .specialPercent(calculatorPercentage(reviewCount, bakery.getKeywordDeliciousCount()))
+            .specialPercent(calculatorPercentage(reviewCount, bakery.getKeywordSpecialCount()))
             .kindPercent(calculatorPercentage(reviewCount, bakery.getKeywordKindCount()))
             .zeroWastePercent(calculatorPercentage(reviewCount, bakery.getKeywordZeroWasteCount()))
             .build();
