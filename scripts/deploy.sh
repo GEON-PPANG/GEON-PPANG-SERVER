@@ -8,7 +8,7 @@ DEPLOY_PATH=/home/ubuntu/app/nonstop/jar/
 cp $BUILD_PATH $DEPLOY_PATH
 
 echo "> 현재 구동중인 Set 확인"
-CURRENT_PROFILE=$(curl -s http://localhost/profile)
+CURRENT_PROFILE=$(curl -s https://www.gunbbang.org/profile)
 echo "> $CURRENT_PROFILE"
 
 # 쉬고 있는 set 찾기: set1이 사용중이면 set2가 쉬고 있고, 반대면 set1이 쉬고 있음
@@ -60,7 +60,7 @@ nohup java -jar -Duser.timezone=Asia/Seoul -Dspring.profiles.active=$IDLE_PROFIL
 current_datetime=$(date "+%Y년 %m월 %d일 %H시 %M분 %S초")
 echo "배포된 시간: $current_datetime"
 echo "> $IDLE_PROFILE 10초 후 Health check 시작"
-echo "> curl -s http://localhost:$IDLE_PORT/health "
+echo "> curl -s http://localhost:$IDLE_PORT/actuator/health "
 sleep 10
 
 # health check부분
