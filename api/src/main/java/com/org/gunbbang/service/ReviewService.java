@@ -39,8 +39,7 @@ public class ReviewService {
   public Long createReview(Long bakeryId, ReviewRequestDTO reviewRequestDto) {
     Long currentMemberId = SecurityUtil.getLoginMemberId();
 
-    if (reviewRequestDto.getIsLike().equals(Boolean.FALSE)
-        && !reviewRequestDto.getKeywordList().isEmpty()) {
+    if (!reviewRequestDto.getIsLike() && !reviewRequestDto.getKeywordList().isEmpty()) {
       throw new BadRequestException(ErrorType.REQUEST_ISNOTLIKE_KEYWORDLIST_VALIDATION_EXCEPTION);
     }
 
