@@ -72,6 +72,11 @@ public class ReviewService {
 
   private void createReviewRecommendKeyword(
       List<RecommendKeywordNameRequestDTO> keywordNameRequestDtoList, Long reviewId) {
+
+    if (keywordNameRequestDtoList.isEmpty()) {
+      throw new BadRequestException(ErrorType.REQUEST_KEYWORDLIST_VALIDATION_EXCEPTION);
+    }
+
     Review review =
         reviewRepository
             .findById(reviewId)
