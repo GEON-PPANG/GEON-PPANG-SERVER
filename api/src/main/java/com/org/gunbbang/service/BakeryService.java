@@ -45,10 +45,10 @@ public class BakeryService {
       boolean isDessert,
       boolean isBrunch) {
     Long memberBreadTypeId = SecurityUtil.getLoginMemberBreadTypeId();
-    if (Objects.equals(
-            memberBreadTypeId,
+    if (memberBreadTypeId.equals(
             breadTypeRepository
-                .findByBreadTypeName("빵유형 필터 선택 안함")
+                .findBreadTypeByIsGlutenFreeAndIsVeganAndIsNutFreeAndIsSugarFree(
+                    false, false, false, false)
                 .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION))
                 .getBreadTypeId())
         && personalFilter) throw new BadRequestException(ErrorType.PERSONAL_FILTER_EXCEPTION);
