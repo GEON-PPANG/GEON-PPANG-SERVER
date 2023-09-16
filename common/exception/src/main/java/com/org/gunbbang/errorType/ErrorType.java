@@ -23,6 +23,7 @@ public enum ErrorType {
   PARAMETER_TYPE_MISMATCH_EXCEPTION(HttpStatus.BAD_REQUEST, "요청 값의 타입이 올바르지 않습니다"),
   REQUEST_BIND_EXCEPTION(HttpStatus.BAD_REQUEST, "요청 값 바인딩에 실패했습니다"),
   LOGIN_FAIL_EXCEPTION(HttpStatus.BAD_REQUEST, "로그인에 실패하였습니다. 아이디나 비밀번호 확인해주세요"),
+  PERSONAL_FILTER_EXCEPTION(HttpStatus.BAD_REQUEST, "필터 선택을 하지 않은 경우 맞춤 필터링을 적용할 수 없습니다"),
 
   /** 401 */
   ABUSED_REFRESH_TOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "토큰 재발급 실패"),

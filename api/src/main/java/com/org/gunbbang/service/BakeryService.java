@@ -1,5 +1,6 @@
 package com.org.gunbbang.service;
 
+import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.CategoryType;
 import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.NotFoundException;
@@ -44,6 +45,14 @@ public class BakeryService {
       boolean isDessert,
       boolean isBrunch) {
     Long memberBreadTypeId = SecurityUtil.getLoginMemberBreadTypeId();
+    if (Objects.equals(
+            memberBreadTypeId,
+            breadTypeRepository
+                .findByBreadTypeName("빵유형 필터 선택 안함")
+                .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION))
+                .getBreadTypeId())
+        && personalFilter) throw new BadRequestException(ErrorType.PERSONAL_FILTER_EXCEPTION);
+
     List<Category> categoryList = getCategoryList(isHard, isDessert, isBrunch);
     List<Bakery> bakeryList =
         getFilteredAndSortedBakeryList(
