@@ -24,7 +24,6 @@ public enum ErrorType {
   REQUEST_BIND_EXCEPTION(HttpStatus.BAD_REQUEST, "요청 값 바인딩에 실패했습니다"),
   LOGIN_FAIL_EXCEPTION(HttpStatus.BAD_REQUEST, "로그인에 실패하였습니다. 아이디나 비밀번호 확인해주세요"),
   PERSONAL_FILTER_EXCEPTION(HttpStatus.BAD_REQUEST, "필터 선택을 하지 않은 경우 맞춤 필터링을 적용할 수 없습니다"),
-
   /** 401 */
   ABUSED_REFRESH_TOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "토큰 재발급 실패"),
   NOT_VALID_TOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다"),

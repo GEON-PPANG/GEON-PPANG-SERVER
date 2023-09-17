@@ -114,16 +114,20 @@ public class MemberService {
         nutrientTypeResponseDTO);
   }
 
-  public void checkDuplicatedNickname(String nickname) {
+  public ValidationResponseDTO checkDuplicatedNickname(String nickname) {
     if (memberRepository.findByNickname(nickname).isPresent()) {
       throw new BadRequestException(ErrorType.ALREADY_EXIST_NICKNAME_EXCEPTION);
     }
+
+    return ValidationResponseDTO.builder().isAvailable(true).build();
   }
 
-  public void checkDuplicatedEmail(String email) {
+  public ValidationResponseDTO checkDuplicatedEmail(String email) {
     if (memberRepository.findByEmail(email).isPresent()) {
       throw new BadRequestException(ErrorType.ALREADY_EXIST_EMAIL_EXCEPTION);
     }
+
+    return ValidationResponseDTO.builder().isAvailable(true).build();
   }
 
   public MemberWithdrawResponseDTO withdraw(Long memberId, String appleRefreshToken)
