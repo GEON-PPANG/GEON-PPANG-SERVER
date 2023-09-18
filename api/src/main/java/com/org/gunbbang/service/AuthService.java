@@ -12,7 +12,6 @@ import com.org.gunbbang.repository.BreadTypeRepository;
 import com.org.gunbbang.repository.MemberRepository;
 import com.org.gunbbang.repository.NutrientTypeRepository;
 import com.org.gunbbang.service.VO.SignedUpMemberVO;
-import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -89,7 +88,7 @@ public abstract class AuthService {
     return Member.builder()
         .platformType(request.getPlatformType())
         .email(email)
-        .nickname(Role.GUEST.name() + " " + UUID.randomUUID())
+        .nickname(Role.GUEST.name())
         .role(Role.GUEST)
         .breadType(defaultBreadType)
         .nutrientType(defaultNutrientType)
