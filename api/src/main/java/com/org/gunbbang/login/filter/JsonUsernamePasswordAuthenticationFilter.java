@@ -20,6 +20,7 @@ public class JsonUsernamePasswordAuthenticationFilter
   private static final String DEFAULT_LOGIN_REQUEST_URL = "/auth/login";
   private static final String HTTP_METHOD = "POST";
   private static final String CONTENT_TYPE = "application/json";
+  private static final String CONTENT_TYPE_UTF_8 = "application/json; charset=utf-8";
   private static final String USERNAME_KEY = "email";
   private static final String PASSWORD_KEY = "password";
   private static final AntPathRequestMatcher DEFAULT_LOGIN_PATH_REQUEST_MATCHER =
@@ -39,7 +40,9 @@ public class JsonUsernamePasswordAuthenticationFilter
       throws AuthenticationException, IOException {
 
     // request ContentType이 application/json이 아닌 경우 에러
-    if (request.getContentType() == null || !request.getContentType().equals(CONTENT_TYPE)) {
+    if (request.getContentType() == null
+        || (!request.getContentType().equals(CONTENT_TYPE)
+            && !request.getContentType().equals(CONTENT_TYPE_UTF_8))) {
       throw new AuthenticationServiceException(
           "Authentication Content-Type not supported: " + request.getContentType());
     }
