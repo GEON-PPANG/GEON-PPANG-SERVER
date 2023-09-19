@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-// TODO: AuthService으로 이름을 변경하고 MemberService 내에 구현되어있는 회원가입/회원탈퇴/로그아웃 등등을 빼는건 어떤지?
 public class AuthServiceProvider {
   private static final Map<PlatformType, AuthService> authSerivceMap = new HashMap<>();
 
