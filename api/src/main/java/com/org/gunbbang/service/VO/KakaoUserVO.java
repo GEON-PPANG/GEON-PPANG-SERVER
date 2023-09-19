@@ -2,6 +2,7 @@ package com.org.gunbbang.service.VO;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
@@ -15,6 +16,22 @@ public class KakaoUserVO {
   @Getter
   @JsonIgnoreProperties(ignoreUnknown = true)
   public static class KakaoAccount {
-    private String email;
+    @NotNull private String email;
+    private Boolean age_range_needs_agreement;
+    private String age_range;
+    private Boolean gender_needs_agreement;
+    private String gender;
+  }
+
+  @Override
+  public String toString() {
+    return "KakaoUserVO{"
+        + "id="
+        + id
+        + "age_range_need_agreement="
+        + kakaoAccount.getAge_range_needs_agreement()
+        + "gender_need_agreement="
+        + kakaoAccount.getGender_needs_agreement()
+        + '}';
   }
 }
