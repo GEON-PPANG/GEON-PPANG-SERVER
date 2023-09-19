@@ -68,7 +68,6 @@ public class KakaoAuthService extends AuthService {
       }
 
       Member savedMember = saveUser(request, userInfoVO.getKakaoAccount().getEmail());
-      System.out.println(userInfoVO);
 
       if (!userInfoVO.getKakaoAccount().getAge_range_needs_agreement()
           || !userInfoVO.getKakaoAccount().getGender_needs_agreement()) {
