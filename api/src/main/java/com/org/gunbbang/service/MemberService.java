@@ -142,6 +142,11 @@ public class MemberService {
       throw new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION);
     }
 
+    if (deletedMemberCount != !) {
+      // 에러처리
+      throw new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION);
+    }
+
     SecurityContextHolder.clearContext();
     return MemberWithdrawResponseDTO.builder().memberId(memberId).build();
   }
