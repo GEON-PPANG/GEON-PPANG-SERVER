@@ -12,9 +12,11 @@ import com.org.gunbbang.repository.BreadTypeRepository;
 import com.org.gunbbang.repository.MemberRepository;
 import com.org.gunbbang.repository.NutrientTypeRepository;
 import com.org.gunbbang.service.VO.SignedUpMemberVO;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+@Transactional
 public abstract class AuthService {
   private final MemberRepository memberRepository;
   private final BreadTypeRepository breadTypeRepository;
