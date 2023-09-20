@@ -102,6 +102,7 @@ public class ApiControllerAdviser {
   protected ResponseEntity<ApiResponse> handleException(
       final Exception e, HttpServletRequest request) throws Exception {
     slackSender.sendAlert(e, request);
+    e.printStackTrace();
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(ApiResponse.error(ErrorType.INTERNAL_SERVER_ERROR));
   }
