@@ -34,7 +34,7 @@ jobs:
       run: |
         pwd
         ## create application.yml in api module
-        mkdir ./api/src/main/resources 
+        ## mkdir ./api/src/main/resources 
         cd ./api/src/main/resources
         touch ./application.yml
         ls -al
@@ -42,7 +42,7 @@ jobs:
         
         
         ## create application.yml in client module
-        ## mkdir ./client/client-feign/src/main/resources
+        mkdir ./client/client-feign/src/main/resources
         cd ./client/client-feign/src/main/resources
         touch ./application.yml
         touch ./client.yml    
