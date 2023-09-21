@@ -141,7 +141,7 @@ public class MemberService {
   }
 
   public ValidationResponseDTO checkDuplicatedEmail(String email) {
-    if (memberRepository.findByEmail(email).isPresent()) {
+    if (!memberRepository.findAllByEmail(email).isEmpty()) {
       throw new BadRequestException(ErrorType.ALREADY_EXIST_EMAIL_EXCEPTION);
     }
 

@@ -1,5 +1,6 @@
 package com.org.gunbbang.login.service;
 
+import com.org.gunbbang.PlatformType;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.login.CustomUserDetails;
 import com.org.gunbbang.repository.MemberRepository;
@@ -22,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
   public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
     Member member =
         memberRepository
-            .findByEmail(userName)
+            .findByEmailAndPlatformType(userName, PlatformType.NONE)
             .orElseThrow(
                 () -> new UsernameNotFoundException("해당 이메일이 존재하지 않습니다. 이메일: " + userName));
 

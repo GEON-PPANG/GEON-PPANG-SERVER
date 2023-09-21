@@ -161,8 +161,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         new UsernamePasswordAuthenticationToken(
             userDetailsUser, // principle
             null, // credential (보통 비밀번호. 인증 시에는 null로 들어감)
-            authoritiesMapper.mapAuthorities(
-                userDetailsUser.getAuthorities())); // 여기서 반환되는 값이 달라져야할거같은디
+            authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));
 
     // SecurityContext에 Authentication 객체 저장
     SecurityContextHolder.getContext().setAuthentication(authentication);

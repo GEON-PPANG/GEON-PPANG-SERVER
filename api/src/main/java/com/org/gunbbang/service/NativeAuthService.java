@@ -42,7 +42,10 @@ public class NativeAuthService extends AuthService {
               + request.getEmail());
     }
 
-    if (memberRepository.findByEmail(request.getEmail()).isPresent()) {
+    // 자체로그인에서만 email 중복 비허용
+    if (memberRepository
+        .findByEmailAndPlatformType(request.getEmail(), request.getPlatformType())
+        .isPresent()) {
       throw new BadRequestException(ErrorType.ALREADY_EXIST_EMAIL_EXCEPTION);
     }
 
