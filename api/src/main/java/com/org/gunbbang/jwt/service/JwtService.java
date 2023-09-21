@@ -80,7 +80,7 @@ public class JwtService {
 
     if (vo.getRole().equals(Role.USER)) {
       String refreshToken = createRefreshToken();
-      updateRefreshToken(vo.getEmail(), refreshToken);
+      updateRefreshTokenByMemberId(vo.getMemberId(), refreshToken);
       response.setHeader(refreshHeader, refreshToken);
     }
 
@@ -235,9 +235,9 @@ public class JwtService {
     }
   }
 
-  public void updateRefreshToken(String email, String refreshToken) {
+  public void updateRefreshTokenByMemberId(Long memberId, String refreshToken) {
     memberRepository
-        .findByEmail(email)
+        .findById(memberId)
         .ifPresent(
             member -> {
               member.updateRefreshToken(refreshToken);
