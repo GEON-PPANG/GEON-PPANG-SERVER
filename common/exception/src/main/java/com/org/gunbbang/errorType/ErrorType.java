@@ -44,11 +44,11 @@ public enum ErrorType {
   NOT_FOUND_BREAD_TYPE_EXCEPTION(
       HttpStatus.NOT_FOUND, "존재하지 않는 빵유형 타입입니다. breadTypeId from request: "),
   NOT_FOUND_NUTRIENT_EXCEPTION(
-      HttpStatus.NOT_FOUND, "존재하지 않는 영양성분 타입입니다. ingredientId from reqeust: "),
+      HttpStatus.NOT_FOUND, "존재하지 않는 영양성분 타입입니다. ingredientId from request: "),
   NOT_FOUND_SAVE_REVIEW_EXCEPTION(HttpStatus.NOT_FOUND, "리뷰 저장에 실패했습니다"),
-  NOT_FOUND_REVIEW_EXCEPTION(HttpStatus.NOT_FOUND, "존재하지 않는 리뷰입니다"),
-  NOT_FOUND_CATEGORY_EXCEPTION(HttpStatus.NOT_FOUND, "해당 카테고리를 찾을 수 없습니다"),
-  NOT_FOUND_MEMBER_NICKNAME_EXCEPTION(HttpStatus.NOT_FOUND, "해당 카테고리를 찾을 수 없습니다"),
+  NOT_FOUND_REVIEW_EXCEPTION(HttpStatus.NOT_FOUND, "존재하지 않는 리뷰입니다 reviewId: "),
+  NOT_FOUND_CATEGORY_EXCEPTION(HttpStatus.NOT_FOUND, "해당 카테고리를 찾을 수 없습니다 categoryId: "),
+  NOT_FOUND_MEMBER_NICKNAME_EXCEPTION(HttpStatus.NOT_FOUND, "해당 카테고리를 찾을 수 없습니다 categoryId:"),
 
   /** 409 CONFLICT */
   ALREADY_EXIST_USER_EXCEPTION(HttpStatus.CONFLICT, "이미 존재하는 유저입니다"),
