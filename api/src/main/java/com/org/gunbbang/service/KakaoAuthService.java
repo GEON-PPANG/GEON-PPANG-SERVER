@@ -53,6 +53,7 @@ public class KakaoAuthService extends AuthService {
 
       // KakaoOAuthUserInfo 로 반환 받은 값으로 바로 회원가입되게 변경
       KakaoUserVO userInfoVO = objectMapper.readValue(response, KakaoUserVO.class);
+      System.out.println("userInfoVO: " + userInfoVO.toString());
 
       Member foundMember =
           getUser(request.getPlatformType(), userInfoVO.getKakaoAccount().getEmail());
