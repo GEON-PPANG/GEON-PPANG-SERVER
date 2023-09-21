@@ -78,7 +78,7 @@ public class AppleJwtService {
 
       return appleSecret;
     } catch (Exception e) {
-      log.warn("apple secret 키를 발급하는데 에러가 발생했습니다 {}", e.getMessage());
+      log.error("%%%%%%%%%% apple secret 키를 발급하는데 에러가 발생했습니다 {} %%%%%%%%%%", e.getMessage());
       throw e;
     }
   }
@@ -108,8 +108,9 @@ public class AppleJwtService {
       return getEmailFromClaims(identityToken, appleKey);
 
     } catch (Exception e) {
-      log.warn(
-          "애플 key 가져오는 과정에서 에러 발생. 에러클래스: {} 에러메시지: {} ", e.getClass().getName(), e.getMessage());
+      log.error(
+          "%%%%%%%%%% 애플 key 가져오는 과정에서 에러 발생. 에러클래스: {} 에러메시지: {} %%%%%%%%%%",
+          e.getClass().getName(), e.getMessage());
       throw e;
     }
   }
@@ -124,10 +125,9 @@ public class AppleJwtService {
               .verify(identityToken);
       return decodedIdentitytoken.getClaim(EMAIL_CLAIM).asString();
     } catch (Exception e) {
-      log.warn(
-          "애플 claim에서 email을 가져오는데 실패했습니다. 에러메시지: {} 에러클래스: {}",
-          e.getMessage(),
-          e.getClass().getName());
+      log.error(
+          "%%%%%%%%%% 애플 claim에서 email을 가져오는데 실패했습니다. 에러메시지: {} 에러클래스: {} %%%%%%%%%%",
+          e.getMessage(), e.getClass().getName());
       throw e;
     }
   }
@@ -144,7 +144,10 @@ public class AppleJwtService {
       KeyFactory keyFactory = KeyFactory.getInstance(appleKey.getKty());
       return keyFactory.generatePublic(publicKeySpec);
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-      throw new RuntimeException(e);
+      log.error(
+          "%%%%%%%%%% 애플 claim에서 email을 가져오는데 실패했습니다. 에러메시지: {} 에러클래스: {} %%%%%%%%%%",
+          e.getMessage(), e.getClass().getName());
+      throw new RuntimeException();
     }
   }
 
@@ -161,7 +164,7 @@ public class AppleJwtService {
     try {
       appleFeignClient.revokeAppleToken(request);
     } catch (Exception e) {
-      log.warn("애플 리프레시 토큰을 revoke하는 과정에서 에러 발생: {}", e.getMessage());
+      log.error(" %%%%%%%%%% 애플 리프레시 토큰을 revoke하는 과정에서 에러 발생: {}", e.getMessage());
       throw new AppleTokenRevokeException(ErrorType.REVOKE_APPLE_REFRESH_TOKEN_FAIL_EXCEPTION);
     }
   }
@@ -178,7 +181,8 @@ public class AppleJwtService {
     try {
       return appleFeignClient.validateAuthorizationCode(request);
     } catch (Exception e) {
-      log.warn("애플 authorization code를 validate하는 과정에서 에러 발생: {}", e.getMessage());
+      log.error(
+          "%%%%%%%%%% 애플 authorization code를 validate하는 과정에서 에러 발생: {} %%%%%%%%%%", e.getMessage());
       throw new InvalidAppleAuthTokenException(ErrorType.INVALID_APPLE_AUTH_TOKEN_EXCEPTION);
     }
   }

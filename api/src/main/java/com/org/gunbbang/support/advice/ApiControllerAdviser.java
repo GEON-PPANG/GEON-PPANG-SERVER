@@ -8,6 +8,7 @@ import com.org.gunbbang.support.slack.SlackSender;
 import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -21,6 +22,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 @RestControllerAdvice
 @RequiredArgsConstructor
+@Slf4j
 public class ApiControllerAdviser {
 
   private final SlackSender slackSender;
@@ -70,6 +72,7 @@ public class ApiControllerAdviser {
   @ExceptionHandler(SignatureVerificationException.class)
   public ResponseEntity<ApiResponse> handleSignatureVerificationException(
       final SignatureVerificationException e) {
+    e.printStackTrace();
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
         .body(ApiResponse.error(ErrorType.NOT_VALID_TOKEN_EXCEPTION));
   }
@@ -81,19 +84,22 @@ public class ApiControllerAdviser {
   }
 
   @ExceptionHandler(JWTDecodeException.class)
-  public ResponseEntity<ApiResponse> handleJWTDecodeException() {
+  public ResponseEntity<ApiResponse> handleJWTDecodeException(JWTDecodeException e) {
+    e.printStackTrace();
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
         .body(ApiResponse.error(ErrorType.JWT_DECODE_FAIL_EXCEPTION));
   }
 
   @ExceptionHandler(JWTVerificationException.class)
   public ResponseEntity<ApiResponse> handleJWTVerificationException(Exception e) {
+    e.printStackTrace();
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
         .body(ApiResponse.error(401, e.getMessage()));
   }
 
   @ExceptionHandler(HandleException.class)
   protected ResponseEntity<ApiResponse> handleCustomException(final HandleException e) {
+    log.error("%%%%%%%%%% " + e.getMessage() + " %%%%%%%%%%");
     return ResponseEntity.status(e.getHttpStatus())
         .body(ApiResponse.error(e.getErrorType(), e.getMessage()));
   }
@@ -102,6 +108,7 @@ public class ApiControllerAdviser {
   protected ResponseEntity<ApiResponse> handleException(
       final Exception e, HttpServletRequest request) throws Exception {
     slackSender.sendAlert(e, request);
+    log.error("%%%%%%%%%% " + e.getMessage() + "%%%%%%%%%%");
     e.printStackTrace();
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(ApiResponse.error(ErrorType.INTERNAL_SERVER_ERROR));

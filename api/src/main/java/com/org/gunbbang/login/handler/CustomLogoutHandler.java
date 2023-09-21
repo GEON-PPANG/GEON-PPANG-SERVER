@@ -23,18 +23,22 @@ public class CustomLogoutHandler implements LogoutHandler {
   @Override
   public void logout(
       HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-    log.info("CustomLogoutHandler 진입");
+    log.info("########## CustomLogoutHandler 진입 ##########");
 
     Long memberId = SecurityUtil.getLoginMemberId();
     Member foundMember =
         memberRepository
             .findById(memberId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_USER_EXCEPTION,
+                        ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberId));
     foundMember.updateRefreshToken(null);
     memberRepository.saveAndFlush(foundMember);
 
     SecurityContextHolder.clearContext();
 
-    log.info("로그아웃 성공. memberId : {} ", memberId);
+    log.info("########## 로그아웃 성공. memberId : {} ##########", memberId);
   }
 }

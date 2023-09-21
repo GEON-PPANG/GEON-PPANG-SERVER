@@ -6,7 +6,6 @@ import com.org.gunbbang.controller.DTO.response.ReviewReportResponseDTO;
 import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.service.ReviewReportService;
 import com.org.gunbbang.util.security.SecurityUtil;
-import java.io.IOException;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +19,7 @@ public class ReportController {
   @PostMapping("/review/{reviewId}")
   public ApiResponse<ReviewReportResponseDTO> createReviewReport(
       @RequestBody @Valid final ReviewReportRequestDTO request,
-      @PathVariable("reviewId") final Long reviewId)
-      throws IOException {
+      @PathVariable("reviewId") final Long reviewId) {
     Long memberId = SecurityUtil.getLoginMemberId();
     return ApiResponse.success(
         SuccessType.CREATE_REVIEW_REPORT_SUCCESS,

@@ -23,7 +23,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     Member member =
         memberRepository
             .findByEmail(userName)
-            .orElseThrow(() -> new UsernameNotFoundException("해당 이메일이 존재하지 않습니다."));
+            .orElseThrow(
+                () -> new UsernameNotFoundException("해당 이메일이 존재하지 않습니다. 이메일: " + userName));
 
     CustomUserDetails userDetailsUser =
         new CustomUserDetails(

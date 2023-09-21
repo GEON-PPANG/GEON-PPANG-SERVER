@@ -13,11 +13,13 @@ import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class SlackSender {
 
   private static final String DOUBLE_NEW_LINE = "\n\n";
@@ -41,17 +43,30 @@ public class SlackSender {
 
   private final StringBuilder sb = new StringBuilder();
 
-  public void sendReviewReportMessage(ReviewReportSlackVO vo) throws IOException {
+  public void sendReviewReportMessage(ReviewReportSlackVO vo) {
     List layoutBlocks = generateReportLayoutBlock(vo);
-
-    if (Boolean.parseBoolean(isActive)) {
-      Slack.getInstance()
-          .send(reportWebhookUrl, WebhookPayloads.payload(p -> p.blocks(layoutBlocks)));
+    try {
+      if (Boolean.parseBoolean(isActive)) {
+        Slack.getInstance()
+            .send(reportWebhookUrl, WebhookPayloads.payload(p -> p.blocks(layoutBlocks)));
+      }
+    } catch (IOException e) {
+      log.error(
+          "%%%%%%%%%% 슬랙 에러 메시지 전송하는 과정에서 IOException 발생. 에러 메시지: {}  %%%%%%%%%%", e.getMessage());
+      e.printStackTrace();
     }
   }
 
   public void sendAlert(Exception error, HttpServletRequest request) throws IOException {
     List layoutBlocks = generateLayoutBlock(error, request);
+    if (Boolean.parseBoolean(isActive)) {
+      Slack.getInstance()
+          .send(errorWebhookUrl, WebhookPayloads.payload(p -> p.blocks(layoutBlocks)));
+    }
+  }
+
+  public void sendAlertWithMessage(Exception error, HttpServletRequest request) throws IOException {
+    List layoutBlocks = generateLayoutBlockWithMessage(error, request, error.getMessage());
     if (Boolean.parseBoolean(isActive)) {
       Slack.getInstance()
           .send(errorWebhookUrl, WebhookPayloads.payload(p -> p.blocks(layoutBlocks)));
@@ -75,6 +90,18 @@ public class SlackSender {
         Blocks.divider(),
         getSection(generateErrorPointMessage(request)),
         Blocks.divider());
+  }
+
+  private List generateLayoutBlockWithMessage(
+      Exception error, HttpServletRequest request, String message) {
+    return Blocks.asBlocks(
+        getHeader(ERROR_MESSAGE_TITLE),
+        Blocks.divider(),
+        getSection(generateErrorMessage(error)),
+        Blocks.divider(),
+        getSection(generateErrorPointMessage(request)),
+        Blocks.divider(),
+        getSection(message));
   }
 
   private String generateErrorMessage(Exception error) {
@@ -109,6 +136,10 @@ public class SlackSender {
         + error.getStackTrace()[2].toString()
         + NEW_LINE
         + error.getStackTrace()[3].toString()
+        + NEW_LINE
+        + error.getStackTrace()[4].toString()
+        + NEW_LINE
+        + error.getStackTrace()[5].toString()
         + NEW_LINE;
   }
 

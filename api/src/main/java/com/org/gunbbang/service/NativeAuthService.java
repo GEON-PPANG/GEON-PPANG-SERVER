@@ -32,11 +32,9 @@ public class NativeAuthService extends AuthService {
     if (isNullOrBlank(request.getPassword())
         || isNullOrBlank(request.getNickname())
         || isNullOrBlank(request.getEmail())) {
-      log.warn(
-          "자체로그인 시 필요한 요청 값이 오지 않음. pwd: {} nickname: {} email: {}",
-          request.getPassword(),
-          request.getNickname(),
-          request.getEmail());
+      log.error(
+          "%%%%%%%%%% 자체로그인 시 필요한 요청 값이 오지 않음. pwd: {} nickname: {} email: {} %%%%%%%%%%",
+          request.getPassword(), request.getNickname(), request.getEmail());
       throw new BadRequestException(
           ErrorType.NO_REQUEST_PARAMETER_EXCEPTION,
           ErrorType.NO_REQUEST_PARAMETER_EXCEPTION.getMessage()
