@@ -13,7 +13,6 @@ import com.org.gunbbang.repository.ReviewRepository;
 import com.org.gunbbang.service.VO.ReviewReportSlackVO;
 import com.org.gunbbang.support.slack.SlackSender;
 import com.org.gunbbang.util.mapper.ReviewReportMapper;
-import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,15 +25,23 @@ public class ReviewReportService {
   private final SlackSender slackSender;
 
   public ReviewReportResponseDTO createReviewReport(
-      ReviewReportRequestDTO request, Long memberId, Long reviewId) throws IOException {
+      ReviewReportRequestDTO request, Long memberId, Long reviewId) {
     Member foundMember =
         memberRepository
             .findById(memberId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_USER_EXCEPTION,
+                        ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberId));
     Review foundReview =
         reviewRepository
             .findById(reviewId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_REVIEW_EXCEPTION));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_REVIEW_EXCEPTION,
+                        ErrorType.NOT_FOUND_REVIEW_EXCEPTION.getMessage() + reviewId));
 
     ReviewReport reviewReport =
         ReviewReportMapper.INSTANCE.toReviewReportEntity(request, foundMember, foundReview);
@@ -47,8 +54,7 @@ public class ReviewReportService {
         .build();
   }
 
-  private void sendReviewReportMessage(Review review, ReviewReport reviewReport)
-      throws IOException {
+  private void sendReviewReportMessage(Review review, ReviewReport reviewReport) {
     ReviewReportSlackVO vo =
         ReviewReportMapper.INSTANCE.toReviewReportSlackVO(review, reviewReport);
     slackSender.sendReviewReportMessage(vo);

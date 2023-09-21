@@ -26,12 +26,20 @@ public class BookMarkService {
     Bakery foundBakery =
         bakeryRepository
             .findById(bakeryId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_BAKERY_EXCEPTION,
+                        ErrorType.NOT_FOUND_BAKERY_EXCEPTION.getMessage() + bakeryId));
 
     Member foundMember =
         memberRepository
             .findById(memberId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_USER_EXCEPTION,
+                        ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberId));
 
     Optional<BookMark> foundBookMark =
         bookMarkRepository.findByMemberIdAndBakeryId(memberId, bakeryId);

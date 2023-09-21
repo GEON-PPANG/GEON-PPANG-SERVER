@@ -21,7 +21,7 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
   public void onAuthenticationFailure(
       HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
       throws IOException {
-    log.warn("로그인 실패. error message: {}", exception.getMessage());
+    log.warn("@@@@@@@@@@ 로그인 실패. error message: {} @@@@@@@@@@", exception.getMessage());
     ApiResponse.sendErrorResponseBody(response, objectMapper, ErrorType.LOGIN_FAIL_EXCEPTION);
   }
 }
