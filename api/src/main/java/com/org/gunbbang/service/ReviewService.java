@@ -46,11 +46,19 @@ public class ReviewService {
     Member member =
         memberRepository
             .findById(currentMemberId)
-            .orElseThrow(() -> new BadRequestException(ErrorType.TOKEN_TIME_EXPIRED_EXCEPTION));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_USER_EXCEPTION,
+                        ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + currentMemberId));
     Bakery bakery =
         bakeryRepository
             .findById(bakeryId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_BAKERY_EXCEPTION,
+                        ErrorType.NOT_FOUND_BAKERY_EXCEPTION.getMessage() + bakeryId));
     Review review =
         reviewRepository.saveAndFlush(
             Review.builder()
@@ -79,16 +87,30 @@ public class ReviewService {
     Review review =
         reviewRepository
             .findById(reviewId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_REVIEW_EXCEPTION));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_REVIEW_EXCEPTION,
+                        ErrorType.NOT_FOUND_REVIEW_EXCEPTION.getMessage() + reviewId));
     Bakery bakery =
         bakeryRepository
             .findById(review.getBakery().getBakeryId())
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_BAKERY_EXCEPTION,
+                        ErrorType.NOT_FOUND_BAKERY_EXCEPTION.getMessage()
+                            + review.getBakery().getBakeryId()));
     for (RecommendKeywordNameRequestDTO keyword : keywordNameRequestDtoList) {
       RecommendKeyword recommendKeyword =
           recommendKeywordRepository
               .findByKeywordName(keyword.getKeywordName().getMessage())
-              .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_CATEGORY_EXCEPTION));
+              .orElseThrow(
+                  () ->
+                      new NotFoundException(
+                          ErrorType.NOT_FOUND_CATEGORY_EXCEPTION,
+                          ErrorType.NOT_FOUND_CATEGORY_EXCEPTION.getMessage()
+                              + keyword.getKeywordName().getMessage()));
       reviewRecommendKeywordRepository.saveAndFlush(
           ReviewRecommendKeyword.builder()
               .recommendKeyword(recommendKeyword)
@@ -104,7 +126,11 @@ public class ReviewService {
     Review review =
         reviewRepository
             .findById(reviewId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_REVIEW_EXCEPTION));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_REVIEW_EXCEPTION,
+                        ErrorType.NOT_FOUND_REVIEW_EXCEPTION.getMessage() + reviewId));
     if (currentMemberId.equals(review.getMember().getMemberId())) {
       List<RecommendKeywordResponseDTO> recommendKeywordList =
           getRecommendKeywordListResponseDTO(review);
@@ -118,7 +144,11 @@ public class ReviewService {
     Bakery bakery =
         bakeryRepository
             .findById(bakeryId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BAKERY_EXCEPTION));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_BAKERY_EXCEPTION,
+                        ErrorType.NOT_FOUND_BAKERY_EXCEPTION.getMessage() + bakeryId));
     List<Review> reviewList = reviewRepository.findAllByBakeryOrderByCreatedAtDesc(bakery);
     List<ReviewResponseDTO> reviewListDto = new ArrayList<>();
     long reviewCount = bakery.getReviewCount();
@@ -183,10 +213,14 @@ public class ReviewService {
     Member foundMember =
         memberRepository
             .findById(memberId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_USER_EXCEPTION,
+                        ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberId));
 
     if (isFilterNotSelected(foundMember)) {
-      log.info("회원이 필터 선택 안한 경우. 랜덤으로 10개 리뷰 반환");
+      log.info("########## 회원이 필터 선택 안한 경우. 랜덤으로 10개 리뷰 반환 ##########");
       PageRequest randomPageRequest = PageRequest.of(0, maxBestBakeryCount);
       List<Review> randomReviews =
           reviewRepository.findRandomReviews(randomPageRequest); // 랜덤 리뷰 10개 조회
@@ -195,11 +229,11 @@ public class ReviewService {
 
     List<BestReviewDTO> bestReviews = getBestReviews(foundMember);
     if (bestReviews.size() == maxBestBakeryCount) {
-      log.info("베스트 리뷰 10개 조회 완료. 추가 조회 쿼리 없이 바로 반환");
+      log.info("########## 베스트 리뷰 10개 조회 완료. 추가 조회 쿼리 없이 바로 반환 ##########");
       return getBestReviewListResponseDTOs(bestReviews);
     }
 
-    log.info("랜덤 리뷰 조회 시작. 현재까지 조회된 리뷰 수: {}", bestReviews.size());
+    log.info("########## 랜덤 리뷰 조회 시작. 현재까지 조회된 리뷰 수: {} ##########", bestReviews.size());
     List<Long> alreadyFoundReviewIds = new ArrayList<>();
     alreadyFoundReviewIds.add(-1L);
     getRestReviewsRandomly(alreadyFoundReviewIds, bestReviews);

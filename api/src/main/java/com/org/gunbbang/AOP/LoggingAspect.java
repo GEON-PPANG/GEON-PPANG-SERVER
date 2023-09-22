@@ -59,7 +59,7 @@ public class LoggingAspect {
             //                apiInfo.getMemberId()
             );
 
-    log.warn("리뷰 id 로깅");
+    log.info("리뷰 id 로깅");
     return doLogging(joinPoint, reviewIdLogInfo);
   }
 
@@ -148,7 +148,7 @@ public class LoggingAspect {
             //                apiInfo.getMemberId()
             );
 
-    log.warn("서치 로깅");
+    log.info("서치 로깅");
     return doLogging(joinPoint, searchLogInfo);
   }
 

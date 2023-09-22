@@ -1,7 +1,6 @@
 package com.org.gunbbang.jwt.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.CustomJwtTokenException;
 import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.common.DTO.ApiResponse;
@@ -58,8 +57,6 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
   protected void doFilterInternal(
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
-    log.info("JwtAuthenticationProcessingFilter 진입 시작.");
-
     if (!jwtService.isAccessTokenExist(request)) {
       throw new CustomJwtTokenException(ErrorType.NOT_EXIST_ACCESS_TOKEN_EXCEPTION);
     }
@@ -77,32 +74,41 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
   private void refreshAccessAndRefreshTokens(
       HttpServletRequest request, HttpServletResponse response) throws IOException {
-    log.info("토큰 리프레시 접근 요청 처리 시작.");
+    log.info("########## 토큰 리프레시 접근 요청 처리 시작 ##########");
 
     String accessToken = jwtService.extractAccessTokenAsString(request);
     String refreshToken = jwtService.extractRefreshTokenAsString(request);
 
     // at가 만료되지 않을 경우 에러
     if (!jwtService.isTokenExpired(accessToken)) {
-      log.info("만료되지 않은 엑세스 토큰을 재발급하려는 시도");
-      throw new CustomJwtTokenException(ErrorType.NOT_EXPIRED_ACCESS_TOKEN_EXCEPTION);
+      log.warn("@@@@@@@@@@ 만료되지 않은 엑세스 토큰을 재발급하려는 시도 @@@@@@@@@@");
+      Long memberId = jwtService.extractMemberIdClaim(accessToken);
+      throw new CustomJwtTokenException(
+          ErrorType.NOT_EXPIRED_ACCESS_TOKEN_EXCEPTION,
+          ErrorType.NOT_EXPIRED_ACCESS_TOKEN_EXCEPTION.getMessage() + memberId.toString());
     }
 
     Long memberId = jwtService.extractMemberIdClaimFromExpiredToken(accessToken);
     Member foundMember =
         memberRepository
             .findById(memberId)
-            .orElseThrow(() -> new BadRequestException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_USER_EXCEPTION,
+                        ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberId));
 
     // 해당 member의 rt가 요청에서 온 rt랑 일치하는지 판단, 일치하지 않는 경우는 이미 해당 rt로 재발급을 한번은 했다는 의미이므로
     // 이 경우에는 해당 rt를 invalid 처리함
     if (foundMember.getRefreshToken() != null
         && !foundMember.getRefreshToken().equals(refreshToken)) {
-      log.info("재발급 용도로 한번 사용된 정황이 의심되는 rt를 다시 사용하려는 시도. 로그인 페이지로 이동 요청");
-      log.info("요청으로 온 rt: {}", refreshToken);
-      log.info("DB에서 조회된 rt: {}", foundMember.getRefreshToken());
+      log.warn("@@@@@@@@@@ 재발급 용도로 한번 사용된 정황이 의심되는 rt를 다시 사용하려는 시도. 로그인 페이지로 이동 요청 @@@@@@@@@@");
+      log.warn("@@@@@@@@@@ 요청으로 온 rt: {} @@@@@@@@@@", refreshToken);
+      log.warn("@@@@@@@@@@ DB에서 조회된 rt: {} @@@@@@@@@@", foundMember.getRefreshToken());
 
-      throw new CustomJwtTokenException(ErrorType.ABUSED_REFRESH_TOKEN_EXCEPTION);
+      throw new CustomJwtTokenException(
+          ErrorType.ABUSED_REFRESH_TOKEN_EXCEPTION,
+          ErrorType.ABUSED_REFRESH_TOKEN_EXCEPTION.getMessage() + memberId);
     }
 
     jwtService.reIssueTokensAndUpdateRefreshToken(response, foundMember);
@@ -115,7 +121,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
    * Authentication 객체 생성 후 SecurityContext에 저장
    */
   public void checkAccessTokenAndAuthentication(HttpServletRequest request) {
-    log.info("일반적인 리소스 접근 요청. 엑세스 토큰 유효성 검사 시작");
+    log.info("########## 일반적인 리소스 접근 요청. 엑세스 토큰 유효성 검사 시작 ##########");
 
     String accessToken = jwtService.extractAccessTokenAsString(request);
     Long memberId = jwtService.extractMemberIdClaim(accessToken);
@@ -123,7 +129,11 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     Member foundMember =
         memberRepository
             .findById(memberId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_USER_EXCEPTION,
+                        ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberId));
     saveAuthentication(foundMember);
   }
 
@@ -145,14 +155,13 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
             myMember.getNickname(),
             myMember.getRole().toString());
 
-    log.info("엑세스 요청 성공 시 user id {}", userDetailsUser.getMemberId());
+    log.info("########## 엑세스 요청 성공 시 user id {} ##########", userDetailsUser.getMemberId());
 
     Authentication authentication =
         new UsernamePasswordAuthenticationToken(
             userDetailsUser, // principle
             null, // credential (보통 비밀번호. 인증 시에는 null로 들어감)
-            authoritiesMapper.mapAuthorities(
-                userDetailsUser.getAuthorities())); // 여기서 반환되는 값이 달라져야할거같은디
+            authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));
 
     // SecurityContext에 Authentication 객체 저장
     SecurityContextHolder.getContext().setAuthentication(authentication);

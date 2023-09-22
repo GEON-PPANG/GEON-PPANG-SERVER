@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,6 +16,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.util.StreamUtils;
 
 /** 로그인 요청이 왔을 때 해당 유저가 유효한 유저인지 인증 처리하는 커스텀 필터 */
+@Slf4j
 public class JsonUsernamePasswordAuthenticationFilter
     extends AbstractAuthenticationProcessingFilter {
   private static final String DEFAULT_LOGIN_REQUEST_URL = "/auth/login";
@@ -43,6 +45,9 @@ public class JsonUsernamePasswordAuthenticationFilter
     if (request.getContentType() == null
         || (!request.getContentType().equals(CONTENT_TYPE)
             && !request.getContentType().equals(CONTENT_TYPE_UTF_8))) {
+      log.error(
+          "%%%%%%%%%% Authentication Content-Type not supported: {} %%%%%%%%%%",
+          request.getContentType());
       throw new AuthenticationServiceException(
           "Authentication Content-Type not supported: " + request.getContentType());
     }

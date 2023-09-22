@@ -32,7 +32,7 @@ public class AppleAuthService extends AuthService {
   public SignedUpMemberVO saveMemberOrLogin(String platformToken, MemberSignUpRequestDTO request)
       throws Exception {
     if (request.getEmail() == null || request.getEmail().isBlank()) {
-      log.warn("애플 회원가입 시 email 필드가 안옴");
+      log.warn("@@@@@@@@@@ 애플 회원가입 시 email 필드가 없음 @@@@@@@@@@");
       throw new BadRequestException(
           ErrorType.NO_REQUEST_PARAMETER_EXCEPTION,
           ErrorType.NO_REQUEST_PARAMETER_EXCEPTION.getMessage()

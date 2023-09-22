@@ -38,7 +38,7 @@ public class SignupApiInfo extends RequestApiInfo {
 
       return null;
     } catch (Exception e) {
-      log.warn("MemberSignUpRequestDTO extract 시 에러 발생");
+      log.warn("@@@@@@@@@@ MemberSignUpRequestDTO extract 시 에러 발생 @@@@@@@@@@");
       e.printStackTrace();
       return null;
     }

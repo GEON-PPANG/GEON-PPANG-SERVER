@@ -132,7 +132,7 @@ public class RequestApiInfo {
                       String.format("%s%s", baseUrl, methodUrl.length > 0 ? methodUrl[0] : "");
                   this.name = (String) mappingClass.getMethod("name").invoke(annotation);
                 } catch (Exception e) {
-                  log.warn("method, url, name 빼낼때 에러");
+                  log.warn("@@@@@@@@@@ method, url, name 빼낼때 에러 @@@@@@@@@@");
                   e.printStackTrace();
                 }
               });

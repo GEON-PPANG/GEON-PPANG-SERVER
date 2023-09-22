@@ -80,7 +80,7 @@ public class JwtService {
 
     if (vo.getRole().equals(Role.USER)) {
       String refreshToken = createRefreshToken();
-      updateRefreshToken(vo.getEmail(), refreshToken);
+      updateRefreshTokenByMemberId(vo.getMemberId(), refreshToken);
       response.setHeader(refreshHeader, refreshToken);
     }
 
@@ -94,7 +94,7 @@ public class JwtService {
     String reIssuedAccessToken =
         createAccessToken(foundMember.getEmail(), foundMember.getMemberId());
     sendAccessAndRefreshToken(response, reIssuedAccessToken, reIssuedRefreshToken);
-    log.info("엑세스 토큰 및 리프레시 토큰 재발급 완료");
+    log.info("########## 엑세스 토큰 및 리프레시 토큰 재발급 완료 ##########");
   }
 
   /** GUEST였던 회원이 닉네임 변경하고 USER로 되었을 때 사용 */
@@ -102,7 +102,11 @@ public class JwtService {
     Member foundMember =
         memberRepository
             .findById(memberId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_USER_EXCEPTION,
+                        ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberId));
     reIssueTokensAndUpdateRefreshToken(response, foundMember);
   }
 
@@ -119,13 +123,13 @@ public class JwtService {
     response.setStatus(HttpServletResponse.SC_OK);
     setAccessTokenHeader(response, accessToken);
     setRefreshTokenHeader(response, refreshToken);
-    log.info("accessToken, refreshToken 헤더에 넣어서 반환 완료");
+    log.info("########## accessToken, refreshToken 헤더에 넣어서 반환 완료 ##########");
   }
 
   public void sendAccessToken(HttpServletResponse response, String accessToken) {
     response.setStatus(HttpServletResponse.SC_OK);
     setAccessTokenHeader(response, accessToken);
-    log.info("accessToken 헤더에 넣어서 반환 완료");
+    log.info("########## accessToken 헤더에 넣어서 반환 완료 ##########");
   }
 
   /** accessToken 헤더 설정 */
@@ -181,7 +185,7 @@ public class JwtService {
       DecodedJWT decodedJWT = getVerifiedJWT(accessToken);
       return Optional.ofNullable(decodedJWT.getClaim(EMAIL_CLAIM).asString());
     } catch (Exception e) {
-      log.error("엑세스 토큰이 유효하지 않습니다");
+      log.error("%%%%%%%%%% 엑세스 토큰이 유효하지 않습니다 %%%%%%%%%%");
       return Optional.empty();
     }
   }
@@ -191,8 +195,8 @@ public class JwtService {
       DecodedJWT decodedJWT = getVerifiedJWT(accessToken);
       return decodedJWT.getClaim(MEMBER_ID_CLAIM).asLong();
     } catch (Exception e) {
-      log.error("엑세스 토큰이 유효하지 않습니다. 에러 메시지: {}", e.getMessage());
-      log.error("stack trace: {}", Arrays.toString(e.getStackTrace()));
+      log.error("%%%%%%%%%% 엑세스 토큰이 유효하지 않습니다. 에러 메시지: {} %%%%%%%%%%", e.getMessage());
+      e.printStackTrace();
       throw e;
     }
   }
@@ -217,7 +221,7 @@ public class JwtService {
       getVerifiedJWT(token);
       return true;
     } catch (Exception e) {
-      log.error("유효하지 않은 토큰 {}", e.getMessage());
+      log.error("%%%%%%%%%% 유효하지 않은 토큰 {} %%%%%%%%%%", e.getMessage());
       return false;
     }
   }
@@ -231,9 +235,9 @@ public class JwtService {
     }
   }
 
-  public void updateRefreshToken(String email, String refreshToken) {
+  public void updateRefreshTokenByMemberId(Long memberId, String refreshToken) {
     memberRepository
-        .findByEmail(email)
+        .findById(memberId)
         .ifPresent(
             member -> {
               member.updateRefreshToken(refreshToken);

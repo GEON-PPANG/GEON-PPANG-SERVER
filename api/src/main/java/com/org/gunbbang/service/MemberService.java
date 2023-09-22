@@ -41,7 +41,11 @@ public class MemberService {
     BreadType breadType =
         breadTypeRepository
             .findById(memberBreadTypeId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION,
+                        ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION.getMessage() + memberBreadTypeId));
     BreadTypeResponseDTO breadTypeResponseDTO =
         BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(breadType);
 
@@ -54,7 +58,11 @@ public class MemberService {
     Member foundMember =
         memberRepository
             .findById(memberId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_USER_EXCEPTION,
+                        ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberId));
 
     BreadType breadType =
         breadTypeRepository
@@ -95,11 +103,21 @@ public class MemberService {
     BreadType breadType =
         breadTypeRepository
             .findById(Long.parseLong(loginMemberInfo.get("breadTypeId").toString()))
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION,
+                        ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION.getMessage()
+                            + loginMemberInfo.get("breadTypeId")));
     NutrientType nutrientType =
         nutrientTypeRepository
             .findById(Long.parseLong(loginMemberInfo.get("nutrientTypeId").toString()))
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_NUTRIENT_EXCEPTION));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_NUTRIENT_EXCEPTION,
+                        ErrorType.NOT_FOUND_NUTRIENT_EXCEPTION.getMessage()
+                            + loginMemberInfo.get("nutrientTypeId")));
 
     BreadTypeResponseDTO breadTypeResponseDTO =
         BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(breadType);
@@ -123,7 +141,7 @@ public class MemberService {
   }
 
   public ValidationResponseDTO checkDuplicatedEmail(String email) {
-    if (memberRepository.findByEmail(email).isPresent()) {
+    if (!memberRepository.findAllByEmail(email).isEmpty()) {
       throw new BadRequestException(ErrorType.ALREADY_EXIST_EMAIL_EXCEPTION);
     }
 
@@ -139,7 +157,9 @@ public class MemberService {
     Long deletedMemberCount = memberRepository.deleteMemberByMemberId(memberId).get();
 
     if (deletedMemberCount == 0) {
-      throw new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION);
+      throw new NotFoundException(
+          ErrorType.NOT_FOUND_USER_EXCEPTION,
+          ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberId);
     }
 
     SecurityContextHolder.clearContext();
@@ -150,7 +170,11 @@ public class MemberService {
     Member foundMember =
         memberRepository
             .findById(memberId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_USER_EXCEPTION,
+                        ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberId));
     return foundMember.getPlatformType();
   }
 
@@ -161,7 +185,11 @@ public class MemberService {
     Member foundMember =
         memberRepository
             .findById(memberId)
-            .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_USER_EXCEPTION));
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_USER_EXCEPTION,
+                        ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberId));
 
     foundMember.authorizeUser();
     foundMember.updateNickname(nickname);

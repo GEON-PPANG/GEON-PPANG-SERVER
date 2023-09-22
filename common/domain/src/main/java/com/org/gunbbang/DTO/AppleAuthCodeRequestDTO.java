@@ -8,7 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @Builder
-// @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class AppleAuthCodeRequestDTO {
   @NotNull String client_id;
   @NotNull String client_secret;

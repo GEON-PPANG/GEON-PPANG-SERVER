@@ -8,6 +8,7 @@ import com.org.gunbbang.login.filter.JsonUsernamePasswordAuthenticationFilter;
 import com.org.gunbbang.login.handler.*;
 import com.org.gunbbang.login.service.CustomUserDetailsService;
 import com.org.gunbbang.repository.MemberRepository;
+import com.org.gunbbang.support.slack.SlackSender;
 import javax.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -34,6 +35,7 @@ public class SecurityConfig {
   private final JwtService jwtService;
   private final MemberRepository memberRepository;
   private final ObjectMapper objectMapper;
+  private final SlackSender slackSender;
 
   @Qualifier("handlerExceptionResolver")
   private final HandlerExceptionResolver handlerExceptionResolver;
@@ -128,7 +130,7 @@ public class SecurityConfig {
 
   @Bean
   public JwtExceptionFilter jwtExceptionFilter() {
-    return new JwtExceptionFilter(handlerExceptionResolver);
+    return new JwtExceptionFilter(handlerExceptionResolver, slackSender);
   }
 
   @Bean
