@@ -5,9 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.org.gunbbang.InvalidKakaoTokenException;
 import com.org.gunbbang.common.AuthType;
 import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
+import com.org.gunbbang.entity.KakaoMember;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.BreadTypeRepository;
+import com.org.gunbbang.repository.KakaoMemberRepository;
 import com.org.gunbbang.repository.MemberRepository;
 import com.org.gunbbang.repository.NutrientTypeRepository;
 import com.org.gunbbang.service.VO.KakaoUserVO;
@@ -25,11 +27,15 @@ public class KakaoAuthService extends AuthService {
   @Value("${spring.security.oauth2.client.provider.kakao.user-info-uri}")
   private String kakaoUserInfoUri;
 
+  private final KakaoMemberRepository kakaoMemberRepository;
+
   public KakaoAuthService(
       MemberRepository memberRepository,
       BreadTypeRepository breadTypeRepository,
-      NutrientTypeRepository nutrientTypeRepository) {
+      NutrientTypeRepository nutrientTypeRepository,
+      KakaoMemberRepository kakaoMemberRepository) {
     super(memberRepository, breadTypeRepository, nutrientTypeRepository);
+    this.kakaoMemberRepository = kakaoMemberRepository;
   }
 
   @Override
@@ -63,6 +69,11 @@ public class KakaoAuthService extends AuthService {
       }
 
       Member savedMember = saveUser(request, userInfoVO.getKakaoAccount().getEmail());
+
+      if (!userInfoVO.getKakaoAccount().getAge_range_needs_agreement()
+          || !userInfoVO.getKakaoAccount().getGender_needs_agreement()) {
+        saveKakaoMemberInfo(userInfoVO, savedMember);
+      }
       return SignedUpMemberVO.of(savedMember, null, AuthType.SIGN_UP);
 
     } catch (Exception e) {
@@ -70,5 +81,15 @@ public class KakaoAuthService extends AuthService {
           ErrorType.INVALID_KAKAO_TOKEN_EXCEPTION,
           ErrorType.INVALID_KAKAO_TOKEN_EXCEPTION.getMessage());
     }
+  }
+
+  private void saveKakaoMemberInfo(KakaoUserVO kakaoUserVo, Member member) {
+    KakaoMember newKakaoMember =
+        KakaoMember.builder()
+            .member(member)
+            .gender(kakaoUserVo.getKakaoAccount().getGender())
+            .age_range(kakaoUserVo.getKakaoAccount().getAge_range())
+            .build();
+    kakaoMemberRepository.save(newKakaoMember);
   }
 }
