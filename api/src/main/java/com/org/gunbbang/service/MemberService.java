@@ -150,7 +150,7 @@ public class MemberService {
   public MemberWithdrawResponseDTO withdraw(Long memberId, String appleRefreshToken)
       throws Exception {
     if (getMemberPlatformType(memberId) == PlatformType.APPLE) {
-      appleJWTService.revokeAppleTokens(appleRefreshToken);
+      appleJWTService.revokeAppleTokens(appleRefreshToken, memberId);
     }
 
     Long deletedMemberCount = memberRepository.deleteMemberByMemberId(memberId).get();
