@@ -167,6 +167,10 @@ public class MemberService {
     }
 
     SecurityContextHolder.clearContext();
+    log.info(
+        "회원 탈퇴 성공. 탈퇴한 회원 id: {} || securityContext: {}",
+        memberId,
+        SecurityContextHolder.getContext());
     return MemberWithdrawResponseDTO.builder().memberId(memberId).build();
   }
 
