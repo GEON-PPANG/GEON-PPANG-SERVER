@@ -9,6 +9,7 @@ import com.org.gunbbang.repository.BreadTypeRepository;
 import com.org.gunbbang.repository.MemberRepository;
 import com.org.gunbbang.repository.NutrientTypeRepository;
 import com.org.gunbbang.service.VO.SignedUpMemberVO;
+import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ public class NativeAuthService extends AuthService {
   }
 
   @Override
+  @Transactional
   public SignedUpMemberVO saveMemberOrLogin(String platformToken, MemberSignUpRequestDTO request) {
     if (isNullOrBlank(request.getPassword())
         || isNullOrBlank(request.getNickname())

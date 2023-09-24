@@ -37,7 +37,7 @@ public abstract class AuthService {
       String platformToken, MemberSignUpRequestDTO request) throws Exception;
 
   protected Member getUser(PlatformType platformType, String email) {
-    return memberRepository.findByPlatformTypeAndEmail(platformType, email).orElse(null);
+    return memberRepository.findByEmailAndPlatformType(email, platformType).orElse(null);
   }
 
   // OAuthAttributes의 toEntity() 메서드를 통해 빌터로 Member 객체 생성 후 반환한다

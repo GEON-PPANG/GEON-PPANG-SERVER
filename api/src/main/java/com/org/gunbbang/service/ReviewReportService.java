@@ -13,11 +13,13 @@ import com.org.gunbbang.repository.ReviewRepository;
 import com.org.gunbbang.service.VO.ReviewReportSlackVO;
 import com.org.gunbbang.support.slack.SlackSender;
 import com.org.gunbbang.util.mapper.ReviewReportMapper;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ReviewReportService {
   private final ReviewReportRepository reviewReportRepository;
   private final MemberRepository memberRepository;
