@@ -38,7 +38,9 @@ public class ReviewService {
 
   public Long createReview(Long bakeryId, ReviewRequestDTO reviewRequestDto) {
     Long currentMemberId = SecurityUtil.getLoginMemberId();
-    String reviewText = validateReviewAndGetReviewText(reviewRequestDto);
+    String reviewText = reviewRequestDto.getReviewText().trim();
+
+    validateReview(reviewRequestDto, reviewText);
 
     Member member =
         memberRepository
@@ -74,8 +76,7 @@ public class ReviewService {
     return review.getReviewId();
   }
 
-  private String validateReviewAndGetReviewText(ReviewRequestDTO reviewRequestDto) {
-    String reviewText = reviewRequestDto.getReviewText().trim();
+  private void validateReview(ReviewRequestDTO reviewRequestDto, String reviewText) {
     if (reviewRequestDto.getIsLike() && reviewRequestDto.getKeywordList().isEmpty()) {
       throw new BadRequestException(ErrorType.REQUEST_KEYWORDLIST_VALIDATION_EXCEPTION);
     }
@@ -87,7 +88,6 @@ public class ReviewService {
         throw new BadRequestException(ErrorType.REQUEST_ISNOTLIKE_REVIEWTEXT_VALIDATION_EXCEPTION);
       }
     }
-    return reviewText;
   }
 
   private void createReviewRecommendKeyword(
