@@ -173,6 +173,7 @@ public class JwtService {
   }
 
   public boolean isAccessTokenExist(HttpServletRequest request) {
+    log.info("request url: " + request.getRequestURI());
     log.info("accessHeader: " + request.getHeader(accessHeader));
     return request.getHeader(accessHeader) != null;
   }

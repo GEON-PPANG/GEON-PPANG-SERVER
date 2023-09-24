@@ -3,18 +3,15 @@ package com.org.gunbbang.service;
 import com.org.gunbbang.*;
 import com.org.gunbbang.controller.DTO.request.MemberTypesRequestDTO;
 import com.org.gunbbang.controller.DTO.response.*;
-import com.org.gunbbang.entity.BreadType;
-import com.org.gunbbang.entity.Member;
-import com.org.gunbbang.entity.NutrientType;
+import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.jwt.service.AppleJwtService;
-import com.org.gunbbang.repository.BreadTypeRepository;
-import com.org.gunbbang.repository.MemberRepository;
-import com.org.gunbbang.repository.NutrientTypeRepository;
+import com.org.gunbbang.repository.*;
 import com.org.gunbbang.util.mapper.BreadTypeMapper;
 import com.org.gunbbang.util.mapper.MemberTypeMapper;
 import com.org.gunbbang.util.mapper.NutrientTypeMapper;
 import com.org.gunbbang.util.security.SecurityUtil;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +29,8 @@ public class MemberService {
   private final BreadTypeRepository breadTypeRepository;
   private final NutrientTypeRepository nutrientTypeRepository;
   private final AppleJwtService appleJWTService;
+  private final BookMarkRepository bookMarkRepository;
+  private final BakeryRepository bakeryRepository;
 
   public MemberDetailResponseDTO getMemberDetail() {
     String memberNickname = SecurityUtil.getLoginMemberNickname();
@@ -151,18 +150,27 @@ public class MemberService {
   public MemberWithdrawResponseDTO withdraw(Long memberId, String appleRefreshToken)
       throws Exception {
     if (getMemberPlatformType(memberId) == PlatformType.APPLE) {
-      appleJWTService.revokeAppleTokens(appleRefreshToken);
+      appleJWTService.revokeAppleTokens(appleRefreshToken, memberId);
     }
 
     Long deletedMemberCount = memberRepository.deleteMemberByMemberId(memberId).get();
-
     if (deletedMemberCount == 0) {
       throw new NotFoundException(
           ErrorType.NOT_FOUND_USER_EXCEPTION,
           ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberId);
     }
 
+    List<BookMark> bookMarks = bookMarkRepository.findAllByMemberId(memberId);
+    for (BookMark bookMark : bookMarks) {
+      Bakery bookMarkedBakery = bookMark.getBakery();
+      bookMarkedBakery.updateBookMarkCount(false); // 삭제될 북마크 객체 bakery에 카운트 반영
+    }
+
     SecurityContextHolder.clearContext();
+    log.info(
+        "회원 탈퇴 성공. 탈퇴한 회원 id: {} || securityContext: {}",
+        memberId,
+        SecurityContextHolder.getContext());
     return MemberWithdrawResponseDTO.builder().memberId(memberId).build();
   }
 

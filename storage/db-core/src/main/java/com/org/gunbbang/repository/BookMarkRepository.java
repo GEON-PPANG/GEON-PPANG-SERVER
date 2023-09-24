@@ -3,6 +3,7 @@ package com.org.gunbbang.repository;
 import com.org.gunbbang.entity.Bakery;
 import com.org.gunbbang.entity.BookMark;
 import com.org.gunbbang.entity.Member;
+import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,4 +23,7 @@ public interface BookMarkRepository extends JpaRepository<BookMark, Long> {
   @Transactional
   @Query(value = "DELETE FROM BookMark bm WHERE bm.member = :member AND bm.bakery = :bakery")
   void deleteByMemberAndBakery(Member member, Bakery bakery);
+
+  @Query(value = "SELECT bm FROM BookMark bm WHERE bm.member.memberId = :memberId")
+  List<BookMark> findAllByMemberId(Long memberId);
 }

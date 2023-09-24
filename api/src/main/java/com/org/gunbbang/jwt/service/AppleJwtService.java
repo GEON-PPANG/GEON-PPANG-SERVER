@@ -12,6 +12,7 @@ import com.org.gunbbang.DTO.AppleKey;
 import com.org.gunbbang.DTO.RevokeAppleTokenRequestDTO;
 import com.org.gunbbang.InvalidAppleAuthTokenException;
 import com.org.gunbbang.errorType.ErrorType;
+import com.org.gunbbang.support.slack.SlackSender;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -51,6 +52,8 @@ public class AppleJwtService {
 
   @Value("${apple.api.private-key-path}")
   private String privateKeyPath;
+
+  private final SlackSender slackSender;
 
   private static final String URL = "https://appleid.apple.com";
   private static final String ALG = "ES256";
@@ -152,9 +155,12 @@ public class AppleJwtService {
   }
 
   // 애플 refreshToken revoke처리
-  public void revokeAppleTokens(String appleRefreshToken) throws Exception {
+  public void revokeAppleTokens(String appleRefreshToken, Long memberId) throws Exception {
     if (appleRefreshToken == null) {
-      throw new BadRequestException(ErrorType.NO_REQUEST_HEADER_EXCEPTION);
+      slackSender.sendMessage(ErrorType.NO_APPLE_REFRESH_HEADER_EXCEPTION.getMessage() + memberId);
+      throw new BadRequestException(
+          ErrorType.NO_APPLE_REFRESH_HEADER_EXCEPTION,
+          ErrorType.NO_APPLE_REFRESH_HEADER_EXCEPTION.getMessage() + memberId);
     }
 
     RevokeAppleTokenRequestDTO request =
