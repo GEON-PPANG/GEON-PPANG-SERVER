@@ -38,10 +38,7 @@ public class ReviewService {
 
   public Long createReview(Long bakeryId, ReviewRequestDTO reviewRequestDto) {
     Long currentMemberId = SecurityUtil.getLoginMemberId();
-
-    if (!reviewRequestDto.getIsLike() && !reviewRequestDto.getKeywordList().isEmpty()) {
-      throw new BadRequestException(ErrorType.REQUEST_ISNOTLIKE_KEYWORDLIST_VALIDATION_EXCEPTION);
-    }
+    String reviewText = validateReviewAndGetReviewText(reviewRequestDto);
 
     Member member =
         memberRepository
@@ -65,11 +62,11 @@ public class ReviewService {
                 .member(member)
                 .bakery(bakery)
                 .isLike(reviewRequestDto.getIsLike())
-                .reviewText(reviewRequestDto.getReviewText())
+                .reviewText(reviewText)
                 .build());
 
     if (reviewRequestDto.getIsLike()) {
-      createReviewRecommendKeyword(reviewRequestDto.getKeywordList(), review.getReviewId());
+      createReviewRecommendKeyword(reviewRequestDto.getKeywordList(), review, bakery);
     }
 
     bakery.reviewCountChange(true);
@@ -77,30 +74,27 @@ public class ReviewService {
     return review.getReviewId();
   }
 
-  private void createReviewRecommendKeyword(
-      List<RecommendKeywordNameRequestDTO> keywordNameRequestDtoList, Long reviewId) {
-
-    if (keywordNameRequestDtoList.isEmpty()) {
+  private String validateReviewAndGetReviewText(ReviewRequestDTO reviewRequestDto) {
+    String reviewText = reviewRequestDto.getReviewText().trim();
+    if (reviewRequestDto.getIsLike() && reviewRequestDto.getKeywordList().isEmpty()) {
       throw new BadRequestException(ErrorType.REQUEST_KEYWORDLIST_VALIDATION_EXCEPTION);
     }
+    if (!reviewRequestDto.getIsLike()) {
+      if (!reviewRequestDto.getKeywordList().isEmpty()) {
+        throw new BadRequestException(ErrorType.REQUEST_ISNOTLIKE_KEYWORDLIST_VALIDATION_EXCEPTION);
+      }
+      if (reviewText.equals("")) {
+        throw new BadRequestException(ErrorType.REQUEST_ISNOTLIKE_REVIEWTEXT_VALIDATION_EXCEPTION);
+      }
+    }
+    return reviewText;
+  }
 
-    Review review =
-        reviewRepository
-            .findById(reviewId)
-            .orElseThrow(
-                () ->
-                    new NotFoundException(
-                        ErrorType.NOT_FOUND_REVIEW_EXCEPTION,
-                        ErrorType.NOT_FOUND_REVIEW_EXCEPTION.getMessage() + reviewId));
-    Bakery bakery =
-        bakeryRepository
-            .findById(review.getBakery().getBakeryId())
-            .orElseThrow(
-                () ->
-                    new NotFoundException(
-                        ErrorType.NOT_FOUND_BAKERY_EXCEPTION,
-                        ErrorType.NOT_FOUND_BAKERY_EXCEPTION.getMessage()
-                            + review.getBakery().getBakeryId()));
+  private void createReviewRecommendKeyword(
+      List<RecommendKeywordNameRequestDTO> keywordNameRequestDtoList,
+      Review review,
+      Bakery bakery) {
+
     for (RecommendKeywordNameRequestDTO keyword : keywordNameRequestDtoList) {
       RecommendKeyword recommendKeyword =
           recommendKeywordRepository
@@ -111,6 +105,7 @@ public class ReviewService {
                           ErrorType.NOT_FOUND_CATEGORY_EXCEPTION,
                           ErrorType.NOT_FOUND_CATEGORY_EXCEPTION.getMessage()
                               + keyword.getKeywordName().getMessage()));
+
       reviewRecommendKeywordRepository.saveAndFlush(
           ReviewRecommendKeyword.builder()
               .recommendKeyword(recommendKeyword)
@@ -118,6 +113,7 @@ public class ReviewService {
               .build());
       bakery.keywordCountChange(keyword.getKeywordName().getMessage());
     }
+
     bakeryRepository.saveAndFlush(bakery);
   }
 

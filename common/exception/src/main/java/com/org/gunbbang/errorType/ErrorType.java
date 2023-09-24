@@ -14,6 +14,8 @@ public enum ErrorType {
       HttpStatus.BAD_REQUEST, "좋아요 선택시 추천 키워드를 하나 이상 선택해야 합니다"),
   REQUEST_ISNOTLIKE_KEYWORDLIST_VALIDATION_EXCEPTION(
       HttpStatus.BAD_REQUEST, "별로에요 리뷰 시 키워드를 선택할 수 없습니다"),
+  REQUEST_ISNOTLIKE_REVIEWTEXT_VALIDATION_EXCEPTION(
+      HttpStatus.BAD_REQUEST, "아쉬워요 리뷰 시 리뷰 텍스트를 입력해야합니다"),
   INVALID_PASSWORD_EXCEPTION(HttpStatus.BAD_REQUEST, "잘못된 비밀번호입니다"),
   TOKEN_TIME_EXPIRED_EXCEPTION(HttpStatus.BAD_REQUEST, "만료된 토큰입니다"),
   ALREADY_BOOKMARKED_EXCEPTION(HttpStatus.BAD_REQUEST, "이미 북마크된 빵집입니다"),
