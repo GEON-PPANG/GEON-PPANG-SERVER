@@ -55,7 +55,9 @@ else
 fi
 
 echo "> $IDLE_PROFILE 배포"
-nohup java -jar -Duser.timezone=Asia/Seoul -Dspring.profiles.active=$IDLE_PROFILE $IDLE_APPLICATION_PATH >> /home/ubuntu/app/nohup.out 2>&1 &
+TIMESTAMP=$(date +%Y%m%d%H%M%S)
+LOG_FILE="/home/ubuntu/app/nohup_${TIMESTAMP}.out"
+nohup java -jar -Duser.timezone=Asia/Seoul -Dspring.profiles.active=$IDLE_PROFILE $IDLE_APPLICATION_PATH >> /home/ubuntu/app/nohup/LOG_FILE 2>&1 &
 
 current_datetime=$(date "+%Y년 %m월 %d일 %H시 %M분 %S초")
 echo "배포된 시간: $current_datetime"
