@@ -47,14 +47,22 @@ public class BookMarkService {
     if (isAddingBookMark) {
       // 북마크 했는데 또 한경우
       if (foundBookMark.isPresent()) {
-        throw new DoubleBookMarkRequestException(ErrorType.ALREADY_BOOKMARKED_EXCEPTION);
+        throw new DoubleBookMarkRequestException(
+            ErrorType.ALREADY_BOOKMARKED_EXCEPTION,
+            ErrorType.ALREADY_BOOKMARKED_EXCEPTION.getMessage()
+                + "memberId: "
+                + foundBookMark.get().getMember().getMemberId()
+                + " bakeryId: "
+                + foundBookMark.get().getBakery().getBakeryId());
       }
       return addBookMark(isAddingBookMark, foundBakery, foundMember);
     }
 
-    // 북마크 했는데 또 한경우
+    // 북마크 안했는데 취소한 경우
     if (foundBookMark.isEmpty()) {
-      throw new DoubleBookMarkRequestException(ErrorType.ALREADY_CANCELED_BOOKMARK_EXCEPTION);
+      throw new DoubleBookMarkRequestException(
+          ErrorType.ALREADY_CANCELED_BOOKMARK_EXCEPTION,
+          ErrorType.ALREADY_CANCELED_BOOKMARK_EXCEPTION.getMessage() + "memberId: " + memberId);
     }
     return cancelBookMark(isAddingBookMark, foundBakery, foundMember);
   }

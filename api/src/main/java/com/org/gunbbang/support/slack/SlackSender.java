@@ -73,6 +73,12 @@ public class SlackSender {
     }
   }
 
+  public void sendMessage(String message) throws IOException {
+    if (Boolean.parseBoolean(isActive)) {
+      Slack.getInstance().send(errorWebhookUrl, WebhookPayloads.payload(p -> p.text(message)));
+    }
+  }
+
   // 리뷰 신고 메시지 생성
   private List generateReportLayoutBlock(ReviewReportSlackVO vo) {
     return Blocks.asBlocks(
