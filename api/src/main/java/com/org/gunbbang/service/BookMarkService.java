@@ -11,11 +11,13 @@ import com.org.gunbbang.repository.BakeryRepository;
 import com.org.gunbbang.repository.BookMarkRepository;
 import com.org.gunbbang.repository.MemberRepository;
 import java.util.Optional;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BookMarkService {
 
   private final BookMarkRepository bookMarkRepository;
@@ -72,6 +74,7 @@ public class BookMarkService {
 
     updateBookMarkCount(isAddingBookMark, foundBakery);
     bookMarkRepository.deleteByMemberAndBakery(foundMember, foundBakery);
+    bookMarkRepository.flush();
 
     return BookMarkResponseDTO.builder()
         .bookMarkCount(foundBakery.getBookMarkCount())
