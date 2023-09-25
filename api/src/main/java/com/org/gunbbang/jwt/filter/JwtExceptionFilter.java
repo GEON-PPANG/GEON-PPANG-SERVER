@@ -49,7 +49,6 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
           "%%%%%%%%%% JwtAuthenticationProcessingFilter에서 에러 발생. 에러 클래스 이름: {} 에러 메시지 이름: {}"
               + " %%%%%%%%%% ",
           e.getClass().getName(), e.getMessage());
-      e.printStackTrace();
       slackSender.sendAlertWithMessage(e, request);
       request.setAttribute("exception", e);
       resolver.resolveException(
