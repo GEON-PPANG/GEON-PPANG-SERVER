@@ -18,6 +18,4 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
   Optional<Member> findByNickname(String nickname);
 
   Optional<Long> deleteMemberByMemberId(Long memberId);
-
-  Optional<Member> findByPlatformTypeAndEmail(PlatformType platformType, String email);
 }

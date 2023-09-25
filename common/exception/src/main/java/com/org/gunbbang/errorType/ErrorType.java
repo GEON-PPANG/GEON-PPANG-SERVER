@@ -33,6 +33,7 @@ public enum ErrorType {
   NOT_VALID_TOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다"),
   NOT_EXPIRED_ACCESS_TOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "만료되지 않은 엑세스 토큰입니다. memberId: "),
   EXPIRED_TOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "만료된 토큰입니다"),
+  EXPIRED_REFRESH_AND_ACCESS_EXCEPTION(HttpStatus.UNAUTHORIZED, "엑세스 및 리프레시 둘 다 만료되었습니다"),
   NOT_EXIST_ACCESS_TOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "엑세스 토큰이 없습니다."),
   NOT_EXIST_REFRESH_TOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "리프레시 토큰이 없습니다"),
   JWT_DECODE_FAIL_EXCEPTION(HttpStatus.UNAUTHORIZED, "토큰 디코딩에 실패했습니다"),
