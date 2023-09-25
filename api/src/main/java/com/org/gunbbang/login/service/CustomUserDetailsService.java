@@ -4,6 +4,7 @@ import com.org.gunbbang.PlatformType;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.login.CustomUserDetails;
 import com.org.gunbbang.repository.MemberRepository;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class CustomUserDetailsService implements UserDetailsService {
 
   private final MemberRepository memberRepository;
