@@ -88,6 +88,12 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
           ErrorType.NOT_EXPIRED_ACCESS_TOKEN_EXCEPTION.getMessage() + memberId.toString());
     }
 
+    // at 및 rt 둘 다 만료되었을 시 에러 -> 로그인 창으로 이동
+    if (jwtService.isTokenExpired(refreshToken)) {
+      log.warn("@@@@@@@@@@ 엑세스 및 리프레시 둘 다 만료된 경우 - 로그인 창으로 이동 @@@@@@@@@@");
+      throw new CustomJwtTokenException(ErrorType.EXPIRED_REFRESH_AND_ACCESS_EXCEPTION);
+    }
+
     Long memberId = jwtService.extractMemberIdClaimFromExpiredToken(accessToken);
     Member foundMember =
         memberRepository
