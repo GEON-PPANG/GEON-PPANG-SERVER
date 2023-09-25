@@ -133,7 +133,6 @@ public class BakeryService {
       return getSortedByCategoryBakeryList;
     }
 
-    getSortedByCategoryBakeryList.sort(Comparator.comparingLong(Bakery::getBakeryId).reversed());
     return getSortedByCategoryBakeryList;
   }
 
