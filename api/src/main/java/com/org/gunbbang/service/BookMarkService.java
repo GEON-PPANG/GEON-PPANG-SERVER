@@ -11,11 +11,14 @@ import com.org.gunbbang.repository.BakeryRepository;
 import com.org.gunbbang.repository.BookMarkRepository;
 import com.org.gunbbang.repository.MemberRepository;
 import java.util.Optional;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BookMarkService {
 
   private final BookMarkRepository bookMarkRepository;
@@ -46,15 +49,15 @@ public class BookMarkService {
 
     if (isAddingBookMark) {
       // 북마크 했는데 또 한경우
-      if (foundBookMark.isPresent()) {
-        throw new DoubleBookMarkRequestException(
-            ErrorType.ALREADY_BOOKMARKED_EXCEPTION,
-            ErrorType.ALREADY_BOOKMARKED_EXCEPTION.getMessage()
-                + "memberId: "
-                + foundBookMark.get().getMember().getMemberId()
-                + " bakeryId: "
-                + foundBookMark.get().getBakery().getBakeryId());
-      }
+      //      if (foundBookMark.isPresent()) {
+      //        throw new DoubleBookMarkRequestException(
+      //            ErrorType.ALREADY_BOOKMARKED_EXCEPTION,
+      //            ErrorType.ALREADY_BOOKMARKED_EXCEPTION.getMessage()
+      //                + "memberId: "
+      //                + foundBookMark.get().getMember().getMemberId()
+      //                + " bakeryId: "
+      //                + foundBookMark.get().getBakery().getBakeryId());
+      //      }
       return addBookMark(isAddingBookMark, foundBakery, foundMember);
     }
 
@@ -81,10 +84,18 @@ public class BookMarkService {
 
   private BookMarkResponseDTO addBookMark(
       boolean isAddingBookMark, Bakery foundBakery, Member foundMember) {
+    try {
+      bookMarkRepository.saveAndFlush(
+          BookMark.builder().bakery(foundBakery).member(foundMember).build());
+    } catch (DataIntegrityViolationException e) {
+      throw new DoubleBookMarkRequestException(
+          ErrorType.ALREADY_BOOKMARKED_EXCEPTION,
+          ErrorType.ALREADY_BOOKMARKED_EXCEPTION.getMessage()
+              + "memberId: "
+              + foundMember.getMemberId());
+    }
 
     updateBookMarkCount(isAddingBookMark, foundBakery);
-    bookMarkRepository.saveAndFlush(
-        BookMark.builder().bakery(foundBakery).member(foundMember).build());
 
     return BookMarkResponseDTO.builder()
         .bookMarkCount(foundBakery.getBookMarkCount())
@@ -93,7 +104,7 @@ public class BookMarkService {
   }
 
   private void updateBookMarkCount(boolean isAddingBookMark, Bakery foundBakery) {
-    foundBakery.updateBookMarkCount(isAddingBookMark);
     bakeryRepository.saveAndFlush(foundBakery);
+    foundBakery.updateBookMarkCount(isAddingBookMark);
   }
 }
