@@ -9,6 +9,13 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor
+@Table(
+    name = "book_mark",
+    uniqueConstraints = {
+      @UniqueConstraint(
+          columnNames = {"member_id", "bakery_id"},
+          name = "uk_member_bakery")
+    })
 public class BookMark {
 
   @Id
