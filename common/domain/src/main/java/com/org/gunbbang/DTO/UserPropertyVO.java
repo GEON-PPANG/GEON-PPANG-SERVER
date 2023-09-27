@@ -1,6 +1,5 @@
 package com.org.gunbbang.DTO;
 
-import java.time.LocalDateTime;
 import lombok.*;
 
 @Getter
@@ -10,7 +9,7 @@ import lombok.*;
 @Builder
 public class UserPropertyVO {
   String auth_type;
-//  LocalDateTime account_creation_date;
+  //  LocalDateTime account_creation_date;
   String main_purpose;
   String bread_type;
   String ingredients_type;
