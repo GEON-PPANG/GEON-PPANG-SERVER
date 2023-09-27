@@ -60,7 +60,7 @@ else
 fi
 
 echo "> $IDLE_PROFILE 배포"
-nohup java -jar -Duser.timezone=Asia/Seoul -Dspring.profiles.active=$IDLE_PROFILE $IDLE_APPLICATION_PATH >> /home/ubuntu/app/nohup_$(date +\%Y_\%m_\%d).out 2>&1 &
+nohup java -jar -Duser.timezone=Asia/Seoul -Dspring.profiles.active=$IDLE_PROFILE $IDLE_APPLICATION_PATH >> /home/ubuntu/app/nohup/nohup_$(date +\%Y_\%m_\%d_\%H_\%M_\%S).out 2>&1 &
 # nohup java -jar -Duser.timezone=Asia/Seoul -Dspring.profiles.active=$IDLE_PROFILE $IDLE_APPLICATION_PATH >> /home/ubuntu/app/nohup.out 2>&1 &
 
 current_datetime=$(date "+%Y년 %m월 %d일 %H시 %M분 %S초")
