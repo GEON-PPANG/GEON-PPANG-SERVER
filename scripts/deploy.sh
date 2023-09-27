@@ -3,6 +3,9 @@ BUILD_PATH=$(ls /home/ubuntu/app/api-0.0.1-SNAPSHOT.jar)
 JAR_NAME=$(basename $BUILD_PATH)
 echo "> build 파일명: $JAR_NAME"
 
+current_user=$(whoami)
+echo "현재 실행 중인 유저: $current_user"
+
 echo "> build 파일 복사"
 DEPLOY_PATH=/home/ubuntu/app/nonstop/jar/
 cp $BUILD_PATH $DEPLOY_PATH
