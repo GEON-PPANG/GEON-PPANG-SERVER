@@ -6,7 +6,7 @@ import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import com.org.gunbbang.controller.DTO.response.MemberSignUpResponseDTO;
 import com.org.gunbbang.controller.DTO.response.MemberWithdrawResponseDTO;
 import com.org.gunbbang.errorType.SuccessType;
-import com.org.gunbbang.jwt.service.AmplitudeJwtService;
+import com.org.gunbbang.jwt.service.AmplitudeService;
 import com.org.gunbbang.jwt.service.JwtService;
 import com.org.gunbbang.service.AuthServiceProvider;
 import com.org.gunbbang.service.MemberService;
@@ -27,7 +27,7 @@ public class AuthController {
   private final MemberService memberService;
   private final AuthServiceProvider authServiceProvider;
   private final JwtService jwtService;
-  private final AmplitudeJwtService amplitudeJwtService;
+  private final AmplitudeService amplitudeService;
 
   @PostMapping("/signup")
   @SignupApiLog
@@ -43,8 +43,8 @@ public class AuthController {
             .saveMemberOrLogin(platformToken, request);
 
     jwtService.setSignedUpMemberToken(vo, response);
-    amplitudeJwtService.uploadAuthProperty(vo.getPlatformType(), "111111");
-    amplitudeJwtService.sendUserAuthProperty(vo.getPlatformType(), "222222");
+    amplitudeService.uploadUserPropertyV2(vo.getMemberId().toString(), "complete_signup", null);
+    amplitudeService.sendUserPropertyV2(vo.getMemberId(), null);
     return ApiResponse.success(
         SuccessType.SIGNUP_SUCCESS, MemberMapper.INSTANCE.toMemberSignUpResponseDTO(vo));
   }
