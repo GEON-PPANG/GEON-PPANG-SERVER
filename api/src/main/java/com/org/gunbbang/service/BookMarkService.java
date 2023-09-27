@@ -10,6 +10,7 @@ import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.BakeryRepository;
 import com.org.gunbbang.repository.BookMarkRepository;
 import com.org.gunbbang.repository.MemberRepository;
+import java.util.Optional;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -43,30 +44,19 @@ public class BookMarkService {
                         ErrorType.NOT_FOUND_USER_EXCEPTION,
                         ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberId));
 
-    //    Optional<BookMark> foundBookMark =
-    //        bookMarkRepository.findByMemberIdAndBakeryId(memberId, bakeryId);
-
     if (isAddingBookMark) {
-      // 북마크 했는데 또 한경우
-      //      if (foundBookMark.isPresent()) {
-      //        throw new DoubleBookMarkRequestException(
-      //            ErrorType.ALREADY_BOOKMARKED_EXCEPTION,
-      //            ErrorType.ALREADY_BOOKMARKED_EXCEPTION.getMessage()
-      //                + "memberId: "
-      //                + foundBookMark.get().getMember().getMemberId()
-      //                + " bakeryId: "
-      //                + foundBookMark.get().getBakery().getBakeryId());
-      //      }
       return addBookMark(isAddingBookMark, foundBakery, foundMember);
     }
 
+    Optional<BookMark> foundBookMark =
+        bookMarkRepository.findByMemberIdAndBakeryId(memberId, bakeryId);
+
     // 북마크 안했는데 취소한 경우
-    //    if (foundBookMark.isEmpty()) {
-    //      throw new DoubleBookMarkRequestException(
-    //          ErrorType.ALREADY_CANCELED_BOOKMARK_EXCEPTION,
-    //          ErrorType.ALREADY_CANCELED_BOOKMARK_EXCEPTION.getMessage() + "memberId: " +
-    // memberId);
-    //    }
+    if (foundBookMark.isEmpty()) {
+      throw new DoubleBookMarkRequestException(
+          ErrorType.ALREADY_CANCELED_BOOKMARK_EXCEPTION,
+          ErrorType.ALREADY_CANCELED_BOOKMARK_EXCEPTION.getMessage() + "memberId: " + memberId);
+    }
     return cancelBookMark(isAddingBookMark, foundBakery, foundMember);
   }
 
@@ -89,6 +79,7 @@ public class BookMarkService {
       bookMarkRepository.saveAndFlush(
           BookMark.builder().bakery(foundBakery).member(foundMember).build());
     } catch (DataIntegrityViolationException e) {
+      // 북마크 했는데 또 한 경우 -> 에러처리
       throw new DoubleBookMarkRequestException(
           ErrorType.ALREADY_BOOKMARKED_EXCEPTION,
           ErrorType.ALREADY_BOOKMARKED_EXCEPTION.getMessage()
