@@ -8,14 +8,14 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @Builder
-public class UserPropertyRequestDTO {
+public class UserPropertyVO {
   String auth_type;
-  LocalDateTime account_creation_date;
+//  LocalDateTime account_creation_date;
   String main_purpose;
   String bread_type;
   String ingredients_type;
-  Long total_review;
-  Long total_mystore;
+  int total_review;
+  int total_mystore;
   String user_nickname;
   //  LocalDateTime recent_open_app_date;
 }

@@ -13,7 +13,7 @@ public class HttpV2RequestDTO {
   String api_key;
   List<Event> events;
 
-  public void setEvents(String userId, String event_type, UserPropertyRequestDTO userProperty) {
+  public void setEvents(String userId, String event_type, UserPropertyVO userProperty) {
     if (events == null) {
       events = new ArrayList<>(); // events 리스트 초기화
     }
@@ -28,7 +28,7 @@ public class HttpV2RequestDTO {
   public class Event {
     public String user_id;
     public String event_type;
-    public UserPropertyRequestDTO user_properties;
+    public UserPropertyVO user_properties;
 
     private void setUser_id(String userId) {
       user_id = userId;
@@ -38,7 +38,7 @@ public class HttpV2RequestDTO {
       event_type = eventType;
     }
 
-    private void setUser_properties(UserPropertyRequestDTO userProperties) {
+    private void setUser_properties(UserPropertyVO userProperties) {
       user_properties = userProperties;
     }
   }

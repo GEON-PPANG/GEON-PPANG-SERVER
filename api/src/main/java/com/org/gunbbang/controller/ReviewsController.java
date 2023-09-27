@@ -23,7 +23,8 @@ public class ReviewsController {
   @BakeryIdApiLog
   public ApiResponse<ReviewCreateResponseDTO> createReview(
       @PathVariable("bakeryId") final Long bakeryId,
-      @RequestBody @Valid final ReviewRequestDTO request) {
+      @RequestBody @Valid final ReviewRequestDTO request)
+      throws IllegalAccessException {
     Long reviewId = reviewService.createReview(bakeryId, request);
     return ApiResponse.success(
         SuccessType.CREATE_REVIEW_SUCCESS,
