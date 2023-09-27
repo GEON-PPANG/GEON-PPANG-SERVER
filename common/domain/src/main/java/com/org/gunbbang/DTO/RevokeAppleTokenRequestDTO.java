@@ -7,7 +7,6 @@ import lombok.Getter;
 // 애플 토큰 revoke 요청 DTO
 @Getter
 @Builder
-// @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class RevokeAppleTokenRequestDTO {
   @NotNull private String client_id;
   @NotNull private String client_secret;
