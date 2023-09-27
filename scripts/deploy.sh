@@ -52,6 +52,8 @@ else
   else
       echo "kill -15 명령어로 서버가 다운되지 않았습니다. exit status $exit."
       echo "kill -9 명령어로 서버를 다운시킵니다. kill -9로 종료 시작한 시각: $(date)"
+      current_user=$(whoami)
+      echo "현재 실행 중인 유저: $current_user"
       kill -9 $IDLE_PID
   fi
   sleep 30
