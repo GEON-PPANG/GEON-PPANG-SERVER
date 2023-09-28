@@ -66,9 +66,13 @@ public interface BakeryRepository
       "SELECT DISTINCT b FROM Bakery b "
           + "INNER JOIN BakeryCategory bc ON b.bakeryId = bc.bakery.bakeryId "
           + "INNER JOIN Category c ON bc.category.categoryId = c.categoryId "
-          + "WHERE c IN :categoryList "
-          + "AND (b.breadType.isGlutenFree = :isGlutenFree OR b.breadType.isVegan = :isVegan "
-          + "OR b.breadType.isNutFree = :isNutFree OR b.breadType.isSugarFree = :isSugarFree)")
+          + "WHERE (c IN :categoryList) "
+          + "AND ( "
+          + "(:isGlutenFree = true AND b.breadType.isGlutenFree = true) OR "
+          + "(:isVegan = true AND b.breadType.isVegan = true) OR "
+          + "(:isNutFree = true AND b.breadType.isNutFree = true) OR "
+          + "(:isSugarFree = true AND b.breadType.isSugarFree = true)"
+          + ")")
   List<Bakery> findFilteredBakeries(
       @Param("categoryList") List<Category> categoryList,
       @Param("isGlutenFree") boolean isGlutenFree,
