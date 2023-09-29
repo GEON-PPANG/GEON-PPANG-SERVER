@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.org.gunbbang.AmplitudeFeignClient;
 import com.org.gunbbang.DTO.*;
 import com.org.gunbbang.NotFoundException;
-import com.org.gunbbang.PlatformType;
 import com.org.gunbbang.entity.BookMark;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.entity.Review;
@@ -24,10 +23,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class AmplitudeService {
-
-  @Value("${amplitude.jwt.key}")
-  private String amplitudeKey;
-
   @Value("${amplitude.api.key}")
   private String apiKey;
 
@@ -48,7 +43,7 @@ public class AmplitudeService {
   private ObjectNode getIdentification(Map<String, Object> propertyMap, Long memberId) {
     // Create an ObjectNode to build the JSON structure
     ObjectNode identification = objectMapper.createObjectNode();
-    identification.put("user_id", memberId.toString());
+    identification.put("user_id", getAmplUserId(memberId));
 
     // Create user_properties object and add it to the root node
     identification.set("user_properties", getUserProperties(propertyMap));
@@ -66,47 +61,33 @@ public class AmplitudeService {
   }
 
   // Http v2 api
-  public void uploadUserPropertyV2(String memberId, String eventType, Member member) {
+  public void uploadUserProperty(String memberId, String eventType, Member member) {
     HttpV2RequestDTO request = HttpV2RequestDTO.builder().api_key(apiKey).build();
     request.setEvents(
         memberId + memberId + memberId + memberId + memberId,
         eventType,
-//        UserPropertyVO.builder()
-//                .auth_type("NONE")
-//                .user_nickname("정은사랑")
-//                .bread_type("빵유형 선택안함")
-//                .ingredients_type("영양성분 선택안함")
-//                .total_mystore(0)
-//                .total_review(0)
-//                .main_purpose("주목적 선택안함")
-//                .build());
         getUserPropertyVO(Long.parseLong(memberId), member));
     log.info("HttpV2RequestDTO: " + request);
     amplitudeFeignClient.uploadRequest(request);
   }
 
   // identify
-  public void sendUserPropertyV2(Long memberId, Member member) throws IllegalAccessException {
+  public void sendUserProperty(Long memberId, Member member) {
     UserPropertyVO vo = getUserPropertyVO(memberId, member);
-//    UserPropertyVO vo = UserPropertyVO.builder()
-//            .auth_type("NONE")
-//            .user_nickname("정은사랑")
-//            .bread_type("빵유형 선택안함")
-//            .ingredients_type("영양성분 선택안함")
-//            .total_mystore(0)
-//            .total_review(0)
-//            .main_purpose("주목적 선택안함")
-//            .build();
 
     Map<String, Object> propertyMap = new HashMap<>();
-    Field[] fields = vo.getClass().getDeclaredFields(); // TODO: 리플렉션 안쓰고 하는 방법은 없을지?
-    for (Field field : fields) {
-      field.setAccessible(true);
+    try {
+      Field[] fields = vo.getClass().getDeclaredFields(); // TODO: 리플렉션 안쓰고 하는 방법은 없을지?
+      for (Field field : fields) {
+        field.setAccessible(true);
 
-      String propertyKey = field.getName();
-      Object propertyValue = field.get(vo);
+        String propertyKey = field.getName();
+        Object propertyValue = field.get(vo);
 
-      propertyMap.put(propertyKey, propertyValue);
+        propertyMap.put(propertyKey, propertyValue);
+      }
+    } catch (Exception e) {
+      log.error("%%%%%%%%%% user property 생성 과정에서 에러 발생 %%%%%%%%%%");
     }
 
     ObjectNode identification = getIdentification(propertyMap, memberId);
@@ -140,5 +121,9 @@ public class AmplitudeService {
         .total_mystore(bookMarks.size())
         .user_nickname(foundMember.getNickname())
         .build();
+  }
+
+  private String getAmplUserId(Long memberId) {
+    return "gunbbang" + memberId.toString();
   }
 }

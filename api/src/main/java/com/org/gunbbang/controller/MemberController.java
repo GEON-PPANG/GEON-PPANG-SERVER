@@ -6,6 +6,7 @@ import com.org.gunbbang.controller.DTO.request.NicknameUpdateRequestDTO;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.jwt.service.JwtService;
+import com.org.gunbbang.service.AmplitudeService;
 import com.org.gunbbang.service.BakeryService;
 import com.org.gunbbang.service.MemberService;
 import com.org.gunbbang.service.ReviewService;
@@ -27,6 +28,7 @@ public class MemberController {
   private final ReviewService reviewService;
   private final BakeryService bakeryService;
   private final JwtService jwtService;
+  private final AmplitudeService amplitudeService;
 
   @GetMapping(value = "", name = "유저_상세정보_조회")
   @ResponseStatus(HttpStatus.OK)
@@ -84,6 +86,7 @@ public class MemberController {
     NicknameUpdateResponseDTO responseDTO =
         memberService.updateMemberNickname(memberId, request.getNickname());
     jwtService.reIssueTokensAndUpdateRefreshToken(response, responseDTO.getMemberId());
+    amplitudeService.sendUserProperty(memberId, null);
     return ApiResponse.success(SuccessType.UPDATE_MEMBER_NICKNAME_SUCCESS, responseDTO);
   }
 }

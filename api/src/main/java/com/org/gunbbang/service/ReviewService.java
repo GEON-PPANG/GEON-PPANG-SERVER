@@ -34,12 +34,9 @@ public class ReviewService {
   private final BakeryRepository bakeryRepository;
   private final MemberRepository memberRepository;
   private final RecommendKeywordRepository recommendKeywordRepository;
-  private final AmplitudeService amplitudeService;
   private final int maxBestBakeryCount = 10;
 
-  public Long createReview(Long bakeryId, ReviewRequestDTO reviewRequestDto)
-      throws IllegalAccessException {
-    Long currentMemberId = SecurityUtil.getLoginMemberId();
+  public Long createReview(Long currentMemberId, Long bakeryId, ReviewRequestDTO reviewRequestDto) {
     String reviewText = reviewRequestDto.getReviewText().trim();
 
     validateReview(reviewRequestDto, reviewText);
@@ -75,11 +72,6 @@ public class ReviewService {
 
     bakery.reviewCountChange(true);
     bakeryRepository.saveAndFlush(bakery);
-
-    amplitudeService.uploadUserPropertyV2(
-        member.getMemberId().toString(), "complete_reviewwriting", null);
-    amplitudeService.sendUserPropertyV2(member.getMemberId(), null);
-
     return review.getReviewId();
   }
 

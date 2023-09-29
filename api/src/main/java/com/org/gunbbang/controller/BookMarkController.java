@@ -4,6 +4,7 @@ import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.controller.DTO.request.BookMarkRequestDTO;
 import com.org.gunbbang.controller.DTO.response.BookMarkResponseDTO;
 import com.org.gunbbang.errorType.SuccessType;
+import com.org.gunbbang.service.AmplitudeService;
 import com.org.gunbbang.service.BookMarkService;
 import com.org.gunbbang.util.security.SecurityUtil;
 import javax.validation.Valid;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class BookMarkController {
 
   private final BookMarkService bookMarkService;
+  private final AmplitudeService amplitudeService;
 
   @PostMapping(value = "/{bakeryId}", name = "북마크")
   public ApiResponse<BookMarkResponseDTO> doBookMark(
@@ -24,6 +26,7 @@ public class BookMarkController {
     BookMarkResponseDTO response =
         bookMarkService.doBookMark(request.getIsAddingBookMark(), bakeryId, memberId);
 
+    amplitudeService.sendUserProperty(memberId, null);
     if (response.getIsBookMarked()) {
       return ApiResponse.success(SuccessType.CREATE_BOOKMARK_SUCCESS, response);
     }
