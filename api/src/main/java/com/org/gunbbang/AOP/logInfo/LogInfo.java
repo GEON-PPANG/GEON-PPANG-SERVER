@@ -1,35 +1,32 @@
 package com.org.gunbbang.AOP.logInfo;
 
+import java.util.Map;
 import lombok.Getter;
 
 @Getter
 public class LogInfo {
+  private Long memberId;
   private String url;
   private String name;
   private String method;
-  private String header;
-  private String parameters;
-  private String body;
-  private String ipAddress;
-  //    private Long memberId;
+  private Map<String, Object> parameters;
+  private Map<String, Object> body;
   private String exception = null;
   private String exceptionSimpleName = null;
 
   public LogInfo(
+      Long memberId,
       String url,
       String name,
       String method,
-      String header,
-      String parameters,
-      String body,
-      String ipAddress) {
+      Map<String, Object> parameters,
+      Map<String, Object> body) {
+    this.memberId = memberId;
     this.url = url;
     this.name = name;
     this.method = method;
-    this.header = header;
     this.parameters = parameters;
     this.body = body;
-    this.ipAddress = ipAddress;
   }
 
   public LogInfo() {}

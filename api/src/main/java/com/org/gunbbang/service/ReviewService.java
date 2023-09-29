@@ -9,7 +9,6 @@ import com.org.gunbbang.controller.DTO.request.ReviewRequestDTO;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
-import com.org.gunbbang.jwt.service.AmplitudeService;
 import com.org.gunbbang.repository.*;
 import com.org.gunbbang.util.RecommendKeywordPercentage;
 import com.org.gunbbang.util.mapper.BakeryMapper;

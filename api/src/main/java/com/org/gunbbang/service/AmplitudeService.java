@@ -1,4 +1,4 @@
-package com.org.gunbbang.jwt.service;
+package com.org.gunbbang.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -45,28 +45,6 @@ public class AmplitudeService {
     return "Basic " + Base64.getEncoder().encodeToString(valueToEncode.getBytes());
   }
 
-  // http v2
-  public void uploadAuthProperty(PlatformType platformType, String userId) {
-    UserPropertyVO userProperty = UserPropertyVO.builder().auth_type(platformType.name()).build();
-
-    HttpV2RequestDTO request = HttpV2RequestDTO.builder().api_key(apiKey).build();
-
-    request.setEvents(userId, "complete_signup", userProperty);
-    log.info("HttpV2RequestDTO: " + request);
-    amplitudeFeignClient.uploadRequest(request);
-  }
-
-  // identify
-  public void sendUserAuthProperty(PlatformType platformType, Long memberId) {
-    Map<String, Object> propertyMap = new HashMap<>();
-    propertyMap.put("auth_type", platformType.name());
-
-    ObjectNode identification = getIdentification(propertyMap, memberId);
-
-    String requestBody = "api_key=" + apiKey + "&identification=" + identification;
-    amplitudeFeignClient.identifyUserProperty(requestBody);
-  }
-
   private ObjectNode getIdentification(Map<String, Object> propertyMap, Long memberId) {
     // Create an ObjectNode to build the JSON structure
     ObjectNode identification = objectMapper.createObjectNode();
@@ -87,32 +65,21 @@ public class AmplitudeService {
     return userPropertiesNode;
   }
 
-  public void uploadReviewProperty(int reviewCount, String eventType, String userId) {
-    UserPropertyVO userProperty = UserPropertyVO.builder().total_review(reviewCount).build();
-
-    HttpV2RequestDTO request = HttpV2RequestDTO.builder().api_key(apiKey).build();
-
-    request.setEvents(userId, eventType, userProperty);
-    log.info("HttpV2RequestDTO: " + request);
-    amplitudeFeignClient.uploadRequest(request);
-  }
-
-  public void sendUserReviewProperty(int reviewCount, Long memberId) {
-    Map<String, Object> propertyMap = new HashMap<>();
-    propertyMap.put("total_review", Integer.toString(reviewCount));
-
-    ObjectNode identification = getIdentification(propertyMap, memberId);
-
-    String requestBody = "api_key=" + apiKey + "&identification=" + identification;
-    amplitudeFeignClient.identifyUserProperty(requestBody);
-  }
-
   // Http v2 api
   public void uploadUserPropertyV2(String memberId, String eventType, Member member) {
     HttpV2RequestDTO request = HttpV2RequestDTO.builder().api_key(apiKey).build();
     request.setEvents(
         memberId + memberId + memberId + memberId + memberId,
         eventType,
+//        UserPropertyVO.builder()
+//                .auth_type("NONE")
+//                .user_nickname("정은사랑")
+//                .bread_type("빵유형 선택안함")
+//                .ingredients_type("영양성분 선택안함")
+//                .total_mystore(0)
+//                .total_review(0)
+//                .main_purpose("주목적 선택안함")
+//                .build());
         getUserPropertyVO(Long.parseLong(memberId), member));
     log.info("HttpV2RequestDTO: " + request);
     amplitudeFeignClient.uploadRequest(request);
@@ -121,6 +88,15 @@ public class AmplitudeService {
   // identify
   public void sendUserPropertyV2(Long memberId, Member member) throws IllegalAccessException {
     UserPropertyVO vo = getUserPropertyVO(memberId, member);
+//    UserPropertyVO vo = UserPropertyVO.builder()
+//            .auth_type("NONE")
+//            .user_nickname("정은사랑")
+//            .bread_type("빵유형 선택안함")
+//            .ingredients_type("영양성분 선택안함")
+//            .total_mystore(0)
+//            .total_review(0)
+//            .main_purpose("주목적 선택안함")
+//            .build();
 
     Map<String, Object> propertyMap = new HashMap<>();
     Field[] fields = vo.getClass().getDeclaredFields(); // TODO: 리플렉션 안쓰고 하는 방법은 없을지?
@@ -153,9 +129,6 @@ public class AmplitudeService {
     }
     List<Review> reviews = reviewRepository.findAllByMemberOrderByCreatedAtDesc(foundMember);
     List<BookMark> bookMarks = bookMarkRepository.findAllByMemberId(foundMember.getMemberId());
-
-    System.out.println("review size: " + reviews.size());
-    System.out.println("bookMarks size: " + bookMarks.size());
 
     return UserPropertyVO.builder()
         .auth_type(foundMember.getPlatformType().name())

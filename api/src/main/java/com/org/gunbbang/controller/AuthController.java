@@ -1,13 +1,12 @@
 package com.org.gunbbang.controller;
 
-import com.org.gunbbang.AOP.annotation.SignupApiLog;
 import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import com.org.gunbbang.controller.DTO.response.MemberSignUpResponseDTO;
 import com.org.gunbbang.controller.DTO.response.MemberWithdrawResponseDTO;
 import com.org.gunbbang.errorType.SuccessType;
-import com.org.gunbbang.jwt.service.AmplitudeService;
 import com.org.gunbbang.jwt.service.JwtService;
+import com.org.gunbbang.service.AmplitudeService;
 import com.org.gunbbang.service.AuthServiceProvider;
 import com.org.gunbbang.service.MemberService;
 import com.org.gunbbang.service.VO.SignedUpMemberVO;
@@ -29,8 +28,7 @@ public class AuthController {
   private final JwtService jwtService;
   private final AmplitudeService amplitudeService;
 
-  @PostMapping("/signup")
-  @SignupApiLog
+  @PostMapping(value = "/signup", name = "회원가입")
   public ApiResponse<MemberSignUpResponseDTO> signUp(
       @RequestHeader(value = "Platform-token", required = false) final String platformToken,
       @RequestBody @Valid final MemberSignUpRequestDTO request,
@@ -49,7 +47,7 @@ public class AuthController {
         SuccessType.SIGNUP_SUCCESS, MemberMapper.INSTANCE.toMemberSignUpResponseDTO(vo));
   }
 
-  @DeleteMapping("/withdraw")
+  @DeleteMapping(value = "/withdraw", name = "회원탈퇴")
   public ApiResponse<MemberWithdrawResponseDTO> withdraw(
       @RequestHeader(name = "Apple-refresh", required = false) String appleRefreshToken)
       throws Exception {

@@ -1,6 +1,5 @@
 package com.org.gunbbang.controller;
 
-import com.org.gunbbang.AOP.annotation.SearchApiLog;
 import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.controller.DTO.response.BakerySearchResponseDTO;
 import com.org.gunbbang.errorType.SuccessType;
@@ -18,8 +17,7 @@ public class SearchController {
 
   private final BakeryService bakeryService;
 
-  @GetMapping("/bakeries")
-  @SearchApiLog
+  @GetMapping(value = "/bakeries", name = "건빵집_검색")
   public ApiResponse<BakerySearchResponseDTO> searchBakery(@RequestParam final String searchTerm) {
     return ApiResponse.success(
         SuccessType.SEARCH_BAKERIES_SUCCESS, bakeryService.getBakeriesBySearch(searchTerm.trim()));

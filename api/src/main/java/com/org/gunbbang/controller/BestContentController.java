@@ -20,14 +20,14 @@ public class BestContentController {
   private final BakeryService bakeryService;
   private final ReviewService reviewService;
 
-  @GetMapping("/bakeries")
+  @GetMapping(value = "/bakeries", name = "베스트_건빵집_조회")
   public ApiResponse<List<BestBakeryListResponseDTO>> getBestBakeries() {
     Long memberId = SecurityUtil.getLoginMemberId();
     return ApiResponse.success(
         SuccessType.GET_BEST_BAKERIES_SUCCESS, bakeryService.getBestBakeries(memberId));
   }
 
-  @GetMapping("/reviews")
+  @GetMapping(value = "/reviews", name = "베스트_리뷰_조회")
   public ApiResponse<List<BestReviewListResponseDTO>> getBestReviews() {
     Long memberId = SecurityUtil.getLoginMemberId();
     return ApiResponse.success(

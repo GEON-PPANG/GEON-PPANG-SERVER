@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class ReportController {
   private final ReviewReportService reviewReportService;
 
-  @PostMapping("/review/{reviewId}")
+  @PostMapping(value = "/review/{reviewId}", name = "리뷰_신고")
   public ApiResponse<ReviewReportResponseDTO> createReviewReport(
       @RequestBody @Valid final ReviewReportRequestDTO request,
       @PathVariable("reviewId") final Long reviewId) {
