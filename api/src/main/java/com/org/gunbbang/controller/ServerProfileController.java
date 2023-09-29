@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ServerProfileController {
   private final Environment env;
 
-  @GetMapping("/profile")
+  @GetMapping(value = "/profile", name = "서버_env_조회")
   public String getProfile() {
     return Arrays.stream(env.getActiveProfiles()).findFirst().orElse("");
   }

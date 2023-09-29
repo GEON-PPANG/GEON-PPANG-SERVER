@@ -17,7 +17,7 @@ public class ValidationController {
 
   private final MemberService memberService;
 
-  @PostMapping("/nickname")
+  @PostMapping(value = "/nickname", name = "닉네임_중복조회")
   public ApiResponse<ValidationResponseDTO> checkDuplicatedNickname(
       @RequestBody @Valid final ValidateNicknameRequestDTO request) {
     return ApiResponse.success(
@@ -25,7 +25,7 @@ public class ValidationController {
         memberService.checkDuplicatedNickname(request.getNickname().strip()));
   }
 
-  @PostMapping("/email")
+  @PostMapping(value = "/email", name = "이메일_중복조회")
   public ApiResponse<ValidationResponseDTO> checkDuplicatedEmail(
       @RequestBody @Valid final ValidateEmailRequestDTO request) {
     return ApiResponse.success(

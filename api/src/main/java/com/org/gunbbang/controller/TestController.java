@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 public class TestController {
 
-  @GetMapping("/security")
+  @GetMapping(value = "/security", name = "spring_security_test")
   public Long securityTest() {
     return SecurityUtil.getLoginMemberId();
   }
 
-  @GetMapping("/error")
+  @GetMapping(value = "/error", name = "error_test")
   public void errorTest() {
     throw new IllegalArgumentException("에러 로그 확인용 테스트");
   }

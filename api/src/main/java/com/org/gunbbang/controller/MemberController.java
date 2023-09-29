@@ -6,6 +6,7 @@ import com.org.gunbbang.controller.DTO.request.NicknameUpdateRequestDTO;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.jwt.service.JwtService;
+import com.org.gunbbang.service.AmplitudeService;
 import com.org.gunbbang.service.BakeryService;
 import com.org.gunbbang.service.MemberService;
 import com.org.gunbbang.service.ReviewService;
@@ -27,15 +28,16 @@ public class MemberController {
   private final ReviewService reviewService;
   private final BakeryService bakeryService;
   private final JwtService jwtService;
+  private final AmplitudeService amplitudeService;
 
-  @GetMapping("")
+  @GetMapping(value = "", name = "유저_상세정보_조회")
   @ResponseStatus(HttpStatus.OK)
   public ApiResponse<MemberDetailResponseDTO> getMemberDetail() {
     MemberDetailResponseDTO memberDetailResponseDto = memberService.getMemberDetail();
     return ApiResponse.success(SuccessType.GET_MYPAGE_SUCCESS, memberDetailResponseDto);
   }
 
-  @PostMapping("/types")
+  @PostMapping(value = "/types", name = "유저_필터칩_변경")
   public ApiResponse<MemberTypeResponseDTO> updateMemberTypes(
       @Valid @RequestBody final MemberTypesRequestDTO request) {
     Long memberId = SecurityUtil.getLoginMemberId();
@@ -45,14 +47,14 @@ public class MemberController {
         memberService.updateMemberTypes(request, memberId, nickname));
   }
 
-  @GetMapping("/types")
+  @GetMapping(value = "/types", name = "유저_필터칩_조회")
   public ApiResponse<MemberTypeResponseDTO> getMemberTypes() {
     Map<String, Object> loginMemberInfo = SecurityUtil.getLoginMemberInfo();
     return ApiResponse.success(
         SuccessType.GET_MEMBER_TYPES_SUCCESS, memberService.getMemberTypes(loginMemberInfo));
   }
 
-  @GetMapping("/reviews")
+  @GetMapping(value = "/reviews", name = "유저_리뷰_목록_조회")
   @ResponseStatus(HttpStatus.OK)
   public ApiResponse<List<BakeryListReviewedByMemberDTO>> getBakeryListReviewedByMember() {
     Long memberId = SecurityUtil.getLoginMemberId();
@@ -61,14 +63,14 @@ public class MemberController {
         reviewService.getBakeryListReviewedByMember(memberId));
   }
 
-  @GetMapping("/bookMarks")
+  @GetMapping(value = "/bookMarks", name = "북마크_리뷰_목록_조회")
   public ApiResponse<List<BakeryListResponseDTO>> getBookMarkedBakeries() {
     Long memberId = SecurityUtil.getLoginMemberId();
     return ApiResponse.success(
         SuccessType.GET_BOOKMARKED_BAKERIES_SUCCESS, bakeryService.getBookMarkedBakeries(memberId));
   }
 
-  @GetMapping("/nickname")
+  @GetMapping(value = "/nickname", name = "유저_닉네임_조회")
   public ApiResponse<MemberNicknameResponseDTO> getLoginMemberNickname() {
     String nickname = SecurityUtil.getLoginMemberNickname();
     return ApiResponse.success(
@@ -77,13 +79,14 @@ public class MemberController {
   }
 
   /** 소셜로그인을 한 회원이 닉네임 설정 뷰에서 이탈하고(GUEST) 추후에 진입했을 때 사용되는 닉네임 변경 api */
-  @PostMapping("/nickname")
+  @PostMapping(value = "/nickname", name = "소셜용_닉네임_변경")
   public ApiResponse<NicknameUpdateResponseDTO> updateLoginMemberNickname(
       @RequestBody @Valid final NicknameUpdateRequestDTO request, HttpServletResponse response) {
     Long memberId = SecurityUtil.getLoginMemberId();
     NicknameUpdateResponseDTO responseDTO =
         memberService.updateMemberNickname(memberId, request.getNickname());
     jwtService.reIssueTokensAndUpdateRefreshToken(response, responseDTO.getMemberId());
+    amplitudeService.sendUserProperty(memberId, null);
     return ApiResponse.success(SuccessType.UPDATE_MEMBER_NICKNAME_SUCCESS, responseDTO);
   }
 }

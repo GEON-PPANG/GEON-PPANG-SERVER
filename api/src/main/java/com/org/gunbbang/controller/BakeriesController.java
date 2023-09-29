@@ -1,6 +1,5 @@
 package com.org.gunbbang.controller;
 
-import com.org.gunbbang.AOP.annotation.BakeryIdApiLog;
 import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.controller.DTO.response.BakeryDetailResponseDTO;
 import com.org.gunbbang.controller.DTO.response.BakeryListResponseDTO;
@@ -22,7 +21,7 @@ public class BakeriesController {
   private final BakeryService bakeryService;
   private final ReviewService reviewService;
 
-  @GetMapping("")
+  @GetMapping(value = "", name = "건빵집 리스트 조회")
   @ResponseStatus(HttpStatus.OK)
   public ApiResponse<List<BakeryListResponseDTO>> getBakeryList(
       @RequestParam("sortingOption") String sortingOption,
@@ -35,9 +34,8 @@ public class BakeriesController {
     return ApiResponse.success(SuccessType.GET_BAKERY_LIST_SUCCESS, bakeryListResponseDto);
   }
 
-  @GetMapping("/{bakeryId}")
+  @GetMapping(value = "/{bakeryId}", name = "건빵집_상세조회")
   @ResponseStatus(HttpStatus.OK)
-  @BakeryIdApiLog
   public ApiResponse<BakeryDetailResponseDTO> getBakeryDetail(
       @PathVariable("bakeryId") Long bakeryId) {
     Long memberId = SecurityUtil.getLoginMemberId();
@@ -46,9 +44,8 @@ public class BakeriesController {
     return ApiResponse.success(SuccessType.GET_BAKERY_DETAIL_SUCCESS, bakeryDetailResponseDTO);
   }
 
-  @GetMapping("/{bakeryId}/reviews")
+  @GetMapping(value = "/{bakeryId}/reviews", name = "건빵집_리뷰_조회")
   @ResponseStatus(HttpStatus.OK)
-  @BakeryIdApiLog
   public ApiResponse<ReviewListResponseDTO> getBakeryReviewList(
       @PathVariable("bakeryId") Long bakeryId) {
     ReviewListResponseDTO reviewListResponseDto = reviewService.getBakeryReviewList(bakeryId);
