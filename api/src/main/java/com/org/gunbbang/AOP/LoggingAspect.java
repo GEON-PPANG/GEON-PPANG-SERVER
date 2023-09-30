@@ -40,7 +40,8 @@ public class LoggingAspect {
             apiInfo.getName(),
             apiInfo.getMethod(),
             apiInfo.getParameters(),
-            apiInfo.getBody());
+            apiInfo.getBody(),
+            apiInfo.getLogTimeStamp());
 
     System.out.println("기본 로깅");
     return doLogging(joinPoint, logInfo);
@@ -52,6 +53,7 @@ public class LoggingAspect {
       final String logMessage = objectMapper.writeValueAsString(Map.entry("logInfo", logInfo));
       log.info(logMessage);
     } catch (Exception e) {
+      log.error("%%%%%%%%%% 로깅 남기는 과정에서 에러 발생 %%%%%%%%%%");
       final StringWriter sw = new StringWriter();
       e.printStackTrace(new PrintWriter(sw));
       final String exceptionAsString = sw.toString();
