@@ -31,7 +31,7 @@ public class LoggingAspect {
   @Around("onRequest()")
   public Object doDefaultLogging(ProceedingJoinPoint joinPoint) throws Throwable {
     final RequestApiInfo apiInfo =
-        new RequestApiInfo(joinPoint, joinPoint.getTarget().getClass(), objectMapper, jwtService);
+        new RequestApiInfo(joinPoint, joinPoint.getTarget().getClass(), jwtService);
 
     final LogInfo logInfo =
         new LogInfo(
@@ -47,14 +47,10 @@ public class LoggingAspect {
   }
 
   private Object doLogging(ProceedingJoinPoint joinPoint, LogInfo logInfo) throws Throwable {
+    final Object result = joinPoint.proceed(joinPoint.getArgs());
     try {
-
-      final Object result = joinPoint.proceed(joinPoint.getArgs());
       final String logMessage = objectMapper.writeValueAsString(Map.entry("logInfo", logInfo));
       log.info(logMessage);
-
-      return result;
-
     } catch (Exception e) {
       final StringWriter sw = new StringWriter();
       e.printStackTrace(new PrintWriter(sw));
@@ -71,8 +67,7 @@ public class LoggingAspect {
       logInfo.setExceptionSimpleName(e.getClass().getSimpleName());
       final String logMessage = objectMapper.writeValueAsString(logInfo);
       log.error(logMessage);
-
-      throw e;
     }
+    return result;
   }
 }
