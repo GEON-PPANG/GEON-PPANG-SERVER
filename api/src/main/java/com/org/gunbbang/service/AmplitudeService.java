@@ -66,14 +66,14 @@ public class AmplitudeService {
     request.setEvents(
         memberId + memberId + memberId + memberId + memberId,
         eventType,
-        getUserPropertyVO(Long.parseLong(memberId), member));
+        getUserPropertyVO(Long.parseLong(memberId)));
     log.info("HttpV2RequestDTO: " + request);
     amplitudeFeignClient.uploadRequest(request);
   }
 
   // identify
-  public void sendUserProperty(Long memberId, Member member) {
-    UserPropertyVO vo = getUserPropertyVO(memberId, member);
+  public void sendUserProperty(Long memberId) {
+    UserPropertyVO vo = getUserPropertyVO(memberId);
 
     Map<String, Object> propertyMap = new HashMap<>();
     try {
@@ -96,18 +96,16 @@ public class AmplitudeService {
     amplitudeFeignClient.identifyUserProperty(requestBody);
   }
 
-  private UserPropertyVO getUserPropertyVO(Long memberId, Member member) {
-    Member foundMember = member;
-    if (foundMember == null) {
-      foundMember =
-          memberRepository
-              .findById(memberId)
-              .orElseThrow(
-                  () ->
-                      new NotFoundException(
-                          ErrorType.NOT_FOUND_USER_EXCEPTION,
-                          ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberId));
-    }
+  private UserPropertyVO getUserPropertyVO(Long memberId) {
+    Member foundMember =
+        memberRepository
+            .findById(memberId)
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_USER_EXCEPTION,
+                        ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberId));
+
     List<Review> reviews = reviewRepository.findAllByMemberOrderByCreatedAtDesc(foundMember);
     List<BookMark> bookMarks = bookMarkRepository.findAllByMemberId(foundMember.getMemberId());
 

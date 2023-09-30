@@ -1,6 +1,5 @@
 package com.org.gunbbang.AOP.ApiInfo;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.org.gunbbang.jwt.service.JwtService;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -38,17 +37,15 @@ public class RequestApiInfo {
   private final String dateTime =
       LocalDateTime.now(ZoneId.of("Asia/Seoul"))
           .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-  private final ObjectMapper objectMapper = new ObjectMapper();
   private final JwtService jwtService;
 
-  public RequestApiInfo(
-      JoinPoint joinPoint, Class clazz, ObjectMapper objectMapper, JwtService jwtService) {
+  public RequestApiInfo(JoinPoint joinPoint, Class clazz, JwtService jwtService) {
     this.jwtService = jwtService;
     try {
       final HttpServletRequest request =
           ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
       setApiInfo(joinPoint, clazz);
-      setInputStream(joinPoint);
+      setBodyAndParameter(joinPoint);
       setMemberId(request);
     } catch (Exception e) {
       e.printStackTrace();
@@ -71,12 +68,14 @@ public class RequestApiInfo {
     final MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
     if (methodSignature != null) {
       final Method method = methodSignature.getMethod(); // methodSignature에서 실행 중인 메서드를 가져옴
-      final Class mappingClass = getMappingClass(method);
-      final Annotation annotation = method.getAnnotation(mappingClass);
+      if (method != null) {
+        final Class mappingClass = getMappingClass(method);
+        final Annotation annotation = method.getAnnotation(mappingClass);
 
-      setMethod(mappingClass);
-      setName(mappingClass, annotation);
-      setFullUrl(clazz, mappingClass, annotation);
+        setMethod(mappingClass);
+        setName(mappingClass, annotation);
+        setFullUrl(clazz, mappingClass, annotation);
+      }
     }
   }
 
@@ -130,7 +129,7 @@ public class RequestApiInfo {
     return baseUrl;
   }
 
-  private void setInputStream(JoinPoint joinPoint) {
+  private void setBodyAndParameter(JoinPoint joinPoint) {
     try {
       final CodeSignature codeSignature = (CodeSignature) joinPoint.getSignature();
       final String[] parameterNames = codeSignature.getParameterNames();

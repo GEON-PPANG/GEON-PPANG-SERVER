@@ -86,7 +86,7 @@ public class MemberController {
     NicknameUpdateResponseDTO responseDTO =
         memberService.updateMemberNickname(memberId, request.getNickname());
     jwtService.reIssueTokensAndUpdateRefreshToken(response, responseDTO.getMemberId());
-    amplitudeService.sendUserProperty(memberId, null);
+    amplitudeService.sendUserProperty(memberId);
     return ApiResponse.success(SuccessType.UPDATE_MEMBER_NICKNAME_SUCCESS, responseDTO);
   }
 }

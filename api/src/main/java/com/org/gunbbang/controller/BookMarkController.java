@@ -26,7 +26,7 @@ public class BookMarkController {
     BookMarkResponseDTO response =
         bookMarkService.doBookMark(request.getIsAddingBookMark(), bakeryId, memberId);
 
-    amplitudeService.sendUserProperty(memberId, null);
+    amplitudeService.sendUserProperty(memberId);
     if (response.getIsBookMarked()) {
       return ApiResponse.success(SuccessType.CREATE_BOOKMARK_SUCCESS, response);
     }

@@ -41,7 +41,7 @@ public class AuthController {
             .saveMemberOrLogin(platformToken, request);
 
     jwtService.setSignedUpMemberToken(vo, response);
-    amplitudeService.sendUserProperty(vo.getMemberId(), null);
+    amplitudeService.sendUserProperty(vo.getMemberId());
     return ApiResponse.success(
         SuccessType.SIGNUP_SUCCESS, MemberMapper.INSTANCE.toMemberSignUpResponseDTO(vo));
   }
