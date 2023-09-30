@@ -72,7 +72,6 @@ public class ApiControllerAdviser {
   @ExceptionHandler(SignatureVerificationException.class)
   public ResponseEntity<ApiResponse> handleSignatureVerificationException(
       final SignatureVerificationException e) {
-    e.printStackTrace();
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
         .body(ApiResponse.error(ErrorType.NOT_VALID_TOKEN_EXCEPTION));
   }
@@ -85,14 +84,12 @@ public class ApiControllerAdviser {
 
   @ExceptionHandler(JWTDecodeException.class)
   public ResponseEntity<ApiResponse> handleJWTDecodeException(JWTDecodeException e) {
-    e.printStackTrace();
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
         .body(ApiResponse.error(ErrorType.JWT_DECODE_FAIL_EXCEPTION));
   }
 
   @ExceptionHandler(JWTVerificationException.class)
   public ResponseEntity<ApiResponse> handleJWTVerificationException(Exception e) {
-    e.printStackTrace();
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
         .body(ApiResponse.error(401, e.getMessage()));
   }

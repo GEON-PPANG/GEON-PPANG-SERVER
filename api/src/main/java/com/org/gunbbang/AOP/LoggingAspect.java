@@ -40,9 +40,7 @@ public class LoggingAspect {
             apiInfo.getName(),
             apiInfo.getMethod(),
             apiInfo.getParameters(),
-            apiInfo.getBody()
-            //                apiInfo.getMemberId()
-            );
+            apiInfo.getBody());
 
     System.out.println("기본 로깅");
     return doLogging(joinPoint, logInfo);
