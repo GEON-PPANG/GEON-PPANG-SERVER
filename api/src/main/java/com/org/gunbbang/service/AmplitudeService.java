@@ -111,7 +111,7 @@ public class AmplitudeService {
 
     return UserPropertyVO.builder()
         .auth_type(foundMember.getPlatformType().name())
-        //            .account_creation_date(member.getCreatedAt())
+        .account_creation_date(foundMember.getCreatedAt())
         .main_purpose(foundMember.getMainPurpose().name())
         .ingredients_type(foundMember.getNutrientType().getNutrientTypeName())
         .bread_type(foundMember.getBreadType().getBreadTypeName())
