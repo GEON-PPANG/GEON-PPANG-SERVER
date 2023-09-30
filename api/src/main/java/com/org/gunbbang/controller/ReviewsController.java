@@ -29,7 +29,7 @@ public class ReviewsController {
     Long currentMemberId = SecurityUtil.getLoginMemberId();
     Long reviewId = reviewService.createReview(currentMemberId, bakeryId, request);
 
-    amplitudeService.sendUserProperty(currentMemberId, null);
+    amplitudeService.sendUserProperty(currentMemberId);
     return ApiResponse.success(
         SuccessType.CREATE_REVIEW_SUCCESS,
         ReviewCreateResponseDTO.builder().reviewId(reviewId).build());
