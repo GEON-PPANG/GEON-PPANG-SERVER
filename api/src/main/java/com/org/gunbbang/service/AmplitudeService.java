@@ -73,10 +73,10 @@ public class AmplitudeService {
 
   // identify
   public void sendUserProperty(Long memberId) {
-    UserPropertyVO vo = getUserPropertyVO(memberId);
-
-    Map<String, Object> propertyMap = new HashMap<>();
     try {
+      UserPropertyVO vo = getUserPropertyVO(memberId);
+
+      Map<String, Object> propertyMap = new HashMap<>();
       Field[] fields = vo.getClass().getDeclaredFields(); // TODO: 리플렉션 안쓰고 하는 방법은 없을지?
       for (Field field : fields) {
         field.setAccessible(true);
@@ -86,14 +86,14 @@ public class AmplitudeService {
 
         propertyMap.put(propertyKey, propertyValue);
       }
+
+      ObjectNode identification = getIdentification(propertyMap, memberId);
+
+      String requestBody = "api_key=" + apiKey + "&identification=" + identification;
+      amplitudeFeignClient.identifyUserProperty(requestBody);
     } catch (Exception e) {
-      log.error("%%%%%%%%%% user property 생성 과정에서 에러 발생 %%%%%%%%%%");
+      log.error("%%%%%%%%%% user property 전송 과정에서 에러 발생 %%%%%%%%%%");
     }
-
-    ObjectNode identification = getIdentification(propertyMap, memberId);
-
-    String requestBody = "api_key=" + apiKey + "&identification=" + identification;
-    amplitudeFeignClient.identifyUserProperty(requestBody);
   }
 
   private UserPropertyVO getUserPropertyVO(Long memberId) {
