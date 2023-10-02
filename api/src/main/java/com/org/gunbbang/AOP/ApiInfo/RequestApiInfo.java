@@ -6,7 +6,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,9 +33,7 @@ public class RequestApiInfo {
   private Map<String, Object> parameters = new HashMap<>();
   private Map<String, String> pathVariables = new HashMap<>();
   private Map<String, Object> body = new HashMap<>();
-  private final String dateTime =
-      LocalDateTime.now(ZoneId.of("Asia/Seoul"))
-          .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+  private LocalDateTime logTimeStamp;
   private final JwtService jwtService;
 
   public RequestApiInfo(JoinPoint joinPoint, Class clazz, JwtService jwtService) {
@@ -44,12 +41,18 @@ public class RequestApiInfo {
     try {
       final HttpServletRequest request =
           ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+      setLogTimestamp();
       setApiInfo(joinPoint, clazz);
       setBodyAndParameter(joinPoint);
       setMemberId(request);
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  private void setLogTimestamp() {
+    LocalDateTime dateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+    logTimeStamp = dateTime;
   }
 
   private void setMemberId(HttpServletRequest request) {
@@ -145,7 +148,6 @@ public class RequestApiInfo {
         }
       }
       this.parameters = parametersMap;
-      System.out.println(parametersMap);
     } catch (Exception e) {
       e.printStackTrace();
     }

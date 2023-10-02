@@ -1,5 +1,6 @@
 package com.org.gunbbang.AOP.logInfo;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import lombok.Getter;
 
@@ -11,6 +12,7 @@ public class LogInfo {
   private String method;
   private Map<String, Object> parameters;
   private Map<String, Object> body;
+  private LocalDateTime logTimeStamp;
   private String exception = null;
   private String exceptionSimpleName = null;
 
@@ -20,13 +22,15 @@ public class LogInfo {
       String name,
       String method,
       Map<String, Object> parameters,
-      Map<String, Object> body) {
+      Map<String, Object> body,
+      LocalDateTime logTimeStamp) {
     this.memberId = memberId;
     this.url = url;
     this.name = name;
     this.method = method;
     this.parameters = parameters;
     this.body = body;
+    this.logTimeStamp = logTimeStamp;
   }
 
   public LogInfo() {}
