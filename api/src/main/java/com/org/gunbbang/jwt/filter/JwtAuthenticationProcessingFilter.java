@@ -11,7 +11,6 @@ import com.org.gunbbang.jwt.service.JwtService;
 import com.org.gunbbang.login.CustomUserDetails;
 import com.org.gunbbang.repository.MemberRepository;
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -36,39 +35,23 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
   private final ObjectMapper objectMapper;
   private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
-  private static final List<String> WHITE_LIST =
-      List.of(
-          "/auth/signup",
-          "/auth/login",
-          "/health",
-          "/profile",
-          "/validation/nickname",
-          "/validation/email",
-          "/actuator/health",
-          "/favicon.ico");
-
-  @Override
-  protected boolean shouldNotFilter(HttpServletRequest request) {
-    String path = request.getRequestURI();
-    return WHITE_LIST.contains(path) || path.startsWith(H2_PREFIX);
-  }
-
   @Override
   protected void doFilterInternal(
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
-    if (!jwtService.isAccessTokenExist(request)) {
-      throw new CustomJwtTokenException(ErrorType.NOT_EXIST_ACCESS_TOKEN_EXCEPTION);
+    if (jwtService.isAccessTokenExist(request)) {
+      checkAccessTokenAndAuthentication(request);
+      //      throw new CustomJwtTokenException(ErrorType.NOT_EXIST_ACCESS_TOKEN_EXCEPTION);
     }
 
     // 헤더에 유효한 refreshToken이 담겨져서 요청된 경우 토큰 재발급 요청 refresh와 access 둘 다 재발급해서 반환
-    if (jwtService.isRefreshTokenExist(request)) {
+    if (jwtService.isRefreshTokenExist(request) && jwtService.isAccessTokenExist(request)) {
       refreshAccessAndRefreshTokens(request, response);
       return;
     }
 
     // refreshToken가 null인 경우 -> 일반적인 인증인 경우 accesssToken이 유효한지 검사 후 유효하면 접근 허용, 유효하지 않으면 에러 응답
-    checkAccessTokenAndAuthentication(request);
+    log.info("do filter 진입");
     filterChain.doFilter(request, response);
   }
 
