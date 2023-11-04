@@ -78,7 +78,7 @@ public class JwtService {
     String accessToken = createAccessToken(vo.getEmail(), vo.getMemberId());
     response.setHeader(accessHeader, accessToken);
 
-    if (vo.getRole().equals(Role.USER)) {
+    if (vo.getRole().equals(Role.ROLE_MEMBER)) {
       String refreshToken = createRefreshToken();
       updateRefreshTokenByMemberId(vo.getMemberId(), refreshToken);
       response.setHeader(refreshHeader, refreshToken);
