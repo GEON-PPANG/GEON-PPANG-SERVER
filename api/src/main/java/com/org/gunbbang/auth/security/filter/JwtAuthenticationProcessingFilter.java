@@ -3,12 +3,12 @@ package com.org.gunbbang.auth.security.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.org.gunbbang.CustomJwtTokenException;
 import com.org.gunbbang.NotFoundException;
+import com.org.gunbbang.auth.jwt.service.JwtService;
+import com.org.gunbbang.auth.security.CustomUserDetails;
 import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.errorType.SuccessType;
-import com.org.gunbbang.auth.jwt.service.JwtService;
-import com.org.gunbbang.auth.security.CustomUserDetails;
 import com.org.gunbbang.repository.MemberRepository;
 import java.io.IOException;
 import java.util.UUID;
@@ -39,10 +39,6 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
   protected void doFilterInternal(
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
-    if (jwtService.isAccessTokenExist(request)) {
-      checkAccessTokenAndAuthentication(request);
-      //      throw new CustomJwtTokenException(ErrorType.NOT_EXIST_ACCESS_TOKEN_EXCEPTION);
-    }
 
     // 헤더에 유효한 refreshToken이 담겨져서 요청된 경우 토큰 재발급 요청 refresh와 access 둘 다 재발급해서 반환
     if (jwtService.isRefreshTokenExist(request) && jwtService.isAccessTokenExist(request)) {
@@ -50,8 +46,12 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
       return;
     }
 
-    // refreshToken가 null인 경우 -> 일반적인 인증인 경우 accesssToken이 유효한지 검사 후 유효하면 접근 허용, 유효하지 않으면 에러 응답
-    log.info("do filter 진입");
+    // 일반적인 엑세스 접근 요청
+    if (jwtService.isAccessTokenExist(request)) {
+      checkAccessTokenAndAuthentication(request);
+      //      throw new CustomJwtTokenException(ErrorType.NOT_EXIST_ACCESS_TOKEN_EXCEPTION);
+    }
+
     filterChain.doFilter(request, response);
   }
 

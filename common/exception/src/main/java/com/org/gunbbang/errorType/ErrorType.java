@@ -41,10 +41,10 @@ public enum ErrorType {
   REVOKE_APPLE_REFRESH_TOKEN_FAIL_EXCEPTION(HttpStatus.UNAUTHORIZED, "애플 리프레시 토큰 revoke에 실패했습니다."),
   INVALID_APPLE_AUTH_TOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "애플 authorization code가 유효하지 않습니다."),
   INVALID_KAKAO_TOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "카카오 엑세스 토큰이 유효하지 않습니다."),
-  NOT_AUTHENTICATED(HttpStatus.UNAUTHORIZED, "접근이 허용되지 않습니다"),
+  NOT_AUTHENTICATED(HttpStatus.UNAUTHORIZED, "인증되지 않은 회원의 접근입니다"),
 
   /** 403 */
-  ACCESS_DENIED(HttpStatus.UNAUTHORIZED, "접근이 허용되지 않습니다"),
+  ACCESS_DENIED(HttpStatus.FORBIDDEN, "접근이 허용되지 않습니다"),
 
   /** 404 NOT FOUND */
   NOT_FOUND_USER_EXCEPTION(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다. memberId from request: "),

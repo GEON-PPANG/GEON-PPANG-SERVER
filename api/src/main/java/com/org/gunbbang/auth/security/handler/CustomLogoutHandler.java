@@ -1,10 +1,10 @@
 package com.org.gunbbang.auth.security.handler;
 
 import com.org.gunbbang.NotFoundException;
+import com.org.gunbbang.auth.security.util.SecurityUtil;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.MemberRepository;
-import com.org.gunbbang.auth.security.util.SecurityUtil;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;

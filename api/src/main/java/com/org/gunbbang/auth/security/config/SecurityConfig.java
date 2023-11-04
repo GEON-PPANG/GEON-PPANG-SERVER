@@ -1,11 +1,11 @@
 package com.org.gunbbang.auth.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.org.gunbbang.auth.jwt.service.JwtService;
+import com.org.gunbbang.auth.security.filter.JsonUsernamePasswordAuthenticationFilter;
 import com.org.gunbbang.auth.security.filter.JwtAuthenticationProcessingFilter;
 import com.org.gunbbang.auth.security.filter.JwtExceptionFilter;
-import com.org.gunbbang.auth.jwt.service.JwtService;
 import com.org.gunbbang.auth.security.handler.*;
-import com.org.gunbbang.auth.security.filter.JsonUsernamePasswordAuthenticationFilter;
 import com.org.gunbbang.auth.security.service.CustomUserDetailsService;
 import com.org.gunbbang.repository.MemberRepository;
 import javax.servlet.Filter;
@@ -76,7 +76,7 @@ public class SecurityConfig {
             "/bookMarks/{bakeryId}", // 북마크
             "/report/review/{reviewId}", // 리뷰신고
             "/member/withdraw", // 회원탈퇴
-            // 로그아웃
+            "/auth/logout", // 로그아웃
             "/member", // 유저 정보 상세보기(마이페이지)
             "/member/bookMarks", // 북마크 목록 조회
             "/member/types" // 유져 필터 조회(이거 아요에서 한번 쓰지 않나?) 및 필터 변경
