@@ -1,4 +1,4 @@
-package com.org.gunbbang.jwt.filter;
+package com.org.gunbbang.auth.security.filter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;

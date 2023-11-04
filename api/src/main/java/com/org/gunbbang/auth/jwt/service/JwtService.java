@@ -1,4 +1,4 @@
-package com.org.gunbbang.jwt.service;
+package com.org.gunbbang.auth.jwt.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

@@ -1,7 +1,7 @@
-package com.org.gunbbang.util.security;
+package com.org.gunbbang.auth.security.util;
 
 import com.org.gunbbang.MainPurpose;
-import com.org.gunbbang.login.CustomUserDetails;
+import com.org.gunbbang.auth.security.CustomUserDetails;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.security.core.context.SecurityContextHolder;

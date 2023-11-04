@@ -1,4 +1,4 @@
-package com.org.gunbbang.jwt.filter;
+package com.org.gunbbang.auth.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.org.gunbbang.CustomJwtTokenException;
@@ -7,8 +7,8 @@ import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.errorType.SuccessType;
-import com.org.gunbbang.jwt.service.JwtService;
-import com.org.gunbbang.login.CustomUserDetails;
+import com.org.gunbbang.auth.jwt.service.JwtService;
+import com.org.gunbbang.auth.security.CustomUserDetails;
 import com.org.gunbbang.repository.MemberRepository;
 import java.io.IOException;
 import java.util.UUID;

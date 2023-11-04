@@ -28,6 +28,7 @@ public enum ErrorType {
   REQUEST_BIND_EXCEPTION(HttpStatus.BAD_REQUEST, "요청 값 바인딩에 실패했습니다"),
   LOGIN_FAIL_EXCEPTION(HttpStatus.BAD_REQUEST, "로그인에 실패하였습니다. 아이디나 비밀번호 확인해주세요"),
   PERSONAL_FILTER_EXCEPTION(HttpStatus.BAD_REQUEST, "필터 선택을 하지 않은 경우 맞춤 필터링을 적용할 수 없습니다"),
+
   /** 401 */
   ABUSED_REFRESH_TOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "토큰 재발급 실패. memberId: "),
   NOT_VALID_TOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다"),
@@ -40,6 +41,10 @@ public enum ErrorType {
   REVOKE_APPLE_REFRESH_TOKEN_FAIL_EXCEPTION(HttpStatus.UNAUTHORIZED, "애플 리프레시 토큰 revoke에 실패했습니다."),
   INVALID_APPLE_AUTH_TOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "애플 authorization code가 유효하지 않습니다."),
   INVALID_KAKAO_TOKEN_EXCEPTION(HttpStatus.UNAUTHORIZED, "카카오 엑세스 토큰이 유효하지 않습니다."),
+  NOT_AUTHENTICATED(HttpStatus.UNAUTHORIZED, "접근이 허용되지 않습니다"),
+
+  /** 403 */
+  ACCESS_DENIED(HttpStatus.UNAUTHORIZED, "접근이 허용되지 않습니다"),
 
   /** 404 NOT FOUND */
   NOT_FOUND_USER_EXCEPTION(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다. memberId from request: "),

@@ -1,12 +1,12 @@
 package com.org.gunbbang.controller;
 
+import com.org.gunbbang.auth.security.util.SecurityUtil;
 import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.controller.DTO.response.BestBakeryListResponseDTO;
 import com.org.gunbbang.controller.DTO.response.BestReviewListResponseDTO;
 import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.service.BakeryService;
 import com.org.gunbbang.service.ReviewService;
-import com.org.gunbbang.util.security.SecurityUtil;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

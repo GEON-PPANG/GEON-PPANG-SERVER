@@ -1,8 +1,8 @@
-package com.org.gunbbang.login.service;
+package com.org.gunbbang.auth.security.service;
 
 import com.org.gunbbang.PlatformType;
 import com.org.gunbbang.entity.Member;
-import com.org.gunbbang.login.CustomUserDetails;
+import com.org.gunbbang.auth.security.CustomUserDetails;
 import com.org.gunbbang.repository.MemberRepository;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
