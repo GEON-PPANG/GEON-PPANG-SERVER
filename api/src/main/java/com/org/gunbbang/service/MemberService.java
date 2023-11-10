@@ -147,7 +147,7 @@ public class MemberService {
     return ValidationResponseDTO.builder().isAvailable(true).build();
   }
 
-  public MemberWithdrawResponseDTO withdraw(Long memberId, String appleRefreshToken)
+  public MemberWithdrawResponseDTO withdraw(String appleRefreshToken, Long memberId)
       throws Exception {
     if (getMemberPlatformType(memberId) == PlatformType.APPLE) {
       appleJWTService.revokeAppleTokens(appleRefreshToken, memberId);

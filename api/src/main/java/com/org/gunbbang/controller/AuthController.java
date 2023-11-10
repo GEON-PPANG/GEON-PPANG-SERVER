@@ -52,6 +52,6 @@ public class AuthController {
       throws Exception {
     Long memberId = SecurityUtil.getLoginMemberId();
     return ApiResponse.success(
-        SuccessType.DELETE_MEMBER_SUCCESS, memberService.withdraw(memberId, appleRefreshToken));
+        SuccessType.DELETE_MEMBER_SUCCESS, memberService.withdraw(appleRefreshToken, memberId));
   }
 }

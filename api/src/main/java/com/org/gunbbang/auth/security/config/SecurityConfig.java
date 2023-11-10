@@ -81,7 +81,7 @@ public class SecurityConfig {
             "/member/bookMarks", // 북마크 목록 조회
             "/member/types" // 유져 필터 조회(이거 아요에서 한번 쓰지 않나?) 및 필터 변경
             )
-        .hasRole("MEMBERRR")
+        .hasRole("MEMBER")
         .and()
         .exceptionHandling()
         .accessDeniedHandler(customAccessDeniedHandler())

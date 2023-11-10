@@ -1,6 +1,5 @@
 package com.org.gunbbang.controller;
 
-import com.org.gunbbang.auth.security.util.SecurityUtil;
 import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.controller.DTO.response.BakeryDetailResponseDTO;
 import com.org.gunbbang.controller.DTO.response.BakeryListResponseDTO;
@@ -38,9 +37,7 @@ public class BakeriesController {
   @ResponseStatus(HttpStatus.OK)
   public ApiResponse<BakeryDetailResponseDTO> getBakeryDetail(
       @PathVariable("bakeryId") Long bakeryId) {
-    Long memberId = SecurityUtil.getLoginMemberId();
-    BakeryDetailResponseDTO bakeryDetailResponseDTO =
-        bakeryService.getBakeryDetail(memberId, bakeryId);
+    BakeryDetailResponseDTO bakeryDetailResponseDTO = bakeryService.getBakeryDetail(bakeryId);
     return ApiResponse.success(SuccessType.GET_BAKERY_DETAIL_SUCCESS, bakeryDetailResponseDTO);
   }
 

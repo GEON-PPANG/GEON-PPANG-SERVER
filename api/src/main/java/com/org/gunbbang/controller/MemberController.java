@@ -83,6 +83,7 @@ public class MemberController {
   public ApiResponse<NicknameUpdateResponseDTO> updateLoginMemberNickname(
       @RequestBody @Valid final NicknameUpdateRequestDTO request, HttpServletResponse response) {
     Long memberId = SecurityUtil.getLoginMemberId();
+
     NicknameUpdateResponseDTO responseDTO =
         memberService.updateMemberNickname(memberId, request.getNickname());
     jwtService.reIssueTokensAndUpdateRefreshToken(response, responseDTO.getMemberId());
