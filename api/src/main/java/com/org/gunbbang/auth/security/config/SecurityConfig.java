@@ -1,18 +1,19 @@
-package com.org.gunbbang.config;
+package com.org.gunbbang.auth.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.org.gunbbang.jwt.filter.JwtAuthenticationProcessingFilter;
-import com.org.gunbbang.jwt.filter.JwtExceptionFilter;
-import com.org.gunbbang.jwt.service.JwtService;
-import com.org.gunbbang.login.filter.JsonUsernamePasswordAuthenticationFilter;
-import com.org.gunbbang.login.handler.*;
-import com.org.gunbbang.login.service.CustomUserDetailsService;
+import com.org.gunbbang.auth.jwt.service.JwtService;
+import com.org.gunbbang.auth.security.filter.JsonUsernamePasswordAuthenticationFilter;
+import com.org.gunbbang.auth.security.filter.JwtAuthenticationProcessingFilter;
+import com.org.gunbbang.auth.security.filter.JwtExceptionFilter;
+import com.org.gunbbang.auth.security.handler.*;
+import com.org.gunbbang.auth.security.service.CustomUserDetailsService;
 import com.org.gunbbang.repository.MemberRepository;
 import javax.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -21,7 +22,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
@@ -56,21 +59,33 @@ public class SecurityConfig {
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
         .authorizeRequests()
+        .antMatchers("/", "/css/**", "/images/**", "/js/**", "/favicon.ico", "/h2-console/**")
+        .permitAll()
         .antMatchers(
-            "/",
-            "/css/**",
-            "/images/**",
-            "/js/**",
-            "/favicon.ico",
-            "/h2-console/**",
-            "/health",
-            "/profile",
-            "/auth/signup",
-            "/validation/nickname",
-            "/validation/email",
-            "/profile",
-            "/actuator/health")
-        .permitAll();
+            HttpMethod.POST, "/member/nickname" // 소셜용 닉네임 변경 api
+            )
+        .hasRole("GUEST")
+        .antMatchers(
+            HttpMethod.GET, "/member/nickname" // 회원 닉네임 조회 api
+            )
+        .hasRole("MEMBER")
+        .antMatchers(
+            "/reviews/{bakeryId}", // 리뷰작성
+            "/reviews/{reviewId}", // 내가 쓴 리뷰 상세보기
+            "/member/reviews", // 내가 작성한 리뷰 목록
+            "/bookMarks/{bakeryId}", // 북마크
+            "/report/review/{reviewId}", // 리뷰신고
+            "/member/withdraw", // 회원탈퇴
+            "/auth/logout", // 로그아웃
+            "/member", // 유저 정보 상세보기(마이페이지)
+            "/member/bookMarks", // 북마크 목록 조회
+            "/member/types" // 유져 필터 조회(이거 아요에서 한번 쓰지 않나?) 및 필터 변경
+            )
+        .hasRole("MEMBER")
+        .and()
+        .exceptionHandling()
+        .accessDeniedHandler(customAccessDeniedHandler())
+        .authenticationEntryPoint(customAuthenticationEntryPoint());
 
     // logout 구현
     http.logout()
@@ -139,5 +154,15 @@ public class SecurityConfig {
   @Bean
   public LogoutSuccessHandler customLogoutSuccessHandler() {
     return new LogoutSuccessHandler(objectMapper);
+  }
+
+  @Bean
+  public AuthenticationEntryPoint customAuthenticationEntryPoint() {
+    return new CustomAuthenticationEntryPoint(objectMapper);
+  }
+
+  @Bean
+  public AccessDeniedHandler customAccessDeniedHandler() {
+    return new CustomAccessDeniedHandler(objectMapper);
   }
 }

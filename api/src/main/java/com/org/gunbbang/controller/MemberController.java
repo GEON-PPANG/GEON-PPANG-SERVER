@@ -1,16 +1,16 @@
 package com.org.gunbbang.controller;
 
+import com.org.gunbbang.auth.jwt.service.JwtService;
+import com.org.gunbbang.auth.security.util.SecurityUtil;
 import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.controller.DTO.request.MemberTypesRequestDTO;
 import com.org.gunbbang.controller.DTO.request.NicknameUpdateRequestDTO;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.errorType.SuccessType;
-import com.org.gunbbang.jwt.service.JwtService;
 import com.org.gunbbang.service.AmplitudeService;
 import com.org.gunbbang.service.BakeryService;
 import com.org.gunbbang.service.MemberService;
 import com.org.gunbbang.service.ReviewService;
-import com.org.gunbbang.util.security.*;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
@@ -83,6 +83,7 @@ public class MemberController {
   public ApiResponse<NicknameUpdateResponseDTO> updateLoginMemberNickname(
       @RequestBody @Valid final NicknameUpdateRequestDTO request, HttpServletResponse response) {
     Long memberId = SecurityUtil.getLoginMemberId();
+
     NicknameUpdateResponseDTO responseDTO =
         memberService.updateMemberNickname(memberId, request.getNickname());
     jwtService.reIssueTokensAndUpdateRefreshToken(response, responseDTO.getMemberId());

@@ -1,6 +1,6 @@
 package com.org.gunbbang.AOP.ApiInfo;
 
-import com.org.gunbbang.jwt.service.JwtService;
+import com.org.gunbbang.auth.jwt.service.JwtService;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

@@ -1,4 +1,4 @@
-package com.org.gunbbang.login.filter;
+package com.org.gunbbang.auth.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;

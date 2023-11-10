@@ -1,6 +1,6 @@
 package com.org.gunbbang.controller;
 
-import com.org.gunbbang.util.security.SecurityUtil;
+import com.org.gunbbang.auth.security.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -4,6 +4,7 @@ import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.DTO.BestReviewDTO;
 import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.NotFoundException;
+import com.org.gunbbang.auth.security.util.SecurityUtil;
 import com.org.gunbbang.controller.DTO.request.RecommendKeywordNameRequestDTO;
 import com.org.gunbbang.controller.DTO.request.ReviewRequestDTO;
 import com.org.gunbbang.controller.DTO.response.*;
@@ -15,7 +16,6 @@ import com.org.gunbbang.util.mapper.BakeryMapper;
 import com.org.gunbbang.util.mapper.BreadTypeMapper;
 import com.org.gunbbang.util.mapper.RecommendKeywordMapper;
 import com.org.gunbbang.util.mapper.ReviewMapper;
-import com.org.gunbbang.util.security.SecurityUtil;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -116,8 +116,7 @@ public class ReviewService {
     bakeryRepository.saveAndFlush(bakery);
   }
 
-  public ReviewDetailResponseDTO getReviewedByMember(Long reviewId) {
-    Long currentMemberId = SecurityUtil.getLoginMemberId();
+  public ReviewDetailResponseDTO getReviewedByMember(Long reviewId, Long memberId) {
     Review review =
         reviewRepository
             .findById(reviewId)
@@ -126,7 +125,7 @@ public class ReviewService {
                     new NotFoundException(
                         ErrorType.NOT_FOUND_REVIEW_EXCEPTION,
                         ErrorType.NOT_FOUND_REVIEW_EXCEPTION.getMessage() + reviewId));
-    if (currentMemberId.equals(review.getMember().getMemberId())) {
+    if (memberId.equals(review.getMember().getMemberId())) {
       List<RecommendKeywordResponseDTO> recommendKeywordList =
           getRecommendKeywordListResponseDTO(review);
       return ReviewMapper.INSTANCE.toReviewDetailResponseDTO(review, recommendKeywordList);
@@ -204,10 +203,17 @@ public class ReviewService {
     return responseDtoList;
   }
 
-  public List<BestReviewListResponseDTO> getBestReviews(Long memberId) {
+  public List<BestReviewListResponseDTO> getBestReviews() {
+    Optional<Long> memberId = SecurityUtil.getUserId();
+
+    if (memberId.isEmpty()) {
+      List<Review> randomReviews = getRamdomReviews();
+      return getRandomReviewListResponseDTOs(randomReviews);
+    }
+
     Member foundMember =
         memberRepository
-            .findById(memberId)
+            .findById(memberId.get())
             .orElseThrow(
                 () ->
                     new NotFoundException(
@@ -216,9 +222,7 @@ public class ReviewService {
 
     if (isFilterNotSelected(foundMember)) {
       log.info("########## 회원이 필터 선택 안한 경우. 랜덤으로 10개 리뷰 반환 ##########");
-      PageRequest randomPageRequest = PageRequest.of(0, maxBestBakeryCount);
-      List<Review> randomReviews =
-          reviewRepository.findRandomReviews(randomPageRequest); // 랜덤 리뷰 10개 조회
+      List<Review> randomReviews = getRamdomReviews();
       return getRandomReviewListResponseDTOs(randomReviews);
     }
 
@@ -234,6 +238,13 @@ public class ReviewService {
     getRestReviewsRandomly(alreadyFoundReviewIds, bestReviews);
 
     return getBestReviewListResponseDTOs(bestReviews);
+  }
+
+  private List<Review> getRamdomReviews() {
+    PageRequest randomPageRequest = PageRequest.of(0, maxBestBakeryCount);
+    List<Review> randomReviews =
+        reviewRepository.findRandomReviews(randomPageRequest); // 랜덤 리뷰 10개 조회
+    return randomReviews;
   }
 
   private static boolean isFilterNotSelected(Member foundMember) {

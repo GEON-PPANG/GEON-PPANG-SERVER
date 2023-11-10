@@ -3,7 +3,7 @@ package com.org.gunbbang.AOP;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.org.gunbbang.AOP.ApiInfo.RequestApiInfo;
 import com.org.gunbbang.AOP.logInfo.*;
-import com.org.gunbbang.jwt.service.JwtService;
+import com.org.gunbbang.auth.jwt.service.JwtService;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Map;

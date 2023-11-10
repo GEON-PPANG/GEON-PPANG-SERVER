@@ -1,10 +1,10 @@
-package com.org.gunbbang.login.handler;
+package com.org.gunbbang.auth.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.org.gunbbang.auth.jwt.service.JwtService;
+import com.org.gunbbang.auth.security.CustomUserDetails;
 import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.errorType.SuccessType;
-import com.org.gunbbang.jwt.service.JwtService;
-import com.org.gunbbang.login.CustomUserDetails;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

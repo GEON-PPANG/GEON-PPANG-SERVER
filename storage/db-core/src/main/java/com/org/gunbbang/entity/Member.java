@@ -64,7 +64,7 @@ public class Member extends BaseEntity {
 
   // 유저 권한 설정 메소드
   public void authorizeUser() {
-    this.role = Role.USER;
+    this.role = Role.ROLE_MEMBER;
   }
 
   @Builder
