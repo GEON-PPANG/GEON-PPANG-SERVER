@@ -4,6 +4,7 @@ import com.org.gunbbang.BadRequestException;
 import com.org.gunbbang.CategoryType;
 import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.NotFoundException;
+import com.org.gunbbang.auth.security.util.SecurityUtil;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
@@ -12,7 +13,6 @@ import com.org.gunbbang.service.specification.BakerySpecifications;
 import com.org.gunbbang.util.mapper.BakeryMapper;
 import com.org.gunbbang.util.mapper.BreadTypeMapper;
 import com.org.gunbbang.util.mapper.MenuMapper;
-import com.org.gunbbang.util.security.SecurityUtil;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -151,7 +151,9 @@ public class BakeryService {
         .collect(Collectors.toList());
   }
 
-  public BakeryDetailResponseDTO getBakeryDetail(Long memberId, Long bakeryId) {
+  public BakeryDetailResponseDTO getBakeryDetail(Long bakeryId) {
+    Long memberId = SecurityUtil.getUserId().orElse(null);
+
     Bakery bakery =
         bakeryRepository
             .findById(bakeryId)
@@ -162,7 +164,7 @@ public class BakeryService {
                         ErrorType.NOT_FOUND_BAKERY_EXCEPTION.getMessage() + bakeryId));
     BreadTypeResponseDTO breadType =
         BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(bakery.getBreadType());
-    boolean isBookMarked = isBookMarked(memberId, bakeryId);
+    boolean isBookMarked = memberId == null ? false : isBookMarked(memberId, bakeryId);
     List<Menu> bakeryMenuList = menuRepository.findAllByBakery(bakery);
     List<MenuResponseDTO> menuList = MenuMapper.INSTANCE.toMenuResponseDTOList(bakeryMenuList);
     String address =
@@ -176,10 +178,17 @@ public class BakeryService {
     return state + BLANK_SPACE + city + BLANK_SPACE + town + BLANK_SPACE + addressRest;
   }
 
-  public List<BestBakeryListResponseDTO> getBestBakeries(Long memberId) {
+  public List<BestBakeryListResponseDTO> getBestBakeries() {
+    Optional<Long> memberId = SecurityUtil.getUserId();
+
+    if (memberId.isEmpty()) {
+      List<Bakery> randomBakeries = getOnlyRandomBakeries();
+      return BakeryMapper.INSTANCE.toBestBakeryListResponseDTO(randomBakeries);
+    }
+
     Member foundMember =
         memberRepository
-            .findById(memberId)
+            .findById(memberId.get())
             .orElseThrow(
                 () ->
                     new NotFoundException(
@@ -301,7 +310,6 @@ public class BakeryService {
     return getBakeryListResponseDTOList(bookMarkedBakeries);
   }
 
-  // TODO: 공통적으로 사용되는 메서드라 다른 곳으로는 못뺄지
   private boolean isBookMarked(Long memberId, Long bakeryId) {
     if (bookMarkRepository.findByMemberIdAndBakeryId(memberId, bakeryId).isPresent()) {
       return true;

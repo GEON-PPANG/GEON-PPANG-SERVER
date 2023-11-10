@@ -60,17 +60,6 @@ public class AmplitudeService {
     return userPropertiesNode;
   }
 
-  // Http v2 api
-  public void uploadUserProperty(String memberId, String eventType, Member member) {
-    HttpV2RequestDTO request = HttpV2RequestDTO.builder().api_key(apiKey).build();
-    request.setEvents(
-        memberId + memberId + memberId + memberId + memberId,
-        eventType,
-        getUserPropertyVO(Long.parseLong(memberId)));
-    log.info("HttpV2RequestDTO: " + request);
-    amplitudeFeignClient.uploadRequest(request);
-  }
-
   // identify
   public void sendUserProperty(Long memberId) {
     try {

@@ -75,7 +75,7 @@ public abstract class AuthService {
         .platformType(request.getPlatformType())
         .email(email)
         .nickname(request.getNickname()) // 자체로그인 시 request에 있는 nickName
-        .role(Role.USER) // 자체로그인 시 USER
+        .role(Role.ROLE_MEMBER) // 자체로그인 시 MEMBER
         .breadType(defaultBreadType)
         .nutrientType(defaultNutrientType)
         .password(request.getPassword()) // 자체로그인 시 password 저장해야함
@@ -90,8 +90,8 @@ public abstract class AuthService {
     return Member.builder()
         .platformType(request.getPlatformType())
         .email(email)
-        .nickname(Role.GUEST.name())
-        .role(Role.GUEST)
+        .nickname(Role.ROLE_GUEST.name())
+        .role(Role.ROLE_GUEST)
         .breadType(defaultBreadType)
         .nutrientType(defaultNutrientType)
         .build();

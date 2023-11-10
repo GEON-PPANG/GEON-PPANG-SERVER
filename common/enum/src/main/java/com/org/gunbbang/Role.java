@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Role {
-  GUEST("ROLE_GUEST"),
-  USER("ROLE_USER"),
-  ADMIN("ROLE_ADMIN");
+  ROLE_GUEST("GUEST"), // 소셜로그인까지 완료했으나 닉네임 설정 뷰에서 이탈한 유저
+  ROLE_MEMBER("MEMBER"), // 회원가입까지 완료한 건빵 유저
+  ROLE_ADMIN("ADMIN");
 
   private final String desc;
 }

@@ -1,4 +1,4 @@
-package com.org.gunbbang.login.handler;
+package com.org.gunbbang.auth.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.org.gunbbang.common.DTO.ApiResponse;

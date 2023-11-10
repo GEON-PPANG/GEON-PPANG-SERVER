@@ -1,17 +1,17 @@
 package com.org.gunbbang.controller;
 
+import com.org.gunbbang.auth.jwt.service.JwtService;
+import com.org.gunbbang.auth.security.util.SecurityUtil;
 import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import com.org.gunbbang.controller.DTO.response.MemberSignUpResponseDTO;
 import com.org.gunbbang.controller.DTO.response.MemberWithdrawResponseDTO;
 import com.org.gunbbang.errorType.SuccessType;
-import com.org.gunbbang.jwt.service.JwtService;
 import com.org.gunbbang.service.AmplitudeService;
 import com.org.gunbbang.service.AuthServiceProvider;
 import com.org.gunbbang.service.MemberService;
 import com.org.gunbbang.service.VO.SignedUpMemberVO;
 import com.org.gunbbang.util.mapper.MemberMapper;
-import com.org.gunbbang.util.security.SecurityUtil;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +52,6 @@ public class AuthController {
       throws Exception {
     Long memberId = SecurityUtil.getLoginMemberId();
     return ApiResponse.success(
-        SuccessType.DELETE_MEMBER_SUCCESS, memberService.withdraw(memberId, appleRefreshToken));
+        SuccessType.DELETE_MEMBER_SUCCESS, memberService.withdraw(appleRefreshToken, memberId));
   }
 }

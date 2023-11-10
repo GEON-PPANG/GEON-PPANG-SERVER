@@ -1,16 +1,16 @@
 package com.org.gunbbang.service;
 
 import com.org.gunbbang.*;
+import com.org.gunbbang.auth.jwt.service.AppleJwtService;
+import com.org.gunbbang.auth.security.util.SecurityUtil;
 import com.org.gunbbang.controller.DTO.request.MemberTypesRequestDTO;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
-import com.org.gunbbang.jwt.service.AppleJwtService;
 import com.org.gunbbang.repository.*;
 import com.org.gunbbang.util.mapper.BreadTypeMapper;
 import com.org.gunbbang.util.mapper.MemberTypeMapper;
 import com.org.gunbbang.util.mapper.NutrientTypeMapper;
-import com.org.gunbbang.util.security.SecurityUtil;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -147,7 +147,7 @@ public class MemberService {
     return ValidationResponseDTO.builder().isAvailable(true).build();
   }
 
-  public MemberWithdrawResponseDTO withdraw(Long memberId, String appleRefreshToken)
+  public MemberWithdrawResponseDTO withdraw(String appleRefreshToken, Long memberId)
       throws Exception {
     if (getMemberPlatformType(memberId) == PlatformType.APPLE) {
       appleJWTService.revokeAppleTokens(appleRefreshToken, memberId);

@@ -7,7 +7,6 @@ import com.org.gunbbang.controller.DTO.response.ReviewListResponseDTO;
 import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.service.BakeryService;
 import com.org.gunbbang.service.ReviewService;
-import com.org.gunbbang.util.security.SecurityUtil;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -38,9 +37,7 @@ public class BakeriesController {
   @ResponseStatus(HttpStatus.OK)
   public ApiResponse<BakeryDetailResponseDTO> getBakeryDetail(
       @PathVariable("bakeryId") Long bakeryId) {
-    Long memberId = SecurityUtil.getLoginMemberId();
-    BakeryDetailResponseDTO bakeryDetailResponseDTO =
-        bakeryService.getBakeryDetail(memberId, bakeryId);
+    BakeryDetailResponseDTO bakeryDetailResponseDTO = bakeryService.getBakeryDetail(bakeryId);
     return ApiResponse.success(SuccessType.GET_BAKERY_DETAIL_SUCCESS, bakeryDetailResponseDTO);
   }
 
