@@ -35,16 +35,6 @@ public class Member extends BaseEntity {
   @Enumerated(EnumType.STRING)
   private MainPurpose mainPurpose = MainPurpose.NONE;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "bread_type_id")
-  @NotNull
-  private BreadType breadType;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "nutrient_type_id")
-  @NotNull
-  private NutrientType nutrientType;
-
   private String refreshToken;
 
   public void updateRefreshToken(String updateRefreshToken) {
@@ -56,13 +46,13 @@ public class Member extends BaseEntity {
     this.password = passwordEncoder.encode(this.password);
   }
 
-  public void updateBreadType(BreadType breadType) {
-    this.breadType = breadType;
-  }
-
-  public void updateNutrientType(NutrientType nutrientType) {
-    this.nutrientType = nutrientType;
-  }
+  //  public void updateBreadType(BreadType breadType) {
+  //    this.breadType = breadType;
+  //  }
+  //
+  //  public void updateNutrientType(NutrientType nutrientType) {
+  //    this.nutrientType = nutrientType;
+  //  }
 
   public void updateMainPurpose(MainPurpose mainPurpose) {
     this.mainPurpose = mainPurpose;
@@ -94,8 +84,6 @@ public class Member extends BaseEntity {
     this.platformType = platformType;
     this.nickname = nickname;
     this.role = role;
-    this.breadType = breadType;
-    this.nutrientType = nutrientType;
     this.refreshToken = refreshToken;
   }
 }
