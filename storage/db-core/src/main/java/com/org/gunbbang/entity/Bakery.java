@@ -20,16 +20,6 @@ public class Bakery {
   @Column(name = "bakery_id")
   private Long bakeryId;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "bread_type_id")
-  @NotNull
-  private BreadType breadType;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "nutrient_type_id")
-  @NotNull
-  private NutrientType nutrientType;
-
   @NotNull private String bakeryName;
 
   @NotNull private String mapUrl;
