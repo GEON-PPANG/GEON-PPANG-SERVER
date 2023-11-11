@@ -1,8 +1,10 @@
 package com.org.gunbbang.entity;
 
 import javax.persistence.*;
+import lombok.Getter;
 
 @Entity
+@Getter
 public class BakeryNutrientType {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

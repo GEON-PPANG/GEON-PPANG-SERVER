@@ -7,8 +7,8 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class NutrientTypeResponseDTO {
-  private Long nutrientTypeId;
-  private String nutrientTypeName;
+  private Long nutrientTypeId = 0L;
+  private String nutrientTypeName = "";
   private boolean isNutrientOpen;
   private boolean isIngredientOpen;
   private boolean isNotOpen;

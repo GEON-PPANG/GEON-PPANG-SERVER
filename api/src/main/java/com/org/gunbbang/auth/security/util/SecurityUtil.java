@@ -24,17 +24,17 @@ public class SecurityUtil {
     return getLoginMemberAuthInfo().getMemberId();
   }
 
-  public static Long getLoginMemberBreadTypeId() {
-    return getLoginMemberAuthInfo().getBreadTypeId();
-  }
+  //  public static Long getLoginMemberBreadTypeId() {
+  //    return getLoginMemberAuthInfo().getBreadTypeId();
+  //  }
 
   public static MainPurpose getLoginMemberMainPurpose() {
     return getLoginMemberAuthInfo().getMainPurpose();
   }
 
-  public static Long getLoginMemberNutrientTypeId() {
-    return getLoginMemberAuthInfo().getNutrientTypeId();
-  }
+  //  public static Long getLoginMemberNutrientTypeId() {
+  //    return getLoginMemberAuthInfo().getNutrientTypeId();
+  //  }
 
   public static String getLoginMemberNickname() {
     return getLoginMemberAuthInfo().getNickname();
@@ -48,9 +48,7 @@ public class SecurityUtil {
   public static Map<String, Object> getLoginMemberInfo() {
     Map<String, Object> memberInfoMap = new HashMap<>();
     memberInfoMap.put("memberId", getLoginMemberId());
-    memberInfoMap.put("breadTypeId", getLoginMemberBreadTypeId());
     memberInfoMap.put("mainPurpose", getLoginMemberMainPurpose());
-    memberInfoMap.put("nutrientTypeId", getLoginMemberNutrientTypeId());
     memberInfoMap.put("nickname", getLoginMemberNickname());
 
     return memberInfoMap;

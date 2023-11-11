@@ -1,7 +1,12 @@
 package com.org.gunbbang.entity;
 
 import javax.persistence.*;
+import lombok.*;
 
+@Entity
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberNutrientType {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,4 +19,10 @@ public class MemberNutrientType {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "nutrient_type_id")
   private NutrientType nutrientType;
+
+  @Builder
+  public MemberNutrientType(Member member, NutrientType nutrientType) {
+    this.member = member;
+    this.nutrientType = nutrientType;
+  }
 }

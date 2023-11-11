@@ -5,13 +5,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.org.gunbbang.AmplitudeFeignClient;
 import com.org.gunbbang.DTO.*;
 import com.org.gunbbang.NotFoundException;
-import com.org.gunbbang.entity.BookMark;
-import com.org.gunbbang.entity.Member;
-import com.org.gunbbang.entity.Review;
+import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
-import com.org.gunbbang.repository.BookMarkRepository;
-import com.org.gunbbang.repository.MemberRepository;
-import com.org.gunbbang.repository.ReviewRepository;
+import com.org.gunbbang.repository.*;
 import java.lang.reflect.Field;
 import java.util.*;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +30,8 @@ public class AmplitudeService {
   private final MemberRepository memberRepository;
   private final ReviewRepository reviewRepository;
   private final BookMarkRepository bookMarkRepository;
+  private final MemberBreadTypeRepository memberBreadTypeRepository;
+  private final MemberNutrientTypeRepository memberNutrientTypeRepository;
 
   public String createAmplitudeToken() {
     String valueToEncode = apiKey + ":" + secretKey;
@@ -97,13 +95,17 @@ public class AmplitudeService {
 
     List<Review> reviews = reviewRepository.findAllByMemberOrderByCreatedAtDesc(foundMember);
     List<BookMark> bookMarks = bookMarkRepository.findAllByMemberId(foundMember.getMemberId());
+    List<MemberBreadType> breadTypes = memberBreadTypeRepository.findAllByMember(foundMember);
+    List<MemberNutrientType> nutrientTypes =
+        memberNutrientTypeRepository.findAllByMember(foundMember);
 
+    // TODO: 이거 앰플에 어떻게 쏴줄지 고민
     return UserPropertyVO.builder()
         .auth_type(foundMember.getPlatformType().name())
         .account_creation_date(foundMember.getCreatedAt())
         .main_purpose(foundMember.getMainPurpose().name())
-        .ingredients_type(foundMember.getNutrientType().getNutrientTypeName())
-        .bread_type(foundMember.getBreadType().getBreadTypeName())
+        //        .ingredients_type(foundMember.getNutrientType().getNutrientTypeName())
+        //        .bread_type(foundMember.getBreadType().getBreadTypeName())
         .total_review(reviews.size())
         .total_mystore(bookMarks.size())
         .user_nickname(foundMember.getNickname())

@@ -34,6 +34,8 @@ public class ReviewService {
   private final BakeryRepository bakeryRepository;
   private final MemberRepository memberRepository;
   private final RecommendKeywordRepository recommendKeywordRepository;
+  private final MemberBreadTypeRepository memberBreadTypeRepository;
+  private final MemberBreadTypeRepository memberNutrientTypeRepository;
   private final int maxBestBakeryCount = 10;
 
   public Long createReview(Long currentMemberId, Long bakeryId, ReviewRequestDTO reviewRequestDto) {
@@ -220,13 +222,18 @@ public class ReviewService {
                         ErrorType.NOT_FOUND_USER_EXCEPTION,
                         ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberId));
 
-    if (isFilterNotSelected(foundMember)) {
+    if (!isFilterSelected(foundMember)) {
       log.info("########## 회원이 필터 선택 안한 경우. 랜덤으로 10개 리뷰 반환 ##########");
       List<Review> randomReviews = getRamdomReviews();
       return getRandomReviewListResponseDTOs(randomReviews);
     }
 
-    List<BestReviewDTO> bestReviews = getBestReviews(foundMember);
+    List<BreadType> breadTypes =
+        memberBreadTypeRepository.findAllByMember(foundMember).stream()
+            .map(MemberBreadType::getBreadType)
+            .collect(Collectors.toList());
+
+    List<BestReviewDTO> bestReviews = getBestReviews(foundMember, breadTypes);
     if (bestReviews.size() == maxBestBakeryCount) {
       log.info("########## 베스트 리뷰 10개 조회 완료. 추가 조회 쿼리 없이 바로 반환 ##########");
       return getBestReviewListResponseDTOs(bestReviews);
@@ -247,14 +254,12 @@ public class ReviewService {
     return randomReviews;
   }
 
-  private static boolean isFilterNotSelected(Member foundMember) {
-    BreadType foundBreadType = foundMember.getBreadType();
+  private boolean isFilterSelected(Member foundMember) {
+    boolean isBreadTypeSelected = memberBreadTypeRepository.existsByMember(foundMember);
+    boolean isNutrientTypeSelected = memberNutrientTypeRepository.existsByMember(foundMember);
+    boolean isMainPurposeNone = foundMember.getMainPurpose().equals(MainPurpose.NONE);
 
-    return !foundBreadType.getIsGlutenFree()
-        && !foundBreadType.getIsNutFree()
-        && !foundBreadType.getIsSugarFree()
-        && !foundBreadType.getIsVegan()
-        && foundMember.getMainPurpose() == MainPurpose.NONE;
+    return isBreadTypeSelected && isNutrientTypeSelected && isMainPurposeNone;
   }
 
   private void getRestReviewsRandomly(
@@ -272,13 +277,11 @@ public class ReviewService {
         bestReviews.stream().map(BestReviewDTO::getReviewId).collect(Collectors.toList()));
   }
 
-  private List<BestReviewDTO> getBestReviews(Member foundMember) {
+  private List<BestReviewDTO> getBestReviews(Member foundMember, List<BreadType> breadTypes) {
     PageRequest bestPageRequest = PageRequest.of(0, maxBestBakeryCount);
     List<BestReviewDTO> bestReviews =
         reviewRepository.findBestReviewDTOList(
-            foundMember.getBreadType().getBreadTypeId(),
-            foundMember.getMainPurpose(),
-            bestPageRequest);
+            breadTypes, foundMember.getMainPurpose(), bestPageRequest);
     return bestReviews;
   }
 

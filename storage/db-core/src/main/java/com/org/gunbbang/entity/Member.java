@@ -75,8 +75,6 @@ public class Member extends BaseEntity {
       PlatformType platformType,
       String nickname,
       Role role,
-      BreadType breadType,
-      NutrientType nutrientType,
       String refreshToken) {
     this.memberId = memberId;
     this.email = email;
