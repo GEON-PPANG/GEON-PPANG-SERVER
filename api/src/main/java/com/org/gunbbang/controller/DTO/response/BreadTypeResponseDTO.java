@@ -8,10 +8,10 @@ import lombok.*;
 @AllArgsConstructor
 public class BreadTypeResponseDTO {
 
-  private Long breadTypeId;
+  private Long breadTypeId = 0L;
 
   /** 글루텐프리, 비건빵, 넛프리, 저당 및 무설탕 */
-  private String breadTypeName;
+  private String breadTypeName = "";
 
   private boolean isGlutenFree; // 글루텐프리
 

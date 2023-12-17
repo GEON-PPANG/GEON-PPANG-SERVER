@@ -10,6 +10,7 @@ import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
 import com.org.gunbbang.service.specification.BakerySpecifications;
+import com.org.gunbbang.util.mapper.BakeryBreadTypeMapper;
 import com.org.gunbbang.util.mapper.BakeryMapper;
 import com.org.gunbbang.util.mapper.BreadTypeMapper;
 import com.org.gunbbang.util.mapper.MenuMapper;
@@ -34,6 +35,9 @@ public class BakeryService {
   private final MenuRepository menuRepository;
   private final BreadTypeRepository breadTypeRepository;
   private final BakeryCategoryRepository bakeryCategoryRepository;
+  private final MemberBreadTypeRepository memberBreadTypeRepository;
+  private final MemberNutrientTypeRepository memberNutrientTypeRepository;
+  private final BakeryBreadTypeRepository bakeryBreadTypeRepository;
 
   private final String BLANK_SPACE = " ";
   private final int maxBestBakeryCount = 10;
@@ -195,13 +199,18 @@ public class BakeryService {
                         ErrorType.NOT_FOUND_USER_EXCEPTION,
                         ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberId));
 
-    if (isFilterNotSelected(foundMember)) {
+    if (!isFilterSelected(foundMember)) {
       log.info("########## 회원이 필터 선택 안한 경우. 랜덤으로 10개 건빵집 반환 ##########");
       List<Bakery> randomBakeries = getOnlyRandomBakeries();
       return BakeryMapper.INSTANCE.toBestBakeryListResponseDTO(randomBakeries);
     }
 
-    List<Bakery> bestBakeries = getBestBakeries(foundMember);
+    List<BreadType> breadTypes =
+        memberBreadTypeRepository.findAllByMember(foundMember).stream()
+            .map(MemberBreadType::getBreadType)
+            .collect(Collectors.toList());
+
+    List<Bakery> bestBakeries = getBestBakeries(foundMember, breadTypes);
     if (bestBakeries.size() == maxBestBakeryCount) {
       log.info("########## 베스트 베이커리 10개 조회 완료. 추가 조회 쿼리 없이 바로 반환 ##########");
       return BakeryMapper.INSTANCE.toBestBakeryListResponseDTO(bestBakeries);
@@ -209,8 +218,8 @@ public class BakeryService {
 
     List<Long> alreadyFoundBakeryIds = new ArrayList<>();
     alreadyFoundBakeryIds.add(-1L);
-    getRestBakeries(alreadyFoundBakeryIds, foundMember.getBreadType(), bestBakeries);
 
+    getRestBakeries(alreadyFoundBakeryIds, breadTypes, bestBakeries);
     if (bestBakeries.size() == maxBestBakeryCount) {
       log.info("##########빵유형 10개 조회 완료. 추가 조회 쿼리 없이 바로 반환 ##########");
       return BakeryMapper.INSTANCE.toBestBakeryListResponseDTO(bestBakeries);
@@ -225,14 +234,12 @@ public class BakeryService {
     return bakeryRepository.findBakeriesRandomly(bestPageRequest);
   }
 
-  private static boolean isFilterNotSelected(Member foundMember) {
-    BreadType foundBreadType = foundMember.getBreadType();
+  private boolean isFilterSelected(Member foundMember) {
+    boolean isBreadTypeSelected = memberBreadTypeRepository.existsByMember(foundMember);
+    boolean isNutrientTypeSelected = memberNutrientTypeRepository.existsByMember(foundMember);
+    boolean isMainPurposeNone = foundMember.getMainPurpose().equals(MainPurpose.NONE);
 
-    return !foundBreadType.getIsGlutenFree()
-        && !foundBreadType.getIsNutFree()
-        && !foundBreadType.getIsSugarFree()
-        && !foundBreadType.getIsVegan()
-        && foundMember.getMainPurpose() == MainPurpose.NONE;
+    return isBreadTypeSelected && isNutrientTypeSelected && isMainPurposeNone;
   }
 
   private void setAlreadyFoundBakeryIds(
@@ -250,23 +257,24 @@ public class BakeryService {
   }
 
   private void getRestBakeries(
-      List<Long> alreadyFoundBakeryIds, BreadType breadType, List<Bakery> bestBakeries) {
+      List<Long> alreadyFoundBakeryIds, List<BreadType> breadTypes, List<Bakery> bestBakeries) {
     log.info("########## 빵유형 일치 베이커리 조회 시작. 현재까지 조회된 베이커리 수: {} ##########", bestBakeries.size());
     setAlreadyFoundBakeryIds(alreadyFoundBakeryIds, bestBakeries);
     PageRequest bestPageRequest = PageRequest.of(0, maxBestBakeryCount - bestBakeries.size());
     bestBakeries.addAll(
-        bakeryRepository.findRestBakeriesByBreadTypeId(
-            breadType, alreadyFoundBakeryIds, bestPageRequest));
+        bakeryRepository.findRestBakeriesByBreadTypes(
+            breadTypes, alreadyFoundBakeryIds, bestPageRequest));
   }
 
-  private List<Bakery> getBestBakeries(Member foundMember) {
+  private List<Bakery> getBestBakeries(Member foundMember, List<BreadType> breadTypes) {
     log.info("########## 베스트 건빵집 조회 시작 ##########");
     PageRequest bestPageRequest = PageRequest.of(0, maxBestBakeryCount);
+
+    // 1. MemberBreadType 뒤져서 나랑 동일한 BreadType 선택한 멤버 가져옴
+    // 2. 북마크 테이블+베이커리 테이블 뒤져서 해당 멤버들이 북마크한 빵집 가져옴
     List<Bakery> bestBakeries =
         bakeryRepository.findBestBakeries(
-            foundMember.getBreadType().getBreadTypeId(),
-            foundMember.getMainPurpose(),
-            bestPageRequest);
+            breadTypes, foundMember.getMainPurpose(), bestPageRequest);
     return bestBakeries;
   }
 
@@ -296,13 +304,17 @@ public class BakeryService {
 
     for (Bakery foundBakery : foundBakeries) {
       BreadTypeResponseDTO breadType =
-          BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(foundBakery.getBreadType());
+          BakeryBreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(getBakeryBreadType(foundBakery));
       BakeryListResponseDTO bakeryListResponseDTO =
           BakeryMapper.INSTANCE.toBakeryListResponseDTO(foundBakery, breadType);
       bakeryListResponseDTOs.add(bakeryListResponseDTO);
     }
 
     return bakeryListResponseDTOs;
+  }
+
+  private List<BakeryBreadType> getBakeryBreadType(Bakery bakery) {
+    return bakeryBreadTypeRepository.findAllByBakery(bakery);
   }
 
   public List<BakeryListResponseDTO> getBookMarkedBakeries(Long memberId) {

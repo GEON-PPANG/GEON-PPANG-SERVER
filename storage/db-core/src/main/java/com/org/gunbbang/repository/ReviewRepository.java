@@ -2,10 +2,7 @@ package com.org.gunbbang.repository;
 
 import com.org.gunbbang.DTO.BestReviewDTO;
 import com.org.gunbbang.MainPurpose;
-import com.org.gunbbang.entity.Bakery;
-import com.org.gunbbang.entity.BreadType;
-import com.org.gunbbang.entity.Member;
-import com.org.gunbbang.entity.Review;
+import com.org.gunbbang.entity.*;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.PageRequest;
@@ -55,13 +52,14 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
               + "r.createdAt) FROM Review r "
               + "INNER JOIN Bakery b ON b.bakeryId = r.bakery.bakeryId "
               + "INNER JOIN Member m ON r.member.memberId = m.memberId "
-              + "WHERE r.member.breadType.breadTypeId = :currentMemberBreadType "
+              + "INNER JOIN MemberBreadType  mbt ON r.member.memberId = mbt.member.memberId "
+              + "WHERE mbt.breadType in :currentMemberBreadType "
               + "AND r.isLike = true "
               + "AND r.member.mainPurpose = :currentMemberMainPurpose "
               + "AND r.reviewText IS NOT NULL AND r.reviewText != '' "
               + "ORDER BY r.createdAt desc")
   List<BestReviewDTO> findBestReviewDTOList(
-      @Param("currentMemberBreadType") Long currentMemberBreadType,
+      @Param("currentMemberBreadType") List<BreadType> currentMemberBreadType,
       @Param("currentMemberMainPurpose") MainPurpose mainPurpose,
       PageRequest bestPageRequest);
 

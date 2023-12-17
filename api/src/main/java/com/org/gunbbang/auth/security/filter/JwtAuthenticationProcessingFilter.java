@@ -139,8 +139,6 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
             myMember.getPassword(),
             myMember.getMemberId(),
             myMember.getMainPurpose(),
-            myMember.getBreadType().getBreadTypeId(),
-            myMember.getNutrientType().getNutrientTypeId(),
             myMember.getNickname(),
             myMember.getRole().toString());
 

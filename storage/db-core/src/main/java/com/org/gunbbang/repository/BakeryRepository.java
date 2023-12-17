@@ -22,21 +22,23 @@ public interface BakeryRepository
           "SELECT distinct b FROM Bakery b "
               + "INNER JOIN BookMark bm ON b.bakeryId = bm.bakery.bakeryId "
               + "INNER JOIN Member m ON bm.member.memberId = m.memberId "
-              + "WHERE m.breadType.breadTypeId = :currentMemberBreadType "
+              + "INNER JOIN MemberBreadType mbt ON mbt.member.memberId = m.memberId "
+              + "WHERE mbt.breadType in :currentMemberBreadType "
               + "AND m.mainPurpose = :currentMemberMainPurpose "
               + "ORDER BY b.bookMarkCount DESC ")
   List<Bakery> findBestBakeries(
-      @Param("currentMemberBreadType") Long currentMemberBreadType,
+      @Param("currentMemberBreadType") List<BreadType> currentMemberBreadType,
       @Param("currentMemberMainPurpose") MainPurpose currentMemberMainPurpose,
       Pageable pageRequest);
 
   @Query(
       value =
           "SELECT b FROM Bakery b "
-              + "WHERE b.breadType = :breadTypeId "
+              + "INNER JOIN BakeryBreadType bbt ON b.bakeryId = bbt.bakery.bakeryId "
+              + "WHERE bbt.breadType in :breadTypes "
               + "AND b.bakeryId not in :alreadyFoundBakeryIds ")
-  List<Bakery> findRestBakeriesByBreadTypeId(
-      @Param("breadTypeId") BreadType breadTypeId,
+  List<Bakery> findRestBakeriesByBreadTypes(
+      @Param("breadTypes") List<BreadType> breadTypes,
       @Param("alreadyFoundBakeryIds") List<Long> alreadyFoundBakeryIds,
       Pageable pageRequest);
 

@@ -1,9 +1,7 @@
 package com.org.gunbbang.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.org.gunbbang.NutrientTypeTag;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,5 +15,7 @@ public class NutrientType {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long nutrientTypeId;
 
-  @NotNull private String nutrientTypeName;
+  @NotNull
+  @Enumerated(EnumType.STRING)
+  private NutrientTypeTag nutrientTypeTag;
 }

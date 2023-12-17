@@ -1,8 +1,12 @@
 package com.org.gunbbang.entity;
 
 import javax.persistence.*;
+import lombok.*;
 
 @Entity
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberBreadType {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,4 +19,10 @@ public class MemberBreadType {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "bread_type_id")
   private BreadType breadType;
+
+  @Builder
+  public MemberBreadType(Member member, BreadType breadType) {
+    this.member = member;
+    this.breadType = breadType;
+  }
 }
