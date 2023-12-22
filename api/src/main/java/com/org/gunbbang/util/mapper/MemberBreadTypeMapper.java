@@ -3,7 +3,9 @@ package com.org.gunbbang.util.mapper;
 import com.org.gunbbang.BreadTypeTag;
 import com.org.gunbbang.controller.DTO.response.BreadTypeResponseDTO;
 import com.org.gunbbang.entity.MemberBreadType;
+import com.org.gunbbang.util.mapper.context.CycleAvoidingMappingContext;
 import java.util.List;
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -17,7 +19,8 @@ public interface MemberBreadTypeMapper {
   @Mapping(target = "isVegan", expression = "java(mapIsVegan(memberBreadTypes))")
   @Mapping(target = "isNutFree", expression = "java(mapIsNutFree(memberBreadTypes))")
   @Mapping(target = "isSugarFree", expression = "java(mapIsSugarFree(memberBreadTypes))")
-  BreadTypeResponseDTO toBreadTypeResponseDTO(List<MemberBreadType> memberBreadTypes);
+  BreadTypeResponseDTO toBreadTypeResponseDTO(
+      List<MemberBreadType> memberBreadTypes, @Context CycleAvoidingMappingContext context);
 
   default boolean mapIsGlutenFree(List<MemberBreadType> memberBreadTypes) {
     return memberBreadTypes.stream()
