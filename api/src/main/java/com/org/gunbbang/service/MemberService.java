@@ -84,8 +84,8 @@ public class MemberService {
 
     List<BreadTypeResponseDTO> breadTypeResponseDTOList =
         MemberBreadTypeMapper.INSTANCE.toBreadTypeResponseDTOList(newMemberBreadTypes);
-    NutrientTypeResponseDTO nutrientTypeResponseDTO =
-        MemberNutrientTypeMapper.INSTANCE.toBreadTypeResponseDTO(newMemberNutrientTypes);
+    List<NutrientTypeResponseDTO> nutrientTypeResponseDTO =
+        MemberNutrientTypeMapper.INSTANCE.toNutrientTypeResponseDTOList(newMemberNutrientTypes);
 
     return MemberTypeMapper.INSTANCE.toMemberTypeResponseDTO(
         foundMember.getMemberId(),
@@ -168,7 +168,7 @@ public class MemberService {
     List<BreadTypeResponseDTO> breadTypeResponseDTO =
         MemberBreadTypeMapper.INSTANCE.toBreadTypeResponseDTOList(memberBreadTypes);
     List<NutrientTypeResponseDTO> nutrientTypeResponseDTO =
-        MemberNutrientTypeMapper.INSTANCE.toBreadTypeResponseDTO(memberNutrientTypes);
+        MemberNutrientTypeMapper.INSTANCE.toNutrientTypeResponseDTOList(memberNutrientTypes);
 
     return MemberTypeMapper.INSTANCE.toMemberTypeResponseDTO(
         memberId,
