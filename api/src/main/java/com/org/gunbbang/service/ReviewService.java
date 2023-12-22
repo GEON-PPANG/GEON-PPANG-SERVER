@@ -12,10 +12,7 @@ import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
 import com.org.gunbbang.util.RecommendKeywordPercentage;
-import com.org.gunbbang.util.mapper.BakeryMapper;
-import com.org.gunbbang.util.mapper.BreadTypeMapper;
-import com.org.gunbbang.util.mapper.RecommendKeywordMapper;
-import com.org.gunbbang.util.mapper.ReviewMapper;
+import com.org.gunbbang.util.mapper.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -198,7 +195,7 @@ public class ReviewService {
 
     for (Review review : reviewList) {
       breadType =
-          BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(
+          BakeryBreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(
               bakeryBreadTypeRepository.findAllByBakery(review.getBakery()));
       bakeryListReviewedByMemberDto =
           BakeryMapper.INSTANCE.toListReviewedByMemberDTO(review.getBakery(), review, breadType);
