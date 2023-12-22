@@ -1,54 +1,49 @@
 package com.org.gunbbang.util.mapper;
 
-import com.org.gunbbang.BreadTypeTag;
 import com.org.gunbbang.controller.DTO.response.BreadTypeResponseDTO;
 import com.org.gunbbang.entity.MemberBreadType;
-import com.org.gunbbang.util.mapper.context.CycleAvoidingMappingContext;
 import java.util.List;
-import org.mapstruct.Context;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface MemberBreadTypeMapper {
   MemberBreadTypeMapper INSTANCE = Mappers.getMapper(MemberBreadTypeMapper.class);
 
-  @Mapping(target = "isGlutenFree", expression = "java(mapIsGlutenFree(memberBreadTypes))")
-  @Mapping(target = "isVegan", expression = "java(mapIsVegan(memberBreadTypes))")
-  @Mapping(target = "isNutFree", expression = "java(mapIsNutFree(memberBreadTypes))")
-  @Mapping(target = "isSugarFree", expression = "java(mapIsSugarFree(memberBreadTypes))")
-  BreadTypeResponseDTO toBreadTypeResponseDTO(
-      List<MemberBreadType> memberBreadTypes, @Context CycleAvoidingMappingContext context);
+  @Mapping(target = "memberBreadType.breadType.breadTypeId", source = "breadTypeId")
+  @Mapping(target = "memberBreadType.breadType.breadTypeName", source = "breadTypeName")
+  BreadTypeResponseDTO toBreadTypeResponseDTO(MemberBreadType memberBreadType);
 
-  default boolean mapIsGlutenFree(List<MemberBreadType> memberBreadTypes) {
-    return memberBreadTypes.stream()
-        .anyMatch(
-            memberBreadType ->
-                memberBreadType.getBreadType().getBreadTypeTag() == BreadTypeTag.GLUTEN_FREE);
-  }
+  @IterableMapping(elementTargetType = BreadTypeResponseDTO.class)
+  List<BreadTypeResponseDTO> toBreadTypeResponseDTOList(List<MemberBreadType> memberBreadTypeList);
 
-  default boolean mapIsVegan(List<MemberBreadType> memberBreadTypes) {
-    return memberBreadTypes.stream()
-        .anyMatch(
-            memberBreadType ->
-                memberBreadType.getBreadType().getBreadTypeTag() == BreadTypeTag.VEGAN);
-  }
-
-  default boolean mapIsNutFree(List<MemberBreadType> memberBreadTypes) {
-    return memberBreadTypes.stream()
-        .anyMatch(
-            memberBreadType ->
-                memberBreadType.getBreadType().getBreadTypeTag() == BreadTypeTag.NUT_FREE);
-  }
-
-  default boolean mapIsSugarFree(List<MemberBreadType> memberBreadTypes) {
-    return memberBreadTypes.stream()
-        .anyMatch(
-            memberBreadType ->
-                memberBreadType.getBreadType().getBreadTypeTag() == BreadTypeTag.SUGAR_FREE);
-  }
+  //  default boolean mapIsGlutenFree(List<MemberBreadType> memberBreadTypes) {
+  //    return memberBreadTypes.stream()
+  //        .anyMatch(
+  //            memberBreadType ->
+  //                memberBreadType.getBreadType().getBreadTypeTag() == BreadTypeTag.GLUTEN_FREE);
+  //  }
+  //
+  //  default boolean mapIsVegan(List<MemberBreadType> memberBreadTypes) {
+  //    return memberBreadTypes.stream()
+  //        .anyMatch(
+  //            memberBreadType ->
+  //                memberBreadType.getBreadType().getBreadTypeTag() == BreadTypeTag.VEGAN);
+  //  }
+  //
+  //  default boolean mapIsNutFree(List<MemberBreadType> memberBreadTypes) {
+  //    return memberBreadTypes.stream()
+  //        .anyMatch(
+  //            memberBreadType ->
+  //                memberBreadType.getBreadType().getBreadTypeTag() == BreadTypeTag.NUT_FREE);
+  //  }
+  //
+  //  default boolean mapIsSugarFree(List<MemberBreadType> memberBreadTypes) {
+  //    return memberBreadTypes.stream()
+  //        .anyMatch(
+  //            memberBreadType ->
+  //                memberBreadType.getBreadType().getBreadTypeTag() == BreadTypeTag.SUGAR_FREE);
+  //  }
 
   /*
   @Mapping(target = "isGlutenFree", expression = "java(mapIsGlutenFree(memberBreadType))")

@@ -49,8 +49,8 @@ public class MemberService {
                         ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberNickname));
 
     List<MemberBreadType> breadType = memberBreadTypeRepository.findAllByMember(foundMember);
-    BreadTypeResponseDTO breadTypeResponseDTO =
-        MemberBreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(breadType);
+    List<BreadTypeResponseDTO> breadTypeResponseDTO =
+        MemberBreadTypeMapper.INSTANCE.toBreadTypeResponseDTOList(breadType);
 
     return MemberTypeMapper.INSTANCE.toMemberDetailResponseDTO(
         memberNickname, memberMainPurpose, breadTypeResponseDTO);
@@ -82,8 +82,8 @@ public class MemberService {
     foundMember.updateMainPurpose(request.getMainPurpose());
     memberRepository.saveAndFlush(foundMember);
 
-    BreadTypeResponseDTO breadTypeResponseDTO =
-        MemberBreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(newMemberBreadTypes);
+    List<BreadTypeResponseDTO> breadTypeResponseDTOList =
+        MemberBreadTypeMapper.INSTANCE.toBreadTypeResponseDTOList(newMemberBreadTypes);
     NutrientTypeResponseDTO nutrientTypeResponseDTO =
         MemberNutrientTypeMapper.INSTANCE.toBreadTypeResponseDTO(newMemberNutrientTypes);
 
@@ -91,7 +91,7 @@ public class MemberService {
         foundMember.getMemberId(),
         foundMember.getMainPurpose(),
         nickname,
-        breadTypeResponseDTO,
+        breadTypeResponseDTOList,
         nutrientTypeResponseDTO);
   }
 
@@ -165,8 +165,8 @@ public class MemberService {
     List<MemberNutrientType> memberNutrientTypes =
         memberNutrientTypeRepository.findAllByMemberId(memberId);
 
-    BreadTypeResponseDTO breadTypeResponseDTO =
-        MemberBreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(memberBreadTypes);
+    List<BreadTypeResponseDTO> breadTypeResponseDTO =
+        MemberBreadTypeMapper.INSTANCE.toBreadTypeResponseDTOList(memberBreadTypes);
     NutrientTypeResponseDTO nutrientTypeResponseDTO =
         MemberNutrientTypeMapper.INSTANCE.toBreadTypeResponseDTO(memberNutrientTypes);
 
