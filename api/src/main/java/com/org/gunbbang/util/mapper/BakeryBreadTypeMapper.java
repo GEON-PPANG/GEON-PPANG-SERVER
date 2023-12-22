@@ -13,12 +13,13 @@ import org.mapstruct.factory.Mappers;
 public interface BakeryBreadTypeMapper {
   BakeryBreadTypeMapper INSTANCE = Mappers.getMapper(BakeryBreadTypeMapper.class);
 
-  @Mapping(target = "breadType.breadTypeId", source = "breadTypeId")
-  @Mapping(target = "breadType.breadTypeTag", source = "breadTypeTag")
+  @Mapping(target = "breadTypeId", source = "breadType.breadTypeId")
+  @Mapping(target = "breadTypeTag", source = "breadType.breadTypeTag")
   BreadTypeResponseDTO toBreadTypeResponseDTO(BakeryBreadType bakeryBreadType);
 
   @IterableMapping(elementTargetType = BreadTypeResponseDTO.class)
   List<BreadTypeResponseDTO> toBreadTypeResponseDTOList(List<BakeryBreadType> bakeryBreadTypeList);
+}
 
   //  default boolean mapIsGlutenFree(List<BakeryBreadType> bakeryBreadTypes) {
   //    return bakeryBreadTypes.stream()
@@ -47,4 +48,4 @@ public interface BakeryBreadTypeMapper {
   //            bakeryBreadType ->
   //                bakeryBreadType.getBreadType().getBreadTypeTag() == BreadTypeTag.SUGAR_FREE);
   //  }
-}
+// }

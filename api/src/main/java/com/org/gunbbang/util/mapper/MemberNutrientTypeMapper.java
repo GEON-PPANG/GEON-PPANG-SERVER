@@ -1,7 +1,6 @@
 package com.org.gunbbang.util.mapper;
 
 import com.org.gunbbang.NutrientTypeTag;
-import com.org.gunbbang.controller.DTO.response.BreadTypeResponseDTO;
 import com.org.gunbbang.controller.DTO.response.NutrientTypeResponseDTO;
 import com.org.gunbbang.entity.MemberNutrientType;
 import java.util.List;
@@ -15,11 +14,11 @@ import org.mapstruct.factory.Mappers;
 public interface MemberNutrientTypeMapper {
   MemberNutrientTypeMapper INSTANCE = Mappers.getMapper(MemberNutrientTypeMapper.class);
 
-  @Mapping(target = "nutrientType.nutrientTypeId", source = "nutrientTypeId")
-  @Mapping(target = "nutrientType.nutrientTypeName", source = "nutrientTypeName")
+  @Mapping(target = "nutrientTypeId", source = "nutrientType.nutrientTypeId")
+  @Mapping(target = "nutrientTypeTag", source = "nutrientType.nutrientTypeTag")
   NutrientTypeResponseDTO toNutrientTypeResponseDTO(MemberNutrientType memberNutrientType);
 
-  @IterableMapping(elementTargetType = BreadTypeResponseDTO.class)
+  @IterableMapping(elementTargetType = NutrientTypeResponseDTO.class)
   List<NutrientTypeResponseDTO> toNutrientTypeResponseDTOList(
       List<MemberNutrientType> memberNutrientTypes);
 

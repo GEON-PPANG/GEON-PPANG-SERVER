@@ -7,6 +7,7 @@ import com.org.gunbbang.common.AuthType;
 import com.org.gunbbang.entity.BreadType;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.entity.NutrientType;
+import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,8 +27,8 @@ public class SignedUpMemberVO {
   @NotNull private final Role role;
   @NotNull private final String appleRefreshToken;
   private final MainPurpose mainPurpose;
-  @NotNull private final BreadType breadType;
-  @NotNull private final NutrientType nutrientType;
+  @NotNull private List<BreadType> breadType;
+  @NotNull private List<NutrientType> nutrientType;
   @NotNull private final AuthType type;
 
   public static SignedUpMemberVO of(Member member, String appleRefreshToken, AuthType authType) {
@@ -40,8 +41,11 @@ public class SignedUpMemberVO {
         .role(member.getRole())
         .appleRefreshToken(appleRefreshToken)
         .mainPurpose(member.getMainPurpose())
-        .breadType(member.getBreadType())
-        .nutrientType(member.getNutrientType())
+        // TODO: breadType, nutrientType 리스트로 넘겨야할 것 같은디.. 양방향으로 해야하나
+        //        .breadType(member.getBreadType())
+        //        .nutrientType(member.getNutrientType())
+        .breadType(null)
+        .nutrientType(null)
         .type(authType)
         .build();
   }
