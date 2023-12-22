@@ -317,7 +317,8 @@ public class BakeryService {
 
     for (Bakery foundBakery : foundBakeries) {
       BreadTypeResponseDTO breadType =
-          BakeryBreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(getBakeryBreadType(foundBakery));
+          BakeryBreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(
+              getBakeryBreadTypeList(foundBakery));
       BakeryListResponseDTO bakeryListResponseDTO =
           BakeryMapper.INSTANCE.toBakeryListResponseDTO(foundBakery, breadType);
       bakeryListResponseDTOs.add(bakeryListResponseDTO);
@@ -326,7 +327,7 @@ public class BakeryService {
     return bakeryListResponseDTOs;
   }
 
-  private List<BakeryBreadType> getBakeryBreadType(Bakery bakery) {
+  private List<BakeryBreadType> getBakeryBreadTypeList(Bakery bakery) {
     return bakeryBreadTypeRepository.findAllByBakery(bakery);
   }
 
