@@ -10,7 +10,6 @@ import com.org.gunbbang.repository.*;
 import com.org.gunbbang.service.specification.BakerySpecifications;
 import com.org.gunbbang.util.mapper.BakeryBreadTypeMapper;
 import com.org.gunbbang.util.mapper.BakeryMapper;
-import com.org.gunbbang.util.mapper.BreadTypeMapper;
 import com.org.gunbbang.util.mapper.MenuMapper;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -179,9 +178,9 @@ public class BakeryService {
                         ErrorType.NOT_FOUND_BAKERY_EXCEPTION,
                         ErrorType.NOT_FOUND_BAKERY_EXCEPTION.getMessage() + bakeryId));
     BreadTypeResponseDTO breadType =
-        BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(
+        BakeryBreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(
             bakeryBreadTypeRepository.findAllByBakery(bakery));
-    boolean isBookMarked = memberId == null ? false : isBookMarked(memberId, bakeryId);
+    boolean isBookMarked = isBookMarked(memberId, bakeryId);
     List<Menu> bakeryMenuList = menuRepository.findAllByBakery(bakery);
     List<MenuResponseDTO> menuList = MenuMapper.INSTANCE.toMenuResponseDTOList(bakeryMenuList);
     String address =
@@ -337,9 +336,7 @@ public class BakeryService {
   }
 
   private boolean isBookMarked(Long memberId, Long bakeryId) {
-    if (bookMarkRepository.findByMemberIdAndBakeryId(memberId, bakeryId).isPresent()) {
-      return true;
-    }
-    return false;
+    if (memberId == null) return false;
+    return bookMarkRepository.findByMemberIdAndBakeryId(memberId, bakeryId).isPresent();
   }
 }
