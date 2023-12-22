@@ -10,8 +10,8 @@ import org.mapstruct.factory.Mappers;
 public interface MemberBreadTypeMapper {
   MemberBreadTypeMapper INSTANCE = Mappers.getMapper(MemberBreadTypeMapper.class);
 
-  @Mapping(target = "memberBreadType.breadType.breadTypeId", source = "breadTypeId")
-  @Mapping(target = "memberBreadType.breadType.breadTypeName", source = "breadTypeName")
+  @Mapping(target = "breadType.breadTypeId", source = "breadTypeId")
+  @Mapping(target = "breadType.breadTypeTag", source = "breadTypeTag")
   BreadTypeResponseDTO toBreadTypeResponseDTO(MemberBreadType memberBreadType);
 
   @IterableMapping(elementTargetType = BreadTypeResponseDTO.class)

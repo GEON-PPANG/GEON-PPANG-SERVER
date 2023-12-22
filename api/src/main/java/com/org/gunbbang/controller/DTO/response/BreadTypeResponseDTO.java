@@ -8,7 +8,6 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 public class BreadTypeResponseDTO {
-
   @NotNull private Long breadTypeId;
-  @NotNull private String breadTypeName;
+  @NotNull private String breadTypeTag;
 }

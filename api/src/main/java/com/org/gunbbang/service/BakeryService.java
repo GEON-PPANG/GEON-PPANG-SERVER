@@ -177,8 +177,8 @@ public class BakeryService {
                     new NotFoundException(
                         ErrorType.NOT_FOUND_BAKERY_EXCEPTION,
                         ErrorType.NOT_FOUND_BAKERY_EXCEPTION.getMessage() + bakeryId));
-    BreadTypeResponseDTO breadType =
-        BakeryBreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(
+    List<BreadTypeResponseDTO> breadType =
+        BakeryBreadTypeMapper.INSTANCE.toBreadTypeResponseDTOList(
             bakeryBreadTypeRepository.findAllByBakery(bakery));
     boolean isBookMarked = isBookMarked(memberId, bakeryId);
     List<Menu> bakeryMenuList = menuRepository.findAllByBakery(bakery);
@@ -315,8 +315,8 @@ public class BakeryService {
     List<BakeryListResponseDTO> bakeryListResponseDTOs = new ArrayList<>();
 
     for (Bakery foundBakery : foundBakeries) {
-      BreadTypeResponseDTO breadType =
-          BakeryBreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(
+      List<BreadTypeResponseDTO> breadType =
+          BakeryBreadTypeMapper.INSTANCE.toBreadTypeResponseDTOList(
               getBakeryBreadTypeList(foundBakery));
       BakeryListResponseDTO bakeryListResponseDTO =
           BakeryMapper.INSTANCE.toBakeryListResponseDTO(foundBakery, breadType);

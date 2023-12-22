@@ -16,7 +16,8 @@ public interface BakeryMapper {
   @Mapping(source = "bakery.isHACCP", target = "isHACCP")
   @Mapping(source = "bakery.isVegan", target = "isVegan")
   @Mapping(source = "bakery.isNonGMO", target = "isNonGMO")
-  BakeryListResponseDTO toBakeryListResponseDTO(Bakery bakery, BreadTypeResponseDTO breadType);
+  BakeryListResponseDTO toBakeryListResponseDTO(
+      Bakery bakery, List<BreadTypeResponseDTO> breadTypeList);
 
   BakerySearchResponseDTO toBakerySearchResponseDTO(
       int resultCount, List<BakeryListResponseDTO> bakeryList);
@@ -29,7 +30,7 @@ public interface BakeryMapper {
   BakeryDetailResponseDTO toBakeryDetailResponseDTO(
       Bakery bakery,
       String address,
-      BreadTypeResponseDTO breadType,
+      List<BreadTypeResponseDTO> breadTypeList,
       boolean isBookMarked,
       List<MenuResponseDTO> menuList);
 
@@ -40,5 +41,5 @@ public interface BakeryMapper {
   @Mapping(source = "review.reviewId", target = "reviewId")
   @Mapping(source = "review.createdAt", target = "createdAt", dateFormat = "yy.MM.dd")
   BakeryListReviewedByMemberDTO toListReviewedByMemberDTO(
-      Bakery bakery, Review review, BreadTypeResponseDTO breadType);
+      Bakery bakery, Review review, List<BreadTypeResponseDTO> breadTypeList);
 }

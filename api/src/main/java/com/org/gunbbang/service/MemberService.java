@@ -167,7 +167,7 @@ public class MemberService {
 
     List<BreadTypeResponseDTO> breadTypeResponseDTO =
         MemberBreadTypeMapper.INSTANCE.toBreadTypeResponseDTOList(memberBreadTypes);
-    NutrientTypeResponseDTO nutrientTypeResponseDTO =
+    List<NutrientTypeResponseDTO> nutrientTypeResponseDTO =
         MemberNutrientTypeMapper.INSTANCE.toBreadTypeResponseDTO(memberNutrientTypes);
 
     return MemberTypeMapper.INSTANCE.toMemberTypeResponseDTO(

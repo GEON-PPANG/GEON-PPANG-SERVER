@@ -1,6 +1,7 @@
 package com.org.gunbbang.controller.DTO.response;
 
 import com.org.gunbbang.controller.DTO.response.BaseDTO.BaseBakeryResponseDTO;
+import java.util.List;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -10,6 +11,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class BakeryListResponseDTO extends BaseBakeryResponseDTO {
   private long reviewCount;
-  private BreadTypeResponseDTO breadType;
+  private List<BreadTypeResponseDTO> breadTypeList;
   private long bookMarkCount;
 }

@@ -190,12 +190,12 @@ public class ReviewService {
             .orElseThrow(() -> new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION));
     List<Review> reviewList = reviewRepository.findAllByMemberOrderByCreatedAtDesc(currentMember);
     List<BakeryListReviewedByMemberDTO> responseDtoList = new ArrayList<>();
-    BreadTypeResponseDTO breadType;
+    List<BreadTypeResponseDTO> breadType;
     BakeryListReviewedByMemberDTO bakeryListReviewedByMemberDto;
 
     for (Review review : reviewList) {
       breadType =
-          BakeryBreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(
+          BakeryBreadTypeMapper.INSTANCE.toBreadTypeResponseDTOList(
               bakeryBreadTypeRepository.findAllByBakery(review.getBakery()));
       bakeryListReviewedByMemberDto =
           BakeryMapper.INSTANCE.toListReviewedByMemberDTO(review.getBakery(), review, breadType);
