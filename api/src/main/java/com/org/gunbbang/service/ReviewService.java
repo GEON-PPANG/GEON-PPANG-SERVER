@@ -36,6 +36,7 @@ public class ReviewService {
   private final RecommendKeywordRepository recommendKeywordRepository;
   private final MemberBreadTypeRepository memberBreadTypeRepository;
   private final MemberBreadTypeRepository memberNutrientTypeRepository;
+  private final BakeryBreadTypeRepository bakeryBreadTypeRepository;
   private final int maxBestBakeryCount = 10;
 
   public Long createReview(Long currentMemberId, Long bakeryId, ReviewRequestDTO reviewRequestDto) {
@@ -197,7 +198,8 @@ public class ReviewService {
 
     for (Review review : reviewList) {
       breadType =
-          BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(review.getBakery().getBreadType());
+          BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(
+              bakeryBreadTypeRepository.findAllByBakery(review.getBakery()));
       bakeryListReviewedByMemberDto =
           BakeryMapper.INSTANCE.toListReviewedByMemberDTO(review.getBakery(), review, breadType);
       responseDtoList.add(bakeryListReviewedByMemberDto);

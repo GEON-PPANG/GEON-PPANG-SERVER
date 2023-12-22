@@ -1,7 +1,8 @@
 package com.org.gunbbang.util.mapper;
 
 import com.org.gunbbang.controller.DTO.response.BreadTypeResponseDTO;
-import com.org.gunbbang.entity.BreadType;
+import com.org.gunbbang.entity.BakeryBreadType;
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -10,5 +11,5 @@ import org.mapstruct.factory.Mappers;
 public interface BreadTypeMapper {
   BreadTypeMapper INSTANCE = Mappers.getMapper(BreadTypeMapper.class);
 
-  BreadTypeResponseDTO toBreadTypeResponseDTO(BreadType breadType);
+  BreadTypeResponseDTO toBreadTypeResponseDTO(List<BakeryBreadType> bakeryBreadTypeList);
 }

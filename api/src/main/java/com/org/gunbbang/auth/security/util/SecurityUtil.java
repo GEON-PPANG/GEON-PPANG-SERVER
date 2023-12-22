@@ -61,4 +61,7 @@ public class SecurityUtil {
     }
     return Optional.of((CustomUserDetails) principal);
   }
+
+  //    public static Long getLoginMemberBreadTypeId() {
+  //    }
 }

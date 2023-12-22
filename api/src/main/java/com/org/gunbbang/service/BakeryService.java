@@ -1,7 +1,5 @@
 package com.org.gunbbang.service;
 
-import com.org.gunbbang.BadRequestException;
-import com.org.gunbbang.CategoryType;
 import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.NotFoundException;
 import com.org.gunbbang.auth.security.util.SecurityUtil;
@@ -48,112 +46,126 @@ public class BakeryService {
       boolean isHard,
       boolean isDessert,
       boolean isBrunch) {
-    Long memberBreadTypeId = SecurityUtil.getLoginMemberBreadTypeId();
-    if (memberBreadTypeId.equals(
-            breadTypeRepository
-                .findBreadTypeByIsGlutenFreeAndIsVeganAndIsNutFreeAndIsSugarFree(
-                    false, false, false, false)
-                .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION))
-                .getBreadTypeId())
-        && personalFilter) throw new BadRequestException(ErrorType.PERSONAL_FILTER_EXCEPTION);
-
-    List<Category> categoryList = getCategoryList(isHard, isDessert, isBrunch);
-    List<Bakery> bakeryList =
-        getFilteredAndSortedBakeryList(
-            personalFilter, memberBreadTypeId, categoryList, sortingOption);
-    return getBakeryListResponseDTOList(bakeryList);
+    return null;
   }
 
-  private List<Category> getCategoryList(boolean isHard, boolean isDessert, boolean isBrunch) {
-    List<Category> categoryList = new ArrayList<>();
-
-    Map<CategoryType, Boolean> categoryMap = new HashMap<>();
-    categoryMap.put(CategoryType.HARD_BREAD, isHard);
-    categoryMap.put(CategoryType.DESSERT, isDessert);
-    categoryMap.put(CategoryType.BRUNCH, isBrunch);
-
-    for (Map.Entry<CategoryType, Boolean> entry : categoryMap.entrySet()) {
-      if (entry.getValue()) { // true인 값만 해당되어 category에 추가된다
-        Category category =
-            categoryRepository
-                .findByCategoryName(entry.getKey().getName())
-                .orElseThrow(
-                    () ->
-                        new NotFoundException(
-                            ErrorType.NOT_FOUND_CATEGORY_EXCEPTION,
-                            ErrorType.NOT_FOUND_CATEGORY_EXCEPTION.getMessage()
-                                + entry.getKey().getName()));
-        categoryList.add(category);
-      }
-    }
-
-    if (categoryList.isEmpty()) { // 카테고리가 빈 경우
-      for (CategoryType categoryType : CategoryType.values()) {
-        Category category =
-            categoryRepository
-                .findByCategoryName(categoryType.getName())
-                .orElseThrow(
-                    () ->
-                        new NotFoundException(
-                            ErrorType.NOT_FOUND_CATEGORY_EXCEPTION,
-                            ErrorType.NOT_FOUND_CATEGORY_EXCEPTION.getMessage()
-                                + categoryType.getName()));
-        categoryList.add(category);
-      }
-    }
-
-    return categoryList;
-  }
-
-  private List<Bakery> getFilteredAndSortedBakeryList(
-      boolean personalFilter, Long breadTypeId, List<Category> categoryList, String sortingOption) {
-    BreadType breadType =
-        personalFilter
-            ? breadTypeRepository
-                .findById(breadTypeId)
-                .orElseThrow(
-                    () ->
-                        new NotFoundException(
-                            ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION,
-                            ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION.getMessage() + breadTypeId))
-            : breadTypeRepository
-                .findBreadTypeByIsGlutenFreeAndIsVeganAndIsNutFreeAndIsSugarFree(
-                    true, true, true, true)
-                .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION));
-
-    List<Bakery> filteredBakeryList =
-        bakeryRepository.findFilteredBakeries(
-            categoryList,
-            breadType.getIsGlutenFree(),
-            breadType.getIsVegan(),
-            breadType.getIsNutFree(),
-            breadType.getIsSugarFree());
-
-    List<Bakery> getSortedByCategoryBakeryList = getSortedByCategoryBakeryList(filteredBakeryList);
-
-    if ("review".equals(sortingOption)) {
-      getSortedByCategoryBakeryList.sort(
-          Comparator.comparingLong(Bakery::getReviewCount).reversed());
-      return getSortedByCategoryBakeryList;
-    }
-
-    return getSortedByCategoryBakeryList;
-  }
-
-  private List<Bakery> getSortedByCategoryBakeryList(List<Bakery> bakeryList) {
-    Map<Bakery, Long> bakeryCategoryCounts = new HashMap<>();
-
-    for (Bakery bakery : bakeryList) {
-      long count = bakeryCategoryRepository.countBakeryCategoriesByBakery(bakery);
-      log.info("########## bakeryName: {} count: {} ##########", bakery.getBakeryName(), count);
-      bakeryCategoryCounts.put(bakery, count);
-    }
-
-    return bakeryCategoryCounts.entrySet().stream()
-        .sorted(Map.Entry.<Bakery, Long>comparingByValue().reversed())
-        .map(Map.Entry::getKey)
-        .collect(Collectors.toList());
-  }
+  //  public List<BakeryListResponseDTO> getBakeryList(
+  //      String sortingOption,
+  //      boolean personalFilter,
+  //      boolean isHard,
+  //      boolean isDessert,
+  //      boolean isBrunch) {
+  //    Long memberBreadTypeId = SecurityUtil.getLoginMemberBreadTypeId();
+  //    if (memberBreadTypeId.equals(
+  //            breadTypeRepository
+  //                .findBreadTypeByIsGlutenFreeAndIsVeganAndIsNutFreeAndIsSugarFree(
+  //                    false, false, false, false)
+  //                .orElseThrow(() -> new
+  // NotFoundException(ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION))
+  //                .getBreadTypeId())
+  //        && personalFilter) throw new BadRequestException(ErrorType.PERSONAL_FILTER_EXCEPTION);
+  //
+  //    List<Category> categoryList = getCategoryList(isHard, isDessert, isBrunch);
+  //    List<Bakery> bakeryList =
+  //        getFilteredAndSortedBakeryList(
+  //            personalFilter, memberBreadTypeId, categoryList, sortingOption);
+  //    return getBakeryListResponseDTOList(bakeryList);
+  //  }
+  //
+  //  private List<Category> getCategoryList(boolean isHard, boolean isDessert, boolean isBrunch) {
+  //    List<Category> categoryList = new ArrayList<>();
+  //
+  //    Map<CategoryType, Boolean> categoryMap = new HashMap<>();
+  //    categoryMap.put(CategoryType.HARD_BREAD, isHard);
+  //    categoryMap.put(CategoryType.DESSERT, isDessert);
+  //    categoryMap.put(CategoryType.BRUNCH, isBrunch);
+  //
+  //    for (Map.Entry<CategoryType, Boolean> entry : categoryMap.entrySet()) {
+  //      if (entry.getValue()) { // true인 값만 해당되어 category에 추가된다
+  //        Category category =
+  //            categoryRepository
+  //                .findByCategoryName(entry.getKey().getName())
+  //                .orElseThrow(
+  //                    () ->
+  //                        new NotFoundException(
+  //                            ErrorType.NOT_FOUND_CATEGORY_EXCEPTION,
+  //                            ErrorType.NOT_FOUND_CATEGORY_EXCEPTION.getMessage()
+  //                                + entry.getKey().getName()));
+  //        categoryList.add(category);
+  //      }
+  //    }
+  //
+  //    if (categoryList.isEmpty()) { // 카테고리가 빈 경우
+  //      for (CategoryType categoryType : CategoryType.values()) {
+  //        Category category =
+  //            categoryRepository
+  //                .findByCategoryName(categoryType.getName())
+  //                .orElseThrow(
+  //                    () ->
+  //                        new NotFoundException(
+  //                            ErrorType.NOT_FOUND_CATEGORY_EXCEPTION,
+  //                            ErrorType.NOT_FOUND_CATEGORY_EXCEPTION.getMessage()
+  //                                + categoryType.getName()));
+  //        categoryList.add(category);
+  //      }
+  //    }
+  //
+  //    return categoryList;
+  //  }
+  //
+  //  private List<Bakery> getFilteredAndSortedBakeryList(
+  //      boolean personalFilter, Long breadTypeId, List<Category> categoryList, String
+  // sortingOption) {
+  //    BreadType breadType =
+  //        personalFilter
+  //            ? breadTypeRepository
+  //                .findById(breadTypeId)
+  //                .orElseThrow(
+  //                    () ->
+  //                        new NotFoundException(
+  //                            ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION,
+  //                            ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION.getMessage() +
+  // breadTypeId))
+  //            : breadTypeRepository
+  //                .findBreadTypeByIsGlutenFreeAndIsVeganAndIsNutFreeAndIsSugarFree(
+  //                    true, true, true, true)
+  //                .orElseThrow(() -> new
+  // NotFoundException(ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION));
+  //
+  //    List<Bakery> filteredBakeryList =
+  //        bakeryRepository.findFilteredBakeries(
+  //            categoryList,
+  //            breadType.getIsGlutenFree(),
+  //            breadType.getIsVegan(),
+  //            breadType.getIsNutFree(),
+  //            breadType.getIsSugarFree());
+  //
+  //    List<Bakery> getSortedByCategoryBakeryList =
+  // getSortedByCategoryBakeryList(filteredBakeryList);
+  //
+  //    if ("review".equals(sortingOption)) {
+  //      getSortedByCategoryBakeryList.sort(
+  //          Comparator.comparingLong(Bakery::getReviewCount).reversed());
+  //      return getSortedByCategoryBakeryList;
+  //    }
+  //
+  //    return getSortedByCategoryBakeryList;
+  //  }
+  //
+  //  private List<Bakery> getSortedByCategoryBakeryList(List<Bakery> bakeryList) {
+  //    Map<Bakery, Long> bakeryCategoryCounts = new HashMap<>();
+  //
+  //    for (Bakery bakery : bakeryList) {
+  //      long count = bakeryCategoryRepository.countBakeryCategoriesByBakery(bakery);
+  //      log.info("########## bakeryName: {} count: {} ##########", bakery.getBakeryName(), count);
+  //      bakeryCategoryCounts.put(bakery, count);
+  //    }
+  //
+  //    return bakeryCategoryCounts.entrySet().stream()
+  //        .sorted(Map.Entry.<Bakery, Long>comparingByValue().reversed())
+  //        .map(Map.Entry::getKey)
+  //        .collect(Collectors.toList());
+  //  }
 
   public BakeryDetailResponseDTO getBakeryDetail(Long bakeryId) {
     Long memberId = SecurityUtil.getUserId().orElse(null);
@@ -167,7 +179,8 @@ public class BakeryService {
                         ErrorType.NOT_FOUND_BAKERY_EXCEPTION,
                         ErrorType.NOT_FOUND_BAKERY_EXCEPTION.getMessage() + bakeryId));
     BreadTypeResponseDTO breadType =
-        BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(bakery.getBreadType());
+        BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(
+            bakeryBreadTypeRepository.findAllByBakery(bakery));
     boolean isBookMarked = memberId == null ? false : isBookMarked(memberId, bakeryId);
     List<Menu> bakeryMenuList = menuRepository.findAllByBakery(bakery);
     List<MenuResponseDTO> menuList = MenuMapper.INSTANCE.toMenuResponseDTOList(bakeryMenuList);

@@ -32,25 +32,25 @@ public class MemberService {
   private final NutrientTypeRepository nutrientTypeRepository;
   private final AppleJwtService appleJWTService;
   private final BookMarkRepository bookMarkRepository;
-  private final BakeryRepository bakeryRepository;
   private final MemberBreadTypeRepository memberBreadTypeRepository;
   private final MemberNutrientTypeRepository memberNutrientTypeRepository;
 
   public MemberDetailResponseDTO getMemberDetail() {
     String memberNickname = SecurityUtil.getLoginMemberNickname();
     MainPurpose memberMainPurpose = SecurityUtil.getLoginMemberMainPurpose();
-    Long memberBreadTypeId = SecurityUtil.getLoginMemberBreadTypeId();
-
-    BreadType breadType =
-        breadTypeRepository
-            .findById(memberBreadTypeId)
+    // Long memberBreadTypeId = SecurityUtil.getLoginMemberBreadTypeId();
+    Member foundMember =
+        memberRepository
+            .findByNickname(memberNickname)
             .orElseThrow(
                 () ->
                     new NotFoundException(
-                        ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION,
-                        ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION.getMessage() + memberBreadTypeId));
+                        ErrorType.NOT_FOUND_USER_EXCEPTION,
+                        ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberNickname));
+
+    List<MemberBreadType> breadType = memberBreadTypeRepository.findAllByMember(foundMember);
     BreadTypeResponseDTO breadTypeResponseDTO =
-        BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(breadType);
+        MemberBreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(breadType);
 
     return MemberTypeMapper.INSTANCE.toMemberDetailResponseDTO(
         memberNickname, memberMainPurpose, breadTypeResponseDTO);
