@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-  Optional<Review> findById(Long reviewId);
+  Optional<Review> findByReviewId(Long reviewId);
 
   List<Review> findAllByBakeryOrderByCreatedAtDesc(Bakery bakery);
 

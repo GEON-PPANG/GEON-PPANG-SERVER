@@ -120,7 +120,7 @@ public class MemberService {
       Member foundMember, BreadTypeTag breadTypeTag) {
     BreadType foundBreadType =
         breadTypeRepository
-            .findByBreadTypeName(breadTypeTag)
+            .findByBreadTypeTag(breadTypeTag)
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION));
 
     MemberBreadType memberBreadType =
@@ -151,7 +151,7 @@ public class MemberService {
       Member foundMember, NutrientTypeTag nutrientTypeTag) {
     NutrientType foundNutrientType =
         nutrientTypeRepository
-            .findByNutrientTypeTagName(nutrientTypeTag)
+            .findByNutrientTypeTag(nutrientTypeTag)
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_NUTRIENT_EXCEPTION));
 
     MemberNutrientType memberNutrientType =
@@ -161,7 +161,15 @@ public class MemberService {
 
   public MemberTypeResponseDTO getMemberTypes(Map<String, Object> loginMemberInfo) {
     Long memberId = Long.parseLong(loginMemberInfo.get("memberId").toString());
-    List<MemberBreadType> memberBreadTypes = memberBreadTypeRepository.findAllByMemberId(memberId);
+    Member member =
+        memberRepository
+            .findById(memberId)
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_USER_EXCEPTION,
+                        ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberId));
+    List<MemberBreadType> memberBreadTypes = memberBreadTypeRepository.findAllByMember(member);
     List<MemberNutrientType> memberNutrientTypes =
         memberNutrientTypeRepository.findAllByMemberId(memberId);
 

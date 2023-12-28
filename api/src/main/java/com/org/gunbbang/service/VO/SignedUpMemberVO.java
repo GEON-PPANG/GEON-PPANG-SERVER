@@ -27,10 +27,11 @@ public class SignedUpMemberVO {
   @NotNull private final Role role;
   @NotNull private final String appleRefreshToken;
   private final MainPurpose mainPurpose;
-  @NotNull private List<BreadType> breadType;
-  @NotNull private List<NutrientType> nutrientType;
+  @NotNull private final List<BreadType> breadType;
+  @NotNull private final List<NutrientType> nutrientType;
   @NotNull private final AuthType type;
 
+  // TODO: breadType, nutrientType 리스트로 넘겨야할 것 같은디 양방향으로 할지 아니면 그냥 단방향으로 할지 고민
   public static SignedUpMemberVO of(Member member, String appleRefreshToken, AuthType authType) {
     return SignedUpMemberVO.builder()
         .memberId(member.getMemberId())
@@ -41,9 +42,6 @@ public class SignedUpMemberVO {
         .role(member.getRole())
         .appleRefreshToken(appleRefreshToken)
         .mainPurpose(member.getMainPurpose())
-        // TODO: breadType, nutrientType 리스트로 넘겨야할 것 같은디.. 양방향으로 해야하나
-        //        .breadType(member.getBreadType())
-        //        .nutrientType(member.getNutrientType())
         .breadType(null)
         .nutrientType(null)
         .type(authType)

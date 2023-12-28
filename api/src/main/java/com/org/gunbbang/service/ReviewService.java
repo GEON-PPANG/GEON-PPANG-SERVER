@@ -119,7 +119,7 @@ public class ReviewService {
   public ReviewDetailResponseDTO getReviewedByMember(Long reviewId, Long memberId) {
     Review review =
         reviewRepository
-            .findById(reviewId)
+            .findByReviewId(reviewId)
             .orElseThrow(
                 () ->
                     new NotFoundException(
