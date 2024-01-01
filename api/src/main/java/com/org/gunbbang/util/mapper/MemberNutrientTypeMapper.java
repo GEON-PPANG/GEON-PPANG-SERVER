@@ -4,6 +4,7 @@ import com.org.gunbbang.NutrientTypeTag;
 import com.org.gunbbang.controller.DTO.response.NutrientTypeResponseDTO;
 import com.org.gunbbang.entity.MemberNutrientType;
 import java.util.List;
+import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -13,10 +14,13 @@ import org.mapstruct.factory.Mappers;
 public interface MemberNutrientTypeMapper {
   MemberNutrientTypeMapper INSTANCE = Mappers.getMapper(MemberNutrientTypeMapper.class);
 
-  @Mapping(target = "isNutrientOpen", expression = "java(mapIsNutrientOpen(memberNutrientTypes))")
-  @Mapping(target = "isIngredientOpen", expression = "java(mapIsVegan(memberNutrientTypes))")
-  @Mapping(target = "isNotOpen", expression = "java(mapIsNotOpen(memberNutrientTypes))")
-  NutrientTypeResponseDTO toBreadTypeResponseDTO(List<MemberNutrientType> memberNutrientTypes);
+  @Mapping(target = "nutrientTypeId", source = "nutrientType.nutrientTypeId")
+  @Mapping(target = "nutrientTypeTag", source = "nutrientType.nutrientTypeTag")
+  NutrientTypeResponseDTO toNutrientTypeResponseDTO(MemberNutrientType memberNutrientType);
+
+  @IterableMapping(elementTargetType = NutrientTypeResponseDTO.class)
+  List<NutrientTypeResponseDTO> toNutrientTypeResponseDTOList(
+      List<MemberNutrientType> memberNutrientTypes);
 
   default boolean mapIsNutrientOpen(List<MemberNutrientType> memberNutrientTypes) {
     return memberNutrientTypes.stream()

@@ -12,10 +12,7 @@ import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
 import com.org.gunbbang.util.RecommendKeywordPercentage;
-import com.org.gunbbang.util.mapper.BakeryMapper;
-import com.org.gunbbang.util.mapper.BreadTypeMapper;
-import com.org.gunbbang.util.mapper.RecommendKeywordMapper;
-import com.org.gunbbang.util.mapper.ReviewMapper;
+import com.org.gunbbang.util.mapper.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +33,7 @@ public class ReviewService {
   private final RecommendKeywordRepository recommendKeywordRepository;
   private final MemberBreadTypeRepository memberBreadTypeRepository;
   private final MemberBreadTypeRepository memberNutrientTypeRepository;
+  private final BakeryBreadTypeRepository bakeryBreadTypeRepository;
   private final int maxBestBakeryCount = 10;
 
   public Long createReview(Long currentMemberId, Long bakeryId, ReviewRequestDTO reviewRequestDto) {
@@ -121,7 +119,7 @@ public class ReviewService {
   public ReviewDetailResponseDTO getReviewedByMember(Long reviewId, Long memberId) {
     Review review =
         reviewRepository
-            .findById(reviewId)
+            .findByReviewId(reviewId)
             .orElseThrow(
                 () ->
                     new NotFoundException(
@@ -192,12 +190,13 @@ public class ReviewService {
             .orElseThrow(() -> new BadRequestException(ErrorType.REQUEST_VALIDATION_EXCEPTION));
     List<Review> reviewList = reviewRepository.findAllByMemberOrderByCreatedAtDesc(currentMember);
     List<BakeryListReviewedByMemberDTO> responseDtoList = new ArrayList<>();
-    BreadTypeResponseDTO breadType;
+    List<BreadTypeResponseDTO> breadType;
     BakeryListReviewedByMemberDTO bakeryListReviewedByMemberDto;
 
     for (Review review : reviewList) {
       breadType =
-          BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(review.getBakery().getBreadType());
+          BakeryBreadTypeMapper.INSTANCE.toBreadTypeResponseDTOList(
+              bakeryBreadTypeRepository.findAllByBakery(review.getBakery()));
       bakeryListReviewedByMemberDto =
           BakeryMapper.INSTANCE.toListReviewedByMemberDTO(review.getBakery(), review, breadType);
       responseDtoList.add(bakeryListReviewedByMemberDto);

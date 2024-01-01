@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface NutrientTypeRepository extends JpaRepository<NutrientType, Long> {
-  Optional<NutrientType> findByIsNutrientOpenAndIsIngredientOpenAndIsNotOpen(
-      boolean isNutrientOpen, boolean isIngredientOpen, boolean isNotOpen);
+  //  Optional<NutrientType> findByIsNutrientOpenAndIsIngredientOpenAndIsNotOpen(
+  //      boolean isNutrientOpen, boolean isIngredientOpen, boolean isNotOpen);
 
-  Optional<NutrientType> findByNutrientTypeTagName(NutrientTypeTag nutrientTypeTag);
+  Optional<NutrientType> findByNutrientTypeTag(NutrientTypeTag nutrientTypeTag);
 }

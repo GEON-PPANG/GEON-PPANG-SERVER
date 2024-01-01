@@ -38,7 +38,7 @@ public class ReviewReportService {
                         ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberId));
     Review foundReview =
         reviewRepository
-            .findById(reviewId)
+            .findByReviewId(reviewId)
             .orElseThrow(
                 () ->
                     new NotFoundException(

@@ -1,6 +1,7 @@
 package com.org.gunbbang.controller.DTO.response;
 
 import com.org.gunbbang.MainPurpose;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,11 +12,11 @@ import lombok.NoArgsConstructor;
 public class MemberDetailResponseDTO {
   private String memberNickname;
   private MainPurpose mainPurpose;
-  private BreadTypeResponseDTO breadType;
+  private List<BreadTypeResponseDTO> breadType;
 
   @Builder
   public MemberDetailResponseDTO(
-      String memberNickname, MainPurpose mainPurpose, BreadTypeResponseDTO breadType) {
+      String memberNickname, MainPurpose mainPurpose, List<BreadTypeResponseDTO> breadType) {
     this.memberNickname = memberNickname;
     this.mainPurpose = mainPurpose;
     this.breadType = breadType;

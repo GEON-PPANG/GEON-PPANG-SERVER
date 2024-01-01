@@ -32,25 +32,25 @@ public class MemberService {
   private final NutrientTypeRepository nutrientTypeRepository;
   private final AppleJwtService appleJWTService;
   private final BookMarkRepository bookMarkRepository;
-  private final BakeryRepository bakeryRepository;
   private final MemberBreadTypeRepository memberBreadTypeRepository;
   private final MemberNutrientTypeRepository memberNutrientTypeRepository;
 
   public MemberDetailResponseDTO getMemberDetail() {
     String memberNickname = SecurityUtil.getLoginMemberNickname();
     MainPurpose memberMainPurpose = SecurityUtil.getLoginMemberMainPurpose();
-    Long memberBreadTypeId = SecurityUtil.getLoginMemberBreadTypeId();
-
-    BreadType breadType =
-        breadTypeRepository
-            .findById(memberBreadTypeId)
+    // Long memberBreadTypeId = SecurityUtil.getLoginMemberBreadTypeId();
+    Member foundMember =
+        memberRepository
+            .findByNickname(memberNickname)
             .orElseThrow(
                 () ->
                     new NotFoundException(
-                        ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION,
-                        ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION.getMessage() + memberBreadTypeId));
-    BreadTypeResponseDTO breadTypeResponseDTO =
-        BreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(breadType);
+                        ErrorType.NOT_FOUND_USER_EXCEPTION,
+                        ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberNickname));
+
+    List<MemberBreadType> breadType = memberBreadTypeRepository.findAllByMember(foundMember);
+    List<BreadTypeResponseDTO> breadTypeResponseDTO =
+        MemberBreadTypeMapper.INSTANCE.toBreadTypeResponseDTOList(breadType);
 
     return MemberTypeMapper.INSTANCE.toMemberDetailResponseDTO(
         memberNickname, memberMainPurpose, breadTypeResponseDTO);
@@ -82,16 +82,16 @@ public class MemberService {
     foundMember.updateMainPurpose(request.getMainPurpose());
     memberRepository.saveAndFlush(foundMember);
 
-    BreadTypeResponseDTO breadTypeResponseDTO =
-        MemberBreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(newMemberBreadTypes);
-    NutrientTypeResponseDTO nutrientTypeResponseDTO =
-        MemberNutrientTypeMapper.INSTANCE.toBreadTypeResponseDTO(newMemberNutrientTypes);
+    List<BreadTypeResponseDTO> breadTypeResponseDTOList =
+        MemberBreadTypeMapper.INSTANCE.toBreadTypeResponseDTOList(newMemberBreadTypes);
+    List<NutrientTypeResponseDTO> nutrientTypeResponseDTO =
+        MemberNutrientTypeMapper.INSTANCE.toNutrientTypeResponseDTOList(newMemberNutrientTypes);
 
     return MemberTypeMapper.INSTANCE.toMemberTypeResponseDTO(
         foundMember.getMemberId(),
         foundMember.getMainPurpose(),
         nickname,
-        breadTypeResponseDTO,
+        breadTypeResponseDTOList,
         nutrientTypeResponseDTO);
   }
 
@@ -120,7 +120,7 @@ public class MemberService {
       Member foundMember, BreadTypeTag breadTypeTag) {
     BreadType foundBreadType =
         breadTypeRepository
-            .findByBreadTypeName(breadTypeTag)
+            .findByBreadTypeTag(breadTypeTag)
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION));
 
     MemberBreadType memberBreadType =
@@ -151,7 +151,7 @@ public class MemberService {
       Member foundMember, NutrientTypeTag nutrientTypeTag) {
     NutrientType foundNutrientType =
         nutrientTypeRepository
-            .findByNutrientTypeTagName(nutrientTypeTag)
+            .findByNutrientTypeTag(nutrientTypeTag)
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_NUTRIENT_EXCEPTION));
 
     MemberNutrientType memberNutrientType =
@@ -161,14 +161,22 @@ public class MemberService {
 
   public MemberTypeResponseDTO getMemberTypes(Map<String, Object> loginMemberInfo) {
     Long memberId = Long.parseLong(loginMemberInfo.get("memberId").toString());
-    List<MemberBreadType> memberBreadTypes = memberBreadTypeRepository.findAllByMemberId(memberId);
+    Member member =
+        memberRepository
+            .findById(memberId)
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        ErrorType.NOT_FOUND_USER_EXCEPTION,
+                        ErrorType.NOT_FOUND_USER_EXCEPTION.getMessage() + memberId));
+    List<MemberBreadType> memberBreadTypes = memberBreadTypeRepository.findAllByMember(member);
     List<MemberNutrientType> memberNutrientTypes =
         memberNutrientTypeRepository.findAllByMemberId(memberId);
 
-    BreadTypeResponseDTO breadTypeResponseDTO =
-        MemberBreadTypeMapper.INSTANCE.toBreadTypeResponseDTO(memberBreadTypes);
-    NutrientTypeResponseDTO nutrientTypeResponseDTO =
-        MemberNutrientTypeMapper.INSTANCE.toBreadTypeResponseDTO(memberNutrientTypes);
+    List<BreadTypeResponseDTO> breadTypeResponseDTO =
+        MemberBreadTypeMapper.INSTANCE.toBreadTypeResponseDTOList(memberBreadTypes);
+    List<NutrientTypeResponseDTO> nutrientTypeResponseDTO =
+        MemberNutrientTypeMapper.INSTANCE.toNutrientTypeResponseDTOList(memberNutrientTypes);
 
     return MemberTypeMapper.INSTANCE.toMemberTypeResponseDTO(
         memberId,

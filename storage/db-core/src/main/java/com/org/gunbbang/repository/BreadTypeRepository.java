@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface BreadTypeRepository extends JpaRepository<BreadType, Long> {
 
   // TODO: getDefaultBreadType으로 수정
-  Optional<BreadType> findBreadTypeByIsGlutenFreeAndIsVeganAndIsNutFreeAndIsSugarFree(
-      boolean isGlutenFree, boolean isVegan, boolean isNutFree, boolean isSugarFree);
+  //  Optional<BreadType> findBreadTypeByIsGlutenFreeAndIsVeganAndIsNutFreeAndIsSugarFree(
+  //      boolean isGlutenFree, boolean isVegan, boolean isNutFree, boolean isSugarFree);
 
-  Optional<BreadType> findByBreadTypeName(BreadTypeTag breadTypeTagName);
+  Optional<BreadType> findByBreadTypeTag(BreadTypeTag breadTypeTag);
 }
