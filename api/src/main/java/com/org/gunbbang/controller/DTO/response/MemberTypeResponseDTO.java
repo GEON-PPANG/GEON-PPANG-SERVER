@@ -13,6 +13,6 @@ public class MemberTypeResponseDTO {
   @NotNull private Long memberId;
   @NotNull private MainPurpose mainPurpose;
   @NotNull private String nickname;
-  @NotNull private List<BreadTypeResponseDTO> breadTypeList;
-  @NotNull private List<NutrientTypeResponseDTO> nutrientTypeList;
+  @NotNull private List<Long> breadTypeList;
+  @NotNull private List<Long> nutrientTypeList;
 }

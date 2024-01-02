@@ -3,9 +3,7 @@ package com.org.gunbbang.service;
 import com.org.gunbbang.*;
 import com.org.gunbbang.auth.jwt.service.AppleJwtService;
 import com.org.gunbbang.auth.security.util.SecurityUtil;
-import com.org.gunbbang.controller.DTO.request.BreadTypeRequestDTO;
 import com.org.gunbbang.controller.DTO.request.MemberTypesRequestDTO;
-import com.org.gunbbang.controller.DTO.request.NutrientTypeRequestDTO;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.*;
 import com.org.gunbbang.entity.BreadType;
@@ -15,8 +13,10 @@ import com.org.gunbbang.util.mapper.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,57 +70,61 @@ public class MemberService {
     if (memberBreadTypeRepository.existsByMember(foundMember)) {
       memberBreadTypeRepository.deleteAllByMember(foundMember); // 기존에 있던 MemberBreadType 전부 삭제
     }
-    List<MemberBreadType> newMemberBreadTypes =
-        createBreadType(request.getBreadType(), foundMember);
+
+    List<MemberBreadType> memberBreadTypes =
+        saveBreadTypes(request.getBreadTypeList(), foundMember);
 
     if (memberNutrientTypeRepository.existsByMember(foundMember)) {
-      memberNutrientTypeRepository.deleteAllByMember(foundMember); // 기존에 있던 MemberBreadType 전부 삭제
+      memberNutrientTypeRepository.deleteAllByMember(
+          foundMember); // 기존에 있던 MemberNutrientType 전부 삭제
     }
-    List<MemberNutrientType> newMemberNutrientTypes =
-        createNutrientType(request.getNutrientType(), foundMember);
+
+    List<MemberNutrientType> memberNutrientTypes =
+        saveNutrientTypes(request.getNutrientTypeList(), foundMember);
 
     foundMember.updateMainPurpose(request.getMainPurpose());
     memberRepository.saveAndFlush(foundMember);
 
-    List<BreadTypeResponseDTO> breadTypeResponseDTOList =
-        MemberBreadTypeMapper.INSTANCE.toBreadTypeResponseDTOList(newMemberBreadTypes);
-    List<NutrientTypeResponseDTO> nutrientTypeResponseDTO =
-        MemberNutrientTypeMapper.INSTANCE.toNutrientTypeResponseDTOList(newMemberNutrientTypes);
+    List<Long> breadTypeIds = extractBreadTypeIds(memberBreadTypes);
+    List<Long> nutrientTypeIds = extractNutrientTypeIds(memberNutrientTypes);
 
     return MemberTypeMapper.INSTANCE.toMemberTypeResponseDTO(
         foundMember.getMemberId(),
         foundMember.getMainPurpose(),
         nickname,
-        breadTypeResponseDTOList,
-        nutrientTypeResponseDTO);
+        breadTypeIds,
+        nutrientTypeIds);
   }
 
-  private List<MemberBreadType> createBreadType(
-      BreadTypeRequestDTO breadTypeRequest, Member foundMember) {
+  @NotNull
+  private static List<Long> extractNutrientTypeIds(List<MemberNutrientType> memberNutrientTypes) {
+    return memberNutrientTypes.stream()
+        .map(MemberNutrientType::getNutrientType)
+        .map(NutrientType::getNutrientTypeId)
+        .collect(Collectors.toList());
+  }
+
+  @NotNull
+  private static List<Long> extractBreadTypeIds(List<MemberBreadType> memberBreadTypes) {
+    return memberBreadTypes.stream()
+        .map(MemberBreadType::getBreadType)
+        .map(BreadType::getBreadTypeId)
+        .collect(Collectors.toList());
+  }
+
+  private List<MemberBreadType> saveBreadTypes(List<Long> breadTypeIds, Member foundMember) {
     List<MemberBreadType> memberBreadTypes = new ArrayList<>();
-    if (breadTypeRequest.getIsGlutenFree()) {
-      memberBreadTypes.add(createMemberBreadTypeByTag(foundMember, BreadTypeTag.GLUTEN_FREE));
-    }
 
-    if (breadTypeRequest.getIsVegan()) {
-      memberBreadTypes.add(createMemberBreadTypeByTag(foundMember, BreadTypeTag.VEGAN));
-    }
-
-    if (breadTypeRequest.getIsNutFree()) {
-      memberBreadTypes.add(createMemberBreadTypeByTag(foundMember, BreadTypeTag.NUT_FREE));
-    }
-
-    if (breadTypeRequest.getIsSugarFree()) {
-      memberBreadTypes.add(createMemberBreadTypeByTag(foundMember, BreadTypeTag.SUGAR_FREE));
+    for (Long breadTypeId : breadTypeIds) {
+      memberBreadTypes.add(createMemberBreadTypeById(foundMember, breadTypeId));
     }
     return memberBreadTypeRepository.saveAllAndFlush(memberBreadTypes);
   }
 
-  private MemberBreadType createMemberBreadTypeByTag(
-      Member foundMember, BreadTypeTag breadTypeTag) {
+  private MemberBreadType createMemberBreadTypeById(Member foundMember, Long breadTypeId) {
     BreadType foundBreadType =
         breadTypeRepository
-            .findByBreadTypeTag(breadTypeTag)
+            .findByBreadTypeId(breadTypeId)
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_BREAD_TYPE_EXCEPTION));
 
     MemberBreadType memberBreadType =
@@ -128,30 +132,21 @@ public class MemberService {
     return memberBreadType;
   }
 
-  private List<MemberNutrientType> createNutrientType(
-      NutrientTypeRequestDTO NutrientTypeRequest, Member foundMember) {
+  private List<MemberNutrientType> saveNutrientTypes(
+      List<Long> nutrientTypeIds, Member foundMember) {
     List<MemberNutrientType> memberNutrientTypes = new ArrayList<>();
-    if (NutrientTypeRequest.getIsNutrientOpen()) {
-      memberNutrientTypes.add(
-          createMemberNutrientTypeByTag(foundMember, NutrientTypeTag.NUTRIENT_OPEN));
+
+    for (Long nutrientTypeId : nutrientTypeIds) {
+      memberNutrientTypes.add(createMemberNutrientTypeById(foundMember, nutrientTypeId));
     }
 
-    if (NutrientTypeRequest.getIsIngredientOpen()) {
-      memberNutrientTypes.add(
-          createMemberNutrientTypeByTag(foundMember, NutrientTypeTag.INGREDIENT_OPEN));
-    }
-
-    if (NutrientTypeRequest.getIsNotOpen()) {
-      memberNutrientTypes.add(createMemberNutrientTypeByTag(foundMember, NutrientTypeTag.NOT_OPEN));
-    }
     return memberNutrientTypeRepository.saveAllAndFlush(memberNutrientTypes);
   }
 
-  private MemberNutrientType createMemberNutrientTypeByTag(
-      Member foundMember, NutrientTypeTag nutrientTypeTag) {
+  private MemberNutrientType createMemberNutrientTypeById(Member foundMember, Long nutrientTypeId) {
     NutrientType foundNutrientType =
         nutrientTypeRepository
-            .findByNutrientTypeTag(nutrientTypeTag)
+            .findByNutrientTypeId(nutrientTypeId)
             .orElseThrow(() -> new NotFoundException(ErrorType.NOT_FOUND_NUTRIENT_EXCEPTION));
 
     MemberNutrientType memberNutrientType =
@@ -173,17 +168,15 @@ public class MemberService {
     List<MemberNutrientType> memberNutrientTypes =
         memberNutrientTypeRepository.findAllByMemberId(memberId);
 
-    List<BreadTypeResponseDTO> breadTypeResponseDTO =
-        MemberBreadTypeMapper.INSTANCE.toBreadTypeResponseDTOList(memberBreadTypes);
-    List<NutrientTypeResponseDTO> nutrientTypeResponseDTO =
-        MemberNutrientTypeMapper.INSTANCE.toNutrientTypeResponseDTOList(memberNutrientTypes);
+    List<Long> breadTypeIds = extractBreadTypeIds(memberBreadTypes);
+    List<Long> nutrientTypeIds = extractNutrientTypeIds(memberNutrientTypes);
 
     return MemberTypeMapper.INSTANCE.toMemberTypeResponseDTO(
         memberId,
         (MainPurpose) loginMemberInfo.get("mainPurpose"),
         loginMemberInfo.get("nickname").toString(),
-        breadTypeResponseDTO,
-        nutrientTypeResponseDTO);
+        breadTypeIds,
+        nutrientTypeIds);
   }
 
   public ValidationResponseDTO checkDuplicatedNickname(String nickname) {

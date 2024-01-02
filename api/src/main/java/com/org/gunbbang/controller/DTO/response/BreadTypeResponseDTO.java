@@ -9,5 +9,4 @@ import lombok.*;
 @AllArgsConstructor
 public class BreadTypeResponseDTO {
   @NotNull private Long breadTypeId;
-  @NotNull private String breadTypeTag;
 }

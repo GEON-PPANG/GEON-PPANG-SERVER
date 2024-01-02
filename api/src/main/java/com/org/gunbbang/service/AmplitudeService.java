@@ -65,9 +65,6 @@ public class AmplitudeService {
   public void sendUserProperty(Long memberId) {
     try {
       UserPropertyVO vo = getUserPropertyVO(memberId);
-      System.out.println("##### user property vo: " + vo.toString());
-      System.out.println("##### user property vo: " + vo.getBread_type_tags());
-      System.out.println("##### user property vo: " + vo.getNutrient_type_tags());
 
       Map<String, Object> propertyMap = new HashMap<>();
       Field[] fields = vo.getClass().getDeclaredFields(); // TODO: 리플렉션 안쓰고 하는 방법은 없을지?
@@ -103,11 +100,10 @@ public class AmplitudeService {
     List<Review> reviews = reviewRepository.findAllByMemberOrderByCreatedAtDesc(foundMember);
     List<BookMark> bookMarks = bookMarkRepository.findAllByMemberId(foundMember.getMemberId());
     List<BreadTypeTag> foundBreadTypeTags =
-        memberBreadTypeRepository.findAllEagerly(foundMember.getMemberId()).stream()
+        memberBreadTypeRepository.findAllByMemberId(foundMember.getMemberId()).stream()
             .map(MemberBreadType::getBreadType)
             .map(BreadType::getBreadTypeTag)
             .collect(Collectors.toList());
-    System.out.println("foundBreadTypeTags: " + foundBreadTypeTags);
 
     List<NutrientTypeTag> foundNutrientTypeTags =
         memberNutrientTypeRepository.findAllByMember(foundMember).stream()
