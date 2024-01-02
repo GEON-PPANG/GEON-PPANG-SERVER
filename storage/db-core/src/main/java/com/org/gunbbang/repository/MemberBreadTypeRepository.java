@@ -10,8 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 public interface MemberBreadTypeRepository extends JpaRepository<MemberBreadType, Long> {
   List<MemberBreadType> findAllByMember(Member member);
 
-  @Query("SELECT mbt FROM MemberBreadType mbt where mbt.member.memberId=:memberId")
-  List<MemberBreadType> findAllEagerly(Long memberId);
+  @Query("SELECT mbt FROM MemberBreadType mbt where mbt.member.memberId = :memberId")
+  List<MemberBreadType> findAllByMemberId(Long memberId);
 
   boolean existsByMember(Member member);
 
@@ -19,6 +19,6 @@ public interface MemberBreadTypeRepository extends JpaRepository<MemberBreadType
 
   // TODO: 쿼리 확인 필요(+transactional 필요없는지)
   @Modifying
-  @Query("delete from MemberBreadType mbt where mbt.member=:member")
+  @Query("delete from MemberBreadType mbt where mbt.member = :member")
   void deleteAllByMember(Member member);
 }
