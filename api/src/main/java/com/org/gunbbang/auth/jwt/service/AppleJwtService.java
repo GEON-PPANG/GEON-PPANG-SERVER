@@ -154,7 +154,7 @@ public class AppleJwtService {
     }
   }
 
-  // 애플 refreshToken revoke처리
+  // 애플 refreshToken revoke 처리
   public void revokeAppleTokens(String appleRefreshToken, Long memberId) throws Exception {
     if (appleRefreshToken == null) {
       slackSender.sendMessage(ErrorType.NO_APPLE_REFRESH_HEADER_EXCEPTION.getMessage() + memberId);

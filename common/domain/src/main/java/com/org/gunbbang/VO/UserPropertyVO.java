@@ -1,6 +1,10 @@
-package com.org.gunbbang.DTO;
+package com.org.gunbbang.VO;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import com.org.gunbbang.BreadTypeTag;
+import com.org.gunbbang.NutrientTypeTag;
 import lombok.*;
 
 @Getter
@@ -12,10 +16,9 @@ public class UserPropertyVO {
   String auth_type;
   LocalDateTime account_creation_date;
   String main_purpose;
-  String bread_type;
-  String ingredients_type;
+  List<BreadTypeTag> bread_type_tags;
+  List<NutrientTypeTag> nutrient_type_tags;
   int total_review;
   int total_mystore;
   String user_nickname;
-  //  LocalDateTime recent_open_app_date;
 }

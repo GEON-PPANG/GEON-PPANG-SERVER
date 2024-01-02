@@ -3,13 +3,16 @@ package com.org.gunbbang.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.org.gunbbang.AmplitudeFeignClient;
-import com.org.gunbbang.DTO.*;
+import com.org.gunbbang.BreadTypeTag;
 import com.org.gunbbang.NotFoundException;
+import com.org.gunbbang.NutrientTypeTag;
+import com.org.gunbbang.VO.UserPropertyVO;
 import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -62,6 +65,9 @@ public class AmplitudeService {
   public void sendUserProperty(Long memberId) {
     try {
       UserPropertyVO vo = getUserPropertyVO(memberId);
+      System.out.println("##### user property vo: " + vo.toString());
+      System.out.println("##### user property vo: " + vo.getBread_type_tags());
+      System.out.println("##### user property vo: " + vo.getNutrient_type_tags());
 
       Map<String, Object> propertyMap = new HashMap<>();
       Field[] fields = vo.getClass().getDeclaredFields(); // TODO: 리플렉션 안쓰고 하는 방법은 없을지?
@@ -80,6 +86,7 @@ public class AmplitudeService {
       amplitudeFeignClient.identifyUserProperty(requestBody);
     } catch (Exception e) {
       log.error("%%%%%%%%%% user property 전송 과정에서 에러 발생 %%%%%%%%%%");
+      e.printStackTrace();
     }
   }
 
@@ -95,17 +102,25 @@ public class AmplitudeService {
 
     List<Review> reviews = reviewRepository.findAllByMemberOrderByCreatedAtDesc(foundMember);
     List<BookMark> bookMarks = bookMarkRepository.findAllByMemberId(foundMember.getMemberId());
-    List<MemberBreadType> breadTypes = memberBreadTypeRepository.findAllByMember(foundMember);
-    List<MemberNutrientType> nutrientTypes =
-        memberNutrientTypeRepository.findAllByMember(foundMember);
+    List<BreadTypeTag> foundBreadTypeTags =
+        memberBreadTypeRepository.findAllEagerly(foundMember.getMemberId()).stream()
+            .map(MemberBreadType::getBreadType)
+            .map(BreadType::getBreadTypeTag)
+            .collect(Collectors.toList());
+    System.out.println("foundBreadTypeTags: " + foundBreadTypeTags);
 
-    // TODO: 이거 앰플에 어떻게 쏴줄지 고민
+    List<NutrientTypeTag> foundNutrientTypeTags =
+        memberNutrientTypeRepository.findAllByMember(foundMember).stream()
+            .map(MemberNutrientType::getNutrientType)
+            .map(NutrientType::getNutrientTypeTag)
+            .collect(Collectors.toList());
+
     return UserPropertyVO.builder()
         .auth_type(foundMember.getPlatformType().name())
         .account_creation_date(foundMember.getCreatedAt())
         .main_purpose(foundMember.getMainPurpose().name())
-        //        .ingredients_type(foundMember.getNutrientType().getNutrientTypeName())
-        //        .bread_type(foundMember.getBreadType().getBreadTypeName())
+        .bread_type_tags(foundBreadTypeTags)
+        .nutrient_type_tags(foundNutrientTypeTags)
         .total_review(reviews.size())
         .total_mystore(bookMarks.size())
         .user_nickname(foundMember.getNickname())

@@ -4,9 +4,7 @@ import com.org.gunbbang.PlatformType;
 import com.org.gunbbang.Role;
 import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import com.org.gunbbang.entity.Member;
-import com.org.gunbbang.repository.BreadTypeRepository;
-import com.org.gunbbang.repository.MemberRepository;
-import com.org.gunbbang.repository.NutrientTypeRepository;
+import com.org.gunbbang.repository.*;
 import com.org.gunbbang.service.VO.SignedUpMemberVO;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Transactional
 public abstract class AuthService {
   private final MemberRepository memberRepository;
-  private final BreadTypeRepository breadTypeRepository;
-  private final NutrientTypeRepository nutrientTypeRepository;
 
-  public AuthService(
-      MemberRepository memberRepository,
-      BreadTypeRepository breadTypeRepository,
-      NutrientTypeRepository nutrientTypeRepository) {
+  public AuthService(MemberRepository memberRepository) {
     this.memberRepository = memberRepository;
-    this.breadTypeRepository = breadTypeRepository;
-    this.nutrientTypeRepository = nutrientTypeRepository;
   }
 
   @Autowired private PasswordEncoder passwordEncoder; // TODO: final 빼고 하는게 맞을지?
