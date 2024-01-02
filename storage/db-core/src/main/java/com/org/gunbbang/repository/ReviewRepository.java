@@ -22,7 +22,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
           "SELECT r FROM Review r "
               + "INNER JOIN Bakery b ON b.bakeryId = r.bakery.bakeryId "
               + "INNER JOIN Member m ON r.member.memberId = m.memberId "
-              + "WHERE b.breadType = :currentMemberBreadType "
+              + "WHERE b.bakeryId = :currentMemberBreadType "
               + "AND m.mainPurpose = :currentMemberMainPurpose "
               + "ORDER BY r.createdAt desc")
   List<Review> findBestReviews(
