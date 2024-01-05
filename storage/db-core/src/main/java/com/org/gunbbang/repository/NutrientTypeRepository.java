@@ -10,4 +10,6 @@ public interface NutrientTypeRepository extends JpaRepository<NutrientType, Long
   //      boolean isNutrientOpen, boolean isIngredientOpen, boolean isNotOpen);
 
   Optional<NutrientType> findByNutrientTypeTag(NutrientTypeTag nutrientTypeTag);
+
+  Optional<NutrientType> findByNutrientTypeId(Long nutrientTypeId);
 }

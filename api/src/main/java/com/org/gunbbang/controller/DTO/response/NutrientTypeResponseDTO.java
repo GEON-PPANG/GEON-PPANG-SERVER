@@ -9,5 +9,4 @@ import lombok.*;
 @Builder
 public class NutrientTypeResponseDTO {
   @NotNull private Long nutrientTypeId;
-  @NotNull private String nutrientTypeTag;
 }

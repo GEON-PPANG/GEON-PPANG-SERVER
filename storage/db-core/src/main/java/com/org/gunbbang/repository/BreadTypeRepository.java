@@ -12,4 +12,6 @@ public interface BreadTypeRepository extends JpaRepository<BreadType, Long> {
   //      boolean isGlutenFree, boolean isVegan, boolean isNutFree, boolean isSugarFree);
 
   Optional<BreadType> findByBreadTypeTag(BreadTypeTag breadTypeTag);
+
+  Optional<BreadType> findByBreadTypeId(Long breadTypeId);
 }

@@ -1,5 +1,6 @@
 package com.org.gunbbang.DTO;
 
+import com.org.gunbbang.VO.UserPropertyVO;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.*;

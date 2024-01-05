@@ -8,10 +8,8 @@ import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import com.org.gunbbang.entity.KakaoMember;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.errorType.ErrorType;
-import com.org.gunbbang.repository.BreadTypeRepository;
 import com.org.gunbbang.repository.KakaoMemberRepository;
 import com.org.gunbbang.repository.MemberRepository;
-import com.org.gunbbang.repository.NutrientTypeRepository;
 import com.org.gunbbang.service.VO.KakaoUserVO;
 import com.org.gunbbang.service.VO.SignedUpMemberVO;
 import lombok.extern.slf4j.Slf4j;
@@ -30,11 +28,8 @@ public class KakaoAuthService extends AuthService {
   private final KakaoMemberRepository kakaoMemberRepository;
 
   public KakaoAuthService(
-      MemberRepository memberRepository,
-      BreadTypeRepository breadTypeRepository,
-      NutrientTypeRepository nutrientTypeRepository,
-      KakaoMemberRepository kakaoMemberRepository) {
-    super(memberRepository, breadTypeRepository, nutrientTypeRepository);
+      MemberRepository memberRepository, KakaoMemberRepository kakaoMemberRepository) {
+    super(memberRepository);
     this.kakaoMemberRepository = kakaoMemberRepository;
   }
 

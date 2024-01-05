@@ -10,12 +10,12 @@ import org.springframework.data.jpa.repository.Query;
 public interface MemberNutrientTypeRepository extends JpaRepository<MemberNutrientType, Long> {
   List<MemberNutrientType> findAllByMember(Member member);
 
-  @Query("select mnt from MemberNutrientType mnt join Member m where m.memberId =: memberId")
+  @Query("select mnt from MemberNutrientType mnt where mnt.member.memberId = :memberId")
   List<MemberNutrientType> findAllByMemberId(Long memberId);
 
   boolean existsByMember(Member member);
 
   @Modifying
-  @Query("delete from MemberNutrientType mnt where mnt.member =: member")
+  @Query("delete from MemberNutrientType mnt where mnt.member=:member")
   void deleteAllByMember(Member member);
 }

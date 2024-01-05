@@ -17,7 +17,7 @@ public class AuthServiceProvider {
   private final NativeAuthService nativeAuthService;
 
   @PostConstruct
-  void initalAuthServiceMap() {
+  void initialAuthServiceMap() {
     authSerivceMap.put(PlatformType.KAKAO, kakaoAuthService);
     authSerivceMap.put(PlatformType.APPLE, appleAuthService);
     authSerivceMap.put(PlatformType.NONE, nativeAuthService);

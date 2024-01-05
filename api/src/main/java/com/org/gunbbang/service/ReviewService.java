@@ -208,7 +208,7 @@ public class ReviewService {
     Optional<Long> memberId = SecurityUtil.getUserId();
 
     if (memberId.isEmpty()) {
-      List<Review> randomReviews = getRamdomReviews();
+      List<Review> randomReviews = getRandomReviews();
       return getRandomReviewListResponseDTOs(randomReviews);
     }
 
@@ -223,7 +223,7 @@ public class ReviewService {
 
     if (!isFilterSelected(foundMember)) {
       log.info("########## 회원이 필터 선택 안한 경우. 랜덤으로 10개 리뷰 반환 ##########");
-      List<Review> randomReviews = getRamdomReviews();
+      List<Review> randomReviews = getRandomReviews();
       return getRandomReviewListResponseDTOs(randomReviews);
     }
 
@@ -246,7 +246,7 @@ public class ReviewService {
     return getBestReviewListResponseDTOs(bestReviews);
   }
 
-  private List<Review> getRamdomReviews() {
+  private List<Review> getRandomReviews() {
     PageRequest randomPageRequest = PageRequest.of(0, maxBestBakeryCount);
     List<Review> randomReviews =
         reviewRepository.findRandomReviews(randomPageRequest); // 랜덤 리뷰 10개 조회

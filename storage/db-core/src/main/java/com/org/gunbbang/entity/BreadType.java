@@ -17,5 +17,6 @@ public class BreadType {
 
   @NotNull
   @Enumerated(EnumType.STRING)
+  @Column(name = "bread_type_tag")
   private BreadTypeTag breadTypeTag;
 }
