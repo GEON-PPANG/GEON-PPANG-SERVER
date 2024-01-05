@@ -13,10 +13,8 @@ import com.org.gunbbang.util.mapper.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,22 +94,6 @@ public class MemberService {
         nickname,
         breadTypeResponseDTO,
         nutrientTypeResponseDTO);
-  }
-
-  @NotNull
-  private static List<Long> extractNutrientTypeIds(List<MemberNutrientType> memberNutrientTypes) {
-    return memberNutrientTypes.stream()
-        .map(MemberNutrientType::getNutrientType)
-        .map(NutrientType::getNutrientTypeId)
-        .collect(Collectors.toList());
-  }
-
-  @NotNull
-  private static List<Long> extractBreadTypeIds(List<MemberBreadType> memberBreadTypes) {
-    return memberBreadTypes.stream()
-        .map(MemberBreadType::getBreadType)
-        .map(BreadType::getBreadTypeId)
-        .collect(Collectors.toList());
   }
 
   private List<MemberBreadType> saveBreadTypes(List<Long> breadTypeIds, Member foundMember) {
