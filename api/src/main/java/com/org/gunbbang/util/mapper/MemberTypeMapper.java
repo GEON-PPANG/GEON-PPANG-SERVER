@@ -4,6 +4,7 @@ import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.controller.DTO.response.BreadTypeResponseDTO;
 import com.org.gunbbang.controller.DTO.response.MemberDetailResponseDTO;
 import com.org.gunbbang.controller.DTO.response.MemberTypeResponseDTO;
+import com.org.gunbbang.controller.DTO.response.NutrientTypeResponseDTO;
 import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,8 +21,8 @@ public interface MemberTypeMapper {
       Long memberId,
       MainPurpose mainPurpose,
       String nickname,
-      List<Long> breadTypeList,
-      List<Long> nutrientTypeList);
+      List<BreadTypeResponseDTO> breadTypeList,
+      List<NutrientTypeResponseDTO> nutrientTypeList);
 
   MemberDetailResponseDTO toMemberDetailResponseDTO(
       String memberNickname, MainPurpose mainPurpose, List<BreadTypeResponseDTO> breadType);

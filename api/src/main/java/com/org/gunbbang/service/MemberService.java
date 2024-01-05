@@ -85,15 +85,17 @@ public class MemberService {
     foundMember.updateMainPurpose(request.getMainPurpose());
     memberRepository.saveAndFlush(foundMember);
 
-    List<Long> breadTypeIds = extractBreadTypeIds(memberBreadTypes);
-    List<Long> nutrientTypeIds = extractNutrientTypeIds(memberNutrientTypes);
+    List<BreadTypeResponseDTO> breadTypeResponseDTO =
+        MemberBreadTypeMapper.INSTANCE.toBreadTypeResponseDTOList(memberBreadTypes);
+    List<NutrientTypeResponseDTO> nutrientTypeResponseDTO =
+        MemberNutrientTypeMapper.INSTANCE.toNutrientTypeResponseDTOList(memberNutrientTypes);
 
     return MemberTypeMapper.INSTANCE.toMemberTypeResponseDTO(
         foundMember.getMemberId(),
         foundMember.getMainPurpose(),
         nickname,
-        breadTypeIds,
-        nutrientTypeIds);
+        breadTypeResponseDTO,
+        nutrientTypeResponseDTO);
   }
 
   @NotNull
@@ -168,15 +170,17 @@ public class MemberService {
     List<MemberNutrientType> memberNutrientTypes =
         memberNutrientTypeRepository.findAllByMemberId(memberId);
 
-    List<Long> breadTypeIds = extractBreadTypeIds(memberBreadTypes);
-    List<Long> nutrientTypeIds = extractNutrientTypeIds(memberNutrientTypes);
+    List<BreadTypeResponseDTO> breadTypeResponseDTO =
+        MemberBreadTypeMapper.INSTANCE.toBreadTypeResponseDTOList(memberBreadTypes);
+    List<NutrientTypeResponseDTO> nutrientTypeResponseDTO =
+        MemberNutrientTypeMapper.INSTANCE.toNutrientTypeResponseDTOList(memberNutrientTypes);
 
     return MemberTypeMapper.INSTANCE.toMemberTypeResponseDTO(
         memberId,
         (MainPurpose) loginMemberInfo.get("mainPurpose"),
         loginMemberInfo.get("nickname").toString(),
-        breadTypeIds,
-        nutrientTypeIds);
+        breadTypeResponseDTO,
+        nutrientTypeResponseDTO);
   }
 
   public ValidationResponseDTO checkDuplicatedNickname(String nickname) {
