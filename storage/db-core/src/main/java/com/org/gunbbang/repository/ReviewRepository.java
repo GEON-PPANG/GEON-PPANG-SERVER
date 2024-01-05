@@ -17,18 +17,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
   List<Review> findAllByMemberOrderByCreatedAtDesc(Member member);
 
-  @Query(
-      value =
-          "SELECT r FROM Review r "
-              + "INNER JOIN Bakery b ON b.bakeryId = r.bakery.bakeryId "
-              + "INNER JOIN Member m ON r.member.memberId = m.memberId "
-              + "WHERE b.bakeryId = :currentMemberBreadType "
-              + "AND m.mainPurpose = :currentMemberMainPurpose "
-              + "ORDER BY r.createdAt desc")
-  List<Review> findBestReviews(
-      @Param("currentMemberBreadType") BreadType currentMemberBreadType,
-      @Param("currentMemberMainPurpose") MainPurpose mainPurpose);
-
   // 나와 같은 목적을 선택하고 같은 빵 유형을 선택한 다른 유저들이 작성한 리뷰 중 10개의 좋아요 리뷰 최신순
   @Query(
       value =
