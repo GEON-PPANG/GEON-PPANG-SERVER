@@ -3,7 +3,6 @@ package com.org.gunbbang.repository;
 import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.entity.Bakery;
 import com.org.gunbbang.entity.BreadType;
-import com.org.gunbbang.entity.Category;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
@@ -64,21 +63,14 @@ public interface BakeryRepository
   @Query(value = "SELECT b FROM Bakery b " + "ORDER BY RAND() ")
   List<Bakery> findBakeriesRandomly(Pageable pageRequest);
 
-  @Query(
-      "SELECT DISTINCT b FROM Bakery b "
-          + "INNER JOIN BakeryCategory bc ON b.bakeryId = bc.bakery.bakeryId "
-          + "INNER JOIN Category c ON bc.category.categoryId = c.categoryId "
-          + "WHERE (c IN :categoryList) "
-          + "AND ( "
-          + "(:isGlutenFree = true AND b.breadType.isGlutenFree = true) OR "
-          + "(:isVegan = true AND b.breadType.isVegan = true) OR "
-          + "(:isNutFree = true AND b.breadType.isNutFree = true) OR "
-          + "(:isSugarFree = true AND b.breadType.isSugarFree = true)"
-          + ")")
-  List<Bakery> findFilteredBakeries(
-      @Param("categoryList") List<Category> categoryList,
-      @Param("isGlutenFree") boolean isGlutenFree,
-      @Param("isVegan") boolean isVegan,
-      @Param("isNutFree") boolean isNutFree,
-      @Param("isSugarFree") boolean isSugarFree);
+  /**
+   * @Query( "SELECT DISTINCT b FROM Bakery b " + "INNER JOIN BakeryCategory bc ON b.bakeryId =
+   * bc.bakery.bakeryId " + "INNER JOIN Category c ON bc.category.categoryId = c.categoryId " +
+   * "WHERE (c IN :categoryList) " + "AND ( " + "(:isGlutenFree = true AND b.breadType.isGlutenFree
+   * = true) OR " + "(:isVegan = true AND b.breadType.isVegan = true) OR " + "(:isNutFree = true AND
+   * b.breadType.isNutFree = true) OR " + "(:isSugarFree = true AND b.breadType.isSugarFree = true)"
+   * + ")") List<Bakery> findFilteredBakeries( @Param("categoryList") List<Category>
+   * categoryList, @Param("isGlutenFree") boolean isGlutenFree, @Param("isVegan") boolean
+   * isVegan, @Param("isNutFree") boolean isNutFree, @Param("isSugarFree") boolean isSugarFree);
+   */
 }

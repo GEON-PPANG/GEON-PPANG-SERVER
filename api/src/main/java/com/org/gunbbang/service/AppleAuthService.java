@@ -5,11 +5,9 @@ import com.org.gunbbang.DTO.AppleAuthResponseDTO;
 import com.org.gunbbang.auth.jwt.service.AppleJwtService;
 import com.org.gunbbang.common.AuthType;
 import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
-import com.org.gunbbang.entity.Member;
+import com.org.gunbbang.entity.*;
 import com.org.gunbbang.errorType.ErrorType;
-import com.org.gunbbang.repository.BreadTypeRepository;
-import com.org.gunbbang.repository.MemberRepository;
-import com.org.gunbbang.repository.NutrientTypeRepository;
+import com.org.gunbbang.repository.*;
 import com.org.gunbbang.service.VO.SignedUpMemberVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,12 +17,8 @@ import org.springframework.stereotype.Service;
 public class AppleAuthService extends AuthService {
   private final AppleJwtService appleJwtService;
 
-  public AppleAuthService(
-      MemberRepository memberRepository,
-      BreadTypeRepository breadTypeRepository,
-      NutrientTypeRepository nutrientTypeRepository,
-      AppleJwtService appleJwtService) {
-    super(memberRepository, breadTypeRepository, nutrientTypeRepository);
+  public AppleAuthService(MemberRepository memberRepository, AppleJwtService appleJwtService) {
+    super(memberRepository);
     this.appleJwtService = appleJwtService;
   }
 

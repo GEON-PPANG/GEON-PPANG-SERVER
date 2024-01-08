@@ -5,9 +5,7 @@ import com.org.gunbbang.common.AuthType;
 import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.errorType.ErrorType;
-import com.org.gunbbang.repository.BreadTypeRepository;
-import com.org.gunbbang.repository.MemberRepository;
-import com.org.gunbbang.repository.NutrientTypeRepository;
+import com.org.gunbbang.repository.*;
 import com.org.gunbbang.service.VO.SignedUpMemberVO;
 import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -19,15 +17,12 @@ public class NativeAuthService extends AuthService {
 
   private final MemberRepository memberRepository;
 
-  public NativeAuthService(
-      MemberRepository memberRepository,
-      BreadTypeRepository breadTypeRepository,
-      NutrientTypeRepository nutrientTypeRepository,
-      MemberRepository memberRepository1) {
-    super(memberRepository, breadTypeRepository, nutrientTypeRepository);
-    this.memberRepository = memberRepository1;
+  public NativeAuthService(MemberRepository memberRepository) {
+    super(memberRepository);
+    this.memberRepository = memberRepository;
   }
 
+  // 자체로그인 시 로그인 로직은 시큐리티에서 처리
   @Override
   @Transactional
   public SignedUpMemberVO saveMemberOrLogin(String platformToken, MemberSignUpRequestDTO request) {
@@ -56,7 +51,7 @@ public class NativeAuthService extends AuthService {
     }
 
     Member savedMember = saveUser(request, request.getEmail());
-    return SignedUpMemberVO.of(savedMember, null, AuthType.SIGN_UP);
+    return SignedUpMemberVO.of(savedMember, null, AuthType.LOGIN);
   }
 
   private boolean isNullOrBlank(String input) {
