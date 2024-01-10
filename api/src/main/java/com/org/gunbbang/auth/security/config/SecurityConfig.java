@@ -79,7 +79,7 @@ public class SecurityConfig {
             "/auth/logout", // 로그아웃
             "/member", // 유저 정보 상세보기(마이페이지)
             "/member/bookMarks", // 북마크 목록 조회
-            "/member/types" // 유져 필터 조회(이거 아요에서 한번 쓰지 않나?) 및 필터 변경
+            "/member/types" // 유져 필터 조회 및 필터 변경
             )
         .hasRole("MEMBER")
         .and()
