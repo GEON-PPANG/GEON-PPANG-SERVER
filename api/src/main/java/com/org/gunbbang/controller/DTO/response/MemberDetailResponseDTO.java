@@ -12,13 +12,13 @@ import lombok.NoArgsConstructor;
 public class MemberDetailResponseDTO {
   private String memberNickname;
   private MainPurpose mainPurpose;
-  private List<BreadTypeResponseDTO> breadType;
+  private List<BreadTypeResponseDTO> breadTypeList;
 
   @Builder
   public MemberDetailResponseDTO(
       String memberNickname, MainPurpose mainPurpose, List<BreadTypeResponseDTO> breadType) {
     this.memberNickname = memberNickname;
     this.mainPurpose = mainPurpose;
-    this.breadType = breadType;
+    this.breadTypeList = breadType;
   }
 }
