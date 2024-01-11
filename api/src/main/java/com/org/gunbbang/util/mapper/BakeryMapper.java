@@ -27,7 +27,7 @@ public interface BakeryMapper {
   @Mapping(source = "bakery.isHACCP", target = "isHACCP")
   @Mapping(source = "bakery.isVegan", target = "isVegan")
   @Mapping(source = "bakery.isNonGMO", target = "isNonGMO")
-  @Mapping(source = "breadTypeList", target = "breadType")
+  @Mapping(source = "breadTypeList", target = "breadTypeList")
   BakeryDetailResponseDTO toBakeryDetailResponseDTO(
       Bakery bakery,
       String address,

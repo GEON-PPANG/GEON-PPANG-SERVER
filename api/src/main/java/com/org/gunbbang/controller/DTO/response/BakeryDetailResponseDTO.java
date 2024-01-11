@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class BakeryDetailResponseDTO extends BaseBakeryResponseDTO {
   private Long reviewCount;
-  private List<BreadTypeResponseDTO> breadType;
+  private List<BreadTypeResponseDTO> breadTypeList;
   private String mapUrl;
   private String homepageUrl;
   private String instagramUrl;
