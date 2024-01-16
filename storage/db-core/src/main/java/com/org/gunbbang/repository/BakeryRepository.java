@@ -64,13 +64,16 @@ public interface BakeryRepository
 
   @Query(
       value =
-          "SELECT b FROM Bakery b "
-              + "JOIN BakeryBreadType bbt ON b.bakeryId = bbt.bakery.bakeryId "
-              + "JOIN BakeryCategory bc ON b.bakeryId = bc.bakery.bakeryId "
-              + "JOIN BakeryNutrientType bnt ON b.bakeryId = bnt.bakery.bakeryId "
-              + "WHERE bbt.breadType IN :breadTypeList "
-              + "AND bc.category IN :categoryList "
-              + "AND bnt.nutrientType = :bakeryNutrientType")
+          "SELECT DISTINCT b FROM Bakery b "
+              + "WHERE b.bakeryId IN ("
+              + "SELECT bbt.bakery.bakeryId FROM BakeryBreadType bbt WHERE bbt.breadType IN :breadTypeList"
+              + ") "
+              + "AND b.bakeryId IN ("
+              + "SELECT bc.bakery.bakeryId FROM BakeryCategory bc WHERE bc.category IN :categoryList"
+              + ") "
+              + "AND b.bakeryId IN ("
+              + "SELECT bnt.bakery.bakeryId FROM BakeryNutrientType bnt WHERE bnt.nutrientType = :bakeryNutrientType"
+              + ")")
   List<Bakery> findFilteredBakeries(
       @Param("categoryList") List<Category> categoryList,
       @Param("breadTypeList") List<BreadType> breadTypeList,

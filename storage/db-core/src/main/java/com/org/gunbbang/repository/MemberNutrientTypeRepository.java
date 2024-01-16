@@ -10,7 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 public interface MemberNutrientTypeRepository extends JpaRepository<MemberNutrientType, Long> {
   List<MemberNutrientType> findAllByMember(Member member);
 
-  @Query("select mnt from MemberNutrientType mnt where mnt.member.memberId = :memberId")
+  @Query(
+      "select mnt from MemberNutrientType mnt where mnt.member.memberId = :memberId order by mnt.memberNutrientTypeId asc")
   List<MemberNutrientType> findAllByMemberId(Long memberId);
 
   boolean existsByMember(Member member);

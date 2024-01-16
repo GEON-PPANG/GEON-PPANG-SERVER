@@ -3,6 +3,7 @@ package com.org.gunbbang.service;
 import com.org.gunbbang.CategoryType;
 import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.NotFoundException;
+import com.org.gunbbang.NutrientTypeTag;
 import com.org.gunbbang.auth.security.util.SecurityUtil;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.*;
@@ -36,7 +37,7 @@ public class BakeryService {
   private final MemberBreadTypeRepository memberBreadTypeRepository;
   private final MemberNutrientTypeRepository memberNutrientTypeRepository;
   private final BakeryBreadTypeRepository bakeryBreadTypeRepository;
-  private final BakeryNutrientTypeRepository bakeryNutrientTypeRepository;
+  private final NutrientTypeRepository nutrientTypeRepository;
 
   private final String BLANK_SPACE = " ";
   private final int maxBestBakeryCount = 10;
@@ -113,7 +114,10 @@ public class BakeryService {
     List<MemberNutrientType> memberNutrintTypes =
         memberNutrientTypeRepository.findByMemberId(memberId);
     MemberNutrientType memberNutrientType = memberNutrintTypes.get(0);
-    NutrientType bakeryNutrientType = memberNutrientType.getNutrientType();
+    NutrientType bakeryNutrientType =
+        personalFilter
+            ? memberNutrientType.getNutrientType()
+            : nutrientTypeRepository.findByNutrientTypeTag(NutrientTypeTag.NOT_OPEN).orElse(null);
     List<Bakery> filteredBakeryList =
         bakeryRepository.findFilteredBakeries(categoryList, breadType, bakeryNutrientType);
 
