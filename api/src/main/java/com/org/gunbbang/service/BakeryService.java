@@ -110,15 +110,10 @@ public class BakeryService {
                 .map(MemberBreadType::getBreadType)
                 .collect(Collectors.toList())
             : breadTypeRepository.findAll();
-    MemberNutrientType memberNutrintType =
-        memberNutrientTypeRepository
-            .findByMemberId(memberId)
-            .orElseThrow(
-                () ->
-                    new NotFoundException(
-                        ErrorType.NOT_FOUND_NUTRIENT_EXCEPTION,
-                        ErrorType.NOT_FOUND_NUTRIENT_EXCEPTION.getMessage()));
-    NutrientType bakeryNutrientType = memberNutrintType.getNutrientType();
+    List<MemberNutrientType> memberNutrintTypes =
+        memberNutrientTypeRepository.findByMemberId(memberId);
+    MemberNutrientType memberNutrientType = memberNutrintTypes.get(0);
+    NutrientType bakeryNutrientType = memberNutrientType.getNutrientType();
     List<Bakery> filteredBakeryList =
         bakeryRepository.findFilteredBakeries(categoryList, breadType, bakeryNutrientType);
 
