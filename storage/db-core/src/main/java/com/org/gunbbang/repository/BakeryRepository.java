@@ -1,8 +1,7 @@
 package com.org.gunbbang.repository;
 
 import com.org.gunbbang.MainPurpose;
-import com.org.gunbbang.entity.Bakery;
-import com.org.gunbbang.entity.BreadType;
+import com.org.gunbbang.entity.*;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
@@ -63,14 +62,20 @@ public interface BakeryRepository
   @Query(value = "SELECT b FROM Bakery b " + "ORDER BY RAND() ")
   List<Bakery> findBakeriesRandomly(Pageable pageRequest);
 
-  /**
-   * @Query( "SELECT DISTINCT b FROM Bakery b " + "INNER JOIN BakeryCategory bc ON b.bakeryId =
-   * bc.bakery.bakeryId " + "INNER JOIN Category c ON bc.category.categoryId = c.categoryId " +
-   * "WHERE (c IN :categoryList) " + "AND ( " + "(:isGlutenFree = true AND b.breadType.isGlutenFree
-   * = true) OR " + "(:isVegan = true AND b.breadType.isVegan = true) OR " + "(:isNutFree = true AND
-   * b.breadType.isNutFree = true) OR " + "(:isSugarFree = true AND b.breadType.isSugarFree = true)"
-   * + ")") List<Bakery> findFilteredBakeries( @Param("categoryList") List<Category>
-   * categoryList, @Param("isGlutenFree") boolean isGlutenFree, @Param("isVegan") boolean
-   * isVegan, @Param("isNutFree") boolean isNutFree, @Param("isSugarFree") boolean isSugarFree);
-   */
+  @Query(
+      value =
+          "SELECT DISTINCT b FROM Bakery b "
+              + "WHERE b.bakeryId IN ("
+              + "SELECT bbt.bakery.bakeryId FROM BakeryBreadType bbt WHERE bbt.breadType IN :breadTypeList"
+              + ") "
+              + "AND b.bakeryId IN ("
+              + "SELECT bc.bakery.bakeryId FROM BakeryCategory bc WHERE bc.category IN :categoryList"
+              + ") "
+              + "AND b.bakeryId IN ("
+              + "SELECT bnt.bakery.bakeryId FROM BakeryNutrientType bnt WHERE bnt.nutrientType = :bakeryNutrientType"
+              + ")")
+  List<Bakery> findFilteredBakeries(
+      @Param("categoryList") List<Category> categoryList,
+      @Param("breadTypeList") List<BreadType> breadTypeList,
+      NutrientType bakeryNutrientType);
 }
