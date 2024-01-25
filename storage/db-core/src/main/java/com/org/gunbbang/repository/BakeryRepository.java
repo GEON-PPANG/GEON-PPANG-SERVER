@@ -4,6 +4,7 @@ import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.entity.*;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -64,18 +65,29 @@ public interface BakeryRepository
 
   @Query(
       value =
-          "SELECT DISTINCT b FROM Bakery b "
-              + "WHERE b.bakeryId IN ("
-              + "SELECT bbt.bakery.bakeryId FROM BakeryBreadType bbt WHERE bbt.breadType IN :breadTypeList"
-              + ") "
-              + "AND b.bakeryId IN ("
-              + "SELECT bc.bakery.bakeryId FROM BakeryCategory bc WHERE bc.category IN :categoryList"
-              + ") "
-              + "AND b.bakeryId IN ("
-              + "SELECT bnt.bakery.bakeryId FROM BakeryNutrientType bnt WHERE bnt.nutrientType = :bakeryNutrientType"
-              + ")")
-  List<Bakery> findFilteredBakeries(
+          "SELECT distinct b FROM Bakery b "
+              + "LEFT JOIN BakeryBreadType bbt ON b.bakeryId = bbt.bakery.bakeryId AND bbt.breadType IN :breadTypeList "
+              + "LEFT JOIN BakeryCategory bc ON b.bakeryId = bc.bakery.bakeryId AND bc.category IN :categoryList "
+              + "LEFT JOIN BakeryNutrientType bnt ON b.bakeryId = bnt.bakery.bakeryId AND bnt.nutrientType = :bakeryNutrientType "
+              + "GROUP BY b.bakeryId "
+              + "ORDER BY COUNT(bc.bakery.bakeryId) DESC, COUNT(bbt.bakery.bakeryId) DESC")
+  Page<Bakery> findFilteredBakeries(
       @Param("categoryList") List<Category> categoryList,
       @Param("breadTypeList") List<BreadType> breadTypeList,
-      NutrientType bakeryNutrientType);
+      NutrientType bakeryNutrientType,
+      Pageable pageable);
+
+  @Query(
+      value =
+          "SELECT distinct b FROM Bakery b "
+              + "LEFT JOIN BakeryBreadType bbt ON b.bakeryId = bbt.bakery.bakeryId AND bbt.breadType IN :breadTypeList "
+              + "LEFT JOIN BakeryCategory bc ON b.bakeryId = bc.bakery.bakeryId AND bc.category IN :categoryList "
+              + "LEFT JOIN BakeryNutrientType bnt ON b.bakeryId = bnt.bakery.bakeryId AND bnt.nutrientType = :bakeryNutrientType "
+              + "GROUP BY b.bakeryId "
+              + "ORDER BY b.reviewCount DESC, COUNT(bc.bakery.bakeryId) DESC, COUNT(bbt.bakery.bakeryId) DESC")
+  Page<Bakery> findFilteredBakeriesSortByReview(
+      @Param("categoryList") List<Category> categoryList,
+      @Param("breadTypeList") List<BreadType> breadTypeList,
+      NutrientType bakeryNutrientType,
+      Pageable pageable);
 }
