@@ -17,6 +17,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -33,7 +35,6 @@ public class BakeryService {
   private final BakeryRepository bakeryRepository;
   private final MenuRepository menuRepository;
   private final BreadTypeRepository breadTypeRepository;
-  private final BakeryCategoryRepository bakeryCategoryRepository;
   private final MemberBreadTypeRepository memberBreadTypeRepository;
   private final MemberNutrientTypeRepository memberNutrientTypeRepository;
   private final BakeryBreadTypeRepository bakeryBreadTypeRepository;
@@ -42,19 +43,20 @@ public class BakeryService {
   private final String BLANK_SPACE = " ";
   private final int maxBestBakeryCount = 10;
 
-  public List<BakeryListResponseDTO> getBakeryList(
+  public Page<BakeryListResponseDTO> getBakeryList(
       String sortingOption,
       boolean personalFilter,
       boolean isHard,
       boolean isDessert,
-      boolean isBrunch) {
-    Long memberId = SecurityUtil.getLoginMemberId();
-    List<MemberBreadType> memberBreadType = memberBreadTypeRepository.findAllByMemberId(memberId);
-
+      boolean isBrunch,
+      PageRequest pageRequest) {
     List<Category> categoryList = getCategoryList(isHard, isDessert, isBrunch);
-    List<Bakery> bakeryList =
+    Long memberId = personalFilter ? SecurityUtil.getUserId().orElse(null) : null;
+    List<MemberBreadType> memberBreadType =
+        personalFilter ? memberBreadTypeRepository.findAllByMemberId(memberId) : null;
+    Page<Bakery> bakeryList =
         getFilteredAndSortedBakeryList(
-            personalFilter, memberBreadType, categoryList, sortingOption, memberId);
+            personalFilter, memberBreadType, categoryList, sortingOption, memberId, pageRequest);
     return getBakeryListResponseDTOList(bakeryList);
   }
 
@@ -99,52 +101,50 @@ public class BakeryService {
     return categoryList;
   }
 
-  private List<Bakery> getFilteredAndSortedBakeryList(
+  private Page<Bakery> getFilteredAndSortedBakeryList(
       boolean personalFilter,
       List<MemberBreadType> memberBreadType,
       List<Category> categoryList,
       String sortingOption,
-      Long memberId) {
+      Long memberId,
+      PageRequest pageRequest) {
+    final Page<Bakery> getSortedByCategoryBakeryList;
     List<BreadType> breadType =
         personalFilter
             ? memberBreadType.stream()
                 .map(MemberBreadType::getBreadType)
                 .collect(Collectors.toList())
             : breadTypeRepository.findAll();
-    List<MemberNutrientType> memberNutrintTypes =
-        memberNutrientTypeRepository.findByMemberId(memberId);
-    MemberNutrientType memberNutrientType = memberNutrintTypes.get(0);
-    NutrientType bakeryNutrientType =
-        personalFilter
-            ? memberNutrientType.getNutrientType()
-            : nutrientTypeRepository.findByNutrientTypeTag(NutrientTypeTag.NOT_OPEN).orElse(null);
-    List<Bakery> filteredBakeryList =
-        bakeryRepository.findFilteredBakeries(categoryList, breadType, bakeryNutrientType);
-
-    List<Bakery> getSortedByCategoryBakeryList = getSortedByCategoryBakeryList(filteredBakeryList);
-
-    if ("review".equals(sortingOption)) {
-      getSortedByCategoryBakeryList.sort(
-          Comparator.comparingLong(Bakery::getReviewCount).reversed());
+    if (personalFilter) {
+      List<MemberNutrientType> memberNutrientTypes =
+          memberNutrientTypeRepository.findAllByMemberId(memberId);
+      MemberNutrientType memberNutrientType = memberNutrientTypes.get(0);
+      NutrientType bakeryNutrientType = memberNutrientType.getNutrientType();
+      if ("review".equals(sortingOption)) {
+        getSortedByCategoryBakeryList =
+            bakeryRepository.findFilteredBakeriesSortByReview(
+                categoryList, breadType, bakeryNutrientType, pageRequest);
+        return getSortedByCategoryBakeryList;
+      }
+      getSortedByCategoryBakeryList =
+          bakeryRepository.findFilteredBakeries(
+              categoryList, breadType, bakeryNutrientType, pageRequest);
       return getSortedByCategoryBakeryList;
     }
 
-    return getSortedByCategoryBakeryList;
-  }
+    NutrientType bakeryNutrientType =
+        nutrientTypeRepository.findByNutrientTypeTag(NutrientTypeTag.NOT_OPEN).orElse(null);
 
-  private List<Bakery> getSortedByCategoryBakeryList(List<Bakery> bakeryList) {
-    Map<Bakery, Long> bakeryCategoryCounts = new HashMap<>();
-
-    for (Bakery bakery : bakeryList) {
-      long count = bakeryCategoryRepository.countBakeryCategoriesByBakery(bakery);
-      log.info("########## bakeryName: {} count: {} ##########", bakery.getBakeryName(), count);
-      bakeryCategoryCounts.put(bakery, count);
+    if ("review".equals(sortingOption)) {
+      getSortedByCategoryBakeryList =
+          bakeryRepository.findFilteredBakeriesSortByReview(
+              categoryList, breadType, bakeryNutrientType, pageRequest);
+      return getSortedByCategoryBakeryList;
     }
-
-    return bakeryCategoryCounts.entrySet().stream()
-        .sorted(Map.Entry.<Bakery, Long>comparingByValue().reversed())
-        .map(Map.Entry::getKey)
-        .collect(Collectors.toList());
+    getSortedByCategoryBakeryList =
+        bakeryRepository.findFilteredBakeries(
+            categoryList, breadType, bakeryNutrientType, pageRequest);
+    return getSortedByCategoryBakeryList;
   }
 
   public BakeryDetailResponseDTO getBakeryDetail(Long bakeryId) {
@@ -305,6 +305,22 @@ public class BakeryService {
     }
 
     return bakeryListResponseDTOs;
+  }
+
+  private Page<BakeryListResponseDTO> getBakeryListResponseDTOList(Page<Bakery> foundBakeries) {
+    List<BakeryListResponseDTO> bakeryListResponseDTOs = new ArrayList<>();
+
+    for (Bakery foundBakery : foundBakeries) {
+      List<BreadTypeResponseDTO> breadType =
+          BakeryBreadTypeMapper.INSTANCE.toBreadTypeResponseDTOList(
+              getBakeryBreadTypeList(foundBakery));
+      BakeryListResponseDTO bakeryListResponseDTO =
+          BakeryMapper.INSTANCE.toBakeryListResponseDTO(foundBakery, breadType);
+      bakeryListResponseDTOs.add(bakeryListResponseDTO);
+    }
+
+    return new PageImpl<>(
+        bakeryListResponseDTOs, foundBakeries.getPageable(), foundBakeries.getTotalElements());
   }
 
   private List<BakeryBreadType> getBakeryBreadTypeList(Bakery bakery) {
