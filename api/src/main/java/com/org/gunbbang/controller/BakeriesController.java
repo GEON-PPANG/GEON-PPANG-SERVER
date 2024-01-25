@@ -1,15 +1,19 @@
 package com.org.gunbbang.controller;
 
+import com.org.gunbbang.auth.security.util.SecurityUtil;
 import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.controller.DTO.response.BakeryDetailResponseDTO;
 import com.org.gunbbang.controller.DTO.response.BakeryListResponseDTO;
 import com.org.gunbbang.controller.DTO.response.ReviewListResponseDTO;
+import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.service.BakeryService;
 import com.org.gunbbang.service.ReviewService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,14 +26,22 @@ public class BakeriesController {
 
   @GetMapping(value = "", name = "건빵집 리스트 조회")
   @ResponseStatus(HttpStatus.OK)
-  public ApiResponse<List<BakeryListResponseDTO>> getBakeryList(
+  public ApiResponse<Page<BakeryListResponseDTO>> getBakeryList(
       @RequestParam("sortingOption") String sortingOption,
       @RequestParam("personalFilter") boolean personalFilter,
       @RequestParam("isHard") boolean isHard,
       @RequestParam("isDessert") boolean isDessert,
-      @RequestParam("isBrunch") boolean isBrunch) {
-    List<BakeryListResponseDTO> bakeryListResponseDto =
-        bakeryService.getBakeryList(sortingOption, personalFilter, isHard, isDessert, isBrunch);
+      @RequestParam("isBrunch") boolean isBrunch,
+      @RequestParam(value = "pageNumber", defaultValue = "1") int pageNumber,
+      @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+    Object memberPrincipal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    if (memberPrincipal.equals(SecurityUtil.ANONYMOUS_USER) && personalFilter) {
+      return ApiResponse.error(ErrorType.ACCESS_DENIED);
+    }
+    PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+    Page<BakeryListResponseDTO> bakeryListResponseDto =
+        bakeryService.getBakeryList(
+            sortingOption, personalFilter, isHard, isDessert, isBrunch, pageRequest);
     return ApiResponse.success(SuccessType.GET_BAKERY_LIST_SUCCESS, bakeryListResponseDto);
   }
 

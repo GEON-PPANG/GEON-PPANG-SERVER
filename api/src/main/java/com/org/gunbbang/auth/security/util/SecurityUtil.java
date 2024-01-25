@@ -14,7 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * 다 사용하는 api에서 회원 정보가 필요한 경우 -> getUserXXX() 사용
  */
 public class SecurityUtil {
-  private static final String ANONYMOUS_USER = "anonymousUser";
+  public static final String ANONYMOUS_USER = "anonymousUser";
 
   public static Optional<Long> getUserId() {
     return getUserAuthDetails().map(CustomUserDetails::getMemberId);
