@@ -6,6 +6,24 @@
 
 <br><br>
 
+## 💻 Development Tech
+
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white) <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+<br>
+<img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
+<br>
+<img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"> <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
+<br>
+<img src="https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white"> <img src="https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white">
+
+<br><br>
+
+## 🛠️ Architecture Structure
+<img width="798" alt="image" src="https://github.com/GEON-PPANG/GEON-PPANG-SERVER/assets/89137120/30a727d6-4820-4067-818e-4d13945abcc2">
+
+
+<br><br>
+
 
 ## 🍞 Backend Developer
 <div align="center">
@@ -45,23 +63,22 @@
 	</table>
 </div>
 
-<br>
-<br>
-
-## 💻 Development Tech
-
-![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white) <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
-<br>
-<img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
-<br>
-<img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"> <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
-<br>
-<img src="https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white"> <img src="https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white">
-
 <br><br>
 
-## 🛠️ Architecture Structure
-<img width="798" alt="image" src="https://github.com/GEON-PPANG/GEON-PPANG-SERVER/assets/89137120/30a727d6-4820-4067-818e-4d13945abcc2">
+## 🖥 Key Features
+
+<img src="https://github.com/GEON-PPANG/GEON-PPANG-iOS/assets/107853954/cb16a9a9-b1ba-4345-8c59-700e964bc7c5" width="200"> | <img src="https://github.com/GEON-PPANG/GEON-PPANG-iOS/assets/107853954/86686c2e-af18-4d82-ba89-167e715daedd" width="200"> | <img src="https://github.com/GEON-PPANG/GEON-PPANG-iOS/assets/107853954/446a8091-d44e-4e51-9632-7b0deff35f42" width="200">| <img src="https://github.com/GEON-PPANG/GEON-PPANG-iOS/assets/107853954/a6c6482a-cb75-4159-a104-1d5bcbdf1bbc" width="200">|<img src="https://github.com/GEON-PPANG/GEON-PPANG-iOS/assets/107853954/a566f6fb-f190-4b2a-a777-074a9fe2e633" width="200">|
+:---------:|:----------:|:---------:|:---------:|:---------:
+회원가입 | 홈 | 빵집 리스트 | 검색뷰 | 저장 목록 ⦁ 내가 쓴 리뷰 |
+
+<img src="https://github.com/GEON-PPANG/GEON-PPANG-iOS/assets/107853954/5aeb5c32-d8fe-4861-ad57-f04401516ff4" width="200">|<img src="https://github.com/GEON-PPANG/GEON-PPANG-iOS/assets/81475587/62991515-e5f3-4056-99a3-b19a41b1d17e" width="200">|<img src="https://github.com/GEON-PPANG/GEON-PPANG-iOS/assets/81475587/ac7fff60-e78c-4a36-8ebf-bb28a4ebfc82" width="200">|
+:---------:|:----------:|:---------:|
+온보딩 | 빵집 상세페이지 | 리뷰 신고하기 |
+
+<img src="https://github.com/GEON-PPANG/GEON-PPANG-iOS/assets/107853954/59dfdde4-6230-4644-80f0-db2607d9dfdd" width="200">|<img src="https://github.com/GEON-PPANG/GEON-PPANG-iOS/assets/107853954/b7a33a9e-bac3-46e8-8683-27841bd4dd4c" width="200">|<img src="https://github.com/GEON-PPANG/GEON-PPANG-iOS/assets/107853954/7e9aef4e-91d7-4d2a-88c6-03c925ff0be7" width="200">|
+:---------:|:----------:|:---------:|
+필터 선택 | 마이페이지 | 리뷰 작성 | 
+
 
 <br><br>
 
