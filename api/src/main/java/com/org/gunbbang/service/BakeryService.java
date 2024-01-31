@@ -148,9 +148,7 @@ public class BakeryService {
   }
 
   public BakeryDetailResponseDTO getBakeryDetail(Long bakeryId) {
-    Long memberId = SecurityUtil.getUserId().orElse(null);
-
-    Bakery bakery =
+    final Bakery bakery =
         bakeryRepository
             .findById(bakeryId)
             .orElseThrow(
@@ -158,14 +156,17 @@ public class BakeryService {
                     new NotFoundException(
                         ErrorType.NOT_FOUND_BAKERY_EXCEPTION,
                         ErrorType.NOT_FOUND_BAKERY_EXCEPTION.getMessage() + bakeryId));
-    List<BreadTypeResponseDTO> breadType =
+    final List<BreadTypeResponseDTO> breadType =
         BakeryBreadTypeMapper.INSTANCE.toBreadTypeResponseDTOList(
             bakeryBreadTypeRepository.findAllByBakery(bakery));
-    boolean isBookMarked = isBookMarked(memberId, bakeryId);
-    List<Menu> bakeryMenuList = menuRepository.findAllByBakery(bakery);
-    List<MenuResponseDTO> menuList = MenuMapper.INSTANCE.toMenuResponseDTOList(bakeryMenuList);
-    String address =
+    final List<Menu> bakeryMenuList = menuRepository.findAllByBakery(bakery);
+    final List<MenuResponseDTO> menuList =
+        MenuMapper.INSTANCE.toMenuResponseDTOList(bakeryMenuList);
+    final String address =
         getAddress(bakery.getState(), bakery.getCity(), bakery.getTown(), bakery.getAddressRest());
+    final boolean isBookMarked =
+        !SecurityUtil.checkAnonymousUser()
+            && isBookMarked(SecurityUtil.getUserId().orElse(null), bakeryId);
 
     return BakeryMapper.INSTANCE.toBakeryDetailResponseDTO(
         bakery, address, breadType, isBookMarked, menuList);
