@@ -62,6 +62,8 @@ public class SecurityUtil {
     return Optional.of((CustomUserDetails) principal);
   }
 
-  //    public static Long getLoginMemberBreadTypeId() {
-  //    }
+  public static boolean checkAnonymousUser() {
+    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    return principal.equals(ANONYMOUS_USER) ? true : false;
+  }
 }

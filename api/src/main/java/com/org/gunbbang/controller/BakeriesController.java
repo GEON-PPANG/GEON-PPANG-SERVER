@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,7 +26,7 @@ public class BakeriesController {
 
   @GetMapping(value = "", name = "건빵집 리스트 조회")
   @ResponseStatus(HttpStatus.OK)
-  public ApiResponse<Page<BakeryListResponseDTO>> getBakeryList(
+  public ResponseEntity<ApiResponse<Page<BakeryListResponseDTO>>> getBakeryList(
       @RequestParam("sortingOption") String sortingOption,
       @RequestParam("personalFilter") boolean personalFilter,
       @RequestParam("isHard") boolean isHard,
@@ -34,15 +34,16 @@ public class BakeriesController {
       @RequestParam("isBrunch") boolean isBrunch,
       @RequestParam(value = "pageNumber", defaultValue = "1") int pageNumber,
       @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
-    Object memberPrincipal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    if (memberPrincipal.equals(SecurityUtil.ANONYMOUS_USER) && personalFilter) {
-      return ApiResponse.error(ErrorType.ACCESS_DENIED);
+    if (SecurityUtil.checkAnonymousUser()) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN)
+          .body(ApiResponse.error(ErrorType.ACCESS_DENIED));
     }
     PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
     Page<BakeryListResponseDTO> bakeryListResponseDto =
         bakeryService.getBakeryList(
             sortingOption, personalFilter, isHard, isDessert, isBrunch, pageRequest);
-    return ApiResponse.success(SuccessType.GET_BAKERY_LIST_SUCCESS, bakeryListResponseDto);
+    return ResponseEntity.ok(
+        ApiResponse.success(SuccessType.GET_BAKERY_LIST_SUCCESS, bakeryListResponseDto));
   }
 
   @GetMapping(value = "/{bakeryId}", name = "건빵집_상세조회")
