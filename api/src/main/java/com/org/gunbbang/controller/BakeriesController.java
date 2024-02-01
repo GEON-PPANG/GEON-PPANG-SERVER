@@ -32,13 +32,12 @@ public class BakeriesController {
       @RequestParam("isHard") boolean isHard,
       @RequestParam("isDessert") boolean isDessert,
       @RequestParam("isBrunch") boolean isBrunch,
-      @RequestParam(value = "pageNumber", defaultValue = "1") int pageNumber,
-      @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+      @RequestParam(value = "pageNumber", defaultValue = "1") int pageNumber) {
     if (SecurityUtil.checkAnonymousUser() && personalFilter) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN)
           .body(ApiResponse.error(ErrorType.ACCESS_DENIED));
     }
-    PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+    PageRequest pageRequest = PageRequest.of(pageNumber - 1, 10);
     Page<BakeryListResponseDTO> bakeryListResponseDto =
         bakeryService.getBakeryList(
             sortingOption, personalFilter, isHard, isDessert, isBrunch, pageRequest);
