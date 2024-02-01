@@ -34,7 +34,7 @@ public class BakeriesController {
       @RequestParam("isBrunch") boolean isBrunch,
       @RequestParam(value = "pageNumber", defaultValue = "1") int pageNumber,
       @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
-    if (SecurityUtil.checkAnonymousUser()) {
+    if (SecurityUtil.checkAnonymousUser() && personalFilter) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN)
           .body(ApiResponse.error(ErrorType.ACCESS_DENIED));
     }
