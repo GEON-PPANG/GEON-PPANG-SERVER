@@ -24,11 +24,9 @@ permissions:
 
 jobs:
   build:
-
+    environment: dev
     runs-on: ubuntu-latest
-
     steps:
-    
     # 1) 워크플로우 실행 전 기본적으로 체크아웃 필요
     - name: checkout
       uses: actions/checkout@v3
