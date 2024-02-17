@@ -24,7 +24,7 @@ permissions:
 
 jobs:
   build:
-    environment: dev
+    environment: prod
     runs-on: ubuntu-latest
     steps:
     # 1) 워크플로우 실행 전 기본적으로 체크아웃 필요
@@ -69,11 +69,11 @@ jobs:
         
         
         # GitHub-Actions 에서 설정한 값을 application.yml 파일에 쓰기
-        echo "${{ secrets.GUNBBANG_SECRET_API_APPLICATION_YML }}" >> ./api/src/main/resources/application.yml
-        echo "${{ secrets.DEV_DB_CORE_APPLICATION_YML }}" >> ./storage/db-core/src/main/resources/application.yml
-        echo "${{ secrets.GUNBBANG_SECRET_DB_CORE }}" >> ./storage/db-core/src/main/resources/db-core.yml
-        echo "${{ secrets.GUNBBANG_SECRET_CLIENT }}" >> ./client/client-feign/src/main/resources/client.yml
-        echo "${{ secrets.GUNBBANG_SECRET_CLIENT_APPLICATION_YML }}" >> ./client/client-feign/src/main/resources/application.yml
+        echo "${{ secrets.PROD_API_APPLICATION_YML }}" >> ./api/src/main/resources/application.yml
+        echo "${{ secrets.PROD_DB_CORE_APPLICATION_YML }}" >> ./storage/db-core/src/main/resources/application.yml
+        echo "${{ secrets.PROD_DB_CORE }}" >> ./storage/db-core/src/main/resources/db-core.yml
+        echo "${{ secrets.PROD_CLIENT }}" >> ./client/client-feign/src/main/resources/client.yml
+        echo "${{ secrets.PROD_CLIENT_APPLICATION_YML }}" >> ./client/client-feign/src/main/resources/application.yml
         pwd
       
       shell: bash
