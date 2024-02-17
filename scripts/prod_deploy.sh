@@ -3,9 +3,6 @@ BUILD_PATH=$(ls /home/ubuntu/app/api-0.0.1-SNAPSHOT.jar)
 JAR_NAME=$(basename $BUILD_PATH)
 echo "> build 파일명: $JAR_NAME"
 
-current_user=$(whoami)
-echo "현재 실행 중인 유저: $current_user"
-
 echo "> build 파일 복사"
 DEPLOY_PATH=/home/ubuntu/app/nonstop/jar/
 cp $BUILD_PATH $DEPLOY_PATH
@@ -15,18 +12,18 @@ CURRENT_PROFILE=$(curl -s https://www.gunbbang.org/profile)
 echo "> $CURRENT_PROFILE"
 
 # 쉬고 있는 set 찾기: set1이 사용중이면 set2가 쉬고 있고, 반대면 set1이 쉬고 있음
-if [ $CURRENT_PROFILE == dev-set1 ]
+if [ $CURRENT_PROFILE == prod-set1 ]
 then
-  IDLE_PROFILE=dev-set2
+  IDLE_PROFILE=prod-set2
   IDLE_PORT=8082
-elif [ $CURRENT_PROFILE == dev-set2 ]
+elif [ $CURRENT_PROFILE == prod-set2 ]
 then
-  IDLE_PROFILE=dev-set1
+  IDLE_PROFILE=prod-set1
   IDLE_PORT=8081
 else
   echo "> 일치하는 Profile이 없습니다. Profile: $CURRENT_PROFILE"
-  echo "> dev-set1을 할당합니다. IDLE_PROFILE: dev-set1"
-  IDLE_PROFILE=dev-set1
+  echo "> prod-set1을 할당합니다. IDLE_PROFILE: prod-set1"
+  IDLE_PROFILE=prod-set1
   IDLE_PORT=8081
 fi
 
@@ -52,8 +49,6 @@ else
   else
       echo "kill -15 명령어로 서버가 다운되지 않았습니다. exit status $exit."
       echo "kill -9 명령어로 서버를 다운시킵니다. kill -9로 종료 시작한 시각: $(date)"
-      current_user=$(whoami)
-      echo "현재 실행 중인 유저: $current_user"
       kill -9 $IDLE_PID
   fi
   sleep 30
@@ -61,7 +56,6 @@ fi
 
 echo "> $IDLE_PROFILE 배포"
 nohup java -jar -Duser.timezone=Asia/Seoul -Dspring.profiles.active=$IDLE_PROFILE $IDLE_APPLICATION_PATH >> /home/ubuntu/app/nohup/nohup_$(date +\%Y_\%m_\%d_\%H_\%M_\%S).out 2>&1 &
-# nohup java -jar -Duser.timezone=Asia/Seoul -Dspring.profiles.active=$IDLE_PROFILE $IDLE_APPLICATION_PATH >> /home/ubuntu/app/nohup.out 2>&1 &
 
 current_datetime=$(date "+%Y년 %m월 %d일 %H시 %M분 %S초")
 echo "배포된 시간: $current_datetime"
