@@ -21,10 +21,10 @@
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%msg%n</pattern>
         </encoder>
-        <!-- 하루에 한번 압축 후 보관, 최대 30일, 1GB까지 보관 -->
+        <!-- 하루에 한번 압축 후 보관, 최대 14일, 1GB까지 보관 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}.gz</fileNamePattern>
-            <maxHistory>30</maxHistory>
+            <maxHistory>14</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
     </appender>
@@ -40,28 +40,28 @@
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%msg%n</pattern>
         </encoder>
-        <!-- 하루에 한번 압축 후 보관, 최대 30일, 1GB까지 보관 -->
+        <!-- 하루에 한번 압축 후 보관, 최대 14일, 1GB까지 보관 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_PATH}/${ERR_LOG_FILE_NAME}.%d{yyyy-MM-dd}.gz</fileNamePattern>
-            <maxHistory>30</maxHistory>
+            <maxHistory>14</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
     </appender>
     <springProfile name="local">
         <!-- logger name에 LoggingAspect 클래스 위치해있는 패키지 경로 지정-->
         <logger name="com.org.gunbbang.AOP.LoggingAspect" level="INFO">
-            <appender-ref ref="Console" />
+<!--            <appender-ref ref="Console" />-->
             <appender-ref ref="ApiLogFile" />
             <appender-ref ref="ErrorLogFile" />
         </logger>
     </springProfile>
-    <springProfile name="dev-set1">
+    <springProfile name="prod-set1">
         <logger name="com.org.gunbbang.AOP.LoggingAspect" level="INFO">
             <appender-ref ref="ApiLogFile" />
             <appender-ref ref="ErrorLogFile" />
         </logger>
     </springProfile>
-    <springProfile name="dev-set2">
+    <springProfile name="prod-set2">
         <logger name="com.org.gunbbang.AOP.LoggingAspect" level="INFO">
             <appender-ref ref="ApiLogFile" />
             <appender-ref ref="ErrorLogFile" />
