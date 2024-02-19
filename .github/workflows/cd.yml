@@ -112,7 +112,7 @@ jobs:
       run:
         aws deploy create-deployment 
         --application-name gunbbang-server-codedeploy  
-        --deployment-group-name gunbbang-server-codedeploy-group
+        --deployment-group-name prod-gunbbang-server-codedeploy-group
         --file-exists-behavior OVERWRITE 
         --s3-location bucket=gunbbang-bucket-release,bundleType=zip,key=gunbbang_server.zip
         --region ap-northeast-2
