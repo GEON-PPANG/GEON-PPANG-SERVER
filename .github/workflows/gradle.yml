@@ -15,9 +15,9 @@ name: Gunbbang-Server CI
 
 on:
   push:
-   branches: [ "dev" ]
+   branches: [ "prod" ]
   pull_request:
-    branches: [ "dev" ]
+    branches: [ "prod" ]
 
 permissions:
   contents: read
