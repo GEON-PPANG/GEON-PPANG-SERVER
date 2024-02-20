@@ -7,8 +7,8 @@ echo "> build 파일 복사"
 DEPLOY_PATH=/home/ubuntu/app/nonstop/jar/
 cp $BUILD_PATH $DEPLOY_PATH
 
-echo "> PROFILE = DEV로 설정"
 PROFILE=dev
+echo "> PROFILE = $PROFILE 로 설정"
 
 echo "> application.jar 교체"
 RUNNING_APPLICATION=$PROFILE-GunbbangServer.jar   # ??? 그냥 이름 임의로 지정해놓는듯
@@ -37,8 +37,6 @@ else
   sleep 30
 fi
 
-echo "> $PROFILE 배포"
-nohup java -jar -Duser.timezone=Asia/Seoul -Dspring.profiles.active=$PROFILE $RUNNING_APPLICATION_PATH >> /home/ubuntu/app/nohup/nohup_$(date +\%Y_\%m_\%d_\%H_\%M_\%S).out 2>&1 &
-
 current_datetime=$(date "+%Y년 %m월 %d일 %H시 %M분 %S초")
-echo "배포된 시간: $current_datetime"
+echo "> $PROFILE 배포. 현재 시각: $current_datetime"
+nohup java -jar -Duser.timezone=Asia/Seoul -Dspring.profiles.active=$PROFILE $RUNNING_APPLICATION_PATH >> /home/ubuntu/app/nohup/nohup_$(date +\%Y_\%m_\%d_\%H_\%M_\%S).out 2>&1 &
