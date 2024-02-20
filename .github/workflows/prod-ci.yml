@@ -11,13 +11,13 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
-name: Gunbbang-Server CI
+name: PROD-Gunbbang-Server CI
 
 on:
   push:
-   branches: [ "dev" ]
+   branches: [ "prod" ]
   pull_request:
-    branches: [ "dev" ]
+    branches: [ "prod" ]
 
 permissions:
   contents: read

@@ -1,13 +1,14 @@
 # 워크플로우의 이름 지정
-name: GUNBBANG-SERVER CD
+name: PROD-GUNBBANG-SERVER CD
 
 # 해당 workflow가 언제 실행될 것인지에 대한 트리거를 지정
 on:
   push:
-    branches: [ dev ] # main branch로 push 될 때 실행됩니다.
+    branches: [ prod ] # main branch로 push 될 때 실행됩니다.
 
 env:
   S3_BUCKET_NAME: gunbbang-bucket-release
+  ZIP_FILE_NAME: prod-gunbbang-server
 
 jobs:
   build:
@@ -76,22 +77,22 @@ jobs:
       
     # 디렉토리 생성
     - name: Make Directory
-      run: mkdir -p deploy
+      run: mkdir -p prod-deploy
       
     # Jar 파일 복사
     - name: Copy Jar
-      run: cp ./api/build/libs/*.jar ./deploy
+      run: cp ./api/build/libs/*.jar ./prod-deploy
     
     # appspec.yml 파일 복사
     - name: Copy appspec.yml
-      run: cp appspec.yml ./deploy
+      run: cp appspec.yml ./prod-deploy
 
     # script files 복사
     - name: Copy script
-      run: cp ./scripts/*.sh ./deploy
+      run: cp ./scripts/prod-deploy.sh ./prod-deploy/deploy.sh
       
     - name: Make zip file
-      run: zip -r ./gunbbang_server.zip ./deploy
+      run: zip -r ./$ZIP_FILE_NAME.zip ./prod-deploy
       shell: bash
       
     - name: Configure AWS credentials
@@ -102,7 +103,7 @@ jobs:
         aws-region: ap-northeast-2
         
     - name: Upload to S3
-      run: aws s3 cp --region ap-northeast-2 ./gunbbang_server.zip s3://$S3_BUCKET_NAME/
+      run: aws s3 cp --region ap-northeast-2 ./$ZIP_FILE_NAME.zip s3://$S3_BUCKET_NAME/
       
     # Deploy
     - name: Deploy
@@ -112,7 +113,7 @@ jobs:
       run:
         aws deploy create-deployment 
         --application-name gunbbang-server-codedeploy  
-        --deployment-group-name gunbbang-server-codedeploy-group
+        --deployment-group-name prod-gunbbang-server-codedeploy-group
         --file-exists-behavior OVERWRITE 
-        --s3-location bucket=gunbbang-bucket-release,bundleType=zip,key=gunbbang_server.zip
+        --s3-location bucket=gunbbang-bucket-release,bundleType=zip,key=$ZIP_FILE_NAME.zip
         --region ap-northeast-2
