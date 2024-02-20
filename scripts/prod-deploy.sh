@@ -43,15 +43,15 @@ else
   echo "> kill -15 $IDLE_PID"
   kill -15 $IDLE_PID
   exit=$?
-  sleep 60
-  if [ exit -eq 0 ]; then
+  sleep 15
+  if [ $exit -eq 0 ]; then
       echo "kill -15 명령어로 서버가 다운되었습니다. exit status $exit. kill -15로 종료된 시각: $(date) "
   else
       echo "kill -15 명령어로 서버가 다운되지 않았습니다. exit status $exit."
       echo "kill -9 명령어로 서버를 다운시킵니다. kill -9로 종료 시작한 시각: $(date)"
       kill -9 $IDLE_PID
   fi
-  sleep 30
+  sleep 25
 fi
 
 echo "> $IDLE_PROFILE 배포"
