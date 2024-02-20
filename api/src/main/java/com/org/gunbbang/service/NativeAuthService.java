@@ -47,7 +47,7 @@ public class NativeAuthService extends AuthService {
     }
 
     Member savedMember = saveUser(request, request.getEmail());
-    return SignedUpMemberVO.of(savedMember, null, AuthType.LOGIN);
+    return SignedUpMemberVO.of(savedMember, null, AuthType.SIGN_UP);
   }
 
   private boolean isNullOrBlank(String input) {
