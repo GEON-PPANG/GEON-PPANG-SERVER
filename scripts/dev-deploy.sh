@@ -8,7 +8,7 @@ DEPLOY_PATH=/home/ubuntu/app/nonstop/jar/
 cp $BUILD_PATH $DEPLOY_PATH
 
 echo "> PROFILE = DEV로 설정"
-PROFILE=DEV
+PROFILE=dev
 
 echo "> application.jar 교체"
 RUNNING_APPLICATION=$PROFILE-GunbbangServer.jar   # ??? 그냥 이름 임의로 지정해놓는듯
