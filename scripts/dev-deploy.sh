@@ -26,15 +26,15 @@ else
   echo "> kill -15 $RUNNING_PID"
   kill -15 $RUNNING_PID
   exit=$?
-  sleep 60
-  if [ exit -eq 0 ]; then
+  sleep 10
+  if [ $exit -eq 0 ]; then
       echo "kill -15 명령어로 서버가 다운되었습니다. exit status $exit. kill -15로 종료된 시각: $(date) "
   else
       echo "kill -15 명령어로 서버가 다운되지 않았습니다. exit status $exit."
       echo "kill -9 명령어로 서버를 다운시킵니다. kill -9로 종료 시작한 시각: $(date)"
       kill -9 $RUNNING_PID
+      sleep 20
   fi
-  sleep 30
 fi
 
 current_datetime=$(date "+%Y년 %m월 %d일 %H시 %M분 %S초")
