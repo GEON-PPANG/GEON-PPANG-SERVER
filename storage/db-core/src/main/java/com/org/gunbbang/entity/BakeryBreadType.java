@@ -5,6 +5,13 @@ import lombok.Getter;
 
 @Entity
 @Getter
+@Table(
+    name = "bakeryBreadType",
+    uniqueConstraints = {
+      @UniqueConstraint(
+          name = "BAKERY_ID_BREAD_TYPE_ID_UNIQUE",
+          columnNames = {"bakery_id", "bread_type_id"})
+    })
 public class BakeryBreadType {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
