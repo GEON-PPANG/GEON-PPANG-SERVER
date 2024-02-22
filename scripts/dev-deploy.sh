@@ -37,6 +37,6 @@ else
   fi
 fi
 
-current_datetime=$(date "+%Y년 %m월 %d일 %H시 %M분 %S초")
+current_datetime=$(TZ=Asia/Seoul date "+%Y년_%m월_%d일_%H시_%M분_%S")
 echo "> $PROFILE 배포. 현재 시각: $current_datetime"
-nohup java -jar -Duser.timezone=Asia/Seoul -Dspring.profiles.active=$PROFILE $RUNNING_APPLICATION_PATH >> /home/ubuntu/app/nohup/nohup_$(date +\%Y_\%m_\%d_\%H_\%M_\%S).out 2>&1 &
+nohup java -jar -Duser.timezone=Asia/Seoul -Dspring.profiles.active=$PROFILE $RUNNING_APPLICATION_PATH >> /home/ubuntu/app/nohup/nohup_$current_datetime.out 2>&1 &

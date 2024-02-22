@@ -25,9 +25,6 @@ public class AmplitudeService {
   @Value("${amplitude.api.key}")
   private String apiKey;
 
-  @Value("${amplitude.secret.key}")
-  private String secretKey;
-
   private final AmplitudeFeignClient amplitudeFeignClient;
   private final ObjectMapper objectMapper;
   private final MemberRepository memberRepository;
@@ -35,11 +32,6 @@ public class AmplitudeService {
   private final BookMarkRepository bookMarkRepository;
   private final MemberBreadTypeRepository memberBreadTypeRepository;
   private final MemberNutrientTypeRepository memberNutrientTypeRepository;
-
-  public String createAmplitudeToken() {
-    String valueToEncode = apiKey + ":" + secretKey;
-    return "Basic " + Base64.getEncoder().encodeToString(valueToEncode.getBytes());
-  }
 
   private ObjectNode getIdentification(Map<String, Object> propertyMap, Long memberId) {
     // Create an ObjectNode to build the JSON structure
