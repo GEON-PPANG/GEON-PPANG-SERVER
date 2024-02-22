@@ -54,6 +54,13 @@ public class BakeryService {
     Long memberId = personalFilter ? SecurityUtil.getUserId().orElse(null) : null;
     List<MemberBreadType> memberBreadType =
         personalFilter ? memberBreadTypeRepository.findAllByMemberId(memberId) : null;
+
+    if (memberBreadType.isEmpty()) {
+      throw new NotFoundException(
+          ErrorType.REQUEST_VALIDATION_EXCEPTION,
+          ErrorType.REQUEST_VALIDATION_EXCEPTION.getMessage());
+    }
+
     Page<Bakery> bakeryList =
         getFilteredAndSortedBakeryList(
             personalFilter, memberBreadType, categoryList, sortingOption, memberId, pageRequest);
