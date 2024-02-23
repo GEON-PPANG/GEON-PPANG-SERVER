@@ -52,18 +52,10 @@ public class BakeryService {
       PageRequest pageRequest) {
     List<Category> categoryList = getCategoryList(isHard, isDessert, isBrunch);
     Long memberId = personalFilter ? SecurityUtil.getUserId().orElse(null) : null;
-    List<MemberBreadType> memberBreadType =
-        personalFilter ? memberBreadTypeRepository.findAllByMemberId(memberId) : null;
-
-    if (memberBreadType.isEmpty()) {
-      throw new NotFoundException(
-          ErrorType.REQUEST_VALIDATION_EXCEPTION,
-          ErrorType.REQUEST_VALIDATION_EXCEPTION.getMessage());
-    }
 
     Page<Bakery> bakeryList =
         getFilteredAndSortedBakeryList(
-            personalFilter, memberBreadType, categoryList, sortingOption, memberId, pageRequest);
+            personalFilter, categoryList, sortingOption, memberId, pageRequest);
     return getBakeryListResponseDTOList(bakeryList);
   }
 
@@ -110,23 +102,28 @@ public class BakeryService {
 
   private Page<Bakery> getFilteredAndSortedBakeryList(
       boolean personalFilter,
-      List<MemberBreadType> memberBreadType,
       List<Category> categoryList,
       String sortingOption,
       Long memberId,
       PageRequest pageRequest) {
-    final Page<Bakery> getSortedByCategoryBakeryList;
-    List<BreadType> breadType =
-        personalFilter
-            ? memberBreadType.stream()
-                .map(MemberBreadType::getBreadType)
-                .collect(Collectors.toList())
-            : breadTypeRepository.findAll();
+    Page<Bakery> getSortedByCategoryBakeryList;
     if (personalFilter) {
-      List<MemberNutrientType> memberNutrientTypes =
+      final List<MemberBreadType> memberBreadType =
+          memberBreadTypeRepository.findAllByMemberId(memberId);
+
+      if (memberBreadType.isEmpty()) {
+        throw new NotFoundException(
+            ErrorType.REQUEST_VALIDATION_EXCEPTION,
+            ErrorType.REQUEST_VALIDATION_EXCEPTION.getMessage());
+      }
+
+      final List<BreadType> breadType =
+          memberBreadType.stream().map(MemberBreadType::getBreadType).collect(Collectors.toList());
+      final List<MemberNutrientType> memberNutrientTypes =
           memberNutrientTypeRepository.findAllByMemberId(memberId);
-      MemberNutrientType memberNutrientType = memberNutrientTypes.get(0);
-      NutrientType bakeryNutrientType = memberNutrientType.getNutrientType();
+      final MemberNutrientType memberNutrientType = memberNutrientTypes.get(0);
+      final NutrientType bakeryNutrientType = memberNutrientType.getNutrientType();
+
       if ("review".equals(sortingOption)) {
         getSortedByCategoryBakeryList =
             bakeryRepository.findFilteredBakeriesSortByReview(
@@ -139,6 +136,7 @@ public class BakeryService {
       return getSortedByCategoryBakeryList;
     }
 
+    final List<BreadType> breadType = breadTypeRepository.findAll();
     NutrientType bakeryNutrientType =
         nutrientTypeRepository.findByNutrientTypeTag(NutrientTypeTag.NOT_OPEN).orElse(null);
 
