@@ -28,22 +28,22 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class JwtService {
   @Value("${jwt.secretKey}")
-  private String secretKey;
+  private String SECRET_KEY;
 
   @Value("${jwt.access.expiration}")
-  private Long accessTokenExpirationPeriod;
+  private Long ACCESS_TOKEN_EXPIRE_PERIOD;
 
   @Value("${jwt.refresh.expiration}")
-  private Long refreshTokenExpirationPeriod;
+  private Long REFRESH_TOKEN_EXPIRE_PERIOD;
 
   @Value("${jwt.access.header}")
-  private String accessHeader;
+  private String ACCESS_HEADER;
 
   @Value("${jwt.refresh.header}")
-  private String refreshHeader;
+  private String REFRESH_HEADER;
 
   @Value("${apple.refresh.header}")
-  private String appleRefreshHeader;
+  private String APLLE_REFRESH_HEADER;
 
   private static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
   private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
@@ -59,10 +59,10 @@ public class JwtService {
     Date now = new Date();
     return JWT.create()
         .withSubject(ACCESS_TOKEN_SUBJECT) // jwt의 subject 지정 (AccessToken으로 지정)
-        .withExpiresAt(new Date(now.getTime() + accessTokenExpirationPeriod)) // 토큰 만료시간 지정
+        .withExpiresAt(new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_PERIOD)) // 토큰 만료시간 지정
         .withClaim(EMAIL_CLAIM, email)
         .withClaim(MEMBER_ID_CLAIM, memberId)
-        .sign(Algorithm.HMAC512(secretKey));
+        .sign(Algorithm.HMAC512(SECRET_KEY));
   }
 
   // refreshToken 생성
@@ -70,22 +70,22 @@ public class JwtService {
     Date now = new Date();
     return JWT.create()
         .withSubject(REFRESH_TOKEN_SUBJECT)
-        .withExpiresAt(new Date(now.getTime() + refreshTokenExpirationPeriod))
-        .sign(Algorithm.HMAC512(secretKey));
+        .withExpiresAt(new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_PERIOD))
+        .sign(Algorithm.HMAC512(SECRET_KEY));
   }
 
   public void setSignedUpMemberToken(SignedUpMemberVO vo, HttpServletResponse response) {
     String accessToken = createAccessToken(vo.getEmail(), vo.getMemberId());
-    response.setHeader(accessHeader, accessToken);
+    response.setHeader(ACCESS_HEADER, accessToken);
 
     if (vo.getRole().equals(Role.ROLE_MEMBER)) {
       String refreshToken = createRefreshToken();
       updateRefreshTokenByMemberId(vo.getMemberId(), refreshToken);
-      response.setHeader(refreshHeader, refreshToken);
+      response.setHeader(REFRESH_HEADER, refreshToken);
     }
 
     if (vo.getPlatformType().equals(PlatformType.APPLE)) {
-      response.setHeader(appleRefreshHeader, vo.getAppleRefreshToken());
+      response.setHeader(APLLE_REFRESH_HEADER, vo.getAppleRefreshToken());
     }
   }
 
@@ -134,30 +134,30 @@ public class JwtService {
 
   /** accessToken 헤더 설정 */
   public void setAccessTokenHeader(HttpServletResponse response, String accessToken) {
-    response.setHeader(accessHeader, accessToken);
+    response.setHeader(ACCESS_HEADER, accessToken);
   }
 
   /** refreshToken 헤더 설정 */
   public void setRefreshTokenHeader(HttpServletResponse response, String refreshToken) {
-    response.setHeader(refreshHeader, refreshToken);
+    response.setHeader(REFRESH_HEADER, refreshToken);
   }
 
   /** header에서 refreshToken 추출 토큰 앞에 붙은 Bearer 문자열 삭제 후 리턴 */
   public Optional<String> extractRefreshToken(HttpServletRequest request) {
-    return Optional.ofNullable(request.getHeader(refreshHeader))
+    return Optional.ofNullable(request.getHeader(REFRESH_HEADER))
         .filter(refreshToken -> refreshToken.startsWith(BEARER_PREFIX))
         .map(refreshToken -> refreshToken.replace(BEARER_PREFIX, ""));
   }
 
   /** header에서 accessToken 추출 토큰 앞에 붙은 Bearer 문자열 삭제 후 리턴 */
   public Optional<String> extractAccessToken(HttpServletRequest request) {
-    return Optional.ofNullable(request.getHeader(accessHeader))
+    return Optional.ofNullable(request.getHeader(ACCESS_HEADER))
         .filter(accessToken -> accessToken.startsWith(BEARER_PREFIX))
         .map(accessToken -> accessToken.replace(BEARER_PREFIX, ""));
   }
 
   public String extractAccessTokenAsString(HttpServletRequest request) {
-    String header = request.getHeader(accessHeader);
+    String header = request.getHeader(ACCESS_HEADER);
     if (header.startsWith(BEARER_PREFIX)) {
       return header.replace(BEARER_PREFIX, "");
     }
@@ -165,7 +165,7 @@ public class JwtService {
   }
 
   public String extractRefreshTokenAsString(HttpServletRequest request) {
-    String header = request.getHeader(refreshHeader);
+    String header = request.getHeader(REFRESH_HEADER);
     if (header.startsWith(BEARER_PREFIX)) {
       return header.replace(BEARER_PREFIX, "");
     }
@@ -173,11 +173,11 @@ public class JwtService {
   }
 
   public boolean isAccessTokenExist(HttpServletRequest request) {
-    return request.getHeader(accessHeader) != null;
+    return request.getHeader(ACCESS_HEADER) != null;
   }
 
   public boolean isRefreshTokenExist(HttpServletRequest request) {
-    return request.getHeader(refreshHeader) != null;
+    return request.getHeader(REFRESH_HEADER) != null;
   }
 
   public Optional<String> extractEmailClaim(String accessToken) {
@@ -213,7 +213,7 @@ public class JwtService {
   }
 
   public DecodedJWT getVerifiedJWT(String jwtToken) {
-    return JWT.require(Algorithm.HMAC512(secretKey)).build().verify(jwtToken);
+    return JWT.require(Algorithm.HMAC512(SECRET_KEY)).build().verify(jwtToken);
   }
 
   public boolean isTokenValid(String token) {

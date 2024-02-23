@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class AmplitudeService {
   @Value("${amplitude.api.key}")
-  private String apiKey;
+  private String API_KEY;
 
   private final AmplitudeFeignClient amplitudeFeignClient;
   private final ObjectMapper objectMapper;
@@ -71,7 +71,7 @@ public class AmplitudeService {
 
       ObjectNode identification = getIdentification(propertyMap, memberId);
 
-      String requestBody = "api_key=" + apiKey + "&identification=" + identification;
+      String requestBody = "api_key=" + API_KEY + "&identification=" + identification;
       amplitudeFeignClient.identifyUserProperty(requestBody);
     } catch (Exception e) {
       log.error("%%%%%%%%%% user property 전송 과정에서 에러 발생 %%%%%%%%%%");
