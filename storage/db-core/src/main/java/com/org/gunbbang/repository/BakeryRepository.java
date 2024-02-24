@@ -65,7 +65,7 @@ public interface BakeryRepository
 
   @Query(
       value =
-          "SELECT b FROM Bakery b "
+          "SELECT distinct b FROM Bakery b "
               + "INNER JOIN BakeryBreadType bbt ON b.bakeryId = bbt.bakery.bakeryId AND bbt.breadType IN :breadTypeList "
               + "INNER JOIN BakeryCategory bc ON b.bakeryId = bc.bakery.bakeryId AND bc.category IN :categoryList "
               + "INNER JOIN BakeryNutrientType bnt ON b.bakeryId = bnt.bakery.bakeryId AND bnt.nutrientType = :bakeryNutrientType "
