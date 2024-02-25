@@ -76,10 +76,10 @@ public class SecurityConfig {
             "/bookMarks/{bakeryId}", // 북마크
             "/report/review/{reviewId}", // 리뷰신고
             "/member/withdraw", // 회원탈퇴
-            "/auth/logout", // 로그아웃
             "/member", // 유저 정보 상세보기(마이페이지)
             "/member/bookMarks", // 북마크 목록 조회
-            "/member/types" // 유져 필터 조회 및 필터 변경
+            "/member/types", // 유져 필터 조회 및 필터 변경
+            "/auth/withdraw" // 회원 탈퇴
             )
         .hasRole("MEMBER")
         .and()
