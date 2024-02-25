@@ -34,7 +34,7 @@ public class ReviewService {
   private final MemberBreadTypeRepository memberBreadTypeRepository;
   private final MemberBreadTypeRepository memberNutrientTypeRepository;
   private final BakeryBreadTypeRepository bakeryBreadTypeRepository;
-  private final int maxBestBakeryCount = 10;
+  private final int MAX_BEST_BAKERY_COUNT = 10;
 
   public Long createReview(Long currentMemberId, Long bakeryId, ReviewRequestDTO reviewRequestDto) {
     String reviewText = reviewRequestDto.getReviewText().trim();
@@ -233,7 +233,7 @@ public class ReviewService {
             .collect(Collectors.toList());
 
     List<BestReviewDTO> bestReviews = getBestReviews(foundMember, breadTypes);
-    if (bestReviews.size() == maxBestBakeryCount) {
+    if (bestReviews.size() == MAX_BEST_BAKERY_COUNT) {
       log.info("########## 베스트 리뷰 10개 조회 완료. 추가 조회 쿼리 없이 바로 반환 ##########");
       return getBestReviewListResponseDTOs(bestReviews);
     }
@@ -247,7 +247,7 @@ public class ReviewService {
   }
 
   private List<Review> getRandomReviews() {
-    PageRequest randomPageRequest = PageRequest.of(0, maxBestBakeryCount);
+    PageRequest randomPageRequest = PageRequest.of(0, MAX_BEST_BAKERY_COUNT);
     List<Review> randomReviews =
         reviewRepository.findRandomReviews(randomPageRequest); // 랜덤 리뷰 10개 조회
     return randomReviews;
@@ -263,7 +263,7 @@ public class ReviewService {
 
   private void getRestReviewsRandomly(
       List<Long> alreadyFoundReviewIds, List<BestReviewDTO> bestReviews) {
-    PageRequest restPageRequest = PageRequest.of(0, maxBestBakeryCount - bestReviews.size());
+    PageRequest restPageRequest = PageRequest.of(0, MAX_BEST_BAKERY_COUNT - bestReviews.size());
     setAlreadyFoundReviewIds(alreadyFoundReviewIds, bestReviews);
     bestReviews.addAll(
         reviewRepository.findRestBestReviewDTOListByBreadType(
@@ -277,7 +277,7 @@ public class ReviewService {
   }
 
   private List<BestReviewDTO> getBestReviews(Member foundMember, List<BreadType> breadTypes) {
-    PageRequest bestPageRequest = PageRequest.of(0, maxBestBakeryCount);
+    PageRequest bestPageRequest = PageRequest.of(0, MAX_BEST_BAKERY_COUNT);
     List<BestReviewDTO> bestReviews =
         reviewRepository.findBestReviewDTOList(
             breadTypes, foundMember.getMainPurpose(), bestPageRequest);
