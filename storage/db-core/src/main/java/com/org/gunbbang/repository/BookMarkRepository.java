@@ -26,4 +26,6 @@ public interface BookMarkRepository extends JpaRepository<BookMark, Long> {
 
   @Query(value = "SELECT bm FROM BookMark bm WHERE bm.member.memberId = :memberId")
   List<BookMark> findAllByMemberId(Long memberId);
+
+  List<BookMark> findAllByBakery(Bakery bakery);
 }

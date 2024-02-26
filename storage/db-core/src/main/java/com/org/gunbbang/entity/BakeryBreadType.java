@@ -1,7 +1,9 @@
 package com.org.gunbbang.entity;
 
 import javax.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -12,6 +14,7 @@ import lombok.Getter;
           name = "BAKERY_ID_BREAD_TYPE_ID_UNIQUE",
           columnNames = {"bakery_id", "bread_type_id"})
     })
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BakeryBreadType {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
