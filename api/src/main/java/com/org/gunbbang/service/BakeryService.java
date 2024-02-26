@@ -238,9 +238,9 @@ public class BakeryService {
   private boolean isFilterSelected(Member foundMember) {
     boolean isBreadTypeSelected = memberBreadTypeRepository.existsByMember(foundMember);
     boolean isNutrientTypeSelected = memberNutrientTypeRepository.existsByMember(foundMember);
-    boolean isMainPurposeNone = foundMember.getMainPurpose().equals(MainPurpose.NONE);
+    boolean isMainPurposeSelected = !foundMember.getMainPurpose().equals(MainPurpose.NONE);
 
-    return isBreadTypeSelected && isNutrientTypeSelected && isMainPurposeNone;
+    return isBreadTypeSelected && isNutrientTypeSelected && isMainPurposeSelected;
   }
 
   private void setAlreadyFoundBakeryIds(

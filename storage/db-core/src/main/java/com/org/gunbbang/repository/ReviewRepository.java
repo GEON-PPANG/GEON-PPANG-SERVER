@@ -40,7 +40,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
               + "r.createdAt) FROM Review r "
               + "INNER JOIN Bakery b ON b.bakeryId = r.bakery.bakeryId "
               + "INNER JOIN Member m ON r.member.memberId = m.memberId "
-              + "INNER JOIN MemberBreadType  mbt ON r.member.memberId = mbt.member.memberId "
+              + "INNER JOIN MemberBreadType mbt ON m.memberId = mbt.member.memberId "
               + "WHERE mbt.breadType in :currentMemberBreadType "
               + "AND r.isLike = true "
               + "AND r.member.mainPurpose = :currentMemberMainPurpose "
@@ -48,8 +48,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
               + "ORDER BY r.createdAt desc")
   List<BestReviewDTO> findBestReviewDTOList(
       @Param("currentMemberBreadType") List<BreadType> currentMemberBreadType,
-      @Param("currentMemberMainPurpose") MainPurpose mainPurpose,
-      PageRequest bestPageRequest);
+      @Param("currentMemberMainPurpose") MainPurpose mainPurpose);
+
+  // PageRequest bestPageRequest);
 
   @Query(
       value =
