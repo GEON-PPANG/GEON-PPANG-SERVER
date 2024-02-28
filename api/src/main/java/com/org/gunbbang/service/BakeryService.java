@@ -1,9 +1,7 @@
 package com.org.gunbbang.service;
 
-import com.org.gunbbang.CategoryType;
 import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.NotFoundException;
-import com.org.gunbbang.NutrientTypeTag;
 import com.org.gunbbang.auth.security.util.SecurityUtil;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.*;
@@ -43,114 +41,115 @@ public class BakeryService {
   private final String BLANK_SPACE = " ";
   private final int MAX_BEST_BAKERY_COUNT = 10;
 
-  public Page<BakeryListResponseDTO> getBakeryList(
-      String sortingOption,
-      boolean personalFilter,
-      boolean isHard,
-      boolean isDessert,
-      boolean isBrunch,
-      PageRequest pageRequest) {
-    List<Category> categoryList = getCategoryList(isHard, isDessert, isBrunch);
-    Long memberId = personalFilter ? SecurityUtil.getUserId().orElse(null) : null;
+  //  public Page<BakeryListResponseDTO> getBakeryList(
+  //      String sortingOption,
+  //      boolean personalFilter,
+  //      boolean isHard,
+  //      boolean isDessert,
+  //      boolean isBrunch,
+  //      PageRequest pageRequest) {
+  //    List<Category> categoryList = getCategoryList(isHard, isDessert, isBrunch);
+  //    Long memberId = personalFilter ? SecurityUtil.getUserId().orElse(null) : null;
+  //
+  //    Page<Bakery> bakeryList =
+  //        getFilteredAndSortedBakeryList(
+  //            personalFilter, categoryList, sortingOption, memberId, pageRequest);
+  //    return getBakeryListResponseDTOList(bakeryList);
+  //  }
+  //
+  //  private List<Category> getCategoryList(boolean isHard, boolean isDessert, boolean isBrunch) {
+  //    List<Category> categoryList = new ArrayList<>();
+  //
+  //    Map<CategoryType, Boolean> categoryMap = new HashMap<>();
+  //    categoryMap.put(CategoryType.HARD_BREAD, isHard);
+  //    categoryMap.put(CategoryType.DESSERT, isDessert);
+  //    categoryMap.put(CategoryType.BRUNCH, isBrunch);
+  //
+  //    for (Map.Entry<CategoryType, Boolean> entry : categoryMap.entrySet()) {
+  //      if (entry.getValue()) { // true인 값만 해당되어 category에 추가된다
+  //        Category category =
+  //            categoryRepository
+  //                .findByCategoryName(entry.getKey().getName())
+  //                .orElseThrow(
+  //                    () ->
+  //                        new NotFoundException(
+  //                            ErrorType.NOT_FOUND_CATEGORY_EXCEPTION,
+  //                            ErrorType.NOT_FOUND_CATEGORY_EXCEPTION.getMessage()
+  //                                + entry.getKey().getName()));
+  //        categoryList.add(category);
+  //      }
+  //    }
+  //
+  //    if (categoryList.isEmpty()) { // 카테고리가 빈 경우
+  //      for (CategoryType categoryType : CategoryType.values()) {
+  //        Category category =
+  //            categoryRepository
+  //                .findByCategoryName(categoryType.getName())
+  //                .orElseThrow(
+  //                    () ->
+  //                        new NotFoundException(
+  //                            ErrorType.NOT_FOUND_CATEGORY_EXCEPTION,
+  //                            ErrorType.NOT_FOUND_CATEGORY_EXCEPTION.getMessage()
+  //                                + categoryType.getName()));
+  //        categoryList.add(category);
+  //      }
+  //    }
+  //
+  //    return categoryList;
+  //  }
 
-    Page<Bakery> bakeryList =
-        getFilteredAndSortedBakeryList(
-            personalFilter, categoryList, sortingOption, memberId, pageRequest);
-    return getBakeryListResponseDTOList(bakeryList);
-  }
+  //  private Page<Bakery> getFilteredAndSortedBakeryList(
+  //      boolean personalFilter,
+  //      List<Category> categoryList,
+  //      String sortingOption,
+  //      Long memberId,
+  //      PageRequest pageRequest) {
+  //    Page<Bakery> getSortedByCategoryBakeryList;
+  //    if (personalFilter) {
+  //      final List<MemberBreadType> memberBreadType =
+  //          memberBreadTypeRepository.findAllByMemberId(memberId);
+  //
+  //      if (memberBreadType.isEmpty()) {
+  //        throw new NotFoundException(
+  //            ErrorType.REQUEST_VALIDATION_EXCEPTION,
+  //            ErrorType.REQUEST_VALIDATION_EXCEPTION.getMessage());
+  //      }
+  //
+  //      final List<BreadType> breadType =
+  //
+  // memberBreadType.stream().map(MemberBreadType::getBreadType).collect(Collectors.toList());
+  //      final List<MemberNutrientType> memberNutrientTypes =
+  //          memberNutrientTypeRepository.findAllByMemberId(memberId);
+  //      final MemberNutrientType memberNutrientType = memberNutrientTypes.get(0);
+  //      final NutrientType bakeryNutrientType = memberNutrientType.getNutrientType();
+  //
+  //      if ("review".equals(sortingOption)) {
+  //        getSortedByCategoryBakeryList =
+  //            bakeryRepository.findFilteredBakeriesSortByReview(
+  //                categoryList, breadType, bakeryNutrientType, pageRequest);
+  //        return getSortedByCategoryBakeryList;
+  //      }
+  //      getSortedByCategoryBakeryList =
+  //          bakeryRepository.findFilteredBakeries(
+  //              categoryList, breadType, bakeryNutrientType, pageRequest);
+  //      return getSortedByCategoryBakeryList;
+  //    }
 
-  private List<Category> getCategoryList(boolean isHard, boolean isDessert, boolean isBrunch) {
-    List<Category> categoryList = new ArrayList<>();
-
-    Map<CategoryType, Boolean> categoryMap = new HashMap<>();
-    categoryMap.put(CategoryType.HARD_BREAD, isHard);
-    categoryMap.put(CategoryType.DESSERT, isDessert);
-    categoryMap.put(CategoryType.BRUNCH, isBrunch);
-
-    for (Map.Entry<CategoryType, Boolean> entry : categoryMap.entrySet()) {
-      if (entry.getValue()) { // true인 값만 해당되어 category에 추가된다
-        Category category =
-            categoryRepository
-                .findByCategoryName(entry.getKey().getName())
-                .orElseThrow(
-                    () ->
-                        new NotFoundException(
-                            ErrorType.NOT_FOUND_CATEGORY_EXCEPTION,
-                            ErrorType.NOT_FOUND_CATEGORY_EXCEPTION.getMessage()
-                                + entry.getKey().getName()));
-        categoryList.add(category);
-      }
-    }
-
-    if (categoryList.isEmpty()) { // 카테고리가 빈 경우
-      for (CategoryType categoryType : CategoryType.values()) {
-        Category category =
-            categoryRepository
-                .findByCategoryName(categoryType.getName())
-                .orElseThrow(
-                    () ->
-                        new NotFoundException(
-                            ErrorType.NOT_FOUND_CATEGORY_EXCEPTION,
-                            ErrorType.NOT_FOUND_CATEGORY_EXCEPTION.getMessage()
-                                + categoryType.getName()));
-        categoryList.add(category);
-      }
-    }
-
-    return categoryList;
-  }
-
-  private Page<Bakery> getFilteredAndSortedBakeryList(
-      boolean personalFilter,
-      List<Category> categoryList,
-      String sortingOption,
-      Long memberId,
-      PageRequest pageRequest) {
-    Page<Bakery> getSortedByCategoryBakeryList;
-    if (personalFilter) {
-      final List<MemberBreadType> memberBreadType =
-          memberBreadTypeRepository.findAllByMemberId(memberId);
-
-      if (memberBreadType.isEmpty()) {
-        throw new NotFoundException(
-            ErrorType.REQUEST_VALIDATION_EXCEPTION,
-            ErrorType.REQUEST_VALIDATION_EXCEPTION.getMessage());
-      }
-
-      final List<BreadType> breadType =
-          memberBreadType.stream().map(MemberBreadType::getBreadType).collect(Collectors.toList());
-      final List<MemberNutrientType> memberNutrientTypes =
-          memberNutrientTypeRepository.findAllByMemberId(memberId);
-      final MemberNutrientType memberNutrientType = memberNutrientTypes.get(0);
-      final NutrientType bakeryNutrientType = memberNutrientType.getNutrientType();
-
-      if ("review".equals(sortingOption)) {
-        getSortedByCategoryBakeryList =
-            bakeryRepository.findFilteredBakeriesSortByReview(
-                categoryList, breadType, bakeryNutrientType, pageRequest);
-        return getSortedByCategoryBakeryList;
-      }
-      getSortedByCategoryBakeryList =
-          bakeryRepository.findFilteredBakeries(
-              categoryList, breadType, bakeryNutrientType, pageRequest);
-      return getSortedByCategoryBakeryList;
-    }
-
-    final List<BreadType> breadType = breadTypeRepository.findAll();
-    NutrientType bakeryNutrientType =
-        nutrientTypeRepository.findByNutrientTypeTag(NutrientTypeTag.NOT_OPEN).orElse(null);
-
-    if ("review".equals(sortingOption)) {
-      getSortedByCategoryBakeryList =
-          bakeryRepository.findFilteredBakeriesSortByReview(
-              categoryList, breadType, bakeryNutrientType, pageRequest);
-      return getSortedByCategoryBakeryList;
-    }
-    getSortedByCategoryBakeryList =
-        bakeryRepository.findFilteredBakeries(
-            categoryList, breadType, bakeryNutrientType, pageRequest);
-    return getSortedByCategoryBakeryList;
-  }
+  //    final List<BreadType> breadType = breadTypeRepository.findAll();
+  //    NutrientType bakeryNutrientType =
+  //        nutrientTypeRepository.findByNutrientTypeTag(NutrientTypeTag.NOT_OPEN).orElse(null);
+  //
+  //    if ("review".equals(sortingOption)) {
+  //      getSortedByCategoryBakeryList =
+  //          bakeryRepository.findFilteredBakeriesSortByReview(
+  //              categoryList, breadType, bakeryNutrientType, pageRequest);
+  //      return getSortedByCategoryBakeryList;
+  //    }
+  //    getSortedByCategoryBakeryList =
+  //        bakeryRepository.findFilteredBakeries(
+  //            categoryList, breadType, bakeryNutrientType, pageRequest);
+  //    return getSortedByCategoryBakeryList;
+  //  }
 
   public BakeryDetailResponseDTO getBakeryDetail(Long bakeryId) {
     final Bakery bakery =
