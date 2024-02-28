@@ -7,6 +7,7 @@ import com.org.gunbbang.controller.DTO.response.BakeryListResponseDTO;
 import com.org.gunbbang.controller.DTO.response.ReviewListResponseDTO;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.errorType.SuccessType;
+import com.org.gunbbang.service.BakeryListService;
 import com.org.gunbbang.service.BakeryService;
 import com.org.gunbbang.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +24,34 @@ public class BakeriesController {
 
   private final BakeryService bakeryService;
   private final ReviewService reviewService;
+  private final BakeryListService bakeryListService;
+
+  //    @GetMapping(value = "", name = "건빵집 리스트 조회")
+  //    @ResponseStatus(HttpStatus.OK)
+  //    public ResponseEntity<ApiResponse<Page<BakeryListResponseDTO>>> getBakeryList(
+  //            @RequestParam("sortingOption") String sortingOption,
+  //            @RequestParam("personalFilter") boolean personalFilter,
+  //            @RequestParam("isHard") boolean isHard,
+  //            @RequestParam("isDessert") boolean isDessert,
+  //            @RequestParam("isBrunch") boolean isBrunch,
+  //            @RequestParam(value = "pageNumber", defaultValue = "1") int pageNumber) {
+  //        if (SecurityUtil.checkAnonymousUser() && personalFilter) {
+  //            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+  //                    .body(ApiResponse.error(ErrorType.ACCESS_DENIED));
+  //        }
+  //        PageRequest pageRequest = PageRequest.of(pageNumber - 1, 10);
+  //        Page<BakeryListResponseDTO> bakeryListResponseDto =
+  //                bakeryService.getBakeryList(
+  //                        sortingOption, personalFilter, isHard, isDessert, isBrunch,
+  // pageRequest);
+  //        return ResponseEntity.ok(
+  //                ApiResponse.success(SuccessType.GET_BAKERY_LIST_SUCCESS,
+  // bakeryListResponseDto));
+  //    }
 
   @GetMapping(value = "", name = "건빵집 리스트 조회")
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<ApiResponse<Page<BakeryListResponseDTO>>> getBakeryList(
+  public ResponseEntity<ApiResponse<Page<BakeryListResponseDTO>>> getBakeryListV2(
       @RequestParam("sortingOption") String sortingOption,
       @RequestParam("personalFilter") boolean personalFilter,
       @RequestParam("isHard") boolean isHard,
@@ -39,7 +64,7 @@ public class BakeriesController {
     }
     PageRequest pageRequest = PageRequest.of(pageNumber - 1, 10);
     Page<BakeryListResponseDTO> bakeryListResponseDto =
-        bakeryService.getBakeryList(
+        bakeryListService.getBakeryList(
             sortingOption, personalFilter, isHard, isDessert, isBrunch, pageRequest);
     return ResponseEntity.ok(
         ApiResponse.success(SuccessType.GET_BAKERY_LIST_SUCCESS, bakeryListResponseDto));

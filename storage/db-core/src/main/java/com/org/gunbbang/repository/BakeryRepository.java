@@ -32,7 +32,7 @@ public interface BakeryRepository
 
   @Query(
       value =
-          "SELECT b FROM Bakery b "
+          "SELECT distinct b FROM Bakery b "
               + "INNER JOIN BakeryBreadType bbt ON b.bakeryId = bbt.bakery.bakeryId "
               + "WHERE bbt.breadType in :breadTypes "
               + "AND b.bakeryId not in :alreadyFoundBakeryIds ")
@@ -63,31 +63,47 @@ public interface BakeryRepository
   @Query(value = "SELECT b FROM Bakery b " + "ORDER BY RAND() ")
   List<Bakery> findBakeriesRandomly(Pageable pageRequest);
 
+  //    @Query(
+  //            value =
+  //                    "SELECT distinct b FROM Bakery b "
+  //                            + "INNER JOIN BakeryNutrientType bnt ON b.bakeryId =
+  // bnt.bakery.bakeryId AND bnt.nutrientType in :bakeryNutrientType "
+  //                            + "INNER JOIN BakeryBreadType bbt ON b.bakeryId =
+  // bbt.bakery.bakeryId AND bbt.breadType IN :breadTypeList "
+  //                            + "INNER JOIN BakeryCategory bc ON b.bakeryId = bc.bakery.bakeryId
+  // AND bc.category IN :categoryList "
+  //                            + "ORDER BY COUNT(bbt) DESC, COUNT(bc) DESC")
+  //    Page<Bakery> findFilteredBakeries(
+  //            @Param("categoryList") List<Category> categoryList,
+  //            @Param("breadTypeList") List<BreadType> breadTypeList,
+  //            NutrientType bakeryNutrientType,
+  //            Pageable pageable);
+
   @Query(
       value =
-          "SELECT distinct b FROM Bakery b "
+          "SELECT DISTINCT b FROM Bakery b "
+              + "INNER JOIN BakeryNutrientType bnt ON b.bakeryId = bnt.bakery.bakeryId AND bnt.nutrientType IN :nutrientTypeList "
               + "INNER JOIN BakeryBreadType bbt ON b.bakeryId = bbt.bakery.bakeryId AND bbt.breadType IN :breadTypeList "
               + "INNER JOIN BakeryCategory bc ON b.bakeryId = bc.bakery.bakeryId AND bc.category IN :categoryList "
-              + "INNER JOIN BakeryNutrientType bnt ON b.bakeryId = bnt.bakery.bakeryId AND bnt.nutrientType = :bakeryNutrientType "
               + "GROUP BY b.bakeryId "
-              + "ORDER BY COUNT(bbt.bakery.bakeryId) DESC, COUNT(bc.bakery.bakeryId) DESC")
+              + "ORDER BY COUNT(bnt.bakery.bakeryId) DESC, COUNT(bbt.bakery.bakeryId) DESC, b.bakeryId DESC")
   Page<Bakery> findFilteredBakeries(
       @Param("categoryList") List<Category> categoryList,
       @Param("breadTypeList") List<BreadType> breadTypeList,
-      NutrientType bakeryNutrientType,
+      @Param("nutrientTypeList") List<NutrientType> nutrientTypeList,
       Pageable pageable);
 
   @Query(
       value =
-          "SELECT distinct b FROM Bakery b "
+          "SELECT DISTINCT b FROM Bakery b "
+              + "INNER JOIN BakeryNutrientType bnt ON b.bakeryId = bnt.bakery.bakeryId AND bnt.nutrientType IN :nutrientTypeList "
               + "INNER JOIN BakeryBreadType bbt ON b.bakeryId = bbt.bakery.bakeryId AND bbt.breadType IN :breadTypeList "
               + "INNER JOIN BakeryCategory bc ON b.bakeryId = bc.bakery.bakeryId AND bc.category IN :categoryList "
-              + "INNER JOIN BakeryNutrientType bnt ON b.bakeryId = bnt.bakery.bakeryId AND bnt.nutrientType = :bakeryNutrientType "
               + "GROUP BY b.bakeryId "
-              + "ORDER BY b.reviewCount DESC, COUNT(bbt.bakery.bakeryId) DESC, COUNT(bc.bakery.bakeryId) DESC")
+              + "ORDER BY b.reviewCount DESC, COUNT(bnt.bakery.bakeryId) DESC, COUNT(bbt.bakery.bakeryId) DESC, b.bakeryId DESC")
   Page<Bakery> findFilteredBakeriesSortByReview(
       @Param("categoryList") List<Category> categoryList,
       @Param("breadTypeList") List<BreadType> breadTypeList,
-      NutrientType bakeryNutrientType,
+      @Param("nutrientTypeList") List<NutrientType> nutrientTypeList,
       Pageable pageable);
 }
