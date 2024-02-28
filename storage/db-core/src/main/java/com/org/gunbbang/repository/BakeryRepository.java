@@ -32,7 +32,7 @@ public interface BakeryRepository
 
   @Query(
       value =
-          "SELECT b FROM Bakery b "
+          "SELECT distinct b FROM Bakery b "
               + "INNER JOIN BakeryBreadType bbt ON b.bakeryId = bbt.bakery.bakeryId "
               + "WHERE bbt.breadType in :breadTypes "
               + "AND b.bakeryId not in :alreadyFoundBakeryIds ")
@@ -65,12 +65,12 @@ public interface BakeryRepository
 
   @Query(
       value =
-          "SELECT distinct b FROM Bakery b "
-              + "INNER JOIN BakeryBreadType bbt ON b.bakeryId = bbt.bakery.bakeryId AND bbt.breadType IN :breadTypeList "
-              + "INNER JOIN BakeryCategory bc ON b.bakeryId = bc.bakery.bakeryId AND bc.category IN :categoryList "
-              + "INNER JOIN BakeryNutrientType bnt ON b.bakeryId = bnt.bakery.bakeryId AND bnt.nutrientType = :bakeryNutrientType "
-              + "GROUP BY b.bakeryId "
-              + "ORDER BY COUNT(bbt.bakery.bakeryId) DESC, COUNT(bc.bakery.bakeryId) DESC")
+          "SELECT distinct b FROM Bakery b INNER JOIN BakeryBreadType bbt ON b.bakeryId ="
+              + " bbt.bakery.bakeryId AND bbt.breadType IN :breadTypeList INNER JOIN BakeryCategory"
+              + " bc ON b.bakeryId = bc.bakery.bakeryId AND bc.category IN :categoryList INNER JOIN"
+              + " BakeryNutrientType bnt ON b.bakeryId = bnt.bakery.bakeryId AND bnt.nutrientType ="
+              + " :bakeryNutrientType GROUP BY b.bakeryId ORDER BY COUNT(bbt.bakery.bakeryId) DESC,"
+              + " COUNT(bc.bakery.bakeryId) DESC")
   Page<Bakery> findFilteredBakeries(
       @Param("categoryList") List<Category> categoryList,
       @Param("breadTypeList") List<BreadType> breadTypeList,
@@ -79,12 +79,12 @@ public interface BakeryRepository
 
   @Query(
       value =
-          "SELECT distinct b FROM Bakery b "
-              + "INNER JOIN BakeryBreadType bbt ON b.bakeryId = bbt.bakery.bakeryId AND bbt.breadType IN :breadTypeList "
-              + "INNER JOIN BakeryCategory bc ON b.bakeryId = bc.bakery.bakeryId AND bc.category IN :categoryList "
-              + "INNER JOIN BakeryNutrientType bnt ON b.bakeryId = bnt.bakery.bakeryId AND bnt.nutrientType = :bakeryNutrientType "
-              + "GROUP BY b.bakeryId "
-              + "ORDER BY b.reviewCount DESC, COUNT(bbt.bakery.bakeryId) DESC, COUNT(bc.bakery.bakeryId) DESC")
+          "SELECT distinct b FROM Bakery b INNER JOIN BakeryBreadType bbt ON b.bakeryId ="
+              + " bbt.bakery.bakeryId AND bbt.breadType IN :breadTypeList INNER JOIN BakeryCategory"
+              + " bc ON b.bakeryId = bc.bakery.bakeryId AND bc.category IN :categoryList INNER JOIN"
+              + " BakeryNutrientType bnt ON b.bakeryId = bnt.bakery.bakeryId AND bnt.nutrientType ="
+              + " :bakeryNutrientType GROUP BY b.bakeryId ORDER BY b.reviewCount DESC,"
+              + " COUNT(bbt.bakery.bakeryId) DESC, COUNT(bc.bakery.bakeryId) DESC")
   Page<Bakery> findFilteredBakeriesSortByReview(
       @Param("categoryList") List<Category> categoryList,
       @Param("breadTypeList") List<BreadType> breadTypeList,
