@@ -32,7 +32,7 @@ public class ReviewService {
   private final MemberRepository memberRepository;
   private final RecommendKeywordRepository recommendKeywordRepository;
   private final MemberBreadTypeRepository memberBreadTypeRepository;
-  private final MemberBreadTypeRepository memberNutrientTypeRepository;
+  private final MemberNutrientTypeRepository memberNutrientTypeRepository;
   private final BakeryBreadTypeRepository bakeryBreadTypeRepository;
   private final int MAX_BEST_BAKERY_COUNT = 10;
 
@@ -256,9 +256,9 @@ public class ReviewService {
   private boolean isFilterSelected(Member foundMember) {
     boolean isBreadTypeSelected = memberBreadTypeRepository.existsByMember(foundMember);
     boolean isNutrientTypeSelected = memberNutrientTypeRepository.existsByMember(foundMember);
-    boolean isMainPurposeNone = foundMember.getMainPurpose().equals(MainPurpose.NONE);
+    boolean isMainPurposeSelected = !foundMember.getMainPurpose().equals(MainPurpose.NONE);
 
-    return isBreadTypeSelected && isNutrientTypeSelected && isMainPurposeNone;
+    return isBreadTypeSelected && isNutrientTypeSelected && isMainPurposeSelected;
   }
 
   private void getRestReviewsRandomly(
@@ -280,7 +280,7 @@ public class ReviewService {
     PageRequest bestPageRequest = PageRequest.of(0, MAX_BEST_BAKERY_COUNT);
     List<BestReviewDTO> bestReviews =
         reviewRepository.findBestReviewDTOList(
-            breadTypes, foundMember.getMainPurpose(), bestPageRequest);
+            breadTypes, foundMember.getMainPurpose()); // , bestPageRequest);
     return bestReviews;
   }
 

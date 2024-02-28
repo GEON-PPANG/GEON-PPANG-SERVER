@@ -32,7 +32,7 @@ public interface BakeryRepository
 
   @Query(
       value =
-          "SELECT b FROM Bakery b "
+          "SELECT distinct b FROM Bakery b "
               + "INNER JOIN BakeryBreadType bbt ON b.bakeryId = bbt.bakery.bakeryId "
               + "WHERE bbt.breadType in :breadTypes "
               + "AND b.bakeryId not in :alreadyFoundBakeryIds ")
