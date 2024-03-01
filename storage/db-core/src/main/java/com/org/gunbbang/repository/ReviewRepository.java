@@ -48,9 +48,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
               + "ORDER BY r.createdAt desc")
   List<BestReviewDTO> findBestReviewDTOList(
       @Param("currentMemberBreadType") List<BreadType> currentMemberBreadType,
-      @Param("currentMemberMainPurpose") MainPurpose mainPurpose);
-
-  // PageRequest bestPageRequest);
+      @Param("currentMemberMainPurpose") MainPurpose mainPurpose,
+      PageRequest bestPageRequest);
 
   @Query(
       value =

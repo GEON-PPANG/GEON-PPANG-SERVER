@@ -267,9 +267,6 @@ public class BakeryService {
   private List<Bakery> getBestBakeries(Member foundMember, List<BreadType> breadTypes) {
     log.info("########## 베스트 건빵집 조회 시작 ##########");
     PageRequest bestPageRequest = PageRequest.of(0, MAX_BEST_BAKERY_COUNT);
-
-    // 1. MemberBreadType 뒤져서 나랑 동일한 BreadType 선택한 멤버 가져옴
-    // 2. 북마크 테이블+베이커리 테이블 뒤져서 해당 멤버들이 북마크한 빵집 가져옴
     List<Bakery> bestBakeries =
         bakeryRepository.findBestBakeries(
             breadTypes, foundMember.getMainPurpose(), bestPageRequest);
