@@ -280,7 +280,7 @@ public class ReviewService {
     PageRequest bestPageRequest = PageRequest.of(0, MAX_BEST_BAKERY_COUNT);
     List<BestReviewDTO> bestReviews =
         reviewRepository.findBestReviewDTOList(
-            breadTypes, foundMember.getMainPurpose()); // , bestPageRequest);
+            breadTypes, foundMember.getMainPurpose(), bestPageRequest);
     return bestReviews;
   }
 
