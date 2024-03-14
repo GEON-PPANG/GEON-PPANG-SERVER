@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -98,6 +99,7 @@ public class JwtService {
   }
 
   /** GUEST였던 회원이 닉네임 변경하고 USER로 되었을 때 사용 */
+  @Transactional
   public void reIssueTokensAndUpdateRefreshToken(HttpServletResponse response, Long memberId) {
     Member foundMember =
         memberRepository
@@ -235,6 +237,7 @@ public class JwtService {
     }
   }
 
+  @Transactional
   public void updateRefreshTokenByMemberId(Long memberId, String refreshToken) {
     memberRepository
         .findById(memberId)
