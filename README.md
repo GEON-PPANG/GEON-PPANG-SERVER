@@ -19,7 +19,7 @@
 <br><br>
 
 ## 🛠️ Architecture Structure
-<img width="798" alt="image" src="https://github.com/GEON-PPANG/GEON-PPANG-SERVER/assets/89137120/30a727d6-4820-4067-818e-4d13945abcc2">
+![건빵_아키텍쳐](https://github.com/GEON-PPANG/GEON-PPANG-SERVER/assets/89137120/cc12bdc2-97b4-4cba-bf54-b40ed45032b5)
 
 
 <br><br>
