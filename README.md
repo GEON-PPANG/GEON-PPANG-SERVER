@@ -1,3 +1,6 @@
+## 🥖 GEON-PPANG
+> App Download Link: https://linktr.ee/gunbbang_official
+
 # <img src="https://github.com/GEON-PPANG/GEON-PPANG-iOS/assets/107853954/d6fdefe3-4c88-4cef-a280-cae13b5199f6" align=left width=110><image src ="https://github.com/GEON-PPANG/GEON-PPANG-iOS/assets/107853954/abf67c6b-0dc2-45f6-be6f-e6534f4850a3" width=100 height=50>
 
 비주류가 만드는 **건빵문화**, 당신이 찾던 그 **건강한 빵집**이 여기에 !
@@ -49,15 +52,17 @@
 - 회원 필터 정보 변경하기<br>
 </td>
 <td>
-- 건빵 내 서버 노션 페이지 구성<br>
-- mysql와 구글스프레드시트 연동 파이썬 코드 작성<br>
-- 건빵집 리스트 조회<br>
+- 건빵집 리스트 조회(필터링)<br>
 - 건빵집 상세조회<br>
 - 건빵집 작성된 리뷰 조회<br>
-- 리뷰 작성<br>
+- 리뷰 작성 API 개발<br>
 - 마이페이지 회원 정보 조회<br>
 - 리뷰 모아보기(마이페이지)<br>
 - 리뷰 상세보기(리뷰 모아보기)<br>
+- 건빵집 이름 및 지역명 기반 검색<br>
+- 구글 스프레드 시트에 수집한 빵집 정보를 자동으로<br>
+데이터베이스에 입력할 수 있는 파이썬 코드 작성<br>
+- 건빵 서버팀 노션 페이지 관리<br>
 </td>
 </tr>
 	</table>
