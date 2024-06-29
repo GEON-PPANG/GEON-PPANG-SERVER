@@ -24,6 +24,9 @@
 ## 🛠️ Architecture Structure
 ![건빵_아키텍쳐](https://github.com/GEON-PPANG/GEON-PPANG-SERVER/assets/89137120/cc12bdc2-97b4-4cba-bf54-b40ed45032b5)
 
+## 💾 ERD
+![건빵 ERD](https://github.com/GEON-PPANG/GEON-PPANG-SERVER/assets/81363864/dca051b1-0e0e-4ec9-9d11-900f23d7fd2a)
+
 
 <br><br>
 
