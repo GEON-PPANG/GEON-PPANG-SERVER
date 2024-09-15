@@ -4,7 +4,7 @@ import com.org.gunbbang.PlatformType;
 import com.org.gunbbang.auth.security.CustomUserDetails;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.repository.MemberRepository;
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -6,7 +6,7 @@ import com.org.gunbbang.controller.DTO.request.ValidateNicknameRequestDTO;
 import com.org.gunbbang.controller.DTO.response.ValidationResponseDTO;
 import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.service.MemberService;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

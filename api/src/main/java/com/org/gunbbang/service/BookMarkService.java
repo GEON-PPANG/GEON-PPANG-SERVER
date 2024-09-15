@@ -11,7 +11,7 @@ import com.org.gunbbang.repository.BakeryRepository;
 import com.org.gunbbang.repository.BookMarkRepository;
 import com.org.gunbbang.repository.MemberRepository;
 import java.util.Optional;
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;

@@ -3,7 +3,7 @@ package com.org.gunbbang.service.VO;
 import com.org.gunbbang.*;
 import com.org.gunbbang.common.AuthType;
 import com.org.gunbbang.entity.Member;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

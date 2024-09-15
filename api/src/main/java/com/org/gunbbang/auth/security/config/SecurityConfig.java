@@ -8,7 +8,6 @@ import com.org.gunbbang.auth.security.filter.JwtExceptionFilter;
 import com.org.gunbbang.auth.security.handler.*;
 import com.org.gunbbang.auth.security.service.CustomUserDetailsService;
 import com.org.gunbbang.repository.MemberRepository;
-import javax.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -19,13 +18,19 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 @Configuration
@@ -43,74 +48,54 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf()
-        .disable()
-        .formLogin()
-        .disable() // FormLogin 사용안함
-        .httpBasic()
-        .disable() // httpBasic 사용안함
-        .headers()
-        .frameOptions()
-        .disable()
-        .and()
-
-        // 세션 사용하지 않으므로 STATELESS로 설정
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .authorizeRequests()
-        .antMatchers("/", "/css/**", "/images/**", "/js/**", "/favicon.ico", "/h2-console/**")
-        .permitAll()
-        .antMatchers(
-            HttpMethod.POST, "/member/nickname" // 소셜용 닉네임 변경 api
+    http
+            .csrf(AbstractHttpConfigurer::disable)
+            .formLogin(AbstractHttpConfigurer::disable)
+            .httpBasic(AbstractHttpConfigurer::disable)
+            .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(authorize -> authorize
+                    .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/favicon.ico", "/h2-console/**").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/member/nickname").hasRole("GUEST")
+                    .requestMatchers(HttpMethod.GET, "/member/nickname").hasRole("MEMBER")
+                    .requestMatchers(
+                            "/reviews/{bakeryId}",
+                            "/reviews/{reviewId}",
+                            "/member/reviews",
+                            "/bookMarks/{bakeryId}",
+                            "/report/review/{reviewId}",
+                            "/member/withdraw",
+                            "/member",
+                            "/member/bookMarks",
+                            "/member/types",
+                            "/auth/withdraw").hasRole("MEMBER")
+                    .anyRequest().permitAll()
             )
-        .hasRole("GUEST")
-        .antMatchers(
-            HttpMethod.GET, "/member/nickname" // 회원 닉네임 조회 api
+            .exceptionHandling(exceptionHandling -> exceptionHandling
+                    .accessDeniedHandler(customAccessDeniedHandler())
+                    .authenticationEntryPoint(customAuthenticationEntryPoint())
             )
-        .hasRole("MEMBER")
-        .antMatchers(
-            "/reviews/{bakeryId}", // 리뷰작성
-            "/reviews/{reviewId}", // 내가 쓴 리뷰 상세보기
-            "/member/reviews", // 내가 작성한 리뷰 목록
-            "/bookMarks/{bakeryId}", // 북마크
-            "/report/review/{reviewId}", // 리뷰신고
-            "/member/withdraw", // 회원탈퇴
-            "/member", // 유저 정보 상세보기(마이페이지)
-            "/member/bookMarks", // 북마크 목록 조회
-            "/member/types", // 유져 필터 조회 및 필터 변경
-            "/auth/withdraw" // 회원 탈퇴
-            )
-        .hasRole("MEMBER")
-        .and()
-        .exceptionHandling()
-        .accessDeniedHandler(customAccessDeniedHandler())
-        .authenticationEntryPoint(customAuthenticationEntryPoint());
+            .logout(logout -> logout
+                    .logoutUrl("/auth/logout")
+                    .addLogoutHandler(customlogoutHandler())
+                    .logoutSuccessHandler(customLogoutSuccessHandler())
+            );
 
-    // logout 구현
-    http.logout()
-        .logoutUrl("/auth/logout") // 로그아웃 URL 설정
-        .addLogoutHandler(customlogoutHandler())
-        .logoutSuccessHandler(customLogoutSuccessHandler());
 
-    // 필터 순서: JwtExceptionFilter -> JwtAuthenticationProcessingFilter -> LogoutFilter
-    // -> CustomJsonUsernamePasswordAuthenticationFilter
-    http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class)
-        .addFilterBefore(
-            jwtAuthenticationProcessingFilter(), JsonUsernamePasswordAuthenticationFilter.class)
-        .addFilterBefore(jwtExceptionFilter(), JwtAuthenticationProcessingFilter.class);
+    http.addFilterBefore(jwtAuthenticationProcessingFilter(), LogoutFilter.class);
+    http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+    http.addFilterBefore(jwtExceptionFilter(), JwtAuthenticationProcessingFilter.class);
 
     return http.build();
   }
 
   @Bean
-  public JsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordAuthenticationFilter() {
-    JsonUsernamePasswordAuthenticationFilter jsonUsernamePasswordAuthenticationFilter =
-        new JsonUsernamePasswordAuthenticationFilter(objectMapper);
-    jsonUsernamePasswordAuthenticationFilter.setAuthenticationManager(authenticationManager());
-    jsonUsernamePasswordAuthenticationFilter.setAuthenticationSuccessHandler(loginSuccessHandler());
-    jsonUsernamePasswordAuthenticationFilter.setAuthenticationFailureHandler(loginFailureHandler());
-    return jsonUsernamePasswordAuthenticationFilter;
+  public JsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordAuthenticationFilter() throws Exception {
+    JsonUsernamePasswordAuthenticationFilter filter = new JsonUsernamePasswordAuthenticationFilter(objectMapper);
+    filter.setAuthenticationManager(authenticationManager());
+    filter.setAuthenticationSuccessHandler(loginSuccessHandler());
+    filter.setAuthenticationFailureHandler(loginFailureHandler());
+    return filter;
   }
 
   @Bean
@@ -118,8 +103,7 @@ public class SecurityConfig {
     DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
     provider.setPasswordEncoder(passwordEncoder());
     provider.setUserDetailsService(customUserDetailsService);
-    return new ProviderManager(provider);
-  }
+    return new ProviderManager(provider);  }
 
   @Bean
   public PasswordEncoder passwordEncoder() {
@@ -127,17 +111,17 @@ public class SecurityConfig {
   }
 
   @Bean
-  public LoginSuccessHandler loginSuccessHandler() {
+  public AuthenticationSuccessHandler loginSuccessHandler() {
     return new LoginSuccessHandler(jwtService, objectMapper);
   }
 
   @Bean
-  public LoginFailureHandler loginFailureHandler() {
+  public AuthenticationFailureHandler loginFailureHandler() {
     return new LoginFailureHandler(objectMapper);
   }
 
   @Bean
-  public Filter jwtAuthenticationProcessingFilter() {
+  public OncePerRequestFilter jwtAuthenticationProcessingFilter() {
     return new JwtAuthenticationProcessingFilter(jwtService, memberRepository, objectMapper);
   }
 

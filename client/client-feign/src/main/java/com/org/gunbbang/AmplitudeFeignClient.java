@@ -2,7 +2,7 @@ package com.org.gunbbang;
 
 import com.org.gunbbang.DTO.*;
 import feign.Response;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;

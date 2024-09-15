@@ -6,7 +6,7 @@ import com.org.gunbbang.controller.DTO.request.ReviewReportRequestDTO;
 import com.org.gunbbang.controller.DTO.response.ReviewReportResponseDTO;
 import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.service.ReviewReportService;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

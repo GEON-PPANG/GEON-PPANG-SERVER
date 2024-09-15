@@ -17,9 +17,11 @@ dependencies {
     implementation project (path: ':storage:db-core')
     implementation project(':client:client-feign')
     implementation "org.springframework.boot:spring-boot-starter-data-jpa" // 이거 개선해야됨
-    implementation "org.springframework.security:spring-security-web"
-    implementation "org.springframework.security:spring-security-config"
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.security:spring-security-web:6.3.1'
+    implementation 'org.springframework.security:spring-security-config:6.3.1'
+    implementation 'org.springframework.security:spring-security-core:6.3.1'
+//    implementation group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+
     implementation 'mysql:mysql-connector-java:8.0.32'
     implementation 'com.auth0:java-jwt:4.2.1'
     implementation 'org.jetbrains:annotations:24.0.0'
@@ -27,9 +29,9 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
 
     // 로깅 시 사용할 라이브러리
-    implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.9'
-    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.9'
-    implementation 'org.slf4j:slf4j-api:1.7.32'
+    implementation group: "ch.qos.logback", name:"logback-core", version:"1.5.6"
+    implementation group: "ch.qos.logback", name:"logback-classic", version:"1.5.6"
+    implementation 'org.slf4j:slf4j-api:2.0.16'
 
     // 슬랙 의존성 추가
     implementation 'com.slack.api:slack-api-client:1.28.0'
@@ -46,7 +48,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
     // feign
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.8'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.2'
 
 }
 

@@ -1,8 +1,8 @@
 package com.org.gunbbang.entity;
 
 import com.org.gunbbang.ReportCategory;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity

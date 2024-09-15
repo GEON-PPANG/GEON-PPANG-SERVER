@@ -1,7 +1,7 @@
 package com.org.gunbbang.controller.DTO.request;
 
 import com.org.gunbbang.ReportCategory;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -3,8 +3,8 @@ package com.org.gunbbang.entity;
 import com.org.gunbbang.MainPurpose;
 import com.org.gunbbang.PlatformType;
 import com.org.gunbbang.Role;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

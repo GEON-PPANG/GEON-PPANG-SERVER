@@ -8,7 +8,7 @@ import com.org.gunbbang.controller.DTO.response.ReviewDetailResponseDTO;
 import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.service.AmplitudeService;
 import com.org.gunbbang.service.ReviewService;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

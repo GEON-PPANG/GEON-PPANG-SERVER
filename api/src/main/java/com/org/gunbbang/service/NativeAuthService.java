@@ -7,7 +7,7 @@ import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
 import com.org.gunbbang.service.VO.SignedUpMemberVO;
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

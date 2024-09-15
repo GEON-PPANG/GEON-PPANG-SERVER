@@ -12,10 +12,10 @@ import com.org.gunbbang.errorType.SuccessType;
 import com.org.gunbbang.repository.MemberRepository;
 import java.io.IOException;
 import java.util.UUID;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,10 +36,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
   private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
   @Override
-  protected void doFilterInternal(
-      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-      throws ServletException, IOException {
-
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    log.info("JwtAuthenticationProcessingFilter 진입");
     // 헤더에 유효한 refreshToken이 담겨져서 요청된 경우 토큰 재발급 요청 refresh와 access 둘 다 재발급해서 반환
     if (jwtService.isRefreshTokenExist(request) && jwtService.isAccessTokenExist(request)) {
       refreshAccessAndRefreshTokens(request, response);
@@ -152,5 +150,6 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     // SecurityContext에 Authentication 객체 저장
     SecurityContextHolder.getContext().setAuthentication(authentication);
+    System.out.println("authen: " + SecurityContextHolder.getContext().getAuthentication().toString());
   }
 }

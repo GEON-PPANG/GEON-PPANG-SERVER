@@ -1,4 +1,4 @@
-rootProject.name = 'gunbbang'
+rootProject.name = 'GUN-PPANG-SERVER-V1' 
 
 include(
     "common:enum",

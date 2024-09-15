@@ -1,6 +1,6 @@
 package com.org.gunbbang.DTO;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,7 +8,8 @@ import lombok.Getter;
 @Getter
 @Builder
 public class RevokeAppleTokenRequestDTO {
-  @NotNull private String client_id;
+  @NotNull
+  private String client_id;
   @NotNull private String client_secret;
   @NotNull private String token;
   @NotNull private String token_type_hint;

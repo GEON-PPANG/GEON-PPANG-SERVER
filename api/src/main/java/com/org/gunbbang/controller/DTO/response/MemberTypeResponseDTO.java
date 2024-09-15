@@ -2,7 +2,7 @@ package com.org.gunbbang.controller.DTO.response;
 
 import com.org.gunbbang.MainPurpose;
 import java.util.List;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter

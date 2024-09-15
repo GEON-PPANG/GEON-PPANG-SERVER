@@ -1,6 +1,6 @@
 package com.org.gunbbang.DTO;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter

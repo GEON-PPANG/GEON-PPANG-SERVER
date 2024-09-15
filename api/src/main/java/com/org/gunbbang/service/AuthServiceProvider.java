@@ -3,7 +3,7 @@ package com.org.gunbbang.service;
 import com.org.gunbbang.PlatformType;
 import java.util.HashMap;
 import java.util.Map;
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

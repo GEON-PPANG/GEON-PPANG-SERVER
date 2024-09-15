@@ -1,6 +1,6 @@
 package com.org.gunbbang.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

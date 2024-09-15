@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property name="LOG_PATH" value="/home/ubuntu/app/logs" />
+    <property name="LOG_PATH" value="${logging.file.path}" />
     <!-- 콘솔 로깅 -->
     <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>

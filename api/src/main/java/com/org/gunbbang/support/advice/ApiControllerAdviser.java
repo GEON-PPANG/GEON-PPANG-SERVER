@@ -6,7 +6,7 @@ import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.errorType.ErrorType;
 import com.org.gunbbang.support.slack.SlackSender;
 import java.util.Objects;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
