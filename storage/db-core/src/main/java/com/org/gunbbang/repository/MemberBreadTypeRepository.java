@@ -17,7 +17,6 @@ public interface MemberBreadTypeRepository extends JpaRepository<MemberBreadType
 
   // List<MemberBreadType> findAllByMemberId(Long memberId);
 
-  // TODO: 쿼리 확인 필요(+transactional 필요없는지)
   @Modifying
   @Query("delete from MemberBreadType mbt where mbt.member = :member")
   void deleteAllByMember(Member member);

@@ -18,7 +18,7 @@ public abstract class AuthService {
     this.memberRepository = memberRepository;
   }
 
-  @Autowired private PasswordEncoder passwordEncoder; // TODO: final 빼고 하는게 맞을지?
+  @Autowired private PasswordEncoder passwordEncoder;
 
   public abstract SignedUpMemberVO saveMemberOrLogin(
       String platformToken, MemberSignUpRequestDTO request) throws Exception;
@@ -42,7 +42,6 @@ public abstract class AuthService {
     return memberRepository.saveAndFlush(newMember);
   }
 
-  // TODO!! 패스워드 인코딩 잘되는지 확인
   private Member createNativeMember(MemberSignUpRequestDTO request, String email) {
     final String encodedPassword = passwordEncoder.encode(request.getPassword());
 
