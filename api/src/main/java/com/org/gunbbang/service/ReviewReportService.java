@@ -1,17 +1,17 @@
 package com.org.gunbbang.service;
 
-import com.org.gunbbang.NotFoundException;
+import com.org.gunbbang.slack.SlackSender;
+import com.org.gunbbang.support.exception.NotFoundException;
 import com.org.gunbbang.controller.DTO.request.ReviewReportRequestDTO;
 import com.org.gunbbang.controller.DTO.response.ReviewReportResponseDTO;
 import com.org.gunbbang.entity.Member;
 import com.org.gunbbang.entity.Review;
 import com.org.gunbbang.entity.ReviewReport;
-import com.org.gunbbang.errorType.ErrorType;
+import com.org.gunbbang.support.errorType.ErrorType;
 import com.org.gunbbang.repository.MemberRepository;
 import com.org.gunbbang.repository.ReviewReportRepository;
 import com.org.gunbbang.repository.ReviewRepository;
-import com.org.gunbbang.service.VO.ReviewReportSlackVO;
-import com.org.gunbbang.support.slack.SlackSender;
+import com.org.gunbbang.VO.ReviewReportSlackVO;
 import com.org.gunbbang.util.mapper.ReviewReportMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

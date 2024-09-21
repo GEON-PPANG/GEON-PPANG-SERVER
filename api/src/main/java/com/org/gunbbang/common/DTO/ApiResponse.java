@@ -1,8 +1,8 @@
 package com.org.gunbbang.common.DTO;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.org.gunbbang.errorType.ErrorType;
-import com.org.gunbbang.errorType.SuccessType;
+import com.org.gunbbang.support.errorType.ErrorType;
+import com.org.gunbbang.support.errorType.SuccessType;
 import java.io.IOException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;

@@ -1,10 +1,10 @@
 package com.org.gunbbang.auth.security.handler;
 
-import com.org.gunbbang.BadRequestException;
-import com.org.gunbbang.NotFoundException;
+import com.org.gunbbang.support.exception.BadRequestException;
+import com.org.gunbbang.support.exception.NotFoundException;
 import com.org.gunbbang.auth.security.util.SecurityUtil;
 import com.org.gunbbang.entity.Member;
-import com.org.gunbbang.errorType.ErrorType;
+import com.org.gunbbang.support.errorType.ErrorType;
 import com.org.gunbbang.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

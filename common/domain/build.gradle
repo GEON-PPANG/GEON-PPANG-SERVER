@@ -1,20 +1,4 @@
-plugins {
-    id 'java'
-}
-
-group = 'com.org'
-version = '0.0.1-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
     implementation project(':common:enum')
-}
-
-test {
-    useJUnitPlatform()
+    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
 }

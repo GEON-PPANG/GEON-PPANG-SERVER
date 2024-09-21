@@ -20,6 +20,9 @@ public class Bakery {
   @Column(name = "bakery_id")
   private Long bakeryId;
 
+  @Version
+  private int version;
+
   @NotNull private String bakeryName;
 
   @NotNull private String mapUrl;

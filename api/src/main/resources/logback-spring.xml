@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property name="LOG_PATH" value="${logging.file.path}" />
+    <springProperty name="LOG_PATH" source="logging.file.path"/>
+    <springProperty name="LOG_FILE_NAME" source="logging.file.name"/>
     <!-- 콘솔 로깅 -->
     <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -8,25 +9,58 @@
         </encoder>
     </appender>
 
-    <property name="DEV_LOG_FILE" value="dev-api"/>
-    <property name="DEV_ERR_LOG_FILE" value="dev-api-error"/>
-    <property name="PROD_LOG_FILE" value="prod-api"/>
-    <property name="PROD_ERR_LOG_FILE" value="prod-api-error"/>
-
-    <!-- DEV API 로깅 -->
-    <appender name="DEV_API_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!-- LOCAL API 로깅 -->
+    <appender name="LOCAL_API_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>INFO</level> <!-- info 레벨 -->
+            <level>INFO</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <file>${LOG_PATH}/${DEV_LOG_FILE}.log</file>
+        <file>${LOG_PATH}/LOCAL_${LOG_FILE_NAME}.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%msg%n</pattern>
         </encoder>
         <!-- 하루에 한번 압축 후 보관, 최대 5일, 1GB까지 보관 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/${DEV_LOG_FILE}.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <fileNamePattern>${LOG_PATH}/LOCAL_${LOG_FILE_NAME}.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>5</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- LOCAL API 에러 로깅 -->
+    <appender name="LOCAL_ERROR_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level> <!-- error 레벨 -->
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <file>${LOG_PATH}/LOCAL_ERROR_${LOG_FILE_NAME}.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%msg%n</pattern>
+        </encoder>
+        <!-- 하루에 한번 압축 후 보관, 최대 5일, 1GB까지 보관 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/LOCAL_ERROR_${LOG_FILE_NAME}.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>5</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- DEV API 로깅 -->
+    <appender name="DEV_API_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <file>${LOG_PATH}/DEV_${LOG_FILE_NAME}.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%msg%n</pattern>
+        </encoder>
+        <!-- 하루에 한번 압축 후 보관, 최대 5일, 1GB까지 보관 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/DEV_${LOG_FILE_NAME}.%d{yyyy-MM-dd}.gz</fileNamePattern>
             <maxHistory>5</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
@@ -39,31 +73,32 @@
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <file>${LOG_PATH}/${DEV_ERR_LOG_FILE}.log</file>
+        <file>${LOG_PATH}/DEV_ERROR_${LOG_FILE_NAME}.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%msg%n</pattern>
         </encoder>
         <!-- 하루에 한번 압축 후 보관, 최대 5일, 1GB까지 보관 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/${DEV_ERR_LOG_FILE}.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <fileNamePattern>${LOG_PATH}/DEV_ERROR_${LOG_FILE_NAME}.%d{yyyy-MM-dd}.gz</fileNamePattern>
             <maxHistory>5</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
     </appender>
+
     <!-- PROD API 로깅 -->
     <appender name="PROD_API_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>INFO</level> <!-- info 레벨 -->
+            <level>INFO</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <file>${LOG_PATH}/${PROD_LOG_FILE}.log</file>
+        <file>${LOG_PATH}/PROD_${LOG_FILE_NAME}.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%msg%n</pattern>
         </encoder>
         <!-- 하루에 한번 압축 후 보관, 최대 14일, 1GB까지 보관 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/${PROD_LOG_FILE}.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <fileNamePattern>${LOG_PATH}/PROD_${LOG_FILE_NAME}.%d{yyyy-MM-dd}.gz</fileNamePattern>
             <maxHistory>14</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
@@ -76,38 +111,40 @@
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <file>${LOG_PATH}/${PROD_ERR_LOG_FILE}.log</file>
+        <file>${LOG_PATH}/PROD_ERROR_${LOG_FILE_NAME}.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%msg%n</pattern>
         </encoder>
         <!-- 하루에 한번 압축 후 보관, 최대 14일, 1GB까지 보관 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/${PROD_ERR_LOG_FILE}.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <fileNamePattern>${LOG_PATH}/PROD_ERROR_${LOG_FILE_NAME}.%d{yyyy-MM-dd}.gz</fileNamePattern>
             <maxHistory>14</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
     </appender>
 
-    <springProfile name="local">
-        <!-- logger name에 LoggingAspect 클래스 위치해있는 패키지 경로 지정-->
-        <logger name="com.org.gunbbang.AOP.LoggingAspect" level="INFO">
-<!--            <appender-ref ref="Console" />-->
-            <appender-ref ref="DEV_API_LOG_FILE" />
-            <appender-ref ref="DEV_ERROR_LOG_FILE" />
-        </logger>
-    </springProfile>
+<!--    <springProfile name="local">-->
+<!--        &lt;!&ndash; logger name에 LoggingAspect 클래스 위치해있는 패키지 경로 지정&ndash;&gt;-->
+<!--        <logger name="com.org.gunbbang.AOP.LoggingAspect" level="INFO">-->
+<!--            <appender-ref ref="LOCAL_API_LOG_FILE" />-->
+<!--            <appender-ref ref="LOCAL_ERROR_LOG_FILE" />-->
+<!--        </logger>
+    </springProfile> -->
+    <!-- 로깅 설정을 프로파일에 따라 다르게 적용 -->
     <springProfile name="dev">
         <logger name="com.org.gunbbang.AOP.LoggingAspect" level="INFO">
             <appender-ref ref="DEV_API_LOG_FILE" />
             <appender-ref ref="DEV_ERROR_LOG_FILE" />
         </logger>
     </springProfile>
+
     <springProfile name="prod-set1">
         <logger name="com.org.gunbbang.AOP.LoggingAspect" level="INFO">
             <appender-ref ref="PROD_API_LOG_FILE" />
             <appender-ref ref="PROD_ERROR_LOG_FILE" />
         </logger>
     </springProfile>
+
     <springProfile name="prod-set2">
         <logger name="com.org.gunbbang.AOP.LoggingAspect" level="INFO">
             <appender-ref ref="PROD_API_LOG_FILE" />
@@ -119,7 +156,6 @@
     <!-- 이 설정 없으면 터미널창에 spring framework 로그 안찍힘  -->
     <root level="INFO">
         <appender-ref ref="Console" />
-        <!--        <appender-ref ref="ApiLogFile" />-->
         <appender-ref ref="PROD_ERROR_LOG_FILE" />
         <appender-ref ref="DEV_ERROR_LOG_FILE" />
     </root>

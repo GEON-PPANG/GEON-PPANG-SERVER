@@ -2,7 +2,7 @@ package com.org.gunbbang.controller;
 
 import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.controller.DTO.response.BakerySearchResponseDTO;
-import com.org.gunbbang.errorType.SuccessType;
+import com.org.gunbbang.support.errorType.SuccessType;
 import com.org.gunbbang.service.BakeryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

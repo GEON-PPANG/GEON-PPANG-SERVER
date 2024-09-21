@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.org.gunbbang.auth.jwt.service.JwtService;
 import com.org.gunbbang.auth.security.CustomUserDetails;
 import com.org.gunbbang.common.DTO.ApiResponse;
-import com.org.gunbbang.errorType.SuccessType;
+import com.org.gunbbang.support.errorType.SuccessType;
 import java.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

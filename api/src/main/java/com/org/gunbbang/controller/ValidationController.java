@@ -4,7 +4,7 @@ import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.controller.DTO.request.ValidateEmailRequestDTO;
 import com.org.gunbbang.controller.DTO.request.ValidateNicknameRequestDTO;
 import com.org.gunbbang.controller.DTO.response.ValidationResponseDTO;
-import com.org.gunbbang.errorType.SuccessType;
+import com.org.gunbbang.support.errorType.SuccessType;
 import com.org.gunbbang.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

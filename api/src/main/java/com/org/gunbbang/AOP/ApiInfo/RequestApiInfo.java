@@ -121,7 +121,6 @@ public class RequestApiInfo {
 
   private String getBaseUrl(Class clazz) {
     // clazz에서 RequestMapping 어노테이션을 가져와 requestMapping 변수에 저장
-    // TODO: @RequestMapping 어노테이션 안붙은 경우에 requestMapping에 null이 들어감 개선 필요
     final RequestMapping requestMapping =
         (RequestMapping) clazz.getAnnotation(RequestMapping.class);
 

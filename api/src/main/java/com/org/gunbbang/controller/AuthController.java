@@ -6,7 +6,7 @@ import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import com.org.gunbbang.controller.DTO.response.MemberSignUpResponseDTO;
 import com.org.gunbbang.controller.DTO.response.MemberWithdrawResponseDTO;
-import com.org.gunbbang.errorType.SuccessType;
+import com.org.gunbbang.support.errorType.SuccessType;
 import com.org.gunbbang.service.AmplitudeService;
 import com.org.gunbbang.service.AuthServiceProvider;
 import com.org.gunbbang.service.MemberService;

@@ -5,7 +5,7 @@ import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.controller.DTO.request.ReviewRequestDTO;
 import com.org.gunbbang.controller.DTO.response.ReviewCreateResponseDTO;
 import com.org.gunbbang.controller.DTO.response.ReviewDetailResponseDTO;
-import com.org.gunbbang.errorType.SuccessType;
+import com.org.gunbbang.support.errorType.SuccessType;
 import com.org.gunbbang.service.AmplitudeService;
 import com.org.gunbbang.service.ReviewService;
 import jakarta.validation.Valid;

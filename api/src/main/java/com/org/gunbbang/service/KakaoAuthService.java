@@ -2,12 +2,12 @@ package com.org.gunbbang.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.org.gunbbang.InvalidKakaoTokenException;
+import com.org.gunbbang.support.exception.InvalidKakaoTokenException;
 import com.org.gunbbang.common.AuthType;
 import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import com.org.gunbbang.entity.KakaoMember;
 import com.org.gunbbang.entity.Member;
-import com.org.gunbbang.errorType.ErrorType;
+import com.org.gunbbang.support.errorType.ErrorType;
 import com.org.gunbbang.repository.KakaoMemberRepository;
 import com.org.gunbbang.repository.MemberRepository;
 import com.org.gunbbang.service.VO.KakaoUserVO;

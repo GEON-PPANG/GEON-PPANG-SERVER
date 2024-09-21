@@ -43,7 +43,6 @@ public class LoggingAspect {
             apiInfo.getBody(),
             apiInfo.getLogTimeStamp());
 
-    System.out.println("기본 로깅");
     return doLogging(joinPoint, logInfo);
   }
 

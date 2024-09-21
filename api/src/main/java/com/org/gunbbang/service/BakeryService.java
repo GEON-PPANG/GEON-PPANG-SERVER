@@ -1,11 +1,11 @@
 package com.org.gunbbang.service;
 
 import com.org.gunbbang.MainPurpose;
-import com.org.gunbbang.NotFoundException;
+import com.org.gunbbang.support.exception.NotFoundException;
 import com.org.gunbbang.auth.security.util.SecurityUtil;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.*;
-import com.org.gunbbang.errorType.ErrorType;
+import com.org.gunbbang.support.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
 import com.org.gunbbang.service.specification.BakerySpecifications;
 import com.org.gunbbang.util.mapper.BakeryBreadTypeMapper;
@@ -180,7 +180,8 @@ public class BakeryService {
     return state + BLANK_SPACE + city + BLANK_SPACE + town + BLANK_SPACE + addressRest;
   }
 
-  public List<BestBakeryListResponseDTO> getBestBakeries() {
+  public List<BestBakeryListResponseDTO>
+  getBestBakeries() {
     Optional<Long> memberId = SecurityUtil.getUserId();
 
     if (memberId.isEmpty()) {

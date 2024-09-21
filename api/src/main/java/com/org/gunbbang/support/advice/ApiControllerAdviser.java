@@ -1,10 +1,10 @@
 package com.org.gunbbang.support.advice;
 
 import com.auth0.jwt.exceptions.*;
-import com.org.gunbbang.HandleException;
+import com.org.gunbbang.slack.SlackSender;
+import com.org.gunbbang.support.exception.HandleException;
 import com.org.gunbbang.common.DTO.ApiResponse;
-import com.org.gunbbang.errorType.ErrorType;
-import com.org.gunbbang.support.slack.SlackSender;
+import com.org.gunbbang.support.errorType.ErrorType;
 import java.util.Objects;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -104,7 +104,7 @@ public class ApiControllerAdviser {
   @ExceptionHandler(Exception.class)
   protected ResponseEntity<ApiResponse> handleException(
       final Exception e, HttpServletRequest request) throws Exception {
-    slackSender.sendAlert(e, request);
+    slackSender.sendErrorAlert(e, request.getRequestURL().toString(), request.getMethod());
     log.error("%%%%%%%%%% " + e.getMessage() + "%%%%%%%%%%");
     e.printStackTrace();
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

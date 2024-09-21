@@ -1,66 +1,46 @@
-plugins {
-    id 'java'
-}
+bootJar.enabled = true
+jar.enabled = false
 
-group = 'com.org'
-version = '0.0.1-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
-
+// TODO: api 모듈 전반적인 의존성 점검 필요
 dependencies {
-    implementation project(':common:exception')
     implementation project(':common:enum')
     implementation project(':common:domain')
     implementation project(':common:util')
-    implementation project (path: ':storage:db-core')
-    implementation project(':client:client-feign')
-    implementation "org.springframework.boot:spring-boot-starter-data-jpa" // 이거 개선해야됨
+    implementation project(':client:client-amplitude')
+    implementation project(':client:client-apple')
+    implementation project (':storage:db-core')
+    implementation project(':support:slack')
+
+    // Spring
+    implementation 'org.springframework.boot:spring-boot-starter-web:3.3.2'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // Auth
     implementation 'org.springframework.security:spring-security-web:6.3.1'
     implementation 'org.springframework.security:spring-security-config:6.3.1'
     implementation 'org.springframework.security:spring-security-core:6.3.1'
-//    implementation group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+    implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
-    implementation 'mysql:mysql-connector-java:8.0.32'
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+
     implementation 'com.auth0:java-jwt:4.2.1'
-    implementation 'org.jetbrains:annotations:24.0.0'
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
 
-    // 로깅 시 사용할 라이브러리
-    implementation group: "ch.qos.logback", name:"logback-core", version:"1.5.6"
-    implementation group: "ch.qos.logback", name:"logback-classic", version:"1.5.6"
-    implementation 'org.slf4j:slf4j-api:2.0.16'
+    // 애플 pem 키 해석용
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.76'
+    implementation 'org.bouncycastle:bcpkix-jdk18on:1.76'
 
-    // 슬랙 의존성 추가
-    implementation 'com.slack.api:slack-api-client:1.28.0'
-    implementation 'com.google.code.gson:gson:2.10.1'
-    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
-    implementation 'com.slack.api:slack-app-backend:1.28.0'
-    implementation 'com.slack.api:slack-api-model:1.28.0'
+    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
 
-    // 매퍼 의존성 추가
+    // 매퍼
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 
-   // annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    // 낙관적 lock retry 허용
+    implementation 'org.springframework.retry:spring-retry'
 
-    // feign
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.2'
 
 }
 
-test {
-    useJUnitPlatform()
-}
-
-// true로 설정하면 실행가능한 jar 파일을 만듦
-bootJar {
-    enabled = true
-}
-
-jar {
-    enabled = false
-}

@@ -1,15 +1,15 @@
 package com.org.gunbbang.service;
 
-import com.org.gunbbang.BadRequestException;
+import com.org.gunbbang.support.exception.BadRequestException;
 import com.org.gunbbang.DTO.BestReviewDTO;
 import com.org.gunbbang.MainPurpose;
-import com.org.gunbbang.NotFoundException;
+import com.org.gunbbang.support.exception.NotFoundException;
 import com.org.gunbbang.auth.security.util.SecurityUtil;
 import com.org.gunbbang.controller.DTO.request.RecommendKeywordNameRequestDTO;
 import com.org.gunbbang.controller.DTO.request.ReviewRequestDTO;
 import com.org.gunbbang.controller.DTO.response.*;
 import com.org.gunbbang.entity.*;
-import com.org.gunbbang.errorType.ErrorType;
+import com.org.gunbbang.support.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
 import com.org.gunbbang.util.RecommendKeywordPercentage;
 import com.org.gunbbang.util.mapper.*;

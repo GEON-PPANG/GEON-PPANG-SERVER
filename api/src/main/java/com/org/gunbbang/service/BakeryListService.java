@@ -1,16 +1,16 @@
 package com.org.gunbbang.service;
 
 import static com.org.gunbbang.CategoryType.getCategoryTypeList;
-import static com.org.gunbbang.errorType.ErrorType.REQUEST_VALIDATION_EXCEPTION;
+import static com.org.gunbbang.support.errorType.ErrorType.REQUEST_VALIDATION_EXCEPTION;
 
-import com.org.gunbbang.BadRequestException;
+import com.org.gunbbang.support.exception.BadRequestException;
 import com.org.gunbbang.CategoryType;
-import com.org.gunbbang.NotFoundException;
+import com.org.gunbbang.support.exception.NotFoundException;
 import com.org.gunbbang.auth.security.util.SecurityUtil;
 import com.org.gunbbang.controller.DTO.response.BakeryListResponseDTO;
 import com.org.gunbbang.controller.DTO.response.BreadTypeResponseDTO;
 import com.org.gunbbang.entity.*;
-import com.org.gunbbang.errorType.ErrorType;
+import com.org.gunbbang.support.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
 import com.org.gunbbang.util.mapper.BakeryBreadTypeMapper;
 import com.org.gunbbang.util.mapper.BakeryMapper;

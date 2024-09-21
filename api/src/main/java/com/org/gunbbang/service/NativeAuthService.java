@@ -1,10 +1,10 @@
 package com.org.gunbbang.service;
 
-import com.org.gunbbang.BadRequestException;
+import com.org.gunbbang.support.exception.BadRequestException;
 import com.org.gunbbang.common.AuthType;
 import com.org.gunbbang.controller.DTO.request.MemberSignUpRequestDTO;
 import com.org.gunbbang.entity.Member;
-import com.org.gunbbang.errorType.ErrorType;
+import com.org.gunbbang.support.errorType.ErrorType;
 import com.org.gunbbang.repository.*;
 import com.org.gunbbang.service.VO.SignedUpMemberVO;
 import jakarta.transaction.Transactional;

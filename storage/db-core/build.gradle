@@ -1,38 +1,11 @@
-plugins {
-    id 'java'
-}
-
-group = 'com.org'
-version = '0.0.1-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     implementation project(':common:enum')
-    implementation project(':common:domain')
-    implementation "org.springframework.boot:spring-boot-starter-validation"
-    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
-    // TODO: 이 밑에 두개 passwordEncoder때문에 넣은건데 이 db-storage 모듈이 해당 의존성을 갖는게 맞나??
-    implementation 'org.springframework.security:spring-security-web:6.3.1'
-    implementation 'org.springframework.security:spring-security-config:6.3.1'
-    implementation 'mysql:mysql-connector-java:8.0.32'
-    runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
-    runtimeOnly("com.h2database:h2")
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-}
+    implementation project(':common:domain') // TODO!! BestReview 조회 시 필요
 
-test {
-    useJUnitPlatform()
-}
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
 
-// true로 설정하면 실행가능한 jar 파일을 만듦
-bootJar {
-    enabled = false
-}
-
-jar {
-    enabled = true
+    runtimeOnly 'mysql:mysql-connector-java:8.0.32'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    runtimeOnly 'com.h2database:h2'
 }

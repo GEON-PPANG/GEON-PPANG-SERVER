@@ -1,0 +1,5 @@
+dependencies {
+    implementation project(':common:domain')
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.2'
+    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+}

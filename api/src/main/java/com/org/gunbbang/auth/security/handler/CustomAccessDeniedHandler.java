@@ -2,7 +2,7 @@ package com.org.gunbbang.auth.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.org.gunbbang.common.DTO.ApiResponse;
-import com.org.gunbbang.errorType.ErrorType;
+import com.org.gunbbang.support.errorType.ErrorType;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

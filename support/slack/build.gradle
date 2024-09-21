@@ -1,0 +1,13 @@
+dependencies {
+    implementation project(':common:domain')
+    implementation project(':common:enum')
+    
+    implementation 'com.slack.api:slack-api-client:1.28.0'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+    implementation 'com.slack.api:slack-app-backend:1.28.0'
+    implementation 'com.slack.api:slack-api-model:1.28.0'
+
+    // 어노테이션
+    implementation 'org.springframework:spring-context:6.1.11'
+}

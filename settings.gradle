@@ -4,10 +4,10 @@ include(
     "common:enum",
     "common:util",
     "common:domain",
-    "common:exception",
-    "client:client-feign",
+    "client:client-amplitude",
+    "client:client-apple",
     "api",
-    "client:client-feign",
     "storage:db-core",
+    "support:slack",
 )
 

@@ -4,7 +4,7 @@ import com.org.gunbbang.auth.security.util.SecurityUtil;
 import com.org.gunbbang.common.DTO.ApiResponse;
 import com.org.gunbbang.controller.DTO.request.ReviewReportRequestDTO;
 import com.org.gunbbang.controller.DTO.response.ReviewReportResponseDTO;
-import com.org.gunbbang.errorType.SuccessType;
+import com.org.gunbbang.support.errorType.SuccessType;
 import com.org.gunbbang.service.ReviewReportService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

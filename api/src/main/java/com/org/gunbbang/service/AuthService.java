@@ -39,21 +39,23 @@ public abstract class AuthService {
 
     // 자체로그인일 때
     Member newMember = createNativeMember(request, email);
-    newMember.passwordEncode(passwordEncoder);
     return memberRepository.saveAndFlush(newMember);
   }
 
-  private static Member createNativeMember(MemberSignUpRequestDTO request, String email) {
+  // TODO!! 패스워드 인코딩 잘되는지 확인
+  private Member createNativeMember(MemberSignUpRequestDTO request, String email) {
+    final String encodedPassword = passwordEncoder.encode(request.getPassword());
+
     return Member.builder()
         .platformType(request.getPlatformType())
         .email(email)
-        .nickname(request.getNickname()) // 자체로그인 시 request에 있는 nickName
-        .role(Role.ROLE_MEMBER) // 자체로그인 시 MEMBER
-        .password(request.getPassword()) // 자체로그인 시 password 저장해야함
+        .nickname(request.getNickname())   // 자체로그인 시 request에 있는 nickName
+        .role(Role.ROLE_MEMBER)            // 자체로그인 시 MEMBER
+        .password(encodedPassword)         // 자체로그인 시 password 저장해야함
         .build();
   }
 
-  private static Member createSocialMember(MemberSignUpRequestDTO request, String email) {
+  private Member createSocialMember(MemberSignUpRequestDTO request, String email) {
     return Member.builder()
         .platformType(request.getPlatformType())
         .email(email)

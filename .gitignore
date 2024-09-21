@@ -43,7 +43,7 @@ out/
 .vscode/
 
 ### log files ###
-log/
+logs/
 *.log
 *.gz
 
