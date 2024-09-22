@@ -11,6 +11,8 @@ import com.org.gunbbang.service.AmplitudeService;
 import com.org.gunbbang.service.BakeryService;
 import com.org.gunbbang.service.MemberService;
 import com.org.gunbbang.service.ReviewService;
+import com.org.gunbbang.service.*;
+
 import java.util.List;
 import java.util.Map;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,11 +31,12 @@ public class MemberController {
   private final BakeryService bakeryService;
   private final JwtService jwtService;
   private final AmplitudeService amplitudeService;
+  private final MemberTypeService memberTypeService;
 
   @GetMapping(value = "", name = "유저_상세정보_조회")
   @ResponseStatus(HttpStatus.OK)
   public ApiResponse<MemberDetailResponseDTO> getMemberDetail() {
-    MemberDetailResponseDTO memberDetailResponseDto = memberService.getMemberDetail();
+    MemberDetailResponseDTO memberDetailResponseDto = memberTypeService.getMemberDetail();
     return ApiResponse.success(SuccessType.GET_MYPAGE_SUCCESS, memberDetailResponseDto);
   }
 
@@ -44,14 +47,14 @@ public class MemberController {
     String nickname = SecurityUtil.getLoginMemberNickname();
     return ApiResponse.success(
         SuccessType.UPDATE_MEMBER_TYPES_SUCCESS,
-        memberService.updateMemberTypes(request, memberId, nickname));
+        memberTypeService.updateMemberTypes(request, memberId, nickname));
   }
 
   @GetMapping(value = "/types", name = "유저_필터칩_조회")
   public ApiResponse<MemberTypeResponseDTO> getMemberTypes() {
     Map<String, Object> loginMemberInfo = SecurityUtil.getLoginMemberInfo();
     return ApiResponse.success(
-        SuccessType.GET_MEMBER_TYPES_SUCCESS, memberService.getMemberTypes(loginMemberInfo));
+        SuccessType.GET_MEMBER_TYPES_SUCCESS, memberTypeService.getMemberTypes(loginMemberInfo));
   }
 
   @GetMapping(value = "/reviews", name = "유저_리뷰_목록_조회")
